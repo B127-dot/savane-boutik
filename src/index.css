@@ -72,6 +72,65 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
+
+  .light {
+    /* Mode clair - Couleurs adaptées pour le Burkina Faso */
+    --background: 0 0% 100%;
+    --foreground: 222 84% 5%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 84% 5%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 84% 5%;
+
+    /* Accent vert conservé mais adapté */
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 142 76% 50%;
+
+    /* Couleurs secondaires adaptées */
+    --secondary: 210 40% 95%;
+    --secondary-foreground: 222 84% 5%;
+
+    --muted: 210 40% 95%;
+    --muted-foreground: 215 15% 45%;
+
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Couleurs fonctionnelles */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 48 96% 53%;
+    --warning-foreground: 222 84% 5%;
+
+    /* Bordures et inputs */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 142 76% 36%;
+
+    /* Couleurs spécifiques e-commerce */
+    --price: 48 96% 53%;
+    --price-foreground: 222 84% 5%;
+    --stock-low: 0 84% 60%;
+    --stock-good: 142 76% 36%;
+
+    /* Gradients adaptés */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 50%, hsl(142 76% 95%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(210 40% 98%) 100%);
+
+    /* Ombres adaptées */
+    --shadow-soft: 0 2px 8px hsl(var(--primary) / 0.1);
+    --shadow-medium: 0 8px 32px hsl(var(--primary) / 0.15);
+    --shadow-strong: 0 16px 64px hsl(var(--primary) / 0.2);
+    --shadow-glow: 0 0 32px hsl(var(--primary-glow) / 0.3);
+  }
 }
 
 @layer base {
