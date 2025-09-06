@@ -1,9 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Globe } from "lucide-react";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
     { label: "Accueil", href: "/" },
@@ -13,8 +23,16 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-sm border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ease-out ${
+      isScrolled 
+        ? 'pt-4 px-4' 
+        : 'pt-0 px-0'
+    }`}>
+      <div className={`transition-all duration-300 ease-out ${
+        isScrolled 
+          ? 'max-w-5xl mx-auto backdrop-blur-md bg-primary/80 border border-white/10 rounded-2xl shadow-2xl shadow-primary/20' 
+          : 'max-w-7xl mx-auto bg-background/90 backdrop-blur-sm border-b border-border'
+      } ${isScrolled ? 'px-6' : 'px-4 sm:px-6 lg:px-8'}`}>
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
