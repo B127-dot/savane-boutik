@@ -131,6 +131,69 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
     --shadow-strong: 0 16px 64px hsl(var(--primary) / 0.3);
     --shadow-glow: 0 0 32px hsl(var(--primary-glow) / 0.4);
   }
+
+  /* Animations de scroll */
+  .animate-fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .animate-fade-left {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-fade-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .animate-fade-right {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-fade-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .animate-scale-up {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-scale-up.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .animate-stagger {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animate-stagger.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Délais pour les animations en cascade */
+  .delay-100 { transition-delay: 0.1s; }
+  .delay-200 { transition-delay: 0.2s; }
+  .delay-300 { transition-delay: 0.3s; }
+  .delay-400 { transition-delay: 0.4s; }
+  .delay-500 { transition-delay: 0.5s; }
 }
 
 @layer base {

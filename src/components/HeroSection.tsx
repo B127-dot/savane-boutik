@@ -1,8 +1,14 @@
 import { ArrowRight, Store, Smartphone, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import useScrollAnimation from "@/hooks/useScrollAnimation";
 import heroImage from "@/assets/hero-ecommerce.jpg";
 
 const HeroSection = () => {
+  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { elementRef: contentRef, isVisible: contentVisible } = useScrollAnimation({ threshold: 0.2 });
+  const { elementRef: imageRef, isVisible: imageVisible } = useScrollAnimation({ threshold: 0.3 });
+  const { elementRef: statsRef, isVisible: statsVisible } = useScrollAnimation({ threshold: 0.1 });
+
   const stats = [
     {
       icon: Store,
@@ -30,9 +36,15 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 pt-20 pb-16">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content Left */}
-          <div className="text-center lg:text-left space-y-8">
+          <div 
+            ref={contentRef}
+            className={`text-center lg:text-left space-y-8 animate-fade-left ${contentVisible ? 'visible' : ''}`}
+          >
             <div className="space-y-6">
-              <div className="inline-flex items-center px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border shadow-soft">
+              <div 
+                ref={headerRef}
+                className={`inline-flex items-center px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border shadow-soft animate-fade-up ${headerVisible ? 'visible' : ''}`}
+              >
                 <span className="text-sm text-muted-foreground">
                   🚀 La solution e-commerce made in Burkina Faso
                 </span>
@@ -87,7 +99,10 @@ const HeroSection = () => {
           </div>
 
           {/* Hero Image Right */}
-          <div className="relative">
+          <div 
+            ref={imageRef}
+            className={`relative animate-fade-right ${imageVisible ? 'visible' : ''}`}
+          >
             <div className="relative z-10">
               <img
                 src={heroImage}
@@ -112,9 +127,15 @@ const HeroSection = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-border">
+        <div 
+          ref={statsRef}
+          className={`grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-border animate-fade-up ${statsVisible ? 'visible' : ''}`}
+        >
           {stats.map((stat, index) => (
-            <div key={index} className="text-center space-y-2">
+            <div 
+              key={index} 
+              className={`text-center space-y-2 animate-stagger delay-${(index + 1) * 100} ${statsVisible ? 'visible' : ''}`}
+            >
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-primary/10 border border-primary/20">
                 <stat.icon className="w-6 h-6 text-primary" />
               </div>

@@ -8,8 +8,12 @@ import {
   MessageCircle,
   Palette
 } from "lucide-react";
+import useScrollAnimation from "@/hooks/useScrollAnimation";
 
 const FeaturesSection = () => {
+  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { elementRef: gridRef, isVisible: gridVisible } = useScrollAnimation({ threshold: 0.1 });
+
   const features = [
     {
       icon: Store,
@@ -65,7 +69,10 @@ const FeaturesSection = () => {
     <section id="features" className="py-24 bg-background">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center space-y-4 mb-16">
+        <div 
+          ref={headerRef}
+          className={`text-center space-y-4 mb-16 animate-fade-up ${headerVisible ? 'visible' : ''}`}
+        >
           <div className="inline-flex items-center px-4 py-2 bg-card rounded-full border border-border">
             <span className="text-sm text-muted-foreground">
               ✨ Fonctionnalités pensées pour vous
@@ -84,11 +91,14 @@ const FeaturesSection = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div 
+          ref={gridRef}
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 animate-fade-up delay-200 ${gridVisible ? 'visible' : ''}`}
+        >
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group p-6 bg-gradient-card rounded-2xl border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-glow"
+              className={`group p-6 bg-gradient-card rounded-2xl border border-border hover:border-primary/20 transition-all duration-300 hover:shadow-glow animate-stagger delay-${(index % 4 + 1) * 100} ${gridVisible ? 'visible' : ''}`}
             >
               <div className="space-y-4">
                 <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-primary/10 border border-primary/20 group-hover:scale-110 transition-transform duration-300`}>

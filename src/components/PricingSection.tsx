@@ -1,7 +1,11 @@
 import { Check, Star, Crown, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import useScrollAnimation from "@/hooks/useScrollAnimation";
 
 const PricingSection = () => {
+  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation();
+  const { elementRef: cardsRef, isVisible: cardsVisible } = useScrollAnimation({ threshold: 0.1 });
+
   const plans = [
     {
       name: "Starter",
@@ -61,7 +65,10 @@ const PricingSection = () => {
     <section id="pricing" className="py-24 bg-gradient-hero">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="text-center space-y-4 mb-16">
+        <div 
+          ref={headerRef}
+          className={`text-center space-y-4 mb-16 animate-fade-up ${headerVisible ? 'visible' : ''}`}
+        >
           <div className="inline-flex items-center px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border">
             <span className="text-sm text-muted-foreground">
               💰 Tarifs transparents, pas de frais cachés
@@ -80,11 +87,14 @@ const PricingSection = () => {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div 
+          ref={cardsRef}
+          className={`grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto animate-fade-up delay-200 ${cardsVisible ? 'visible' : ''}`}
+        >
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`relative p-8 rounded-2xl border transition-all duration-300 hover:scale-105 ${
+              className={`relative p-8 rounded-2xl border transition-all duration-300 hover:scale-105 animate-stagger delay-${(index + 1) * 100} ${cardsVisible ? 'visible' : ''} ${
                 plan.popular
                   ? "bg-gradient-card border-primary shadow-glow scale-105"
                   : "bg-card/50 backdrop-blur-sm border-border hover:border-primary/30"
