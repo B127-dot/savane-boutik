@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Globe } from "lucide-react";
+import { Menu, X, Globe, LogOut } from "lucide-react";
+import { useApp } from '@/contexts/AppContext';
+import { useNavigate, Link } from 'react-router-dom';
 import ThemeToggle from "./ThemeToggle";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user, logout } = useApp();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,7 +20,16 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  const navItems = user ? [
+    { label: "Dashboard", href: "/dashboard" },
+    { label: "Produits", href: "/products" },
+    { label: "Commandes", href: "/orders" },
+  ] : [
     { label: "Accueil", href: "/" },
     { label: "Fonctionnalités", href: "#features" },
     { label: "Tarifs", href: "#pricing" },
@@ -40,33 +53,57 @@ const Navigation = () => {
             <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Globe className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold text-foreground">
+            <Link to="/" className="text-xl font-bold text-foreground">
               BurkE-Shop
-            </span>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-muted-foreground hover:text-foreground transition-colors duration-200"
-              >
-                {item.label}
-              </a>
+              user && item.href.startsWith('/') ? (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                >
+                  {item.label}
+                </a>
+              )
             ))}
           </div>
 
           {/* Action Buttons */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
-            <Button variant="ghost" size="sm">
-              Connexion
-            </Button>
-            <Button variant="default" size="sm">
-              Commencer gratuitement
-            </Button>
+            {user ? (
+              <>
+                <span className="text-sm text-foreground/80">
+                  Bienvenue, {user.name}
+                </span>
+                <Button variant="ghost" size="sm" onClick={handleLogout}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Se déconnecter
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/login">Connexion</Link>
+                </Button>
+                <Button variant="default" size="sm" asChild>
+                  <Link to="/signup">Commencer gratuitement</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -90,25 +127,45 @@ const Navigation = () => {
           <div className="md:hidden bg-card border border-border rounded-lg mt-2 p-4 shadow-soft">
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
+                user && item.href.startsWith('/') ? (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 py-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 py-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                )
               ))}
               <div className="flex flex-col space-y-2 pt-4 border-t border-border">
                 <div className="flex items-center justify-between">
                   <ThemeToggle />
                 </div>
-                <Button variant="ghost" size="sm" className="justify-start">
-                  Connexion
-                </Button>
-                <Button variant="default" size="sm">
-                  Commencer gratuitement
-                </Button>
+                {user ? (
+                  <Button variant="ghost" size="sm" onClick={handleLogout} className="justify-start">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Se déconnecter
+                  </Button>
+                ) : (
+                  <>
+                    <Button variant="ghost" size="sm" className="justify-start" asChild>
+                      <Link to="/login">Connexion</Link>
+                    </Button>
+                    <Button variant="default" size="sm" asChild>
+                      <Link to="/signup">Commencer gratuitement</Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
