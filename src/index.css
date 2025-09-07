@@ -9,72 +9,7 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
 
 @layer base {
   :root {
-    /* Couleurs principales - Thème sombre moderne */
-    --background: 222 84% 5%;
-    --foreground: 210 40% 98%;
-
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
-
-    --popover: 224 71% 4%;
-    --popover-foreground: 213 31% 91%;
-
-    /* Accent vert vibrant inspiré de Wazzap.ai */
-    --primary: 142 76% 36%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 142 76% 50%;
-
-    /* Couleurs secondaires élégantes */
-    --secondary: 215 28% 17%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 215 28% 17%;
-    --muted-foreground: 217 11% 65%;
-
-    --accent: 142 76% 36%;
-    --accent-foreground: 0 0% 100%;
-
-    /* Couleurs fonctionnelles */
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-
-    --success: 142 76% 36%;
-    --success-foreground: 0 0% 100%;
-
-    --warning: 48 96% 53%;
-    --warning-foreground: 222 84% 5%;
-
-    /* Bordures et inputs */
-    --border: 215 28% 17%;
-    --input: 215 28% 17%;
-    --ring: 142 76% 36%;
-
-    --radius: 0.75rem;
-
-    /* Couleurs spécifiques e-commerce */
-    --price: 48 96% 53%;
-    --price-foreground: 222 84% 5%;
-    --stock-low: 0 63% 31%;
-    --stock-good: 142 76% 36%;
-
-    /* Gradients modernes */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(222 84% 5%) 0%, hsl(215 28% 8%) 50%, hsl(142 76% 8%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(215 28% 6%) 100%);
-
-    /* Ombres élégantes */
-    --shadow-soft: 0 2px 8px hsl(var(--primary) / 0.1);
-    --shadow-medium: 0 8px 32px hsl(var(--primary) / 0.2);
-    --shadow-strong: 0 16px 64px hsl(var(--primary) / 0.3);
-    --shadow-glow: 0 0 32px hsl(var(--primary-glow) / 0.4);
-
-    /* Animations */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  }
-
-  .light {
-    /* Mode clair - Couleurs adaptées pour le Burkina Faso */
+    /* Mode clair par défaut - Couleurs adaptées pour le Burkina Faso */
     --background: 0 0% 100%;
     --foreground: 222 84% 5%;
 
@@ -114,6 +49,8 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
     --input: 214 32% 91%;
     --ring: 142 76% 36%;
 
+    --radius: 0.75rem;
+
     /* Couleurs spécifiques e-commerce */
     --price: 48 96% 53%;
     --price-foreground: 222 84% 5%;
@@ -130,6 +67,69 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
     --shadow-medium: 0 8px 32px hsl(var(--primary) / 0.15);
     --shadow-strong: 0 16px 64px hsl(var(--primary) / 0.2);
     --shadow-glow: 0 0 32px hsl(var(--primary-glow) / 0.3);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .dark {
+    /* Mode sombre - Thème sombre moderne */
+    --background: 222 84% 5%;
+    --foreground: 210 40% 98%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 213 31% 91%;
+
+    /* Accent vert vibrant inspiré de Wazzap.ai */
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 142 76% 50%;
+
+    /* Couleurs secondaires élégantes */
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 215 28% 17%;
+    --muted-foreground: 217 11% 65%;
+
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Couleurs fonctionnelles */
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 48 96% 53%;
+    --warning-foreground: 222 84% 5%;
+
+    /* Bordures et inputs */
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 142 76% 36%;
+
+    /* Couleurs spécifiques e-commerce */
+    --price: 48 96% 53%;
+    --price-foreground: 222 84% 5%;
+    --stock-low: 0 63% 31%;
+    --stock-good: 142 76% 36%;
+
+    /* Gradients modernes */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(222 84% 5%) 0%, hsl(215 28% 8%) 50%, hsl(142 76% 8%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(215 28% 6%) 100%);
+
+    /* Ombres élégantes */
+    --shadow-soft: 0 2px 8px hsl(var(--primary) / 0.1);
+    --shadow-medium: 0 8px 32px hsl(var(--primary) / 0.2);
+    --shadow-strong: 0 16px 64px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 32px hsl(var(--primary-glow) / 0.4);
   }
 }
 
