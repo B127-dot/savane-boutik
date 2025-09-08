@@ -33,7 +33,7 @@ const Navigation = () => {
     { label: "Accueil", href: "/" },
     { label: "Fonctionnalités", href: "#features" },
     { label: "Tarifs", href: "#pricing" },
-    { label: "Support", href: "#support" },
+    { label: "Contact", href: "#contact" },
   ];
 
   return (
