@@ -2,8 +2,10 @@ import { ArrowRight, Store, Smartphone, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useScrollAnimation from "@/hooks/useScrollAnimation";
 import heroImage from "@/assets/hero-ecommerce.jpg";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation();
   const { elementRef: contentRef, isVisible: contentVisible } = useScrollAnimation({ threshold: 0.2 });
   const { elementRef: imageRef, isVisible: imageVisible } = useScrollAnimation({ threshold: 0.3 });
@@ -66,7 +68,12 @@ const HeroSection = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button variant="hero" size="lg" className="group">
+              <Button 
+                variant="hero" 
+                size="lg" 
+                className="group" 
+                onClick={() => navigate('/signup')}
+              >
                 Créer ma boutique gratuitement
                 <ArrowRight className="group-hover:translate-x-1 transition-transform" />
               </Button>

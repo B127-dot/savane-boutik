@@ -8,21 +8,6 @@ const PricingSection = () => {
 
   const plans = [
     {
-      name: "Gratuit",
-      price: "0",
-      period: "/ 1 mois d'essai",
-      description: "Testez la plateforme sans risque",
-      icon: Zap,
-      popular: false,
-      features: [
-        "Jusqu'à 5 produits",
-        "Paiements locaux (Orange Money, Moov)",
-        "Boutique publique avec lien BurkinaShop",
-        "Commandes illimitées",
-        "Support WhatsApp basique"
-      ]
-    },
-    {
       name: "Starter",
       price: "7,000",
       period: "/mois",
@@ -99,7 +84,7 @@ const PricingSection = () => {
         {/* Pricing Cards */}
         <div 
           ref={cardsRef}
-          className={`grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto animate-fade-up delay-200 ${cardsVisible ? 'visible' : ''}`}
+          className={`grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto animate-fade-up delay-200 ${cardsVisible ? 'visible' : ''}`}
         >
           {plans.map((plan, index) => (
             <div

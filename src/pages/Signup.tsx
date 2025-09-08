@@ -39,7 +39,7 @@ const Signup = () => {
           title: "Compte créé",
           description: "Votre compte a été créé avec succès",
         });
-        navigate('/dashboard');
+        navigate('/welcome');
       }
     } catch (error) {
       toast({
