@@ -8,55 +8,65 @@ const PricingSection = () => {
 
   const plans = [
     {
-      name: "Starter",
-      price: "5,000",
-      period: "/mois",
-      description: "Parfait pour débuter votre boutique en ligne",
+      name: "Gratuit",
+      price: "0",
+      period: "/ 1 mois d'essai",
+      description: "Testez la plateforme sans risque",
       icon: Zap,
       popular: false,
       features: [
-        "Jusqu'à 50 produits",
-        "Boutique personnalisée", 
-        "Paiement Orange & Moov Money",
-        "Support WhatsApp",
-        "Analytics de base",
-        "SSL sécurisé inclus"
+        "Jusqu'à 5 produits",
+        "Paiements locaux (Orange Money, Moov)",
+        "Boutique publique avec lien BurkinaShop",
+        "Commandes illimitées",
+        "Support WhatsApp basique"
       ]
     },
     {
-      name: "Business", 
-      price: "15,000",
+      name: "Starter",
+      price: "7,000",
       period: "/mois",
-      description: "Idéal pour faire croître votre commerce",
+      description: "Pour petits commerçants qui débutent sérieusement",
       icon: Star,
       popular: true,
       features: [
-        "Produits illimités",
-        "Thèmes premium",
-        "Intégration WhatsApp Business",
-        "Codes promo & réductions", 
-        "Analytics avancées",
-        "Support prioritaire",
-        "Multi-devises (CFA/EUR)",
-        "Sauvegarde automatique"
+        "Jusqu'à 50 produits",
+        "Statistiques de base",
+        "Personnalisation boutique (logo + couleurs)",
+        "Codes promo simples",
+        "Support WhatsApp prioritaire"
       ]
     },
     {
-      name: "Enterprise",
-      price: "35,000", 
+      name: "Premium", 
+      price: "14,000",
       period: "/mois",
-      description: "Solution complète pour les grandes entreprises",
+      description: "Professionnalisez votre boutique en ligne",
       icon: Crown,
       popular: false,
       features: [
-        "Tout du plan Business",
-        "Multi-boutiques",
-        "API personnalisée",
-        "Formation personnalisée", 
-        "Gestionnaire de compte dédié",
-        "Intégrations sur mesure",
-        "Rapports personnalisés",
-        "SLA 99.9% uptime"
+        "Produits illimités",
+        "Domaine personnalisé",
+        "Rapports détaillés (ventes, clients)",
+        "Gestion avancée des commandes",
+        "SEO basique",
+        "Assistance WhatsApp 24/7"
+      ]
+    },
+    {
+      name: "Business",
+      price: "25,000", 
+      period: "/mois",
+      description: "Solution complète pour PME ambitieuses",
+      icon: Crown,
+      popular: false,
+      features: [
+        "Tout le plan Premium",
+        "Multi-utilisateurs avec rôles",
+        "Intégrations avancées (API, réseaux sociaux)",
+        "Notifications avancées",
+        "Statistiques avancées par zones",
+        "Assistance VIP dédiée"
       ]
     }
   ];
