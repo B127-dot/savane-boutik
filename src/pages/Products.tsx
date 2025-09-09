@@ -13,7 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { Product } from '@/contexts/AppContext';
 
 const Products = () => {
-  const { products, addProduct, updateProduct, deleteProduct } = useApp();
+  const { products, categories, addProduct, updateProduct, deleteProduct } = useApp();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -22,14 +22,14 @@ const Products = () => {
     name: '',
     description: '',
     price: 0,
-    category: '',
+    categoryId: '',
     stock: 0,
     status: 'active' as 'active' | 'inactive'
   });
 
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.category.toLowerCase().includes(searchTerm.toLowerCase())
+    categories.find(c => c.id === product.categoryId)?.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -45,7 +45,7 @@ const Products = () => {
     } else {
       addProduct({
         ...formData,
-        image: '/placeholder.svg'
+        images: ['/placeholder.svg']
       });
       toast({
         title: "Produit ajouté",
@@ -58,7 +58,7 @@ const Products = () => {
       name: '',
       description: '',
       price: 0,
-      category: '',
+      categoryId: '',
       stock: 0,
       status: 'active'
     });
@@ -70,7 +70,7 @@ const Products = () => {
       name: product.name,
       description: product.description,
       price: product.price,
-      category: product.category,
+      categoryId: product.categoryId,
       stock: product.stock,
       status: product.status
     });
@@ -97,13 +97,22 @@ const Products = () => {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="category">Catégorie</Label>
-          <Input
-            id="category"
-            value={formData.category}
-            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-            required
-          />
+          <Label htmlFor="categoryId">Catégorie</Label>
+          <Select
+            value={formData.categoryId}
+            onValueChange={(value) => setFormData({ ...formData, categoryId: value })}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Sélectionnez une catégorie" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((category) => (
+                <SelectItem key={category.id} value={category.id}>
+                  {category.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
       
@@ -209,7 +218,9 @@ const Products = () => {
               <div className="flex justify-between items-start">
                 <div>
                   <CardTitle className="text-lg">{product.name}</CardTitle>
-                  <CardDescription>{product.category}</CardDescription>
+                  <CardDescription>
+                    {categories.find(c => c.id === product.categoryId)?.name || 'Sans catégorie'}
+                  </CardDescription>
                 </div>
                 <Badge variant={product.status === 'active' ? 'default' : 'secondary'}>
                   {product.status}
@@ -218,7 +229,7 @@ const Products = () => {
             </CardHeader>
             <CardContent>
               <img
-                src={product.image}
+                src={product.images[0] || '/placeholder.svg'}
                 alt={product.name}
                 className="w-full h-32 object-cover rounded-md mb-4"
               />

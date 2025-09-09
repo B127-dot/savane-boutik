@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { ShoppingBag, Package, TrendingUp, Users } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user, products, orders } = useApp();
+  const { user, products, orders, categories } = useApp();
 
   const activeProducts = products.filter(p => p.status === 'active').length;
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
@@ -130,7 +130,7 @@ const Dashboard = () => {
                   </div>
                   <div className="flex items-center space-x-2">
                     <Badge variant="outline">
-                      {product.category}
+                      {categories.find(c => c.id === product.categoryId)?.name || 'Sans catégorie'}
                     </Badge>
                     <span className="text-sm font-medium">
                       {product.price.toLocaleString('fr-FR')} €

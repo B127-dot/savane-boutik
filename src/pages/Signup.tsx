@@ -13,6 +13,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [shopName, setShopName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { signup } = useApp();
   const navigate = useNavigate();
@@ -33,11 +34,11 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      const success = await signup(email, password, name);
+      const success = await signup(email, password, name, shopName);
       if (success) {
         toast({
-          title: "Compte créé",
-          description: "Votre compte a été créé avec succès",
+          title: "Inscription réussie",
+          description: "Bienvenue ! Votre boutique a été créée",
         });
         navigate('/welcome');
       }
@@ -68,9 +69,20 @@ const Signup = () => {
               <Input
                 id="name"
                 type="text"
-                placeholder="Votre nom"
+                placeholder="Votre nom complet"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="shopName">Nom de votre boutique</Label>
+              <Input
+                id="shopName"
+                type="text"
+                placeholder="Ex: Ma Belle Boutique"
+                value={shopName}
+                onChange={(e) => setShopName(e.target.value)}
                 required
               />
             </div>

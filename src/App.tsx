@@ -11,6 +11,10 @@ import Welcome from "./pages/Welcome";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import Orders from "./pages/Orders";
+import Categories from "./pages/Categories";
+import ShopSettings from "./pages/ShopSettings";
+import Analytics from "./pages/Analytics";
+import Marketing from "./pages/Marketing";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -30,7 +34,11 @@ const App = () => (
             <Route path="/welcome" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/products" element={<ProtectedRoute><Products /></ProtectedRoute>} />
+            <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
             <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+            <Route path="/shop-settings" element={<ProtectedRoute><ShopSettings /></ProtectedRoute>} />
+            <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+            <Route path="/marketing" element={<ProtectedRoute><Marketing /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
