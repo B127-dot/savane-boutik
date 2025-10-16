@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,14 @@ const Login = () => {
   const { login } = useApp();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Redirect if already logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true') {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,7 +70,7 @@ const Login = () => {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@test.com"
+                placeholder="votre@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -73,14 +81,14 @@ const Login = () => {
               <Input
                 id="password"
                 type="password"
-                placeholder="admin"
+                placeholder="Votre mot de passe"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
             <div className="text-sm text-muted-foreground text-center">
-              Test: admin@test.com / admin
+              Utilisez n'importe quel email/mot de passe pour tester
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">

@@ -211,8 +211,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
 
   useEffect(() => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
     const savedUser = localStorage.getItem('user');
-    if (savedUser) {
+    
+    if (isLoggedIn === 'true' && savedUser) {
       const user = JSON.parse(savedUser);
       setUser(user);
       
@@ -251,24 +253,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    // Mock authentication
-    if (email === 'admin@test.com' && password === 'admin') {
-      const mockUser: User = {
-        id: '1',
-        email,
-        name: 'Admin User',
-        role: 'admin'
-      };
-      setUser(mockUser);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      return true;
-    }
-    return false;
+    // Mock authentication - accepts any email/password for testing
+    const mockUser: User = {
+      id: Date.now().toString(),
+      email,
+      name: email.split('@')[0],
+      role: email === 'admin@test.com' ? 'admin' : 'user'
+    };
+    setUser(mockUser);
+    localStorage.setItem('user', JSON.stringify(mockUser));
+    localStorage.setItem('isLoggedIn', 'true');
+    return true;
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('isLoggedIn');
   };
 
   const signup = async (email: string, password: string, name: string, shopName: string): Promise<boolean> => {
@@ -282,6 +283,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     setUser(mockUser);
     localStorage.setItem('user', JSON.stringify(mockUser));
+    localStorage.setItem('isLoggedIn', 'true');
     
     // Initialize shop settings
     const initialShopSettings: ShopSettings = {

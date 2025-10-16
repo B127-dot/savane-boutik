@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, 
   Package, 
@@ -16,7 +16,8 @@ import {
   Globe,
   Plus,
   Grid,
-  History
+  History,
+  LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -63,7 +64,13 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const location = useLocation();
-  const { user, shopSettings } = useApp();
+  const navigate = useNavigate();
+  const { user, shopSettings, logout } = useApp();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -128,7 +135,7 @@ const Sidebar = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="p-2 space-y-1 overflow-y-auto h-[calc(100vh-80px)]">
+        <nav className="p-2 space-y-1 overflow-y-auto h-[calc(100vh-140px)]">
           {sidebarItems.map((item) => (
             <div key={item.href}>
               {item.subItems ? (
@@ -196,6 +203,21 @@ const Sidebar = () => {
             </div>
           ))}
         </nav>
+
+        {/* Logout Button */}
+        <div className="absolute bottom-0 left-0 right-0 p-2 border-t border-border bg-card">
+          <Button
+            variant="ghost"
+            onClick={handleLogout}
+            className={cn(
+              "w-full flex items-center space-x-3 p-3 rounded-lg transition-colors hover:bg-destructive/10 hover:text-destructive",
+              isCollapsed && "justify-center"
+            )}
+          >
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            {!isCollapsed && <span className="font-medium">Déconnexion</span>}
+          </Button>
+        </div>
       </div>
 
       {/* Mobile Toggle Button */}
