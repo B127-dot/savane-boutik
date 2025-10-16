@@ -22,6 +22,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
+import ThemeToggle from '@/components/ThemeToggle';
 
 interface SidebarItem {
   label: string;
@@ -204,8 +205,16 @@ const Sidebar = () => {
           ))}
         </nav>
 
-        {/* Logout Button */}
-        <div className="absolute bottom-0 left-0 right-0 p-2 border-t border-border bg-card">
+        {/* Theme Toggle & Logout Button */}
+        <div className="absolute bottom-0 left-0 right-0 p-2 border-t border-border bg-card space-y-2">
+          <div className={cn(
+            "flex items-center",
+            isCollapsed ? "justify-center" : "justify-between px-3"
+          )}>
+            {!isCollapsed && <span className="text-sm text-muted-foreground">Thème</span>}
+            <ThemeToggle />
+          </div>
+          
           <Button
             variant="ghost"
             onClick={handleLogout}
