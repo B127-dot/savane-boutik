@@ -194,6 +194,11 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
   .delay-300 { transition-delay: 0.3s; }
   .delay-400 { transition-delay: 0.4s; }
   .delay-500 { transition-delay: 0.5s; }
+
+  /* Pause animation on hover */
+  .hover\:pause-animation:hover {
+    animation-play-state: paused !important;
+  }
 }
 
 @layer base {
