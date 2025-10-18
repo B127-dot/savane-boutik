@@ -6,12 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Palette, Globe, Phone, MapPin, Eye } from 'lucide-react';
+import { Palette, Globe, Phone, MapPin, Eye, Copy, ExternalLink, CheckCircle2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const ShopSettings = () => {
   const { shopSettings, updateShopSettings, user } = useApp();
   const { toast } = useToast();
+  const [copied, setCopied] = useState(false);
   const [formData, setFormData] = useState({
     shopName: '',
     description: '',
@@ -63,6 +64,18 @@ const ShopSettings = () => {
     });
   };
 
+  const fullShopUrl = `${window.location.origin}/shop/${formData.shopUrl || 'ma-boutique'}`;
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(fullShopUrl);
+    setCopied(true);
+    toast({
+      title: "Lien copié !",
+      description: "Le lien de votre boutique a été copié dans le presse-papier",
+    });
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const handleColorChange = (color: string) => {
     setFormData({ ...formData, primaryColor: color });
     // Apply color preview
@@ -86,6 +99,47 @@ const ShopSettings = () => {
         <h1 className="text-3xl font-bold text-foreground">Ma boutique</h1>
         <p className="text-muted-foreground">Personnalisez l'apparence et les informations de votre boutique</p>
       </div>
+
+      {/* Lien de la boutique */}
+      <Card className="bg-gradient-hero border-primary/20">
+        <CardHeader>
+          <CardTitle>Lien de votre boutique</CardTitle>
+          <CardDescription>
+            Partagez ce lien avec vos clients ou intégrez-le sur vos réseaux sociaux
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="flex items-center gap-2 p-3 bg-background rounded-lg border">
+            <code className="flex-1 text-sm text-muted-foreground truncate">
+              {fullShopUrl}
+            </code>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopyLink}
+              className="shrink-0"
+            >
+              {copied ? (
+                <CheckCircle2 className="h-4 w-4 text-success" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
+          <div className="flex gap-2">
+            <Button asChild variant="outline" className="flex-1">
+              <a href={`/shop/${formData.shopUrl}`} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Ouvrir dans un nouvel onglet
+              </a>
+            </Button>
+            <Button onClick={handleCopyLink}>
+              <Copy className="mr-2 h-4 w-4" />
+              Copier le lien
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       <Tabs defaultValue="general" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">

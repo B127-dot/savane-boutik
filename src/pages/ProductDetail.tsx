@@ -6,11 +6,13 @@ import { Badge } from '@/components/ui/badge';
 import { useApp, Product } from '@/contexts/AppContext';
 import { CartSheet } from '@/components/CartSheet';
 import ThemeToggle from '@/components/ThemeToggle';
+import { useToast } from '@/hooks/use-toast';
 
 const ProductDetail = () => {
   const { shopUrl, productId } = useParams<{ shopUrl: string; productId: string }>();
   const navigate = useNavigate();
   const { products, categories, addToCart, cart } = useApp();
+  const { toast } = useToast();
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -24,8 +26,20 @@ const ProductDetail = () => {
   }, [productId, products]);
 
   const handleAddToCart = () => {
-    if (product && quantity > 0 && quantity <= product.stock) {
+    if (product) {
+      if (product.stock < quantity) {
+        toast({
+          title: "Stock insuffisant",
+          description: `Seulement ${product.stock} article(s) disponible(s)`,
+          variant: "destructive"
+        });
+        return;
+      }
       addToCart({ productId: product.id, quantity });
+      toast({
+        title: "Produit ajouté !",
+        description: `${quantity} x ${product.name} ajouté(s) au panier`,
+      });
       setIsCartOpen(true);
     }
   };

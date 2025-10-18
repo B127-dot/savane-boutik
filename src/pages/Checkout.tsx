@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Check } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,8 +14,6 @@ const Checkout = () => {
   const { cart, products, clearCart, addOrder } = useApp();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState(false);
-  const [orderId, setOrderId] = useState('');
   const [shopSettings, setShopSettings] = useState<ShopSettings | null>(null);
 
   const [formData, setFormData] = useState({
@@ -34,10 +32,10 @@ const Checkout = () => {
   }, []);
 
   useEffect(() => {
-    if (cart.length === 0 && !orderPlaced) {
+    if (cart.length === 0) {
       navigate(`/shop/${shopUrl}`);
     }
-  }, [cart, navigate, shopUrl, orderPlaced]);
+  }, [cart, navigate, shopUrl]);
 
   // Get full product details from cart items
   const cartWithProducts = cart.map(item => ({
@@ -86,9 +84,6 @@ const Checkout = () => {
 
     // Save order
     addOrder(newOrder);
-    
-    setOrderId(newOrderId);
-    setOrderPlaced(true);
     clearCart();
     
     toast({
@@ -97,35 +92,13 @@ const Checkout = () => {
     });
 
     setIsSubmitting(false);
+    
+    // Redirect to success page
+    setTimeout(() => {
+      navigate(`/shop/${shopUrl}/order-success/${newOrderId}`);
+    }, 500);
   };
 
-  if (orderPlaced) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="max-w-md w-full">
-          <CardHeader className="text-center">
-            <div className="mx-auto mb-4 w-16 h-16 bg-success/10 rounded-full flex items-center justify-center">
-              <Check className="w-8 h-8 text-success" />
-            </div>
-            <CardTitle className="text-2xl">Commande confirmée !</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4 text-center">
-            <p className="text-muted-foreground">
-              Votre commande <span className="font-semibold text-foreground">{orderId}</span> a été enregistrée avec succès.
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Le vendeur vous contactera bientôt pour confirmer les détails de livraison.
-            </p>
-            <div className="pt-4">
-              <Button onClick={() => navigate(`/shop/${shopUrl}`)} className="w-full">
-                Continuer mes achats
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background">

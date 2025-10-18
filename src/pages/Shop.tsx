@@ -7,10 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { useApp, Product, ShopSettings } from '@/contexts/AppContext';
 import { CartSheet } from '@/components/CartSheet';
 import ThemeToggle from '@/components/ThemeToggle';
+import { useToast } from '@/hooks/use-toast';
 
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
   const { products, categories, addToCart, cart } = useApp();
+  const { toast } = useToast();
   const [shopSettings, setShopSettings] = useState<ShopSettings | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -49,6 +51,10 @@ const Shop = () => {
 
   const handleAddToCart = (product: Product) => {
     addToCart({ productId: product.id, quantity: 1 });
+    toast({
+      title: "Produit ajouté !",
+      description: `${product.name} a été ajouté au panier`,
+    });
     setIsCartOpen(true);
   };
 

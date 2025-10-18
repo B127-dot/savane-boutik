@@ -9,6 +9,7 @@ import {
   SheetFooter,
 } from '@/components/ui/sheet';
 import { useApp } from '@/contexts/AppContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface CartSheetProps {
   open: boolean;
@@ -18,6 +19,7 @@ interface CartSheetProps {
 
 export const CartSheet = ({ open, onOpenChange, shopUrl }: CartSheetProps) => {
   const { cart, products, updateCartItem, removeFromCart } = useApp();
+  const { toast } = useToast();
 
   // Get full product details from cart items
   const cartWithProducts = cart.map(item => ({
@@ -26,6 +28,14 @@ export const CartSheet = ({ open, onOpenChange, shopUrl }: CartSheetProps) => {
   })).filter(item => item.product); // Filter out items where product not found
 
   const subtotal = cartWithProducts.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+
+  const handleRemoveItem = (productId: string, productName: string) => {
+    removeFromCart(productId);
+    toast({
+      title: "Produit retiré",
+      description: `${productName} a été retiré du panier`,
+    });
+  };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -99,7 +109,7 @@ export const CartSheet = ({ open, onOpenChange, shopUrl }: CartSheetProps) => {
                         variant="ghost"
                         size="icon"
                         className="h-7 w-7 ml-auto text-destructive hover:text-destructive hover:bg-destructive/10"
-                        onClick={() => removeFromCart(item.productId)}
+                        onClick={() => handleRemoveItem(item.productId, item.product.name)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

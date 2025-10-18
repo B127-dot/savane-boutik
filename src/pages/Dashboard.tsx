@@ -1,14 +1,32 @@
 import { useApp } from '@/contexts/AppContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingBag, Package, TrendingUp, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ShoppingBag, Package, TrendingUp, Users, ExternalLink, Copy, CheckCircle2 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
 const Dashboard = () => {
-  const { user, products, orders, categories } = useApp();
+  const { user, products, orders, categories, shopSettings } = useApp();
+  const { toast } = useToast();
+  const [copied, setCopied] = useState(false);
 
   const activeProducts = products.filter(p => p.status === 'active').length;
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
   const pendingOrders = orders.filter(o => o.status === 'pending').length;
+
+  const shopUrl = shopSettings?.shopUrl || 'ma-boutique';
+  const fullShopUrl = `${window.location.origin}/shop/${shopUrl}`;
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(fullShopUrl);
+    setCopied(true);
+    toast({
+      title: "Lien copié !",
+      description: "Le lien de votre boutique a été copié dans le presse-papier",
+    });
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const stats = [
     {
@@ -27,7 +45,7 @@ const Dashboard = () => {
     },
     {
       title: "Revenus",
-      value: `${totalRevenue.toLocaleString('fr-FR')} €`,
+      value: `${totalRevenue.toLocaleString('fr-FR')} FCFA`,
       description: "Chiffre d'affaires total",
       icon: TrendingUp,
       color: "text-purple-600"
@@ -54,6 +72,54 @@ const Dashboard = () => {
           {user?.role === 'admin' ? 'Administrateur' : 'Utilisateur'}
         </Badge>
       </div>
+
+      {/* Lien de la boutique */}
+      <Card className="bg-gradient-hero border-primary/20">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <ShoppingBag className="h-5 w-5 text-primary" />
+                Ma Boutique en Ligne
+              </CardTitle>
+              <CardDescription className="mt-2">
+                Partagez ce lien avec vos clients pour qu'ils puissent visiter votre boutique
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="flex items-center gap-2 p-3 bg-background rounded-lg border">
+            <code className="flex-1 text-sm text-muted-foreground truncate">
+              {fullShopUrl}
+            </code>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopyLink}
+              className="shrink-0"
+            >
+              {copied ? (
+                <CheckCircle2 className="h-4 w-4 text-success" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
+          <div className="flex gap-2">
+            <Button asChild className="flex-1">
+              <a href={`/shop/${shopUrl}`} target="_blank" rel="noopener noreferrer">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Visiter ma boutique
+              </a>
+            </Button>
+            <Button variant="outline" onClick={handleCopyLink}>
+              <Copy className="mr-2 h-4 w-4" />
+              Copier le lien
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
@@ -102,7 +168,7 @@ const Dashboard = () => {
                       {order.status}
                     </Badge>
                     <span className="text-sm font-medium">
-                      {order.total.toLocaleString('fr-FR')} €
+                      {order.total.toLocaleString('fr-FR')} FCFA
                     </span>
                   </div>
                 </div>
@@ -133,7 +199,7 @@ const Dashboard = () => {
                       {categories.find(c => c.id === product.categoryId)?.name || 'Sans catégorie'}
                     </Badge>
                     <span className="text-sm font-medium">
-                      {product.price.toLocaleString('fr-FR')} €
+                      {product.price.toLocaleString('fr-FR')} FCFA
                     </span>
                   </div>
                 </div>

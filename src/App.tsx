@@ -18,6 +18,7 @@ import Marketing from "./pages/Marketing";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -43,9 +44,10 @@ const App = () => (
             <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
             <Route path="/marketing" element={<ProtectedRoute><Marketing /></ProtectedRoute>} />
             {/* Public Shop Routes */}
-            <Route path="/shop/:shopUrl" element={<Shop />} />
-            <Route path="/shop/:shopUrl/product/:productId" element={<ProductDetail />} />
-            <Route path="/shop/:shopUrl/checkout" element={<Checkout />} />
+          <Route path="/shop/:shopUrl" element={<Shop />} />
+          <Route path="/shop/:shopUrl/product/:productId" element={<ProductDetail />} />
+          <Route path="/shop/:shopUrl/checkout" element={<Checkout />} />
+          <Route path="/shop/:shopUrl/order-success/:orderId" element={<OrderSuccess />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
