@@ -21,11 +21,27 @@ const Shop = () => {
 
   useEffect(() => {
     // Load shop settings from localStorage
+    let settings = null;
+    
+    // Try generic key first
     const savedSettings = localStorage.getItem('shopSettings');
     if (savedSettings) {
-      const settings = JSON.parse(savedSettings);
-      setShopSettings(settings);
+      settings = JSON.parse(savedSettings);
+    } else {
+      // Fallback: search for user-specific keys
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key?.startsWith('shopSettings_')) {
+          const userSettings = localStorage.getItem(key);
+          if (userSettings) {
+            settings = JSON.parse(userSettings);
+            break;
+          }
+        }
+      }
     }
+    
+    setShopSettings(settings);
   }, [shopUrl]);
 
   useEffect(() => {

@@ -294,6 +294,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     setShopSettings(initialShopSettings);
     localStorage.setItem(`shopSettings_${mockUser.id}`, JSON.stringify(initialShopSettings));
+    // Save also to generic key for public access
+    localStorage.setItem('shopSettings', JSON.stringify(initialShopSettings));
     
     return true;
   };
@@ -411,6 +413,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const updated = { ...shopSettings, ...settings };
     setShopSettings(updated);
     localStorage.setItem(`shopSettings_${user.id}`, JSON.stringify(updated));
+    // Save also to generic key for public access
+    localStorage.setItem('shopSettings', JSON.stringify(updated));
   };
 
   // Promo Codes
