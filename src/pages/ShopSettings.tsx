@@ -6,8 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Palette, Globe, Phone, MapPin, Eye, Copy, ExternalLink, CheckCircle2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Palette, Globe, Phone, MapPin, Eye, Copy, ExternalLink, CheckCircle2, MessageCircle, Info } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { isValidWhatsAppNumber } from '@/lib/whatsapp';
 
 const ShopSettings = () => {
   const { shopSettings, updateShopSettings, user } = useApp();
@@ -257,6 +259,19 @@ const ShopSettings = () => {
           </TabsContent>
 
           <TabsContent value="contact" className="space-y-6">
+            <Alert className="border-[#25D366] bg-[#25D366]/10">
+              <MessageCircle className="h-4 w-4 text-[#25D366]" />
+              <AlertTitle>Activez les commandes WhatsApp !</AlertTitle>
+              <AlertDescription className="text-sm space-y-2 mt-2">
+                <p>Permettez à vos clients de commander directement via WhatsApp.</p>
+                <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                  <li>Format attendu : +226 70 12 34 56</li>
+                  <li>Obtenez un numéro WhatsApp Business gratuit</li>
+                  <li>Les boutons WhatsApp apparaîtront automatiquement sur votre boutique</li>
+                </ul>
+              </AlertDescription>
+            </Alert>
+
             <Card>
               <CardHeader>
                 <CardTitle>Informations de contact</CardTitle>
@@ -274,13 +289,28 @@ const ShopSettings = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="whatsapp">WhatsApp</Label>
+                    <Label htmlFor="whatsapp" className="flex items-center gap-2">
+                      <MessageCircle className="h-4 w-4 text-[#25D366]" />
+                      WhatsApp Business
+                    </Label>
                     <Input
                       id="whatsapp"
                       value={formData.whatsapp}
                       onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                       placeholder="+226 70 12 34 56"
+                      className={formData.whatsapp && !isValidWhatsAppNumber(formData.whatsapp) ? 'border-destructive' : ''}
                     />
+                    {formData.whatsapp && !isValidWhatsAppNumber(formData.whatsapp) && (
+                      <p className="text-xs text-destructive mt-1">
+                        Format invalide. Utilisez le format international : +226 70 12 34 56
+                      </p>
+                    )}
+                    {formData.whatsapp && isValidWhatsAppNumber(formData.whatsapp) && (
+                      <p className="text-xs text-[#25D366] mt-1 flex items-center gap-1">
+                        <CheckCircle2 className="h-3 w-3" />
+                        Numéro valide ! Les clients pourront commander via WhatsApp
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div>

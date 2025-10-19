@@ -7,11 +7,13 @@ import { useApp, Product } from '@/contexts/AppContext';
 import { CartSheet } from '@/components/CartSheet';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useToast } from '@/hooks/use-toast';
+import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { generateProductMessage } from '@/lib/whatsapp';
 
 const ProductDetail = () => {
   const { shopUrl, productId } = useParams<{ shopUrl: string; productId: string }>();
   const navigate = useNavigate();
-  const { products, categories, addToCart, cart } = useApp();
+  const { products, categories, addToCart, cart, shopSettings } = useApp();
   const { toast } = useToast();
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
@@ -198,6 +200,17 @@ const ProductDetail = () => {
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   Ajouter au panier
                 </Button>
+
+                {shopSettings?.socialLinks?.whatsapp && (
+                  <WhatsAppButton
+                    phoneNumber={shopSettings.socialLinks.whatsapp}
+                    message={generateProductMessage(product, quantity, shopSettings.shopName)}
+                    variant="outline"
+                    label="Commander via WhatsApp"
+                    className="w-full"
+                    size="lg"
+                  />
+                )}
               </div>
             )}
           </div>
@@ -209,6 +222,7 @@ const ProductDetail = () => {
         open={isCartOpen} 
         onOpenChange={setIsCartOpen}
         shopUrl={shopUrl || ''}
+        shopSettings={shopSettings}
       />
     </div>
   );

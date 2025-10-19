@@ -8,16 +8,19 @@ import {
   SheetTitle,
   SheetFooter,
 } from '@/components/ui/sheet';
-import { useApp } from '@/contexts/AppContext';
+import { useApp, ShopSettings } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
+import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { generateCartMessage } from '@/lib/whatsapp';
 
 interface CartSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   shopUrl: string;
+  shopSettings: ShopSettings | null;
 }
 
-export const CartSheet = ({ open, onOpenChange, shopUrl }: CartSheetProps) => {
+export const CartSheet = ({ open, onOpenChange, shopUrl, shopSettings }: CartSheetProps) => {
   const { cart, products, updateCartItem, removeFromCart } = useApp();
   const { toast } = useToast();
 
@@ -124,6 +127,17 @@ export const CartSheet = ({ open, onOpenChange, shopUrl }: CartSheetProps) => {
                 <span>Total</span>
                 <span className="text-primary">{subtotal.toLocaleString()} FCFA</span>
               </div>
+
+              {shopSettings?.socialLinks?.whatsapp && (
+                <WhatsAppButton
+                  phoneNumber={shopSettings.socialLinks.whatsapp}
+                  message={generateCartMessage(cart, products, shopSettings.shopName)}
+                  variant="outline"
+                  label="Envoyer par WhatsApp"
+                  className="w-full"
+                  size="lg"
+                />
+              )}
 
               <Link to={`/shop/${shopUrl}/checkout`} className="w-full" onClick={() => onOpenChange(false)}>
                 <Button className="w-full" size="lg">

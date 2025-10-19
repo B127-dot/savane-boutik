@@ -8,6 +8,8 @@ import { useApp, Product, ShopSettings } from '@/contexts/AppContext';
 import { CartSheet } from '@/components/CartSheet';
 import ThemeToggle from '@/components/ThemeToggle';
 import { useToast } from '@/hooks/use-toast';
+import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { generateInquiryMessage } from '@/lib/whatsapp';
 
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
@@ -208,11 +210,21 @@ const Shop = () => {
         )}
       </div>
 
+      {/* WhatsApp Floating Button */}
+      {shopSettings?.socialLinks?.whatsapp && (
+        <WhatsAppButton
+          phoneNumber={shopSettings.socialLinks.whatsapp}
+          message={generateInquiryMessage(shopSettings.shopName)}
+          variant="floating"
+        />
+      )}
+
       {/* Cart Sheet */}
       <CartSheet 
         open={isCartOpen} 
         onOpenChange={setIsCartOpen}
         shopUrl={shopUrl || ''}
+        shopSettings={shopSettings}
       />
     </div>
   );

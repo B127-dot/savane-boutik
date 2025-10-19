@@ -4,9 +4,11 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useApp, Order, ShopSettings } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
+import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { generateOrderMessage } from '@/lib/whatsapp';
 
 const Checkout = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
@@ -181,9 +183,43 @@ const Checkout = () => {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
-                    {isSubmitting ? 'Traitement...' : 'Confirmer la commande'}
-                  </Button>
+                  <div className="space-y-3">
+                    <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                      {isSubmitting ? 'Traitement...' : 'Confirmer la commande'}
+                    </Button>
+
+                    {shopSettings?.socialLinks?.whatsapp && formData.customerName && formData.phone && formData.address && (
+                      <>
+                        <div className="relative">
+                          <div className="absolute inset-0 flex items-center">
+                            <span className="w-full border-t" />
+                          </div>
+                          <div className="relative flex justify-center text-xs uppercase">
+                            <span className="bg-card px-2 text-muted-foreground">Ou</span>
+                          </div>
+                        </div>
+                        
+                        <WhatsAppButton
+                          phoneNumber={shopSettings.socialLinks.whatsapp}
+                          message={generateOrderMessage(
+                            cart,
+                            products,
+                            shopSettings.shopName,
+                            {
+                              name: formData.customerName,
+                              phone: formData.phone,
+                              address: formData.address,
+                              email: formData.customerEmail
+                            }
+                          )}
+                          variant="outline"
+                          label="Envoyer la commande via WhatsApp"
+                          className="w-full"
+                          size="lg"
+                        />
+                      </>
+                    )}
+                  </div>
                 </form>
               </CardContent>
             </Card>

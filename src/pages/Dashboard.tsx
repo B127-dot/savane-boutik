@@ -2,9 +2,12 @@ import { useApp } from '@/contexts/AppContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ShoppingBag, Package, TrendingUp, Users, ExternalLink, Copy, CheckCircle2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ShoppingBag, Package, TrendingUp, Users, ExternalLink, Copy, CheckCircle2, MessageCircle, Settings } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getWhatsAppClickCount, isValidWhatsAppNumber } from '@/lib/whatsapp';
 
 const Dashboard = () => {
   const { user, products, orders, categories, shopSettings } = useApp();
@@ -14,6 +17,8 @@ const Dashboard = () => {
   const activeProducts = products.filter(p => p.status === 'active').length;
   const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
   const pendingOrders = orders.filter(o => o.status === 'pending').length;
+  const whatsappClicks = getWhatsAppClickCount();
+  const isWhatsAppConfigured = shopSettings?.socialLinks?.whatsapp && isValidWhatsAppNumber(shopSettings.socialLinks.whatsapp);
 
   const shopUrl = shopSettings?.shopUrl || 'ma-boutique';
   const fullShopUrl = `${window.location.origin}/shop/${shopUrl}`;
@@ -120,6 +125,57 @@ const Dashboard = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* WhatsApp Configuration */}
+      {!isWhatsAppConfigured ? (
+        <Alert className="border-[#25D366] bg-[#25D366]/10">
+          <MessageCircle className="h-4 w-4 text-[#25D366]" />
+          <AlertTitle>Activez WhatsApp pour booster vos ventes ! 🚀</AlertTitle>
+          <AlertDescription className="space-y-3 mt-2">
+            <p className="text-sm">
+              Permettez à vos clients de commander directement via WhatsApp. C'est rapide, simple et très populaire au Burkina Faso !
+            </p>
+            <Link to="/shop-settings">
+              <Button className="bg-[#25D366] hover:bg-[#20BA5A] text-white">
+                <Settings className="mr-2 h-4 w-4" />
+                Configurer WhatsApp Business
+              </Button>
+            </Link>
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <Card className="border-[#25D366]/20 bg-gradient-to-r from-[#25D366]/5 to-transparent">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageCircle className="h-5 w-5 text-[#25D366]" />
+                  WhatsApp Business
+                  <Badge className="bg-[#25D366] hover:bg-[#20BA5A]">Actif</Badge>
+                </CardTitle>
+                <CardDescription className="mt-2">
+                  Les clients peuvent commander via WhatsApp
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="flex items-center justify-between p-3 bg-background rounded-lg border">
+              <div>
+                <p className="text-sm font-medium">Numéro configuré</p>
+                <p className="text-xs text-muted-foreground">{shopSettings.socialLinks.whatsapp}</p>
+              </div>
+              <Badge variant="outline">{whatsappClicks} clics</Badge>
+            </div>
+            <Link to="/shop-settings">
+              <Button variant="outline" className="w-full">
+                <Settings className="mr-2 h-4 w-4" />
+                Modifier les paramètres
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => {
