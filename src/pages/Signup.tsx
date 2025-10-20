@@ -48,7 +48,7 @@ const Signup = () => {
           title: "Inscription réussie",
           description: "Bienvenue ! Votre boutique a été créée",
         });
-        navigate('/welcome');
+        navigate('/onboarding');
       }
     } catch (error) {
       toast({
