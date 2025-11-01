@@ -8,9 +8,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus, Edit, Trash2, Search } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Package } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { Product } from '@/contexts/AppContext';
+import { ImageUploader } from '@/components/ImageUploader';
 
 const Products = () => {
   const { products, categories, addProduct, updateProduct, deleteProduct } = useApp();
@@ -24,7 +25,8 @@ const Products = () => {
     price: 0,
     categoryId: '',
     stock: 0,
-    status: 'active' as 'active' | 'inactive'
+    status: 'active' as 'active' | 'inactive',
+    images: [] as string[]
   });
 
   const filteredProducts = products.filter(product =>
@@ -43,10 +45,7 @@ const Products = () => {
       });
       setEditingProduct(null);
     } else {
-      addProduct({
-        ...formData,
-        images: ['/placeholder.svg']
-      });
+      addProduct(formData);
       toast({
         title: "Produit ajouté",
         description: "Le nouveau produit a été créé avec succès",
@@ -60,7 +59,8 @@ const Products = () => {
       price: 0,
       categoryId: '',
       stock: 0,
-      status: 'active'
+      status: 'active',
+      images: []
     });
   };
 
@@ -72,7 +72,8 @@ const Products = () => {
       price: product.price,
       categoryId: product.categoryId,
       stock: product.stock,
-      status: product.status
+      status: product.status,
+      images: product.images || []
     });
   };
 
@@ -163,6 +164,11 @@ const Products = () => {
           </Select>
         </div>
       </div>
+
+      <ImageUploader
+        images={formData.images}
+        onChange={(images) => setFormData({ ...formData, images })}
+      />
       
       <DialogFooter>
         <Button type="submit">
@@ -214,6 +220,24 @@ const Products = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredProducts.map((product) => (
           <Card key={product.id}>
+            <div className="aspect-square bg-muted relative overflow-hidden">
+              {product.images?.[0] ? (
+                <img
+                  src={product.images[0]}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Package className="h-12 w-12 text-muted-foreground" />
+                </div>
+              )}
+              {product.images && product.images.length > 1 && (
+                <Badge className="absolute top-2 right-2 bg-background/80">
+                  +{product.images.length - 1}
+                </Badge>
+              )}
+            </div>
             <CardHeader>
               <div className="flex justify-between items-start">
                 <div>
@@ -228,17 +252,12 @@ const Products = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <img
-                src={product.images[0] || '/placeholder.svg'}
-                alt={product.name}
-                className="w-full h-32 object-cover rounded-md mb-4"
-              />
-              <p className="text-sm text-muted-foreground mb-2">
+              <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
                 {product.description}
               </p>
               <div className="flex justify-between items-center">
                 <span className="text-lg font-bold">
-                  {product.price.toLocaleString('fr-FR')} €
+                  {product.price.toLocaleString('fr-FR')} FCFA
                 </span>
                 <span className="text-sm text-muted-foreground">
                   Stock: {product.stock}

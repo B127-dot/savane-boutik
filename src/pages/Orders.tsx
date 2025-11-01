@@ -82,13 +82,31 @@ const Orders = () => {
             {order.products.map((item, index) => {
               const product = products.find(p => p.id === item.productId);
               return (
-                <div key={index} className="flex justify-between items-center p-2 border rounded">
-                  <div>
+                <div key={index} className="flex gap-3 p-3 border rounded">
+                  {/* Product Image */}
+                  <div className="w-16 h-16 rounded-md overflow-hidden bg-muted flex-shrink-0">
+                    {product?.images?.[0] ? (
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Package className="h-6 w-6 text-muted-foreground" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="flex-1">
                     <p className="font-medium">{product?.name || 'Produit introuvable'}</p>
                     <p className="text-sm text-muted-foreground">
                       Quantité: {item.quantity}
                     </p>
                   </div>
+
+                  {/* Price Info */}
                   <div className="text-right">
                     <p className="font-medium">
                       {(item.price * item.quantity).toLocaleString('fr-FR')} €

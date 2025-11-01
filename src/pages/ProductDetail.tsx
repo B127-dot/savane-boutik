@@ -9,6 +9,13 @@ import ThemeToggle from '@/components/ThemeToggle';
 import { useToast } from '@/hooks/use-toast';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { generateProductMessage } from '@/lib/whatsapp';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 
 const ProductDetail = () => {
   const { shopUrl, productId } = useParams<{ shopUrl: string; productId: string }>();
@@ -17,7 +24,6 @@ const ProductDetail = () => {
   const { toast } = useToast();
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(0);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
@@ -61,8 +67,6 @@ const ProductDetail = () => {
     );
   }
 
-  const images = product.images && product.images.length > 0 ? product.images : [null];
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -98,45 +102,54 @@ const ProductDetail = () => {
 
       <div className="container mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Images Gallery */}
+          {/* Images Gallery with Carousel */}
           <div className="space-y-4">
-            <div className="aspect-square rounded-lg border bg-muted overflow-hidden">
-              {images[selectedImage] ? (
-                <img
-                  src={images[selectedImage]}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-muted-foreground">Pas d'image</span>
-                </div>
-              )}
-            </div>
-            
-            {images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
-                {images.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setSelectedImage(idx)}
-                    className={`aspect-square rounded-lg border overflow-hidden ${
-                      selectedImage === idx ? 'ring-2 ring-primary' : ''
-                    }`}
-                  >
-                    {img ? (
-                      <img
-                        src={img}
-                        alt={`${product.name} ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-muted">
-                        <span className="text-xs text-muted-foreground">N/A</span>
+            {product.images && product.images.length > 0 ? (
+              <>
+                {/* Main Carousel */}
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {product.images.map((image: string, index: number) => (
+                      <CarouselItem key={index}>
+                        <div className="aspect-square bg-muted rounded-lg overflow-hidden">
+                          <img
+                            src={image}
+                            alt={`${product.name} - Image ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  {product.images.length > 1 && (
+                    <>
+                      <CarouselPrevious className="left-4" />
+                      <CarouselNext className="right-4" />
+                    </>
+                  )}
+                </Carousel>
+
+                {/* Thumbnails */}
+                {product.images.length > 1 && (
+                  <div className="grid grid-cols-4 gap-2">
+                    {product.images.map((image: string, index: number) => (
+                      <div
+                        key={index}
+                        className="aspect-square rounded-md overflow-hidden border-2 border-border hover:border-primary transition-colors cursor-pointer"
+                      >
+                        <img
+                          src={image}
+                          alt={`Miniature ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
-                    )}
-                  </button>
-                ))}
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="aspect-square bg-muted rounded-lg flex items-center justify-center">
+                <span className="text-muted-foreground">Aucune image disponible</span>
               </div>
             )}
           </div>
