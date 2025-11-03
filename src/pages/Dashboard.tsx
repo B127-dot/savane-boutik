@@ -199,6 +199,28 @@ const Dashboard = () => {
         })}
       </div>
 
+      {/* Stock Alerts */}
+      {products.filter(p => p.stock <= 5 && p.status === 'active').length > 0 && (
+        <Alert className="border-warning bg-warning/10">
+          <Package className="h-4 w-4 text-warning" />
+          <AlertTitle>Alerte Stock Faible ⚠️</AlertTitle>
+          <AlertDescription className="space-y-2 mt-2">
+            <p className="text-sm">
+              Attention ! {products.filter(p => p.stock === 0).length} produits sont en rupture de stock
+              et {products.filter(p => p.stock > 0 && p.stock <= 5).length} produits ont un stock faible.
+            </p>
+            <div className="flex gap-2 mt-3">
+              <Link to="/products">
+                <Button size="sm" variant="outline" className="border-warning text-warning hover:bg-warning/20">
+                  <Package className="mr-2 h-3 w-3" />
+                  Gérer les stocks
+                </Button>
+              </Link>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ShopQRCode from '@/components/ShopQRCode';
 import { Plus, Edit, Trash2, Percent, DollarSign, Tag, Share, Users } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { PromoCode } from '@/contexts/AppContext';
@@ -278,6 +279,9 @@ const Marketing = () => {
         </TabsContent>
 
         <TabsContent value="share" className="space-y-6">
+          {/* QR Code Component */}
+          <ShopQRCode shopUrl={shopSettings?.shopUrl || 'ma-boutique'} shopName={shopSettings?.shopName || 'Ma Boutique'} />
+          
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">

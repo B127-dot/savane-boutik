@@ -1,7 +1,16 @@
+import { useState } from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import RevenueChart from '@/components/RevenueChart';
+import CategoryPieChart from '@/components/CategoryPieChart';
+import OrdersBarChart from '@/components/OrdersBarChart';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { useToast } from '@/hooks/use-toast';
 import { 
   BarChart3, 
   TrendingUp, 
@@ -10,11 +19,14 @@ import {
   ShoppingCart, 
   DollarSign,
   Calendar,
-  Award
+  Award,
+  Download
 } from 'lucide-react';
 
 const Analytics = () => {
   const { products, orders, categories } = useApp();
+  const { toast } = useToast();
+  const [period, setPeriod] = useState<number>(30);
 
   // Calculs des statistiques
   const totalRevenue = orders
@@ -96,12 +108,69 @@ const Analytics = () => {
     }
   ];
 
+  const exportToPDF = async () => {
+    const element = document.getElementById('analytics-content');
+    if (!element) return;
+
+    toast({
+      title: "Génération du PDF...",
+      description: "Veuillez patienter quelques secondes",
+    });
+
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        logging: false,
+        useCORS: true,
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`analytics-${new Date().toISOString().split('T')[0]}.pdf`);
+
+      toast({
+        title: "PDF exporté !",
+        description: "Les statistiques ont été enregistrées en PDF",
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible d'exporter le PDF",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Statistiques</h1>
-        <p className="text-muted-foreground">Analysez les performances de votre boutique</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Statistiques</h1>
+          <p className="text-muted-foreground">Analysez les performances de votre boutique</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <Select value={period.toString()} onValueChange={(val) => setPeriod(Number(val))}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="7">7 derniers jours</SelectItem>
+              <SelectItem value="30">30 derniers jours</SelectItem>
+              <SelectItem value="90">90 derniers jours</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button onClick={exportToPDF} variant="outline">
+            <Download className="w-4 h-4 mr-2" />
+            Exporter PDF
+          </Button>
+        </div>
       </div>
+
+      <div id="analytics-content" className="space-y-6">
 
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList>
@@ -150,10 +219,16 @@ const Analytics = () => {
             ))}
           </div>
 
-          {/* Ventes par catégorie */}
+          {/* Graphiques */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <RevenueChart orders={orders} period={period} />
+            <CategoryPieChart orders={orders} products={products} categories={categories} />
+          </div>
+
+          {/* Ventes par catégorie - Details */}
           <Card>
             <CardHeader>
-              <CardTitle>Ventes par catégorie</CardTitle>
+              <CardTitle>Détails des ventes par catégorie</CardTitle>
               <CardDescription>Performance des différentes catégories de produits</CardDescription>
             </CardHeader>
             <CardContent>
@@ -249,6 +324,9 @@ const Analytics = () => {
         </TabsContent>
 
         <TabsContent value="orders" className="space-y-6">
+          {/* Orders Bar Chart */}
+          <OrdersBarChart orders={orders} />
+
           {/* Order Status */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card>
@@ -319,6 +397,7 @@ const Analytics = () => {
           </Card>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 };

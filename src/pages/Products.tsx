@@ -259,9 +259,21 @@ const Products = () => {
                 <span className="text-lg font-bold">
                   {product.price.toLocaleString('fr-FR')} FCFA
                 </span>
-                <span className="text-sm text-muted-foreground">
-                  Stock: {product.stock}
-                </span>
+                <div className="flex items-center gap-2">
+                  {product.stock === 0 ? (
+                    <Badge variant="destructive" className="text-xs">
+                      Rupture
+                    </Badge>
+                  ) : product.stock <= 5 ? (
+                    <Badge variant="secondary" className="text-xs bg-warning/20 text-warning">
+                      Stock faible: {product.stock}
+                    </Badge>
+                  ) : (
+                    <span className="text-sm text-muted-foreground">
+                      Stock: {product.stock}
+                    </span>
+                  )}
+                </div>
               </div>
             </CardContent>
             <CardFooter className="flex space-x-2">
