@@ -68,6 +68,33 @@ const SmartInsights = ({ products, orders, shopSettings }: SmartInsightsProps) =
     });
   }
 
+  // Produits inactifs nombreux (Info)
+  const inactiveProducts = products.filter(p => p.status === 'inactive');
+  if (inactiveProducts.length > 5) {
+    insights.push({
+      type: 'info',
+      icon: PackageX,
+      title: 'Produits inactifs',
+      message: `Vous avez ${inactiveProducts.length} produits inactifs. Pensez à les réactiver ou les supprimer`,
+      action: 'Gérer produits',
+      link: '/products'
+    });
+  }
+
+  // Aucune commande récente (Warning si plus de 7 jours sans commande)
+  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const recentOrders = orders.filter(o => new Date(o.createdAt) >= sevenDaysAgo);
+  if (orders.length > 0 && recentOrders.length === 0) {
+    insights.push({
+      type: 'warning',
+      icon: Clock,
+      title: 'Aucune vente récente',
+      message: 'Vous n\'avez pas eu de commande depuis plus de 7 jours',
+      action: 'Voir marketing',
+      link: '/marketing'
+    });
+  }
+
   if (insights.length === 0) {
     return null;
   }
