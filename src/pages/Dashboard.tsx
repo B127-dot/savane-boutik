@@ -3,9 +3,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { TrendingUp, ShoppingCart, Package, Percent, ExternalLink, Copy, CheckCircle2, Eye } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { TrendingUp, ShoppingCart, Package, Percent, ExternalLink, Copy, CheckCircle2, Eye, AlertTriangle, MessageCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import QuickActions from '@/components/dashboard/QuickActions';
 import SmartInsights from '@/components/dashboard/SmartInsights';
@@ -14,12 +16,28 @@ import PeriodSelector, { Period } from '@/components/dashboard/PeriodSelector';
 import RevenueChart from '@/components/RevenueChart';
 import CategoryPieChart from '@/components/CategoryPieChart';
 import ShopQRCode from '@/components/ShopQRCode';
+import NotificationCenter, { Notification } from '@/components/dashboard/NotificationCenter';
 
 const Dashboard = () => {
   const { user, products, orders, categories, shopSettings } = useApp();
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
   const [period, setPeriod] = useState<Period>('today');
+  const [showComparison, setShowComparison] = useState(() => {
+    const saved = localStorage.getItem('dashboard-show-comparison');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Trigger staggered animations on mount
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  // Save comparison mode preference
+  useEffect(() => {
+    localStorage.setItem('dashboard-show-comparison', JSON.stringify(showComparison));
+  }, [showComparison]);
 
   const shopUrl = shopSettings?.shopUrl || 'ma-boutique';
   const fullShopUrl = `${window.location.origin}/shop/${shopUrl}`;
@@ -142,8 +160,103 @@ const Dashboard = () => {
       .slice(0, 5);
   }, [products, filteredOrders]);
 
+  // Generate sparkline data for last 7 days
+  const revenueSparklineData = useMemo(() => {
+    const data: number[] = [];
+    const now = new Date();
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+      const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
+      
+      const dayRevenue = orders
+        .filter(o => {
+          const orderDate = new Date(o.createdAt);
+          return orderDate >= dayStart && orderDate < dayEnd;
+        })
+        .reduce((sum, o) => sum + o.total, 0);
+      
+      data.push(dayRevenue);
+    }
+    
+    return data;
+  }, [orders]);
+
+  const conversionSparklineData = useMemo(() => {
+    const data: number[] = [];
+    const now = new Date();
+    
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+      const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
+      
+      const dayOrders = orders.filter(o => {
+        const orderDate = new Date(o.createdAt);
+        return orderDate >= dayStart && orderDate < dayEnd;
+      }).length;
+      
+      const rate = dayOrders > 0 ? ((dayOrders / (dayOrders + 10)) * 100) : 0;
+      data.push(rate);
+    }
+    
+    return data;
+  }, [orders]);
+
+  // Generate notifications
+  const notifications = useMemo(() => {
+    const notifs: Notification[] = [];
+    
+    if (pendingOrders.length > 0) {
+      notifs.push({
+        id: 'pending-orders',
+        type: 'order',
+        title: `${pendingOrders.length} commande${pendingOrders.length > 1 ? 's' : ''} en attente`,
+        message: 'Des commandes nécessitent votre attention',
+        link: '/orders',
+        icon: ShoppingCart
+      });
+    }
+    
+    if (outOfStockProducts.length > 0) {
+      notifs.push({
+        id: 'out-of-stock',
+        type: 'alert',
+        title: `${outOfStockProducts.length} produit${outOfStockProducts.length > 1 ? 's' : ''} en rupture`,
+        message: 'Produits ne pouvant plus être vendus',
+        link: '/products',
+        icon: AlertTriangle
+      });
+    }
+    
+    if (lowStockProducts.length > 0) {
+      notifs.push({
+        id: 'low-stock',
+        type: 'stock',
+        title: `${lowStockProducts.length} produit${lowStockProducts.length > 1 ? 's' : ''} à réapprovisionner`,
+        message: 'Stock faible détecté',
+        link: '/products',
+        icon: Package
+      });
+    }
+    
+    if (!shopSettings?.socialLinks?.whatsapp) {
+      notifs.push({
+        id: 'whatsapp-config',
+        type: 'config',
+        title: 'WhatsApp non configuré',
+        message: 'Activez WhatsApp pour booster vos ventes',
+        link: '/shop-settings',
+        icon: MessageCircle
+      });
+    }
+    
+    return notifs;
+  }, [pendingOrders, outOfStockProducts, lowStockProducts, shopSettings]);
+
   return (
-    <div className="p-6 space-y-8 max-w-[1600px] mx-auto">
+    <div className="p-4 md:p-6 space-y-6 md:space-y-8 max-w-[1600px] mx-auto">
       {/* Header Zone */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b">
         <div className="flex items-center gap-4">
@@ -153,91 +266,122 @@ const Dashboard = () => {
             </AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Bienvenue, {user?.name}</h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="text-xl md:text-2xl font-bold tracking-tight">Bienvenue, {user?.name}</h1>
+            <p className="text-xs md:text-sm text-muted-foreground">
               Voici un aperçu de votre activité
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <NotificationCenter notifications={notifications} />
           <PeriodSelector value={period} onChange={setPeriod} />
-          <Badge variant="secondary" className="text-sm px-3 py-1">
-            {user?.role === 'admin' ? 'Administrateur' : 'Utilisateur'}
+          <Badge variant="secondary" className="text-xs md:text-sm px-3 py-1">
+            {user?.role === 'admin' ? 'Admin' : 'User'}
           </Badge>
         </div>
       </div>
 
       {/* Quick Actions Zone */}
-      <QuickActions />
+      <div className={`animate-fade-up ${isVisible ? 'visible' : ''}`}>
+        <QuickActions />
+      </div>
 
       {/* KPIs Zone */}
       <div>
-        <h2 className="text-xl font-bold mb-4">Indicateurs Clés</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <KPICard
-            title="Revenus"
-            value={`${totalRevenue.toLocaleString('fr-FR')} FCFA`}
-            icon={TrendingUp}
-            trend={period !== 'all' ? {
-              value: Math.abs(revenueTrend),
-              label: 'vs période précédente',
-              isPositive: revenueTrend >= 0
-            } : undefined}
-            level={1}
-          />
-          <KPICard
-            title="Commandes en Attente"
-            value={pendingOrders.length}
-            icon={ShoppingCart}
-            badge={pendingOrders.length > 0 ? {
-              text: `${pendingOrders.length} à traiter`,
-              variant: 'destructive'
-            } : undefined}
-            action={pendingOrders.length > 0 ? {
-              label: 'Traiter',
-              link: '/orders'
-            } : undefined}
-            level={pendingOrders.length > 0 ? 1 : 2}
-          />
-          <KPICard
-            title="Stock à Réapprovisionner"
-            value={lowStockProducts.length + outOfStockProducts.length}
-            icon={Package}
-            badge={outOfStockProducts.length > 0 ? {
-              text: `${outOfStockProducts.length} rupture`,
-              variant: 'warning'
-            } : undefined}
-            action={(lowStockProducts.length + outOfStockProducts.length) > 0 ? {
-              label: 'Gérer stock',
-              link: '/products'
-            } : undefined}
-            level={(lowStockProducts.length + outOfStockProducts.length) > 0 ? 2 : 3}
-          />
-          <KPICard
-            title="Taux de Conversion"
-            value={`${conversionRate}%`}
-            icon={Percent}
-            trend={period !== 'all' ? {
-              value: Math.abs(conversionTrend),
-              label: 'vs période précédente',
-              isPositive: conversionTrend >= 0
-            } : undefined}
-            level={3}
-          />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <h2 className="text-lg md:text-xl font-bold">Indicateurs Clés</h2>
+          <div className="flex items-center gap-2">
+            <Switch 
+              id="comparison-mode" 
+              checked={showComparison}
+              onCheckedChange={setShowComparison}
+            />
+            <Label htmlFor="comparison-mode" className="text-xs md:text-sm cursor-pointer">
+              Comparer avec période précédente
+            </Label>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className={`animate-stagger ${isVisible ? 'visible' : ''}`}>
+            <KPICard
+              title="Revenus"
+              value={`${totalRevenue.toLocaleString('fr-FR')} FCFA`}
+              icon={TrendingUp}
+              trend={period !== 'all' ? {
+                value: Math.abs(revenueTrend),
+                label: 'vs période précédente',
+                isPositive: revenueTrend >= 0
+              } : undefined}
+              sparklineData={revenueSparklineData}
+              showTrend={showComparison}
+              level={1}
+            />
+          </div>
+          <div className={`animate-stagger delay-100 ${isVisible ? 'visible' : ''}`}>
+            <KPICard
+              title="Commandes en Attente"
+              value={pendingOrders.length}
+              icon={ShoppingCart}
+              badge={pendingOrders.length > 0 ? {
+                text: `${pendingOrders.length} à traiter`,
+                variant: 'destructive'
+              } : undefined}
+              action={pendingOrders.length > 0 ? {
+                label: 'Traiter',
+                link: '/orders'
+              } : undefined}
+              showTrend={showComparison}
+              level={pendingOrders.length > 0 ? 1 : 2}
+            />
+          </div>
+          <div className={`animate-stagger delay-200 ${isVisible ? 'visible' : ''}`}>
+            <KPICard
+              title="Stock à Réapprovisionner"
+              value={lowStockProducts.length + outOfStockProducts.length}
+              icon={Package}
+              badge={outOfStockProducts.length > 0 ? {
+                text: `${outOfStockProducts.length} rupture`,
+                variant: 'warning'
+              } : undefined}
+              action={(lowStockProducts.length + outOfStockProducts.length) > 0 ? {
+                label: 'Gérer stock',
+                link: '/products'
+              } : undefined}
+              showTrend={showComparison}
+              level={(lowStockProducts.length + outOfStockProducts.length) > 0 ? 2 : 3}
+            />
+          </div>
+          <div className={`animate-stagger delay-300 ${isVisible ? 'visible' : ''}`}>
+            <KPICard
+              title="Taux de Conversion"
+              value={`${conversionRate}%`}
+              icon={Percent}
+              trend={period !== 'all' ? {
+                value: Math.abs(conversionTrend),
+                label: 'vs période précédente',
+                isPositive: conversionTrend >= 0
+              } : undefined}
+              sparklineData={conversionSparklineData}
+              showTrend={showComparison}
+              level={3}
+            />
+          </div>
         </div>
       </div>
 
       {/* Smart Insights Zone */}
-      <SmartInsights 
-        products={products} 
-        orders={orders} 
-        shopSettings={shopSettings}
-      />
+      <div className={`animate-fade-up delay-100 ${isVisible ? 'visible' : ''}`}>
+        <SmartInsights 
+          products={products} 
+          orders={orders} 
+          shopSettings={shopSettings}
+        />
+      </div>
 
       {/* Performance Charts Zone */}
-      <div>
-        <h2 className="text-xl font-bold mb-4">Performance</h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className={`animate-fade-up delay-200 ${isVisible ? 'visible' : ''}`}>
+        <h2 className="text-lg md:text-xl font-bold mb-4">Performance</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           <RevenueChart orders={filteredOrders} period={7} />
           <CategoryPieChart 
             orders={filteredOrders} 
@@ -248,9 +392,9 @@ const Dashboard = () => {
       </div>
 
       {/* Activity Zone */}
-      <div>
-        <h2 className="text-xl font-bold mb-4">Activité Récente</h2>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className={`animate-fade-up delay-300 ${isVisible ? 'visible' : ''}`}>
+        <h2 className="text-lg md:text-xl font-bold mb-4">Activité Récente</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {/* Recent Orders */}
           <Card>
             <CardHeader>
@@ -263,10 +407,10 @@ const Dashboard = () => {
               <div className="space-y-3">
                 {filteredOrders.slice(0, 5).length > 0 ? (
                   filteredOrders.slice(0, 5).map((order) => (
-                    <div key={order.id} className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 transition-all group">
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold">#{order.id}</p>
-                        <p className="text-xs text-muted-foreground">
+                    <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 transition-all group gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold truncate">#{order.id}</p>
+                        <p className="text-xs text-muted-foreground truncate hidden sm:block">
                           {order.customerEmail}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">
@@ -278,7 +422,7 @@ const Dashboard = () => {
                           })}
                         </p>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                         <Badge 
                           variant={order.status === 'pending' ? 'default' : 'secondary'}
                           className="text-xs"
@@ -293,7 +437,7 @@ const Dashboard = () => {
                           {order.total.toLocaleString('fr-FR')} F
                         </span>
                         <Link to="/orders">
-                          <Button size="icon" variant="ghost" className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button size="icon" variant="ghost" className="h-8 w-8 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </Link>
@@ -322,14 +466,14 @@ const Dashboard = () => {
                 {popularProducts.length > 0 ? (
                   popularProducts.map((product) => (
                     <Link key={product.id} to="/products" className="block">
-                      <div className="flex items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 transition-all group">
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold">{product.name}</p>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 hover:scale-[1.01] transition-all group gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold truncate">{product.name}</p>
                           <p className="text-xs text-muted-foreground">
                             {product.soldCount} {product.soldCount > 1 ? 'vendus' : 'vendu'}
                           </p>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                           <Badge 
                             variant={product.stock === 0 ? 'destructive' : product.stock <= 5 ? 'secondary' : 'outline'} 
                             className="text-xs"
@@ -355,7 +499,8 @@ const Dashboard = () => {
       </div>
 
       {/* Shop Link & QR Code Zone */}
-      <Card className="bg-gradient-hero border-primary/20">
+      <div className={`animate-fade-up delay-400 ${isVisible ? 'visible' : ''}`}>
+        <Card className="bg-gradient-hero border-primary/20">
         <CardHeader>
           <CardTitle>Partagez Votre Boutique</CardTitle>
           <CardDescription>
@@ -400,7 +545,8 @@ const Dashboard = () => {
             </div>
           </div>
         </CardContent>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 };
