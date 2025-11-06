@@ -1,72 +1,100 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useApp } from '@/contexts/AppContext';
 import { 
   Home, 
+  BarChart3, 
   Package, 
   ShoppingCart, 
-  CreditCard, 
-  Palette, 
-  BarChart3, 
-  Megaphone, 
-  Crown, 
-  User, 
+  Palette,
+  CreditCard,
+  Megaphone,
   HelpCircle,
+  User,
+  Crown,
+  LogOut,
+  ChevronDown,
+  ChevronRight,
+  Store,
+  Tags,
+  Grid3x3,
   Menu,
-  X,
-  Globe,
-  Plus,
-  Grid,
-  History,
-  LogOut
+  X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { useApp } from '@/contexts/AppContext';
 import ThemeToggle from '@/components/ThemeToggle';
+import UpgradeProCard from '@/components/UpgradeProCard';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Badge } from '@/components/ui/badge';
+
+interface SidebarSection {
+  label: string;
+  items: SidebarItem[];
+}
 
 interface SidebarItem {
   label: string;
   href: string;
-  icon: React.ComponentType<{ className?: string }>;
-  subItems?: { label: string; href: string; icon?: React.ComponentType<{ className?: string }> }[];
+  icon: React.ElementType;
+  badge?: number;
+  subItems?: {
+    label: string;
+    href: string;
+    icon: React.ElementType;
+  }[];
 }
-
-const sidebarItems: SidebarItem[] = [
-  { label: 'Accueil', href: '/dashboard', icon: Home },
-  {
-    label: 'Produits',
-    href: '/products',
-    icon: Package,
-    subItems: [
-      { label: 'Liste des produits', href: '/products', icon: Grid },
-      { label: 'Ajouter un produit', href: '/products/add', icon: Plus },
-      { label: 'Catégories', href: '/categories', icon: Grid },
-    ]
-  },
-  { label: 'Commandes', href: '/orders', icon: ShoppingCart },
-  {
-    label: 'Paiements',
-    href: '/payments',
-    icon: CreditCard,
-    subItems: [
-      { label: 'Transactions', href: '/payments', icon: CreditCard },
-      { label: 'Historique', href: '/payments/history', icon: History },
-    ]
-  },
-  { label: 'Ma boutique', href: '/shop-settings', icon: Palette },
-  { label: 'Statistiques', href: '/analytics', icon: BarChart3 },
-  { label: 'Marketing', href: '/marketing', icon: Megaphone },
-  { label: 'Abonnement', href: '/subscription', icon: Crown },
-  { label: 'Profil', href: '/profile', icon: User },
-  { label: 'Support', href: '/support', icon: HelpCircle },
-];
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [expandedItems, setExpandedItems] = useState<string[]>([]);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [expandedItems, setExpandedItems] = useState<string[]>(['/products']);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, shopSettings, logout } = useApp();
+  const { user, shopSettings, logout, orders } = useApp();
+
+  const pendingOrdersCount = orders.filter(o => o.status === 'pending').length;
+
+  const sidebarSections: SidebarSection[] = [
+    {
+      label: "MENU PRINCIPAL",
+      items: [
+        { label: 'Accueil', href: '/dashboard', icon: Home },
+        { label: 'Statistiques', href: '/analytics', icon: BarChart3 },
+      ]
+    },
+    {
+      label: "COMMERCE",
+      items: [
+        { 
+          label: 'Produits', 
+          href: '/products', 
+          icon: Package,
+          subItems: [
+            { label: 'Tous les produits', href: '/products', icon: Grid3x3 },
+            { label: 'Catégories', href: '/categories', icon: Tags },
+          ]
+        },
+        { 
+          label: 'Commandes', 
+          href: '/orders', 
+          icon: ShoppingCart,
+          badge: pendingOrdersCount > 0 ? pendingOrdersCount : undefined
+        },
+        { label: 'Ma boutique', href: '/shop-settings', icon: Palette },
+      ]
+    },
+    {
+      label: "OUTILS",
+      items: [
+        { label: 'Marketing', href: '/marketing', icon: Megaphone },
+      ]
+    }
+  ];
 
   const handleLogout = () => {
     logout();
@@ -77,170 +105,242 @@ const Sidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
 
+  const toggleMobileSidebar = () => {
+    setIsMobileOpen(!isMobileOpen);
+  };
+
   const toggleExpanded = (href: string) => {
-    setExpandedItems(prev => 
-      prev.includes(href) 
-        ? prev.filter(item => item !== href)
-        : [...prev, href]
-    );
+    if (expandedItems.includes(href)) {
+      setExpandedItems(expandedItems.filter(item => item !== href));
+    } else {
+      setExpandedItems([...expandedItems, href]);
+    }
   };
 
   const isActiveItem = (href: string, subItems?: any[]) => {
     if (location.pathname === href) return true;
     if (subItems) {
-      return subItems.some(subItem => location.pathname === subItem.href);
+      return subItems.some(sub => location.pathname === sub.href);
     }
     return false;
   };
 
-  return (
+  const renderNavItem = (item: SidebarItem) => {
+    const isActive = isActiveItem(item.href, item.subItems);
+    const isExpanded = expandedItems.includes(item.href);
+    const hasSubItems = item.subItems && item.subItems.length > 0;
+
+    return (
+      <div key={item.href}>
+        {/* Main Item */}
+        {isCollapsed ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  to={item.href}
+                  className={`
+                    flex items-center justify-center rounded-lg px-3 py-2.5 transition-all duration-200 group
+                    ${isActive 
+                      ? 'bg-gradient-to-r from-primary to-primary/85 text-primary-foreground shadow-lg shadow-primary/30 scale-[1.02]' 
+                      : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground hover:translate-x-1'
+                    }
+                  `}
+                >
+                  <item.icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? '' : 'group-hover:scale-110'}`} />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side="right" className="font-medium">
+                {item.label}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <div
+            className={`
+              flex items-center justify-between rounded-lg px-3 py-2.5 transition-all duration-200 cursor-pointer group
+              ${isActive 
+                ? 'bg-gradient-to-r from-primary to-primary/85 text-primary-foreground shadow-lg shadow-primary/30 scale-[1.02] border-l-4 border-primary-foreground/50' 
+                : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground hover:translate-x-1'
+              }
+            `}
+            onClick={() => hasSubItems ? toggleExpanded(item.href) : navigate(item.href)}
+          >
+            <div className="flex items-center gap-3 flex-1">
+              <item.icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? '' : 'group-hover:scale-110 group-hover:rotate-6'}`} />
+              <span className={`text-sm tracking-tight ${isActive ? 'font-semibold' : 'font-medium'}`}>
+                {item.label}
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              {item.badge !== undefined && item.badge > 0 && (
+                <Badge 
+                  variant="destructive" 
+                  className="h-5 min-w-[20px] flex items-center justify-center rounded-full text-[10px] font-bold px-1.5 animate-pulse"
+                >
+                  {item.badge}
+                </Badge>
+              )}
+              {hasSubItems && (
+                isExpanded ? (
+                  <ChevronDown className="w-4 h-4 transition-transform duration-200" />
+                ) : (
+                  <ChevronRight className="w-4 h-4 transition-transform duration-200" />
+                )
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Sub Items */}
+        {hasSubItems && isExpanded && !isCollapsed && (
+          <div className="ml-8 mt-1 space-y-1 animate-in slide-in-from-left-1 duration-200">
+            {item.subItems?.map(subItem => {
+              const isSubActive = location.pathname === subItem.href;
+              return (
+                <Link
+                  key={subItem.href}
+                  to={subItem.href}
+                  className={`
+                    flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200
+                    ${isSubActive 
+                      ? 'bg-accent text-accent-foreground font-medium' 
+                      : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground hover:translate-x-1'
+                    }
+                  `}
+                >
+                  <subItem.icon className="w-4 h-4" />
+                  <span>{subItem.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const SidebarContent = () => (
     <>
-      {/* Mobile Overlay */}
-      {!isCollapsed && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setIsCollapsed(true)}
-        />
-      )}
-      
-      {/* Sidebar */}
-      <div className={cn(
-        "fixed left-0 top-0 h-full bg-card border-r border-border z-50 transition-all duration-300 ease-out",
-        isCollapsed ? "w-16" : "w-64"
-      )}>
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-border">
+      {/* Header */}
+      <div className="p-4 border-b border-border/50">
+        <div className="flex items-center gap-3">
           {!isCollapsed && (
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-                <Globe className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <div>
-                <h2 className="font-bold text-foreground truncate">
-                  {shopSettings?.shopName || user?.name}
+            <>
+              {shopSettings?.logo ? (
+                <img 
+                  src={shopSettings.logo} 
+                  alt="Logo" 
+                  className="w-10 h-10 rounded-xl object-cover shadow-lg shadow-primary/20"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg shadow-primary/20">
+                  <Store className="w-5 h-5 text-primary-foreground" />
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <h2 className="font-bold text-base leading-tight truncate">
+                  {shopSettings?.shopName || user?.name || 'Ma Boutique'}
                 </h2>
-                <p className="text-xs text-muted-foreground truncate">
+                <p className="text-xs text-muted-foreground truncate max-w-[140px]">
                   {user?.email}
                 </p>
               </div>
-            </div>
+            </>
           )}
           <Button
             variant="ghost"
-            size="sm"
+            size="icon"
             onClick={toggleSidebar}
-            className="lg:hidden"
+            className="shrink-0 hover:bg-accent"
           >
-            {isCollapsed ? <Menu className="h-4 w-4" /> : <X className="h-4 w-4" />}
-          </Button>
-        </div>
-
-        {/* Navigation */}
-        <nav className="p-2 space-y-1 overflow-y-auto h-[calc(100vh-140px)]">
-          {sidebarItems.map((item) => (
-            <div key={item.href}>
-              {item.subItems ? (
-                <>
-                  <button
-                    onClick={() => toggleExpanded(item.href)}
-                    className={cn(
-                      "w-full flex items-center justify-between p-3 rounded-lg transition-colors",
-                      "hover:bg-accent hover:text-accent-foreground",
-                      isActiveItem(item.href, item.subItems) && "bg-accent text-accent-foreground",
-                      isCollapsed && "justify-center"
-                    )}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <item.icon className="w-5 h-5 flex-shrink-0" />
-                      {!isCollapsed && (
-                        <span className="font-medium truncate">{item.label}</span>
-                      )}
-                    </div>
-                    {!isCollapsed && (
-                      <div className={cn(
-                        "transition-transform",
-                        expandedItems.includes(item.href) && "rotate-90"
-                      )}>
-                        ▶
-                      </div>
-                    )}
-                  </button>
-                  
-                  {!isCollapsed && expandedItems.includes(item.href) && (
-                    <div className="ml-4 mt-1 space-y-1">
-                      {item.subItems.map((subItem) => (
-                        <Link
-                          key={subItem.href}
-                          to={subItem.href}
-                          className={cn(
-                            "flex items-center space-x-3 p-2 rounded-lg transition-colors text-sm",
-                            "hover:bg-accent/50 hover:text-accent-foreground",
-                            location.pathname === subItem.href && "bg-accent/80 text-accent-foreground"
-                          )}
-                        >
-                          {subItem.icon && <subItem.icon className="w-4 h-4" />}
-                          <span className="truncate">{subItem.label}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <Link
-                  to={item.href}
-                  className={cn(
-                    "flex items-center space-x-3 p-3 rounded-lg transition-colors",
-                    "hover:bg-accent hover:text-accent-foreground",
-                    location.pathname === item.href && "bg-accent text-accent-foreground",
-                    isCollapsed && "justify-center"
-                  )}
-                >
-                  <item.icon className="w-5 h-5 flex-shrink-0" />
-                  {!isCollapsed && (
-                    <span className="font-medium truncate">{item.label}</span>
-                  )}
-                </Link>
-              )}
-            </div>
-          ))}
-        </nav>
-
-        {/* Theme Toggle & Logout Button */}
-        <div className="absolute bottom-0 left-0 right-0 p-2 border-t border-border bg-card space-y-2">
-          <div className={cn(
-            "flex items-center",
-            isCollapsed ? "justify-center" : "justify-between px-3"
-          )}>
-            {!isCollapsed && <span className="text-sm text-muted-foreground">Thème</span>}
-            <ThemeToggle />
-          </div>
-          
-          <Button
-            variant="ghost"
-            onClick={handleLogout}
-            className={cn(
-              "w-full flex items-center space-x-3 p-3 rounded-lg transition-colors hover:bg-destructive/10 hover:text-destructive",
-              isCollapsed && "justify-center"
-            )}
-          >
-            <LogOut className="w-5 h-5 flex-shrink-0" />
-            {!isCollapsed && <span className="font-medium">Déconnexion</span>}
+            <Menu className="w-4 h-4" />
           </Button>
         </div>
       </div>
 
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto p-3 space-y-6 sidebar-scroll">
+        {sidebarSections.map((section, sectionIndex) => (
+          <div key={section.label} className={sectionIndex > 0 ? 'mt-6' : ''}>
+            {!isCollapsed && (
+              <h3 className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground/50 px-3 mb-2">
+                {section.label}
+              </h3>
+            )}
+            <div className="space-y-1">
+              {section.items.map(item => renderNavItem(item))}
+            </div>
+          </div>
+        ))}
+      </nav>
+
+      {/* Upgrade Pro Card */}
+      <UpgradeProCard isCollapsed={isCollapsed} />
+
+      {/* Footer */}
+      <div className="border-t border-border/50 p-3 space-y-2">
+        {!isCollapsed && (
+          <div className="flex items-center justify-between px-2 mb-2">
+            <span className="text-xs text-muted-foreground font-medium">Apparence</span>
+            <ThemeToggle />
+          </div>
+        )}
+        
+        <Button
+          variant="ghost"
+          onClick={handleLogout}
+          className={`
+            w-full transition-all duration-200
+            ${isCollapsed 
+              ? 'justify-center px-0' 
+              : 'justify-start text-destructive hover:text-destructive hover:bg-destructive/10'
+            }
+          `}
+        >
+          <LogOut className={`w-4 h-4 ${isCollapsed ? '' : 'mr-3'}`} />
+          {!isCollapsed && <span className="font-medium">Déconnexion</span>}
+        </Button>
+      </div>
+    </>
+  );
+
+  return (
+    <>
       {/* Mobile Toggle Button */}
       <Button
-        variant="outline"
-        size="sm"
-        onClick={() => setIsCollapsed(false)}
-        className={cn(
-          "fixed top-4 left-4 z-40 lg:hidden",
-          !isCollapsed && "hidden"
-        )}
+        variant="ghost"
+        size="icon"
+        onClick={toggleMobileSidebar}
+        className="fixed top-4 left-4 z-50 lg:hidden bg-background/80 backdrop-blur-sm shadow-lg"
       >
-        <Menu className="h-4 w-4" />
+        {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </Button>
+
+      {/* Mobile Overlay */}
+      {isMobileOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={toggleMobileSidebar}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`
+          fixed top-0 left-0 z-40 h-screen bg-background border-r border-border/50 flex flex-col
+          transition-all duration-300 ease-in-out
+          ${isCollapsed ? 'w-16' : 'w-72'}
+          ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
+          lg:translate-x-0
+        `}
+      >
+        <SidebarContent />
+      </aside>
+
+      {/* Spacer for desktop */}
+      <div className={`hidden lg:block transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-72'}`} />
     </>
   );
 };
