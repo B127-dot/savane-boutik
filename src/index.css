@@ -86,26 +86,6 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
 
-  /* =====================================
-   ✨ CUSTOM SCROLLBAR
-   ===================================== */
-  .sidebar-scroll::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .sidebar-scroll::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .sidebar-scroll::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground) / 0.2);
-    border-radius: 3px;
-  }
-
-  .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground) / 0.3);
-  }
-
   .dark {
     /* Mode sombre - Thème sombre moderne */
     --background: 222 84% 5%;
