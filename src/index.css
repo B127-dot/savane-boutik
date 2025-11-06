@@ -64,12 +64,6 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    /* Couleurs KPI */
-    --kpi-success: 142 76% 36%;
-    --kpi-warning: 38 92% 50%;
-    --kpi-danger: 0 84% 60%;
-    --kpi-neutral: 240 5% 65%;
-
     /* Gradients adaptés */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);
     --gradient-hero: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 50%, hsl(142 76% 95%) 100%);
@@ -139,12 +133,6 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
     --chart-3: 48 96% 53%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-
-    /* Couleurs KPI */
-    --kpi-success: 142 76% 36%;
-    --kpi-warning: 38 92% 50%;
-    --kpi-danger: 0 84% 60%;
-    --kpi-neutral: 240 5% 65%;
 
     /* Gradients modernes */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-glow)) 100%);

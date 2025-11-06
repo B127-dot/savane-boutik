@@ -64,12 +64,6 @@ export default {
 				price: {
 					DEFAULT: 'hsl(var(--price))',
 					foreground: 'hsl(var(--price-foreground))'
-				},
-				kpi: {
-					success: 'hsl(var(--kpi-success))',
-					warning: 'hsl(var(--kpi-warning))',
-					danger: 'hsl(var(--kpi-danger))',
-					neutral: 'hsl(var(--kpi-neutral))'
 				}
 			},
 			backgroundImage: {
