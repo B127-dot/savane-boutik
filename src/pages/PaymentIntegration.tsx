@@ -4,9 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ExternalLink, CheckCircle2, XCircle, Shield, Zap, Lock, ArrowRight, Sparkles, Rocket, LayoutDashboard, Key } from 'lucide-react';
+import { CheckCircle2, XCircle, Shield, Zap, Lock, Sparkles, Rocket, LayoutDashboard, Key, ArrowRight } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
+import { StepCard } from '@/components/payment/StepCard';
+import { StepConnector } from '@/components/payment/StepConnector';
+import { ProgressBar } from '@/components/payment/ProgressBar';
 
 interface PaymentConfig {
   apiKey: string;
@@ -322,86 +325,94 @@ const PaymentIntegration = () => {
         </Card>
       </div>
 
-      {/* Instructions Section */}
-      <div className="space-y-6">
-        <div>
-          <h2 className="text-3xl font-bold mb-2">Comment ça marche ?</h2>
-          <p className="text-muted-foreground">Suivez ces étapes simples pour configurer votre compte</p>
+      {/* Instructions Section - Redesigned */}
+      <div id="how-it-works-section" className="space-y-8">
+        <div className="text-center space-y-3">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+            Comment ça marche ?
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Suivez ces étapes simples pour configurer votre compte et commencer à recevoir des paiements
+          </p>
         </div>
         
-        <div className="grid gap-6">
-          {[
-            {
-              step: 1,
-              title: "Créez votre compte marchand",
-              description: "Inscrivez-vous gratuitement sur CynetPay.com et validez votre compte",
-              link: "https://www.cynetpay.com",
-              IconComponent: Rocket,
-              color: "from-blue-500 to-cyan-500"
-            },
-            {
-              step: 2,
-              title: "Accédez à votre tableau de bord",
-              description: "Connectez-vous à votre espace marchand CynetPay",
-              IconComponent: LayoutDashboard,
-              color: "from-purple-500 to-pink-500"
-            },
-            {
-              step: 3,
-              title: "Récupérez vos clés API",
-              description: "Trouvez vos identifiants dans la section 'Intégration' ou 'Développeurs'",
-              IconComponent: Key,
-              color: "from-orange-500 to-red-500"
-            },
-            {
-              step: 4,
-              title: "Configurez BurkinaShop",
-              description: "Collez vos clés API dans le formulaire ci-dessus et activez les paiements",
-              IconComponent: CheckCircle2,
-              color: "from-green-500 to-emerald-500"
-            }
-          ].map((item) => (
-            <Card 
-              key={item.step}
-              className="group hover:shadow-lg hover:scale-[1.02] transition-all duration-300 overflow-hidden"
-            >
-              <CardContent className="p-6">
-                <div className="flex gap-6">
-                  {/* Step Number with gradient */}
-                  <div className="relative">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform`}>
-                      <item.IconComponent className="w-8 h-8 text-white" />
-                    </div>
-                    <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-background border-2 border-primary flex items-center justify-center font-bold text-sm">
-                      {item.step}
-                    </div>
-                  </div>
+        {/* Desktop: 2x2 Grid, Mobile: Vertical Stack */}
+        <div className="relative">
+          {/* Grid Container */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {/* Row 1 */}
+            <StepCard 
+              step={1}
+              title="Créez votre compte marchand"
+              description="Inscrivez-vous gratuitement sur CynetPay.com et validez votre compte en quelques minutes. Aucune carte bancaire requise."
+              IconComponent={Rocket}
+              color="from-blue-500 to-cyan-500"
+              badge="⏱️ 5 min"
+              link="https://www.cynetpay.com"
+              delay={0}
+            />
+            
+            <StepCard 
+              step={2}
+              title="Accédez à votre tableau de bord"
+              description="Connectez-vous à votre espace marchand CynetPay pour accéder à vos paramètres"
+              IconComponent={LayoutDashboard}
+              color="from-purple-500 to-pink-500"
+              delay={150}
+            />
 
-                  {/* Content */}
-                  <div className="flex-1 space-y-2">
-                    <h3 className="text-xl font-bold group-hover:text-primary transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {item.description}
-                    </p>
-                    {item.link && (
-                      <a 
-                        href={item.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-primary hover:underline font-medium group/link"
-                      >
-                        <span>Visitez CynetPay.com</span>
-                        <ExternalLink className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+            {/* Row 2 */}
+            <StepCard 
+              step={3}
+              title="Récupérez vos clés API"
+              description="Trouvez vos identifiants sécurisés dans la section 'Intégration' ou 'Développeurs' de votre dashboard"
+              IconComponent={Key}
+              color="from-orange-500 to-red-500"
+              badge="🔒 Sécurisé"
+              delay={300}
+            />
+            
+            <StepCard 
+              step={4}
+              title="Configurez BurkinaShop"
+              description="Collez vos clés API dans le formulaire ci-dessus. Vos paiements seront activés immédiatement !"
+              IconComponent={CheckCircle2}
+              color="from-green-500 to-emerald-500"
+              badge="✨ Dernière étape"
+              delay={450}
+            />
+          </div>
+
+          {/* Connection Lines - Desktop only */}
+          <div className="hidden md:block">
+            {/* Horizontal line Row 1 */}
+            <div className="absolute top-[15%] left-[48%] right-[48%] h-[2px]">
+              <StepConnector direction="horizontal" />
+            </div>
+            
+            {/* Horizontal line Row 2 */}
+            <div className="absolute bottom-[15%] left-[48%] right-[48%] h-[2px]">
+              <StepConnector direction="horizontal" />
+            </div>
+            
+            {/* Vertical lines */}
+            <div className="absolute top-[30%] bottom-[30%] left-[25%] w-[2px]">
+              <StepConnector direction="vertical" />
+            </div>
+            
+            <div className="absolute top-[30%] bottom-[30%] right-[25%] w-[2px]">
+              <StepConnector direction="vertical" />
+            </div>
+          </div>
+
+          {/* Mobile connectors */}
+          <div className="md:hidden flex flex-col items-center">
+            <StepConnector direction="vertical" />
+          </div>
         </div>
+
+        {/* Progress Bar */}
+        <ProgressBar />
       </div>
     </div>
   );
