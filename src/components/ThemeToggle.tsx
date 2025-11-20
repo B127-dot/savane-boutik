@@ -33,32 +33,26 @@ const ThemeToggle = () => {
   };
 
   return (
-    <Button
-      variant="ghost"
-      size="sm"
-      onClick={toggleTheme}
-      className="relative overflow-hidden w-10 h-10 p-0 rounded-full border border-border/50 hover:border-border hover:bg-muted/50 transition-all duration-300"
-    >
-      <div className="relative w-full h-full flex items-center justify-center">
-        {/* Icône Soleil */}
-        <Sun 
-          className={`absolute w-4 h-4 text-foreground transition-all duration-500 transform ${
-            isDark 
-              ? 'scale-0 rotate-90 opacity-0' 
-              : 'scale-100 rotate-0 opacity-100'
-          }`} 
-        />
-        
-        {/* Icône Lune */}
-        <Moon 
-          className={`absolute w-4 h-4 text-foreground transition-all duration-500 transform ${
-            isDark 
-              ? 'scale-100 rotate-0 opacity-100' 
-              : 'scale-0 -rotate-90 opacity-0'
-          }`} 
-        />
-      </div>
-    </Button>
+    <div className="flex items-center gap-0.5 p-0.5 rounded-md bg-muted/30 border border-border/30">
+      <button 
+        onClick={() => toggleTheme()}
+        className={`p-1.5 rounded transition-all duration-200 ${
+          !isDark ? 'bg-background shadow-sm' : 'hover:bg-muted/50'
+        }`}
+        aria-label="Mode clair"
+      >
+        <Sun className="w-3.5 h-3.5" />
+      </button>
+      <button 
+        onClick={() => toggleTheme()}
+        className={`p-1.5 rounded transition-all duration-200 ${
+          isDark ? 'bg-background shadow-sm' : 'hover:bg-muted/50'
+        }`}
+        aria-label="Mode sombre"
+      >
+        <Moon className="w-3.5 h-3.5" />
+      </button>
+    </div>
   );
 };
 
