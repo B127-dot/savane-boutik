@@ -1,184 +1,285 @@
-import { Check, Star, Crown, Zap } from "lucide-react";
+import { useState, useRef } from "react";
+import { motion } from "framer-motion";
+import { Check, Star } from "lucide-react";
+import { Link } from "react-router-dom";
+import confetti from "canvas-confetti";
+import NumberFlow from "@number-flow/react";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 import useScrollAnimation from "@/hooks/useScrollAnimation";
 
-const PricingSection = () => {
-  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { elementRef: cardsRef, isVisible: cardsVisible } = useScrollAnimation({ threshold: 0.1 });
+interface PricingPlan {
+  name: string;
+  price: number;
+  yearlyPrice: number;
+  period: string;
+  features: string[];
+  description: string;
+  buttonText: string;
+  href: string;
+  isPopular: boolean;
+  popularBadge?: string;
+}
 
-  const plans = [
-    {
-      name: "Starter",
-      price: "7,000",
-      period: "/mois",
-      description: "Pour petits commerçants qui débutent sérieusement",
-      icon: Star,
-      popular: true,
-      features: [
-        "Jusqu'à 50 produits",
-        "Statistiques de base",
-        "Personnalisation boutique (logo + couleurs)",
-        "Codes promo simples",
-        "Support WhatsApp prioritaire"
-      ]
-    },
-    {
-      name: "Premium", 
-      price: "14,000",
-      period: "/mois",
-      description: "Professionnalisez votre boutique en ligne",
-      icon: Crown,
-      popular: false,
-      features: [
-        "Produits illimités",
-        "Domaine personnalisé",
-        "Rapports détaillés (ventes, clients)",
-        "Gestion avancée des commandes",
-        "SEO basique",
-        "Assistance WhatsApp 24/7"
-      ]
-    },
-    {
-      name: "Business",
-      price: "25,000", 
-      period: "/mois",
-      description: "Solution complète pour PME ambitieuses",
-      icon: Crown,
-      popular: false,
-      features: [
-        "Tout le plan Premium",
-        "Multi-utilisateurs avec rôles",
-        "Intégrations avancées (API, réseaux sociaux)",
-        "Notifications avancées",
-        "Statistiques avancées par zones",
-        "Assistance VIP dédiée"
-      ]
+const plans: PricingPlan[] = [
+  {
+    name: "Starter",
+    price: 0,
+    yearlyPrice: 0,
+    period: "Mois",
+    features: [
+      "1 boutique en ligne",
+      "Jusqu'à 50 produits",
+      "Paiements Orange & Moov Money",
+      "Intégration WhatsApp Business",
+      "Support par email",
+    ],
+    description: "Parfait pour démarrer",
+    buttonText: "Commencer gratuitement",
+    href: "/signup",
+    isPopular: false,
+  },
+  {
+    name: "Pro",
+    price: 15000,
+    yearlyPrice: 12000,
+    period: "Mois",
+    features: [
+      "Produits illimités",
+      "Design premium personnalisable",
+      "4 thèmes professionnels",
+      "Analytics avancés",
+      "Nom de domaine personnalisé",
+      "Code QR personnalisé",
+      "Support prioritaire WhatsApp",
+      "Zéro commission sur ventes",
+    ],
+    description: "Pour les professionnels",
+    buttonText: "Commencer",
+    href: "/signup",
+    isPopular: true,
+    popularBadge: "82% Choisissent ce plan",
+  },
+  {
+    name: "Business",
+    price: 35000,
+    yearlyPrice: 28000,
+    period: "Mois",
+    features: [
+      "Tout dans Pro",
+      "Boutiques multiples illimitées",
+      "API développeur complète",
+      "Gestion d'équipe avancée",
+      "Rapports personnalisés",
+      "Formation dédiée",
+      "Account manager dédié",
+      "SLA garanti 99.9%",
+    ],
+    description: "Pour les équipes",
+    buttonText: "Commencer",
+    href: "/signup",
+    isPopular: false,
+  },
+];
+
+export default function PricingSection() {
+  const [isMonthly, setIsMonthly] = useState(true);
+  const switchRef = useRef<HTMLButtonElement>(null);
+  const { elementRef: sectionRef, isVisible } = useScrollAnimation();
+
+  const handleToggle = (checked: boolean) => {
+    setIsMonthly(!checked);
+    if (checked && switchRef.current) {
+      const rect = switchRef.current.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+
+      confetti({
+        particleCount: 30,
+        spread: 50,
+        origin: {
+          x: x / window.innerWidth,
+          y: y / window.innerHeight,
+        },
+        colors: ["#10B981", "#34D399", "#6EE7B7"],
+        ticks: 150,
+        gravity: 1.2,
+        decay: 0.94,
+        startVelocity: 25,
+        shapes: ["circle"],
+        scalar: 0.8,
+      });
     }
-  ];
+  };
 
   return (
-    <section id="pricing" className="py-24 bg-gradient-hero">
-      <div className="container mx-auto px-4">
+    <section
+      id="pricing"
+      ref={sectionRef}
+      className="relative py-24 overflow-hidden bg-gradient-to-b from-background via-background/95 to-background"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.6 }}
+        className="container"
+      >
         {/* Header */}
-        <div 
-          ref={headerRef}
-          className={`text-center space-y-4 mb-16 animate-fade-up ${headerVisible ? 'visible' : ''}`}
-        >
-          <div className="inline-flex items-center px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border">
-            <span className="text-sm text-muted-foreground">
-              💰 Tarifs transparents, pas de frais cachés
-            </span>
-          </div>
-          <h2 className="text-3xl md:text-5xl font-bold">
-            Choisissez votre formule
-            <span className="block bg-gradient-primary bg-clip-text text-transparent">
-              simple et abordable
+        <div className="text-center space-y-4 mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Tarification simple et{" "}
+            <span className="bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
+              transparente
             </span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Commencez gratuitement, puis choisissez le plan qui correspond à votre ambition. 
-            Changez à tout moment selon vos besoins.
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Automatisez vos conversations WhatsApp et générez plus de ventes sans effort
           </p>
+        </div>
+
+        {/* Toggle */}
+        <div className="flex items-center justify-center gap-3 mb-12">
+          <span className="text-sm font-medium text-muted-foreground">
+            Facturation mensuelle
+          </span>
+          <div className="relative">
+            <Label>
+              <Switch
+                ref={switchRef as any}
+                checked={!isMonthly}
+                onCheckedChange={handleToggle}
+                className="relative"
+              />
+            </Label>
+            {!isMonthly && (
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-semibold whitespace-nowrap"
+              >
+                ⭐ Économisez 20%!
+              </motion.div>
+            )}
+          </div>
+          <span className="text-sm font-medium">
+            Facturation annuelle
+          </span>
         </div>
 
         {/* Pricing Cards */}
-        <div 
-          ref={cardsRef}
-          className={`grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto animate-fade-up delay-200 ${cardsVisible ? 'visible' : ''}`}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {plans.map((plan, index) => (
-            <div
-              key={index}
-              className={`relative p-8 rounded-2xl border transition-all duration-300 hover:scale-105 animate-stagger delay-${(index + 1) * 100} ${cardsVisible ? 'visible' : ''} ${
-                plan.popular
-                  ? "bg-gradient-card border-primary shadow-glow scale-105"
-                  : "bg-card/50 backdrop-blur-sm border-border hover:border-primary/30"
-              }`}
+            <motion.div
+              key={plan.name}
+              initial={{ y: 50, opacity: 0 }}
+              animate={isVisible ? { y: 0, opacity: 1 } : { y: 50, opacity: 0 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.2 + index * 0.1,
+              }}
+              whileHover={{
+                y: plan.isPopular ? -10 : -5,
+                transition: { duration: 0.2 },
+              }}
+              className={cn(
+                "relative rounded-2xl border-2 p-8 bg-card text-center flex flex-col",
+                plan.isPopular
+                  ? "border-primary shadow-[0_0_40px_-10px_hsl(var(--primary))] scale-105"
+                  : "border-border hover:border-primary/50 transition-colors"
+              )}
             >
               {/* Popular Badge */}
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-gradient-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium shadow-medium">
-                    ⭐ Le plus populaire
-                  </div>
+              {plan.isPopular && plan.popularBadge && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5 shadow-lg">
+                  <Star className="h-4 w-4 fill-current" />
+                  {plan.popularBadge}
                 </div>
               )}
 
-              <div className="space-y-6">
-                {/* Plan Header */}
-                <div className="text-center space-y-2">
-                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${
-                    plan.popular 
-                      ? "bg-gradient-primary/20 border-primary/30" 
-                      : "bg-gradient-primary/10 border-primary/20"
-                  } border`}>
-                    <plan.icon className={`w-8 h-8 ${plan.popular ? "text-primary-glow" : "text-primary"}`} />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground">{plan.name}</h3>
-                  <p className="text-muted-foreground">{plan.description}</p>
-                </div>
-
-                {/* Price */}
-                <div className="text-center">
-                  <div className="flex items-baseline justify-center space-x-2">
-                    <span className="text-4xl font-bold text-foreground">{plan.price}</span>
-                    <span className="text-xl text-muted-foreground">FCFA</span>
-                  </div>
-                  <div className="text-muted-foreground">{plan.period}</div>
-                </div>
-
-                {/* Features */}
-                <div className="space-y-4">
-                  {plan.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="flex items-start space-x-3">
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                        plan.popular 
-                          ? "bg-primary/20 text-primary" 
-                          : "bg-primary/10 text-primary"
-                      }`}>
-                        <Check className="w-4 h-4" />
-                      </div>
-                      <span className="text-foreground leading-relaxed">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* CTA Button */}
-                <Button 
-                  variant={plan.popular ? "hero" : "premium"} 
-                  className="w-full"
-                  size="lg"
-                >
-                  {plan.popular ? "Commencer maintenant" : "Choisir ce plan"}
-                </Button>
+              {/* Plan Name */}
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-muted-foreground uppercase tracking-wide">
+                  {plan.name}
+                </h3>
               </div>
-            </div>
+
+              {/* Price */}
+              <div className="mb-4">
+                {!isMonthly && plan.yearlyPrice > 0 && (
+                  <div className="text-2xl line-through text-muted-foreground/50 mb-1">
+                    {plan.price.toLocaleString()} FCFA
+                  </div>
+                )}
+                <div className="flex items-baseline justify-center gap-2">
+                  <NumberFlow
+                    value={isMonthly ? plan.price : plan.yearlyPrice}
+                    format={{
+                      style: "decimal",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0,
+                    }}
+                    transformTiming={{
+                      duration: 400,
+                      easing: "ease-out",
+                    }}
+                    willChange
+                    className="text-5xl md:text-6xl font-bold"
+                  />
+                  <div className="flex flex-col items-start">
+                    <span className="text-2xl font-bold">FCFA</span>
+                    <span className="text-sm text-muted-foreground">/ {plan.period}</span>
+                  </div>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {isMonthly ? "facturé mensuellement" : "facturé annuellement"}
+                </p>
+              </div>
+
+              {/* Features */}
+              <ul className="space-y-3 mb-8 flex-1 text-left">
+                {plan.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <Check className={cn(
+                      "h-5 w-5 flex-shrink-0 mt-0.5",
+                      plan.isPopular ? "text-primary" : "text-muted-foreground"
+                    )} />
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTA Button */}
+              <Link to={plan.href}>
+                <Button
+                  variant={plan.isPopular ? "hero" : "outline"}
+                  size="lg"
+                  className="w-full"
+                >
+                  {plan.buttonText}
+                </Button>
+              </Link>
+
+              <p className="text-xs text-muted-foreground mt-4">
+                {plan.description}
+              </p>
+            </motion.div>
           ))}
         </div>
 
-        {/* Bottom Info */}
-        <div className="text-center mt-16 space-y-4">
-          <p className="text-lg text-muted-foreground">
-            🎯 <strong>Essai gratuit de 14 jours</strong> · Aucune carte bancaire requise
+        {/* Footer Note */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="text-center mt-12"
+        >
+          <p className="text-sm text-muted-foreground">
+            Tous les plans incluent un essai gratuit de 14 jours • Pas de carte bancaire requise
           </p>
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-            <div className="flex items-center space-x-2">
-              <Check className="w-4 h-4 text-success" />
-              <span>Résiliation à tout moment</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Check className="w-4 h-4 text-success" />
-              <span>Migration des données incluse</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Check className="w-4 h-4 text-success" />
-              <span>Support en français</span>
-            </div>
-          </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
-};
-
-export default PricingSection;
+}
