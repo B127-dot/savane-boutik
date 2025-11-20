@@ -52,10 +52,11 @@ export function Pricing({
           y: y / window.innerHeight,
         },
         colors: [
-          "hsl(var(--primary))",
-          "hsl(var(--accent))",
-          "hsl(var(--secondary))",
-          "hsl(var(--muted))",
+          "#10B981", // Primary green - BurkinaShop brand color
+          "#34D399", // Light green accent
+          "#059669", // Dark green
+          "#6EE7B7", // Emerald light
+          "#A7F3D0", // Mint green
         ],
         ticks: 200,
         gravity: 1.2,
