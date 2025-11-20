@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
+import VideoSection from "@/components/VideoSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import PricingSection from "@/components/PricingSection";
@@ -23,6 +24,7 @@ const Index = () => {
       <Navigation />
       <div className="pt-16">
         <HeroSection />
+        <VideoSection />
         <FeaturesSection />
         <TestimonialsSection />
         <PricingSection />
