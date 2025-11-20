@@ -164,7 +164,7 @@ const FeaturesSection = () => {
 
           {/* Right Column - Content */}
           <div className="order-1 lg:order-2">
-            <div className="space-y-8">
+            <div className="space-y-8 flex flex-col items-center lg:items-center">
               {/* Header */}
               <div className="inline-flex items-center px-4 py-2 bg-card rounded-full border border-border">
                 <span className="text-sm text-muted-foreground">
@@ -172,7 +172,7 @@ const FeaturesSection = () => {
                 </span>
               </div>
 
-              <h2 className="text-4xl sm:text-5xl font-medium text-foreground tracking-tight transition-colors duration-500 text-center lg:text-center">
+              <h2 className="text-4xl sm:text-5xl font-medium text-foreground tracking-tight transition-colors duration-500 text-center lg:text-center max-w-3xl">
                 Tout ce dont vous avez besoin pour{" "}
                 <span className="bg-gradient-primary bg-clip-text text-transparent">
                   vendre en ligne
@@ -180,8 +180,8 @@ const FeaturesSection = () => {
               </h2>
 
               {/* Core Features */}
-              <div className="border-t border-border pt-6">
-                <h4 className="text-lg font-semibold text-foreground mb-4">Fonctionnalités Principales</h4>
+              <div className="border-t border-border pt-6 w-full max-w-2xl">
+                <h4 className="text-lg font-semibold text-foreground mb-4 text-center lg:text-center">Fonctionnalités Principales</h4>
                 <div className="space-y-4">
                   {/* Feature 1 */}
                   <div className="flex items-start gap-3">
