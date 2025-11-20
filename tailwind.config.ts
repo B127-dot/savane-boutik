@@ -23,6 +23,8 @@ export default {
 				'cormorant': ['Cormorant Garamond', 'serif'],
 				'inter': ['Inter', 'sans-serif'],
 				'dm-sans': ['DM Sans', 'sans-serif'],
+				'fredoka': ['Fredoka', 'sans-serif'],
+				'righteous': ['Righteous', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -118,12 +120,35 @@ export default {
 				'scroll-infinite': {
 					'0%': { transform: 'translateX(0)' },
 					'100%': { transform: 'translateX(-50%)' }
+				},
+				'blob': {
+					'0%': { transform: 'translate(0px, 0px) scale(1)' },
+					'33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+					'66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+					'100%': { transform: 'translate(0px, 0px) scale(1)' }
+				},
+				'spin-slow': {
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'scroll-infinite': 'scroll-infinite 20s linear infinite'
+				'scroll-infinite': 'scroll-infinite 20s linear infinite',
+				'blob': 'blob 7s infinite',
+				'spin-slow': 'spin-slow 3s linear infinite',
+				'fade-in': 'fadeIn 0.5s ease-out',
+			},
+			animationDelay: {
+				'100': '100ms',
+				'200': '200ms',
+				'300': '300ms',
+				'400': '400ms',
+				'600': '600ms',
+				'800': '800ms',
+				'2000': '2s',
+				'4000': '4s',
 			}
 		}
 	},
