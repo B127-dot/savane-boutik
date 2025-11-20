@@ -79,7 +79,7 @@ export default function PricingSection() {
         <Pricing
           plans={plans}
           title="Tarification simple et transparente"
-          description="Automatisez vos conversations WhatsApp et générez plus de ventes sans effort"
+          description="Choisissez le plan qui correspond à vos besoins et développez votre commerce en ligne au Burkina Faso"
         />
 
         {/* Footer Note */}
