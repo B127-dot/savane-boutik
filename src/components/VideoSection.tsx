@@ -96,15 +96,22 @@ const VideoSection = () => {
               <div className="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-primary rounded-br-2xl -z-10" />
 
               {/* Video */}
-              <div className="relative aspect-video">
-                <iframe
-                  className="w-full h-full"
-                  src="https://www.youtube.com/embed/qC1xfIx-8aY?autoplay=1&mute=1&loop=1&playlist=qC1xfIx-8aY&controls=0&modestbranding=1&rel=0&showinfo=0&disablekb=1&fs=0&iv_load_policy=3&playsinline=1"
-                  title="BurkinaShop - Présentation de la plateforme"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                />
-                {/* Overlay to block YouTube controls from appearing on hover */}
-                <div className="absolute inset-0 pointer-events-none" />
+              <div className="relative aspect-video bg-muted/20">
+                <video
+                  className="w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                >
+                  <source src="/videos/burkinashop-demo.mp4" type="video/mp4" />
+                  <source src="/videos/burkinashop-demo.webm" type="video/webm" />
+                  {/* Fallback text */}
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-muted-foreground">Votre navigateur ne supporte pas la lecture de vidéos.</p>
+                  </div>
+                </video>
               </div>
 
               {/* Glow effect on hover */}
