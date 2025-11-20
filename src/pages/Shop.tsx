@@ -187,8 +187,11 @@ const Shop = () => {
 
       <NewArrivalsCarousel 
         products={getNewArrivals()}
+        shopUrl={shopUrl!}
         onAddToCart={handleAddToCart}
         onQuickView={setQuickViewProduct}
+        onToggleWishlist={handleToggleWishlist}
+        wishlist={wishlist}
       />
 
       <div id="categories">
@@ -276,14 +279,15 @@ const Shop = () => {
           ) : filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {filteredProducts.map((product) => (
-                <ProductCardPremium
-                  key={product.id}
-                  product={product}
-                  onAddToCart={handleAddToCart}
-                  onQuickView={setQuickViewProduct}
-                  onToggleWishlist={handleToggleWishlist}
-                  isInWishlist={wishlist.includes(product.id)}
-                />
+              <ProductCardPremium
+                key={product.id}
+                product={product}
+                shopUrl={shopUrl!}
+                onAddToCart={handleAddToCart}
+                onQuickView={setQuickViewProduct}
+                onToggleWishlist={handleToggleWishlist}
+                isInWishlist={wishlist.includes(product.id)}
+              />
               ))}
             </div>
           ) : (

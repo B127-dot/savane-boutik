@@ -3,9 +3,11 @@ import { Button } from '@/components/ui/button';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Product } from '@/contexts/AppContext';
 import ProductBadge from './ProductBadge';
+import { useNavigate } from 'react-router-dom';
 
 interface ProductCardPremiumProps {
   product: Product;
+  shopUrl: string;
   onAddToCart: (product: Product) => void;
   onQuickView: (product: Product) => void;
   onToggleWishlist?: (productId: string) => void;
@@ -13,12 +15,19 @@ interface ProductCardPremiumProps {
 }
 
 const ProductCardPremium = ({ 
-  product, 
+  product,
+  shopUrl,
   onAddToCart, 
   onQuickView,
   onToggleWishlist,
   isInWishlist = false
 }: ProductCardPremiumProps) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/shop/${shopUrl}/product/${product.id}`);
+  };
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('fr-FR').format(price) + ' FCFA';
   };
@@ -35,7 +44,10 @@ const ProductCardPremium = ({
     : 0;
 
   return (
-    <div className="group relative bg-card rounded-lg border border-border overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <div 
+      onClick={handleCardClick}
+      className="group relative bg-card rounded-lg border border-border overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+    >
       {/* Badges */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
         {isNew() && <ProductBadge variant="new" />}
