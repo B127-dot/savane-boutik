@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -29,9 +29,13 @@ import ElegantFooter from '@/components/shop/themes/elegant/ElegantFooter';
 
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
+  const [searchParams] = useSearchParams();
   const { products, categories, addToCart, cart } = useApp();
   const { toast } = useToast();
   const [shopSettings, setShopSettings] = useState<ShopSettings | null>(null);
+  
+  // Support preview theme from URL parameter
+  const previewTheme = searchParams.get('previewTheme');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -164,8 +168,8 @@ const Shop = () => {
 
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Get themed components
-  const currentTheme = shopSettings?.selectedTheme || 'modern';
+  // Get themed components - support preview from URL
+  const currentTheme = previewTheme || shopSettings?.selectedTheme || 'modern';
   const Hero = currentTheme === 'elegant' ? ElegantHero : ModernHero;
   const ProductCard = currentTheme === 'elegant' ? ElegantProductCard : ModernProductCard;
   const Footer = currentTheme === 'elegant' ? ElegantFooter : ModernFooter;
