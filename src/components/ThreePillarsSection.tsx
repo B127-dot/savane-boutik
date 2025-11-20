@@ -1,28 +1,89 @@
 import { Store, Smartphone, TrendingUp, Clock, Zap, Layers, BarChart3 } from 'lucide-react';
+import { motion, useScroll, useTransform, Variants } from 'framer-motion';
+import { useRef } from 'react';
+import useScrollAnimation from '@/hooks/useScrollAnimation';
 
 const ThreePillarsSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.2 });
+  const { elementRef: cardsRef, isVisible: cardsVisible } = useScrollAnimation({ threshold: 0.1 });
+  const { elementRef: bulletsRef, isVisible: bulletsVisible } = useScrollAnimation({ threshold: 0.2 });
+  
+  // Parallax effect for the section
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+  
+  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  
+  // Animation variants
+  const cardVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      y: 60, 
+      scale: 0.95 
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1
+    }
+  };
+
+  const bulletVariants: Variants = {
+    hidden: { 
+      opacity: 0, 
+      x: -20 
+    },
+    visible: { 
+      opacity: 1, 
+      x: 0
+    }
+  };
+
   return (
-    <section className="relative py-20 sm:py-24 md:py-28 max-w-7xl mx-auto px-4 sm:px-6">
-      {/* Ambient gradient */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
+    <section ref={sectionRef} className="relative py-20 sm:py-24 md:py-28 max-w-7xl mx-auto px-4 sm:px-6">
+      {/* Ambient gradient with parallax */}
+      <motion.div 
+        style={{ y }}
+        className="pointer-events-none absolute inset-0 -z-10"
+      >
         <div className="absolute left-1/2 -translate-x-1/2 -top-16 w-[42rem] h-[42rem] rounded-full bg-gradient-to-b from-primary/15 via-primary/10 to-transparent blur-3xl"></div>
-      </div>
+      </motion.div>
 
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <motion.div 
+          ref={headerRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={headerVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-12"
+        >
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
             Nos 3 Piliers
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Une solution complète pour transformer votre commerce en Afrique
           </p>
-        </div>
+        </motion.div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {/* Card 1: Commerce Simplifié */}
-          <div className="group relative overflow-hidden rounded-3xl border border-border bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-xl transition-all duration-300">
+          <motion.div 
+            initial="hidden"
+            animate={cardsVisible ? "visible" : "hidden"}
+            variants={cardVariants}
+            transition={{
+              delay: 0,
+              duration: 0.6,
+              ease: [0.21, 0.45, 0.27, 0.9]
+            }}
+            whileHover={{ y: -8, scale: 1.02 }}
+            className="group relative overflow-hidden rounded-3xl border border-border bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300"
+          >
             {/* Dot pattern background */}
             <div 
               className="pointer-events-none absolute inset-0 opacity-[0.08]" 
@@ -90,10 +151,21 @@ const ThreePillarsSection = () => {
                 <Store className="w-5 h-5 text-primary-foreground" />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 2: Paiements Locaux */}
-          <div className="group relative overflow-hidden rounded-3xl border border-border bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-xl transition-all duration-300">
+          <motion.div 
+            initial="hidden"
+            animate={cardsVisible ? "visible" : "hidden"}
+            variants={cardVariants}
+            transition={{
+              delay: 0.15,
+              duration: 0.6,
+              ease: [0.21, 0.45, 0.27, 0.9]
+            }}
+            whileHover={{ y: -8, scale: 1.02 }}
+            className="group relative overflow-hidden rounded-3xl border border-border bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300"
+          >
             <div 
               className="pointer-events-none absolute inset-0 opacity-[0.08]" 
               style={{
@@ -136,10 +208,21 @@ const ThreePillarsSection = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 3: Croissance Garantie */}
-          <div className="group relative overflow-hidden rounded-3xl border border-border bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-xl transition-all duration-300">
+          <motion.div 
+            initial="hidden"
+            animate={cardsVisible ? "visible" : "hidden"}
+            variants={cardVariants}
+            transition={{
+              delay: 0.3,
+              duration: 0.6,
+              ease: [0.21, 0.45, 0.27, 0.9]
+            }}
+            whileHover={{ y: -8, scale: 1.02 }}
+            className="group relative overflow-hidden rounded-3xl border border-border bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300"
+          >
             <div 
               className="pointer-events-none absolute inset-0 opacity-[0.08]" 
               style={{
@@ -194,13 +277,19 @@ const ThreePillarsSection = () => {
                 <div className="shrink-0 w-2.5 h-6 rounded-full bg-gradient-to-b from-primary to-primary/80"></div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Feature bullets */}
-        <div className="mt-10 sm:mt-12 border-t border-border pt-8">
+        <div ref={bulletsRef} className="mt-10 sm:mt-12 border-t border-border pt-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="flex items-start gap-3">
+            <motion.div 
+              initial="hidden"
+              animate={bulletsVisible ? "visible" : "hidden"}
+              variants={bulletVariants}
+              transition={{ delay: 0, duration: 0.5, ease: "easeOut" }}
+              className="flex items-start gap-3"
+            >
               <span className="inline-flex w-9 h-9 ring-1 ring-border items-center justify-center bg-card rounded-full">
                 <Clock className="w-[18px] h-[18px] text-primary" />
               </span>
@@ -208,8 +297,14 @@ const ThreePillarsSection = () => {
                 <p className="text-sm font-medium text-foreground">Temps Réel</p>
                 <p className="text-sm text-muted-foreground mt-1">Gestion instantanée de vos commandes.</p>
               </div>
-            </div>
-            <div className="flex items-start gap-3">
+            </motion.div>
+            <motion.div 
+              initial="hidden"
+              animate={bulletsVisible ? "visible" : "hidden"}
+              variants={bulletVariants}
+              transition={{ delay: 0.1, duration: 0.5, ease: "easeOut" }}
+              className="flex items-start gap-3"
+            >
               <span className="inline-flex w-9 h-9 ring-1 ring-border items-center justify-center bg-card rounded-full">
                 <Zap className="w-[18px] h-[18px] text-primary" />
               </span>
@@ -217,8 +312,14 @@ const ThreePillarsSection = () => {
                 <p className="text-sm font-medium text-foreground">Automatisation Intelligente</p>
                 <p className="text-sm text-muted-foreground mt-1">Workflows qui s'adaptent à votre business.</p>
               </div>
-            </div>
-            <div className="flex items-start gap-3">
+            </motion.div>
+            <motion.div 
+              initial="hidden"
+              animate={bulletsVisible ? "visible" : "hidden"}
+              variants={bulletVariants}
+              transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
+              className="flex items-start gap-3"
+            >
               <span className="inline-flex w-9 h-9 ring-1 ring-border items-center justify-center bg-card rounded-full">
                 <Layers className="w-[18px] h-[18px] text-primary" />
               </span>
@@ -226,8 +327,14 @@ const ThreePillarsSection = () => {
                 <p className="text-sm font-medium text-foreground">Architecture Évolutive</p>
                 <p className="text-sm text-muted-foreground mt-1">Grandit avec votre entreprise.</p>
               </div>
-            </div>
-            <div className="flex items-start gap-3">
+            </motion.div>
+            <motion.div 
+              initial="hidden"
+              animate={bulletsVisible ? "visible" : "hidden"}
+              variants={bulletVariants}
+              transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
+              className="flex items-start gap-3"
+            >
               <span className="inline-flex w-9 h-9 ring-1 ring-border items-center justify-center bg-card rounded-full">
                 <TrendingUp className="w-[18px] h-[18px] text-primary" />
               </span>
@@ -235,7 +342,7 @@ const ThreePillarsSection = () => {
                 <p className="text-sm font-medium text-foreground">Analytics Avancés</p>
                 <p className="text-sm text-muted-foreground mt-1">Insights précis pour décider mieux.</p>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
