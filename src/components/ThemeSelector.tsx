@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -7,8 +7,6 @@ import { getAvailableThemes, Theme } from '@/types/themes';
 import { useToast } from '@/hooks/use-toast';
 import ThemePreviewModal from './ThemePreviewModal';
 import { useApp } from '@/contexts/AppContext';
-import { getCachedThemeScreenshot } from '@/lib/themeScreenshot';
-import ThemeScreenshotGenerator from './ThemeScreenshotGenerator';
 
 interface ThemeSelectorProps {
   currentTheme: string;
@@ -22,19 +20,6 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
   const [selectedTheme, setSelectedTheme] = useState<string>(currentTheme);
   const [previewTheme, setPreviewTheme] = useState<Theme | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const [themeScreenshots, setThemeScreenshots] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    // Load cached screenshots
-    const screenshots: Record<string, string> = {};
-    themes.forEach(theme => {
-      const cached = getCachedThemeScreenshot(theme.id);
-      if (cached) {
-        screenshots[theme.id] = cached;
-      }
-    });
-    setThemeScreenshots(screenshots);
-  }, [themes]);
 
   const handlePreview = (theme: Theme) => {
     if (!theme.isAvailable) {
@@ -94,34 +79,14 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
             >
               {/* Theme Preview */}
               <div className="relative h-48 bg-gradient-to-br from-muted to-muted-foreground/10 overflow-hidden">
-                {theme.isAvailable ? (
-                  themeScreenshots[theme.id] ? (
-                    <img 
-                      src={themeScreenshots[theme.id]} 
-                      alt={`Aperçu ${theme.name}`}
-                      className="w-full h-full object-cover object-top"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center space-y-2 p-4">
-                        <div className="text-6xl animate-fade-in">
-                          {theme.id === 'modern' && '🚀'}
-                          {theme.id === 'elegant' && '✨'}
-                        </div>
-                        <p className="text-sm text-muted-foreground font-medium">
-                          Aperçu du thème
-                        </p>
-                      </div>
-                    </div>
-                  )
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center backdrop-blur-sm bg-background/50">
-                    <div className="text-center space-y-2">
-                      <Lock className="h-12 w-12 mx-auto text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground font-medium">
-                        Bientôt disponible
-                      </p>
-                    </div>
+                <img 
+                  src={theme.preview} 
+                  alt={`Aperçu ${theme.name}`}
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                />
+                {!theme.isAvailable && (
+                  <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                    <Lock className="h-12 w-12 text-white" />
                   </div>
                 )}
 
@@ -185,9 +150,6 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
           );
         })}
       </div>
-
-      {/* Screenshot Generator */}
-      <ThemeScreenshotGenerator />
 
       {/* Info Card */}
       <Card className="bg-muted/50 border-primary/20">
