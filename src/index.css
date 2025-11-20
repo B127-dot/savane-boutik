@@ -81,25 +81,12 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
     --shadow-strong: 0 16px 64px hsl(var(--primary) / 0.2);
     --shadow-glow: 0 0 32px hsl(var(--primary-glow) / 0.3);
 
-  /* Animations */
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
 
-/* =====================================
- ✨ GLASSMORPHISM & EFFECTS
-===================================== */
-.glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glow-primary {
-  box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
-}
-
-/* =====================================
+  /* =====================================
    ✨ CUSTOM SCROLLBAR
    ===================================== */
   .sidebar-scroll::-webkit-scrollbar {
