@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Eye, Sparkles, Lock } from 'lucide-react';
 import { getAvailableThemes, Theme } from '@/types/themes';
 import { useToast } from '@/hooks/use-toast';
-import ThemePreviewModal from './ThemePreviewModal';
+import ThemePreviewModalEnhanced from './ThemePreviewModalEnhanced';
 import { useApp } from '@/contexts/AppContext';
 
 interface ThemeSelectorProps {
@@ -170,13 +170,18 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
 
       {/* Preview Modal */}
       {previewTheme && (
-        <ThemePreviewModal
+        <ThemePreviewModalEnhanced
           isOpen={isPreviewOpen}
           onClose={() => setIsPreviewOpen(false)}
-          onApply={() => handleApplyTheme(previewTheme)}
+          themes={themes}
           themeId={previewTheme.id}
           themeName={previewTheme.name}
-          shopUrl={shopSettings.shopUrl}
+          currentThemeId={currentTheme}
+          shopUrl={shopSettings?.shopUrl || 'ma-boutique'}
+          onApply={(theme) => {
+            handleApplyTheme(theme);
+            setIsPreviewOpen(false);
+          }}
         />
       )}
     </div>
