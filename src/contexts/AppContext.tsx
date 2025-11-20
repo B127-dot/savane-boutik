@@ -26,6 +26,7 @@ export interface ShopSettings {
   description: string;
   phone: string;
   address: string;
+  selectedTheme?: string;
   socialLinks: {
     whatsapp?: string;
     facebook?: string;
@@ -197,6 +198,7 @@ const mockShopSettings: ShopSettings = {
   description: 'Votre boutique en ligne au Burkina Faso',
   phone: '+226 70 12 34 56',
   address: 'Ouagadougou, Burkina Faso',
+  selectedTheme: 'modern',
   socialLinks: {
     whatsapp: '+22670123456'
   }

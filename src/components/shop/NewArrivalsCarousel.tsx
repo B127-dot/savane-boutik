@@ -2,7 +2,9 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/contexts/AppContext';
 import { useRef } from 'react';
-import ProductCardPremium from './ProductCardPremium';
+import { useTheme } from '@/contexts/ThemeContext';
+import ModernProductCard from './themes/modern/ModernProductCard';
+import ElegantProductCard from './themes/elegant/ElegantProductCard';
 
 interface NewArrivalsCarouselProps {
   products: Product[];
@@ -22,6 +24,8 @@ const NewArrivalsCarousel = ({
   wishlist 
 }: NewArrivalsCarouselProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const { themeId } = useTheme();
+  const ProductCard = themeId === 'elegant' ? ElegantProductCard : ModernProductCard;
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
@@ -84,7 +88,7 @@ const NewArrivalsCarousel = ({
               key={product.id} 
               className="flex-shrink-0 w-72 snap-start"
             >
-              <ProductCardPremium
+              <ProductCard
                 product={product}
                 shopUrl={shopUrl}
                 onAddToCart={onAddToCart}

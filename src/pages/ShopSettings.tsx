@@ -10,6 +10,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Palette, Globe, Phone, MapPin, Eye, Copy, ExternalLink, CheckCircle2, MessageCircle, Info } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { isValidWhatsAppNumber } from '@/lib/whatsapp';
+import ThemeSelector from '@/components/ThemeSelector';
 
 const ShopSettings = () => {
   const { shopSettings, updateShopSettings, user } = useApp();
@@ -144,7 +145,7 @@ const ShopSettings = () => {
       </Card>
 
       <Tabs defaultValue="general" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="general">
             <Globe className="w-4 h-4 mr-2" />
             Général
@@ -152,6 +153,10 @@ const ShopSettings = () => {
           <TabsTrigger value="design">
             <Palette className="w-4 h-4 mr-2" />
             Design
+          </TabsTrigger>
+          <TabsTrigger value="theme">
+            <Palette className="w-4 h-4 mr-2" />
+            Thème
           </TabsTrigger>
           <TabsTrigger value="contact">
             <Phone className="w-4 h-4 mr-2" />
@@ -256,6 +261,15 @@ const ShopSettings = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="theme" className="space-y-6">
+            <ThemeSelector
+              currentTheme={shopSettings?.selectedTheme || 'modern'}
+              onThemeChange={(themeId) => {
+                updateShopSettings({ selectedTheme: themeId });
+              }}
+            />
           </TabsContent>
 
           <TabsContent value="contact" className="space-y-6">
