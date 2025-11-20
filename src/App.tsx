@@ -16,6 +16,7 @@ import Categories from "./pages/Categories";
 import ShopSettings from "./pages/ShopSettings";
 import Analytics from "./pages/Analytics";
 import Marketing from "./pages/Marketing";
+import PaymentIntegration from "./pages/PaymentIntegration";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/shop-settings" element={<ProtectedRoute><ShopSettings /></ProtectedRoute>} />
             <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
             <Route path="/marketing" element={<ProtectedRoute><Marketing /></ProtectedRoute>} />
+            <Route path="/payment-integration" element={<ProtectedRoute><PaymentIntegration /></ProtectedRoute>} />
             {/* Public Shop Routes */}
           <Route path="/shop/:shopUrl" element={<Shop />} />
           <Route path="/shop/:shopUrl/product/:productId" element={<ProductDetail />} />

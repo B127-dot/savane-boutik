@@ -92,6 +92,7 @@ const Sidebar = () => {
       label: "OUTILS",
       items: [
         { label: 'Marketing', href: '/marketing', icon: Megaphone },
+        { label: 'Intégration', href: '/payment-integration', icon: CreditCard },
       ]
     }
   ];
