@@ -140,14 +140,14 @@ const Sidebar = () => {
                 <Link
                   to={item.href}
                   className={`
-                    flex items-center justify-center rounded-lg px-3 py-3 transition-all duration-300 ease-out group
+                    flex items-center justify-center rounded-lg px-3 py-2.5 transition-all duration-200 group
                     ${isActive 
-                      ? 'bg-gradient-to-r from-primary via-primary to-primary/90 text-primary-foreground shadow-lg shadow-primary/40 scale-[1.03] border-l-[5px] border-primary-foreground' 
-                      : 'text-muted-foreground hover:bg-accent/70 hover:text-accent-foreground hover:translate-x-2 hover:shadow-sm'
+                      ? 'bg-gradient-to-r from-primary to-primary/85 text-primary-foreground shadow-lg shadow-primary/30 scale-[1.02]' 
+                      : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground hover:translate-x-1'
                     }
                   `}
                 >
-                  <item.icon className={`w-5 h-5 transition-transform duration-300 ${isActive ? '' : 'group-hover:scale-[1.15] group-hover:rotate-12'}`} />
+                  <item.icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? '' : 'group-hover:scale-110'}`} />
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right" className="font-medium">
@@ -158,17 +158,17 @@ const Sidebar = () => {
         ) : (
           <div
             className={`
-              flex items-center justify-between rounded-lg px-3 py-3 transition-all duration-300 ease-out cursor-pointer group
+              flex items-center justify-between rounded-lg px-3 py-2.5 transition-all duration-200 cursor-pointer group
               ${isActive 
-                ? 'bg-gradient-to-r from-primary via-primary to-primary/90 text-primary-foreground shadow-lg shadow-primary/40 scale-[1.03] border-l-[5px] border-primary-foreground' 
-                : 'text-muted-foreground hover:bg-accent/70 hover:text-accent-foreground hover:translate-x-2 hover:shadow-sm'
+                ? 'bg-gradient-to-r from-primary to-primary/85 text-primary-foreground shadow-lg shadow-primary/30 scale-[1.02] border-l-4 border-primary-foreground/50' 
+                : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground hover:translate-x-1'
               }
             `}
             onClick={() => hasSubItems ? toggleExpanded(item.href) : navigate(item.href)}
           >
             <div className="flex items-center gap-3 flex-1">
-              <item.icon className={`w-5 h-5 transition-transform duration-300 ${isActive ? '' : 'group-hover:scale-[1.15] group-hover:rotate-12'}`} />
-              <span className={`text-sm tracking-tight ${isActive ? 'font-bold' : 'font-medium'}`}>
+              <item.icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? '' : 'group-hover:scale-110 group-hover:rotate-6'}`} />
+              <span className={`text-sm tracking-tight ${isActive ? 'font-semibold' : 'font-medium'}`}>
                 {item.label}
               </span>
             </div>
@@ -177,7 +177,7 @@ const Sidebar = () => {
               {item.badge !== undefined && item.badge > 0 && (
                 <Badge 
                   variant="destructive" 
-                  className="h-5 min-w-[20px] flex items-center justify-center rounded-full text-[10px] font-bold px-1.5 shadow-sm shadow-destructive/50"
+                  className="h-5 min-w-[20px] flex items-center justify-center rounded-full text-[10px] font-bold px-1.5 animate-pulse"
                 >
                   {item.badge}
                 </Badge>
@@ -203,10 +203,10 @@ const Sidebar = () => {
                   key={subItem.href}
                   to={subItem.href}
                   className={`
-                    flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-300 ease-out
+                    flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200
                     ${isSubActive 
                       ? 'bg-accent text-accent-foreground font-medium' 
-                      : 'text-muted-foreground hover:bg-accent/70 hover:text-accent-foreground hover:translate-x-1 hover:shadow-sm'
+                      : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground hover:translate-x-1'
                     }
                   `}
                 >
@@ -224,7 +224,7 @@ const Sidebar = () => {
   const SidebarContent = () => (
     <>
       {/* Header */}
-      <div className="p-5 border-b border-border/50 bg-gradient-to-b from-background to-accent/5">
+      <div className="p-4 border-b border-border/50">
         <div className="flex items-center gap-3">
           {!isCollapsed && (
             <>
@@ -263,13 +263,13 @@ const Sidebar = () => {
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-3 space-y-6 sidebar-scroll">
         {sidebarSections.map((section, sectionIndex) => (
-          <div key={section.label} className={sectionIndex > 0 ? 'mt-8' : ''}>
+          <div key={section.label} className={sectionIndex > 0 ? 'mt-6' : ''}>
             {!isCollapsed && (
-              <h3 className="text-[11px] font-extrabold tracking-widest uppercase text-muted-foreground/70 px-3 mb-2">
+              <h3 className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground/50 px-3 mb-2">
                 {section.label}
               </h3>
             )}
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               {section.items.map(item => renderNavItem(item))}
             </div>
           </div>
