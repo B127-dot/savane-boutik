@@ -13,6 +13,7 @@ import {
   Package
 } from "lucide-react";
 import { AnimatedGroup } from "@/components/ui/animated-group";
+import ShimmerText from '@/components/ui/shimmer-text';
 
 const FeaturesSection = () => {
   return (
@@ -172,12 +173,10 @@ const FeaturesSection = () => {
                 </span>
               </div>
 
-              <h2 className="text-4xl sm:text-5xl font-medium text-foreground tracking-tight transition-colors duration-500 text-center lg:text-center max-w-3xl">
-                Tout ce dont vous avez besoin pour{" "}
-                <span className="bg-gradient-primary bg-clip-text text-transparent">
-                  vendre en ligne
-                </span>
-              </h2>
+              <ShimmerText 
+                text="Tout ce dont vous avez besoin pour vendre en ligne"
+                className="text-4xl sm:text-5xl font-medium tracking-tight text-center lg:text-center max-w-3xl"
+              />
 
               {/* Core Features */}
               <div className="border-t border-border pt-6 w-full max-w-2xl">
