@@ -73,7 +73,7 @@ const TestimonialsSection = () => {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-accent/5">
+    <section id="testimonials" className="py-20 bg-gradient-to-b from-background to-accent/5">
       <div className="container mx-auto px-4">
         {/* Header with Title and CTA */}
         <div 

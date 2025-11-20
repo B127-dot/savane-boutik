@@ -1,23 +1,33 @@
 import { Globe, ArrowRight, Heart } from "lucide-react";
 
 const Footer = () => {
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
   const footerSections = [
     {
       title: "Produit",
       links: [
         { label: "Fonctionnalités", href: "#features" },
         { label: "Tarifs", href: "#pricing" },
-        { label: "Thèmes", href: "#themes" },
+        { label: "Comment ça marche", href: "#how-it-works" },
         { label: "Sécurité", href: "#security" },
       ]
     },
     {
       title: "Ressources", 
       links: [
+        { label: "FAQ", href: "#faq" },
+        { label: "Témoignages", href: "#testimonials" },
         { label: "Documentation", href: "/docs" },
-        { label: "Guides", href: "/guides" },
         { label: "Blog", href: "/blog" },
-        { label: "Communauté", href: "/community" },
       ]
     },
     {
@@ -26,7 +36,7 @@ const Footer = () => {
         { label: "Centre d'aide", href: "/help" },
         { label: "Contact", href: "/contact" },
         { label: "Formation", href: "/training" },
-        { label: "WhatsApp Support", href: "#whatsapp" },
+        { label: "WhatsApp", href: "https://wa.me/22670000000" },
       ]
     }
   ];
@@ -80,6 +90,7 @@ const Footer = () => {
                     <li key={linkIndex}>
                       <a
                         href={link.href}
+                        onClick={(e) => handleSmoothScroll(e, link.href)}
                         className="text-sm text-muted-foreground hover:text-primary transition-colors"
                       >
                         {link.label}
