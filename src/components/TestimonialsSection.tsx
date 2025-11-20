@@ -15,52 +15,52 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    name: "Sophie Martin",
+    name: "Fatimata Ouédraogo",
     role: "Fondatrice",
-    company: "Belle & Chic",
-    content: "J'ai créé ma boutique en ligne en moins de 30 minutes. Les ventes ont dépassé mes attentes dès le premier mois !",
+    company: "Faso Wax",
+    content: "J'ai créé ma boutique de pagnes en moins de 30 minutes. Avec Orange Money intégré, mes clientes paient facilement. Mon chiffre d'affaires a doublé en 2 mois !",
     rating: 5,
-    avatar: "SM"
+    avatar: "FO"
   },
   {
-    name: "Ahmed Benali",
+    name: "Issoufou Sawadogo",
     role: "Entrepreneur",
-    company: "TechStore",
-    content: "Interface intuitive et support client exceptionnel. Je recommande à tous les entrepreneurs qui veulent se lancer rapidement.",
+    company: "Tech BF",
+    content: "Parfait pour vendre mes téléphones et accessoires. Le support via WhatsApp est rapide et efficace. Je recommande à tous les commerçants de Ouaga !",
     rating: 5,
-    avatar: "AB"
+    avatar: "IS"
   },
   {
-    name: "Marie Dubois",
+    name: "Aminata Traoré",
     role: "Créatrice",
-    company: "Artisan Créatif",
-    content: "Parfait pour vendre mes créations artisanales. Le système est simple et les clients adorent l'expérience d'achat.",
+    company: "Bijoux Artisanaux",
+    content: "Grâce à BurkE-Shop, je vends mes créations partout au Burkina. L'intégration WhatsApp Business me permet de communiquer directement avec mes clients.",
     rating: 5,
-    avatar: "MD"
+    avatar: "AT"
   },
   {
-    name: "Lucas Bernard",
+    name: "Moussa Kaboré",
     role: "Gérant",
-    company: "Mode & Style",
-    content: "Les outils marketing intégrés m'ont permis de doubler mon chiffre d'affaires en 3 mois. Incroyable !",
+    company: "Mode Africaine",
+    content: "Interface simple, paiement Orange Money et Moov Money, livraison rapide. J'ai triplé mes ventes en 3 mois. C'est incroyable !",
     rating: 5,
-    avatar: "LB"
+    avatar: "MK"
   },
   {
-    name: "Fatima El Amrani",
-    role: "Directrice",
-    company: "Beauté Bio",
-    content: "Solution complète et professionnelle. Mes clients apprécient la fluidité de la navigation et du paiement.",
+    name: "Salimata Compaoré",
+    role: "Commerçante",
+    company: "Cosmétiques Naturels",
+    content: "Solution complète et professionnelle adaptée au Burkina. Mes clientes adorent pouvoir payer avec leur mobile. Support 7j/7 en français, c'est top !",
     rating: 5,
-    avatar: "FE"
+    avatar: "SC"
   },
   {
-    name: "Pierre Lefebvre",
+    name: "Boureima Ouattara",
     role: "Fondateur",
-    company: "Sport Plus",
-    content: "J'ai testé plusieurs plateformes avant de trouver celle-ci. C'est de loin la meilleure pour les débutants.",
+    company: "Électronique Plus",
+    content: "J'ai testé plusieurs plateformes avant BurkE-Shop. Aucune n'était adaptée au Burkina comme celle-ci. Orange Money, Moov Money, WhatsApp... tout est là !",
     rating: 5,
-    avatar: "PL"
+    avatar: "BO"
   }
 ];
 
