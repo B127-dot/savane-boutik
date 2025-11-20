@@ -123,7 +123,7 @@ export function Pricing({
             }}
             className={cn(
               "rounded-2xl border-[1px] p-6 bg-background text-center lg:flex lg:flex-col lg:justify-center relative",
-              plan.isPopular ? "border-primary border-2" : "border-border",
+              plan.isPopular ? "border-primary border-2 shadow-[0_0_60px_-15px_rgba(16,185,129,0.5)]" : "border-border",
               "flex flex-col",
               !plan.isPopular && "mt-5",
               index === 0 || index === 2
