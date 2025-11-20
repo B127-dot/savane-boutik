@@ -32,7 +32,7 @@ export const THEME_REGISTRY: Record<string, Theme> = {
     description: 'Design sophistiqué avec typographie raffinée et espaces aérés. Idéal pour les produits haut de gamme.',
     preview: '/theme-previews/elegant.jpg',
     category: 'elegant',
-    isAvailable: false,
+    isAvailable: true,
     components: {
       hero: 'elegant',
       productCard: 'elegant',
