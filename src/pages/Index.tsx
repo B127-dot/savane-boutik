@@ -7,6 +7,7 @@ import ThreePillarsSection from "@/components/ThreePillarsSection";
 import ValuePropositionSection from "@/components/ValuePropositionSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import FeaturesSection from "@/components/FeaturesSection";
+import SecuritySection from "@/components/SecuritySection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import PricingSection from "@/components/PricingSection";
 import Footer from "@/components/Footer";
@@ -32,6 +33,7 @@ const Index = () => {
         <ValuePropositionSection />
         <HowItWorksSection />
         <FeaturesSection />
+        <SecuritySection />
         <TestimonialsSection />
         <PricingSection />
         <Footer />
