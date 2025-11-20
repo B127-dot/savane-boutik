@@ -29,10 +29,11 @@ const Products = () => {
     images: [] as string[]
   });
 
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    categories.find(c => c.id === product.categoryId)?.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProducts = products.filter(product => {
+    const category = categories.find(c => c.id === product.categoryId);
+    return product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (category?.name.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

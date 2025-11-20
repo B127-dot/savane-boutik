@@ -71,7 +71,8 @@ const Dashboard = () => {
   const lowStockProducts = products.filter(p => p.stock > 0 && p.stock <= 5 && p.status === 'active');
   const outOfStockProducts = products.filter(p => p.stock === 0 && p.status === 'active');
   const totalOrders = filteredOrders.length;
-  const conversionRate = totalOrders > 0 ? ((totalOrders / (totalOrders + 10)) * 100).toFixed(1) : '0';
+  const deliveredOrders = filteredOrders.filter(o => o.status === 'delivered').length;
+  const conversionRate = totalOrders > 0 ? ((deliveredOrders / totalOrders) * 100).toFixed(1) : '0';
 
   // Calculate comparison with previous period
   const previousPeriodOrders = useMemo(() => {
@@ -106,19 +107,21 @@ const Dashboard = () => {
   const previousRevenue = previousPeriodOrders.reduce((sum, order) => sum + order.total, 0);
   const previousOrdersCount = previousPeriodOrders.length;
 
-  // Calculate trends
+  // Calculate trends with proper edge case handling
   const revenueTrend = previousRevenue > 0 
     ? Math.round(((totalRevenue - previousRevenue) / previousRevenue) * 100)
-    : totalRevenue > 0 ? 100 : 0;
+    : totalRevenue > 0 ? 999 : 0;
   
   const ordersTrend = previousOrdersCount > 0
     ? Math.round(((totalOrders - previousOrdersCount) / previousOrdersCount) * 100)
-    : totalOrders > 0 ? 100 : 0;
+    : totalOrders > 0 ? 999 : 0;
 
-  const previousConversionRate = previousOrdersCount > 0 ? ((previousOrdersCount / (previousOrdersCount + 10)) * 100) : 0;
+  const previousDeliveredOrders = previousPeriodOrders.filter(o => o.status === 'delivered').length;
+  const previousConversionRate = previousOrdersCount > 0 ? ((previousDeliveredOrders / previousOrdersCount) * 100) : 0;
+  const currentConversionRate = parseFloat(conversionRate);
   const conversionTrend = previousConversionRate > 0
-    ? Math.round((parseFloat(conversionRate) - previousConversionRate) / previousConversionRate * 100)
-    : parseFloat(conversionRate) > 0 ? 100 : 0;
+    ? Math.round((currentConversionRate - previousConversionRate) / previousConversionRate * 100)
+    : currentConversionRate > 0 ? 999 : 0;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(fullShopUrl);

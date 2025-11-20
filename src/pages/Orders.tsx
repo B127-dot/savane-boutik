@@ -39,6 +39,7 @@ const Orders = () => {
       case 'confirmed': return 'secondary';
       case 'shipped': return 'outline';
       case 'delivered': return 'secondary';
+      case 'cancelled': return 'destructive';
       default: return 'default';
     }
   };
@@ -49,6 +50,7 @@ const Orders = () => {
       case 'confirmed': return 'Confirmée';
       case 'shipped': return 'Expédiée';
       case 'delivered': return 'Livrée';
+      case 'cancelled': return 'Annulée';
       default: return status;
     }
   };
