@@ -1,15 +1,11 @@
 import { ArrowRight, Store, Smartphone, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import useScrollAnimation from "@/hooks/useScrollAnimation";
+import { AnimatedGroup } from "@/components/ui/animated-group";
 import heroImage from "@/assets/hero-ecommerce.jpg";
 import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const navigate = useNavigate();
-  const { elementRef: headerRef, isVisible: headerVisible } = useScrollAnimation();
-  const { elementRef: contentRef, isVisible: contentVisible } = useScrollAnimation({ threshold: 0.2 });
-  const { elementRef: imageRef, isVisible: imageVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { elementRef: statsRef, isVisible: statsVisible } = useScrollAnimation({ threshold: 0.1 });
 
   const stats = [
     {
@@ -36,17 +32,14 @@ const HeroSection = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--primary))_0%,transparent_50%)] opacity-5" />
       
       <div className="container mx-auto px-4 pt-20 pb-16">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <AnimatedGroup
+          className="grid lg:grid-cols-2 gap-12 items-center"
+          preset="scale"
+        >
           {/* Content Left */}
-          <div 
-            ref={contentRef}
-            className={`text-center lg:text-left space-y-8 animate-fade-left ${contentVisible ? 'visible' : ''}`}
-          >
-            <div className="space-y-6">
-              <div 
-                ref={headerRef}
-                className={`inline-flex items-center px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border shadow-soft animate-fade-up ${headerVisible ? 'visible' : ''}`}
-              >
+          <div className="text-center lg:text-left space-y-8">
+            <AnimatedGroup className="space-y-6" preset="blur-slide">
+              <div className="inline-flex items-center px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border shadow-soft">
                 <span className="text-sm text-muted-foreground">
                   🚀 La solution e-commerce made in Burkina Faso
                 </span>
@@ -64,10 +57,13 @@ const HeroSection = () => {
                 Créez votre boutique en ligne en quelques minutes. Vendez sur WhatsApp, 
                 Facebook et votre site web. Acceptez Orange Money et Moov Money.
               </p>
-            </div>
+            </AnimatedGroup>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <AnimatedGroup 
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+              preset="scale"
+            >
               <Button 
                 variant="hero" 
                 size="lg" 
@@ -80,10 +76,13 @@ const HeroSection = () => {
               <Button variant="premium" size="lg">
                 Voir la démo
               </Button>
-            </div>
+            </AnimatedGroup>
 
             {/* Social Proof */}
-            <div className="flex flex-wrap justify-center lg:justify-start gap-6 pt-8">
+            <AnimatedGroup 
+              className="flex flex-wrap justify-center lg:justify-start gap-6 pt-8"
+              preset="fade"
+            >
               <div className="flex items-center space-x-2">
                 <div className="flex -space-x-2">
                   {[1, 2, 3, 4].map((i) => (
@@ -102,14 +101,11 @@ const HeroSection = () => {
                   <div className="text-muted-foreground">300+ commerçants</div>
                 </div>
               </div>
-            </div>
+            </AnimatedGroup>
           </div>
 
           {/* Hero Image Right */}
-          <div 
-            ref={imageRef}
-            className={`relative animate-fade-right ${imageVisible ? 'visible' : ''}`}
-          >
+          <div className="relative">
             <div className="relative z-10">
               <img
                 src={heroImage}
@@ -117,40 +113,42 @@ const HeroSection = () => {
                 className="rounded-2xl shadow-strong w-full"
               />
               {/* Floating Cards */}
-              <div className="absolute -top-4 -left-4 bg-card p-4 rounded-xl shadow-medium border border-border backdrop-blur-sm">
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded-full bg-success"></div>
-                  <span className="text-sm font-medium">En ligne</span>
+              <AnimatedGroup preset="scale">
+                <div className="absolute -top-4 -left-4 bg-card p-4 rounded-xl shadow-medium border border-border backdrop-blur-sm">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-success animate-pulse"></div>
+                    <span className="text-sm font-medium">En ligne</span>
+                  </div>
                 </div>
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-card p-4 rounded-xl shadow-medium border border-border backdrop-blur-sm">
-                <div className="text-sm">
-                  <div className="font-bold text-success">+247%</div>
-                  <div className="text-muted-foreground">Ventes ce mois</div>
+                <div className="absolute -bottom-4 -right-4 bg-card p-4 rounded-xl shadow-medium border border-border backdrop-blur-sm">
+                  <div className="text-sm">
+                    <div className="font-bold text-success">+247%</div>
+                    <div className="text-muted-foreground">Ventes ce mois</div>
+                  </div>
                 </div>
-              </div>
+              </AnimatedGroup>
             </div>
           </div>
-        </div>
+        </AnimatedGroup>
 
         {/* Stats */}
-        <div 
-          ref={statsRef}
-          className={`grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-border animate-fade-up ${statsVisible ? 'visible' : ''}`}
+        <AnimatedGroup 
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16 pt-16 border-t border-border"
+          preset="slide"
         >
           {stats.map((stat, index) => (
             <div 
               key={index} 
-              className={`text-center space-y-2 animate-stagger delay-${(index + 1) * 100} ${statsVisible ? 'visible' : ''}`}
+              className="text-center space-y-2 group hover:scale-105 transition-transform duration-300"
             >
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-primary/10 border border-primary/20">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-primary/10 border border-primary/20 group-hover:bg-gradient-primary/20 transition-colors">
                 <stat.icon className="w-6 h-6 text-primary" />
               </div>
               <div className="text-3xl font-bold text-foreground">{stat.value}</div>
               <div className="text-muted-foreground">{stat.label}</div>
             </div>
           ))}
-        </div>
+        </AnimatedGroup>
       </div>
     </section>
   );
