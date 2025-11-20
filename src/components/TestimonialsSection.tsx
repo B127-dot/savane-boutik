@@ -1,5 +1,6 @@
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import useScrollAnimation from "@/hooks/useScrollAnimation";
 import { cn } from "@/lib/utils";
 
@@ -63,70 +64,102 @@ const testimonials: Testimonial[] = [
   }
 ];
 
-const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
-  <Card className="flex-shrink-0 w-[350px] mx-3 bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all duration-300">
-    <CardContent className="p-6">
-      <div className="flex items-center gap-4 mb-4">
-        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
-          {testimonial.avatar}
+const TestimonialCard = ({ 
+  testimonial, 
+  isVisible, 
+  delay 
+}: { 
+  testimonial: Testimonial; 
+  isVisible: boolean; 
+  delay: string;
+}) => (
+  <div
+    className={cn(
+      "transition-all duration-700 transform",
+      delay,
+      isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+    )}
+  >
+    <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:scale-[1.02] transition-all duration-300 h-full">
+      <CardContent className="p-6">
+        <div className="flex gap-1 mb-4">
+          {Array.from({ length: testimonial.rating }).map((_, i) => (
+            <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+          ))}
         </div>
-        <div>
-          <h4 className="font-semibold text-foreground">{testimonial.name}</h4>
-          <p className="text-sm text-muted-foreground">
-            {testimonial.role} - {testimonial.company}
-          </p>
+        
+        <p className="text-muted-foreground leading-relaxed mb-6">
+          "{testimonial.content}"
+        </p>
+        
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+            {testimonial.avatar}
+          </div>
+          <div>
+            <h4 className="font-semibold text-foreground text-sm">{testimonial.name}</h4>
+            <p className="text-xs text-muted-foreground">
+              {testimonial.role}
+            </p>
+          </div>
         </div>
-      </div>
-      
-      <div className="flex gap-1 mb-3">
-        {Array.from({ length: testimonial.rating }).map((_, i) => (
-          <Star key={i} className="w-4 h-4 fill-primary text-primary" />
-        ))}
-      </div>
-      
-      <p className="text-muted-foreground leading-relaxed">
-        "{testimonial.content}"
-      </p>
-    </CardContent>
-  </Card>
+      </CardContent>
+    </Card>
+  </div>
 );
 
 const TestimonialsSection = () => {
-  const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.2 });
+  const { elementRef: titleRef, isVisible: titleVisible } = useScrollAnimation({ threshold: 0.2 });
+  const { elementRef: cardsRef, isVisible: cardsVisible } = useScrollAnimation({ threshold: 0.1 });
+
+  const handleGetStarted = () => {
+    window.location.href = '/signup';
+  };
 
   return (
-    <section ref={elementRef} className="py-20 bg-gradient-to-b from-background to-accent/5 overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-background to-accent/5">
       <div className="container mx-auto px-4">
-        <div className={cn(
-          "text-center mb-12 transition-all duration-700 transform",
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        )}>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-            Ils nous font confiance
+        {/* Header with Title and CTA */}
+        <div 
+          ref={titleRef}
+          className={cn(
+            "text-center mb-16 transition-all duration-700 transform",
+            titleVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          )}
+        >
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">
+            Ils l'adorent,{" "}
+            <span className="bg-gradient-primary bg-clip-text text-transparent">
+              pourquoi pas vous ?
+            </span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Découvrez les témoignages de nos clients satisfaits qui ont transformé leur activité avec notre plateforme
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-8 text-lg">
+            Rejoignez plus de 300 entrepreneurs burkinabè qui développent leur commerce avec BurkinaShop
           </p>
+          <Button 
+            variant="hero" 
+            size="lg"
+            onClick={handleGetStarted}
+            className="group"
+          >
+            Commencer gratuitement
+            <span className="ml-2 group-hover:translate-x-1 transition-transform duration-200">→</span>
+          </Button>
         </div>
 
-        <div className="relative">
-          {/* Gradient overlays */}
-          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
-          
-          {/* Scrolling container */}
-          <div className="overflow-hidden">
-            <div className="animate-scroll-infinite hover:pause-animation flex">
-              {/* First set */}
-              {testimonials.map((testimonial, index) => (
-                <TestimonialCard key={`first-${index}`} testimonial={testimonial} />
-              ))}
-              {/* Duplicate set for seamless loop */}
-              {testimonials.map((testimonial, index) => (
-                <TestimonialCard key={`second-${index}`} testimonial={testimonial} />
-              ))}
-            </div>
-          </div>
+        {/* Testimonials Grid */}
+        <div 
+          ref={cardsRef}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
+        >
+          {testimonials.map((testimonial, index) => (
+            <TestimonialCard
+              key={index}
+              testimonial={testimonial}
+              isVisible={cardsVisible}
+              delay={index % 2 === 0 ? "delay-0" : "delay-150"}
+            />
+          ))}
         </div>
       </div>
     </section>
