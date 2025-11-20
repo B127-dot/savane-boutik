@@ -186,11 +186,11 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
             <div 
               className="absolute -inset-1 rounded-2xl opacity-60 blur-xl pointer-events-none"
               style={{
-                background: `radial-gradient(60% 60% at 50% 50%, ${step.gradientFrom.replace('from-', 'rgb(var(--')})/.22, rgba(217,70,239,0) 70%)`
+                background: `radial-gradient(60% 60% at 50% 50%, ${step.gradientFrom.replace('from-', 'hsl(var(--')})/.22, transparent 70%)`
               }}
             />
 
-            {/* Main visual card */}
+            {/* Main visual card with placeholder */}
             <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card/30 shadow-lg aspect-[4/3] backdrop-blur-sm">
               {/* Grid pattern background */}
               <div 
@@ -204,33 +204,33 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
               {/* Inner ring */}
               <div className="absolute inset-0 rounded-2xl ring-1 ring-white/10 pointer-events-none" />
 
-              {/* Icon Container - Centered */}
-              <div className="absolute inset-8 flex items-center justify-center">
-                <div 
-                  className={`rounded-2xl border border-border/50 bg-gradient-to-br from-card/80 via-card/50 to-card/80 backdrop-blur-md px-8 py-12 shadow-lg shadow-black/30 w-full max-w-sm transform hover:scale-105 transition-transform duration-500`}
-                >
-                  <div className="flex flex-col items-center gap-6">
-                    {/* Animated Icon */}
-                    <div className="relative">
-                      <div 
-                        className={`h-16 w-16 rounded-full ring-2 ring-border/50 flex items-center justify-center animate-pulse bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo} shadow-lg`}
-                      >
-                        <step.icon className="w-8 h-8 text-white" strokeWidth={2} />
-                      </div>
+              {/* Placeholder Content - Centered */}
+              <div className="absolute inset-0 flex items-center justify-center p-8">
+                <div className="text-center space-y-6 max-w-md">
+                  {/* Icon with gradient background */}
+                  <div className="flex justify-center">
+                    <div 
+                      className={`h-20 w-20 rounded-2xl bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo} flex items-center justify-center shadow-lg`}
+                    >
+                      <step.icon className="w-10 h-10 text-white" strokeWidth={2} />
                     </div>
+                  </div>
 
-                    {/* Status text */}
-                    <div className="text-center">
-                      <p className="text-foreground/90 text-lg font-medium">{step.badge}</p>
-                      <p className="text-muted-foreground text-sm mt-2">En cours...</p>
-                    </div>
+                  {/* Placeholder text */}
+                  <div className="space-y-3">
+                    <h4 className="text-xl font-semibold text-foreground">
+                      Aperçu visuel à venir
+                    </h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Une démonstration visuelle de cette étape sera bientôt disponible
+                    </p>
+                  </div>
 
-                    {/* Progress bar */}
-                    <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden">
-                      <div 
-                        className={`bg-gradient-to-r ${step.gradientFrom} ${step.gradientTo} h-full rounded-full animate-progressGrow`}
-                      />
-                    </div>
+                  {/* Decorative elements */}
+                  <div className="flex items-center justify-center gap-2 pt-2">
+                    <div className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${step.gradientFrom} ${step.gradientTo} animate-pulse`} />
+                    <div className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${step.gradientFrom} ${step.gradientTo} animate-pulse`} style={{ animationDelay: '0.2s' }} />
+                    <div className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${step.gradientFrom} ${step.gradientTo} animate-pulse`} style={{ animationDelay: '0.4s' }} />
                   </div>
                 </div>
               </div>
@@ -239,7 +239,7 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
               <div 
                 className="absolute -inset-1 rounded-2xl opacity-40 blur-xl pointer-events-none"
                 style={{
-                  background: `radial-gradient(60% 60% at 50% 50%, ${step.gradientFrom.replace('from-', 'rgba(')}0.22), rgba(217,70,239,0) 70%)`
+                  background: `radial-gradient(60% 60% at 50% 50%, ${step.gradientFrom.replace('from-', 'hsl(var(--')})/.15, transparent 70%)`
                 }}
               />
             </div>
