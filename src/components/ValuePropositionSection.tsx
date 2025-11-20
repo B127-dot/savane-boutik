@@ -87,9 +87,6 @@ const ValuePropositionSection = () => {
                 <p className="text-muted-foreground leading-relaxed">
                   {benefit.description}
                 </p>
-
-                {/* Hover effect line */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-b-2xl" />
               </div>
             ))}
           </div>
