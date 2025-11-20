@@ -276,31 +276,31 @@ const Sidebar = () => {
         ))}
       </nav>
 
-      {/* Upgrade Pro Card */}
-      <UpgradeProCard isCollapsed={isCollapsed} />
-
-      {/* Footer */}
-      <div className="border-t border-border/50 p-3 space-y-2">
+      {/* Footer avec Upgrade Pro Card + ThemeToggle + Logout */}
+      <div className="border-t border-border/50 p-2 space-y-1">
+        {/* Upgrade Pro Card */}
+        <UpgradeProCard isCollapsed={isCollapsed} />
+        
+        {/* Theme Toggle (sans label) */}
         {!isCollapsed && (
-          <div className="flex items-center justify-between px-2 mb-2">
-            <span className="text-xs text-muted-foreground font-medium">Apparence</span>
+          <div className="px-2 flex justify-center">
             <ThemeToggle />
           </div>
         )}
         
+        {/* Logout Button */}
         <Button
           variant="ghost"
+          size="sm"
           onClick={handleLogout}
-          className={`
-            w-full transition-all duration-200
-            ${isCollapsed 
+          className={`w-full h-8 transition-all duration-200 ${
+            isCollapsed 
               ? 'justify-center px-0' 
               : 'justify-start text-destructive hover:text-destructive hover:bg-destructive/10'
-            }
-          `}
+          }`}
         >
-          <LogOut className={`w-4 h-4 ${isCollapsed ? '' : 'mr-3'}`} />
-          {!isCollapsed && <span className="font-medium">Déconnexion</span>}
+          <LogOut className={`w-3.5 h-3.5 ${isCollapsed ? '' : 'mr-2'}`} />
+          {!isCollapsed && <span className="text-xs">Déconnexion</span>}
         </Button>
       </div>
     </>
