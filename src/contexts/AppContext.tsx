@@ -30,7 +30,21 @@ export interface ShopSettings {
     whatsapp?: string;
     facebook?: string;
     instagram?: string;
+    tiktok?: string;
   };
+  // Hero Section
+  heroImage?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  heroButtonText?: string;
+  heroButtonLink?: string;
+  // Trust Bar
+  trustBar?: {
+    icon: string;
+    text: string;
+  }[];
+  // Footer
+  aboutText?: string;
 }
 
 export interface CartItem {

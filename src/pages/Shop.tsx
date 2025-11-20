@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Search, ShoppingCart } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useApp, Product, ShopSettings } from '@/contexts/AppContext';
 import { CartSheet } from '@/components/CartSheet';
-import ThemeToggle from '@/components/ThemeToggle';
 import { useToast } from '@/hooks/use-toast';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
-import { generateInquiryMessage } from '@/lib/whatsapp';
+import ShopHeader from '@/components/shop/ShopHeader';
+import ShopHero from '@/components/shop/ShopHero';
+import TrustBar from '@/components/shop/TrustBar';
+import ShopFooter from '@/components/shop/ShopFooter';
 
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
@@ -89,142 +92,155 @@ const Shop = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">{shopSettings.shopName}</h1>
-              {shopSettings.description && (
-                <p className="text-sm text-muted-foreground">{shopSettings.description}</p>
-              )}
-            </div>
-            <div className="flex items-center gap-3">
-              <ThemeToggle />
-              <Button
-                variant="outline"
-                size="icon"
-                className="relative"
-                onClick={() => setIsCartOpen(true)}
-              >
-                <ShoppingCart className="h-5 w-5" />
-                {cartItemsCount > 0 && (
-                  <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                    {cartItemsCount}
-                  </Badge>
-                )}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <ShopHeader 
+        logo={shopSettings.logo}
+        shopName={shopSettings.shopName}
+        cartItemsCount={cartItemsCount}
+        onCartClick={() => setIsCartOpen(true)}
+      />
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Search & Filters */}
-        <div className="mb-8 space-y-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input
-              placeholder="Rechercher un produit..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
+      {/* Hero Section */}
+      <ShopHero 
+        heroImage={shopSettings.heroImage}
+        heroTitle={shopSettings.heroTitle}
+        heroSubtitle={shopSettings.heroSubtitle}
+        heroButtonText={shopSettings.heroButtonText}
+        heroButtonLink={shopSettings.heroButtonLink}
+      />
+
+      {/* Trust Bar */}
+      <TrustBar trustItems={shopSettings.trustBar} />
+
+      {/* Products Section */}
+      <section id="products" className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          {/* Section Title */}
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Nos Produits
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Découvrez notre sélection de produits de qualité
+            </p>
           </div>
-          
-          <div className="flex gap-2 flex-wrap">
-            <Button
-              variant={selectedCategory === 'all' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setSelectedCategory('all')}
-            >
-              Tous les produits
-            </Button>
-            {categories.map(cat => (
+
+          {/* Search and Filters */}
+          <div className="mb-8 space-y-4">
+            <div className="relative max-w-md mx-auto">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Rechercher un produit..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 h-12"
+              />
+            </div>
+
+            {/* Category Filters */}
+            <div className="flex flex-wrap gap-2 justify-center">
               <Button
-                key={cat.id}
-                variant={selectedCategory === cat.name ? 'default' : 'outline'}
+                variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory('all')}
                 size="sm"
-                onClick={() => setSelectedCategory(cat.name)}
               >
-                {cat.name}
+                Tous
               </Button>
-            ))}
+              {categories.map(category => (
+                <Button
+                  key={category.id}
+                  variant={selectedCategory === category.name ? 'default' : 'outline'}
+                  onClick={() => setSelectedCategory(category.name)}
+                  size="sm"
+                >
+                  {category.name}
+                </Button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Products Grid */}
-        {filteredProducts.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">Aucun produit trouvé</p>
-          </div>
-        ) : (
+          {/* Products Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map(product => (
               <div
                 key={product.id}
-                className="group bg-card rounded-lg border overflow-hidden hover:shadow-lg transition-all"
+                className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
               >
-                <Link to={`/shop/${shopUrl}/product/${product.id}`}>
-                  <div className="aspect-square bg-muted relative overflow-hidden">
-                    {product.images?.[0] ? (
-                      <img
-                        src={product.images[0]}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-muted-foreground">Pas d'image</span>
-                      </div>
-                    )}
-                  </div>
+                <Link to={`/product/${product.id}`}>
+                  <AspectRatio ratio={1}>
+                    <img
+                      src={product.images[0] || '/placeholder.svg'}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </AspectRatio>
                 </Link>
-                
-                <div className="p-4 space-y-3">
-                  <Link to={`/shop/${shopUrl}/product/${product.id}`}>
-                    <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+
+                <div className="p-6 space-y-4 text-center">
+                  <Link to={`/product/${product.id}`}>
+                    <h3 className="font-semibold text-lg text-foreground hover:text-primary transition-colors">
                       {product.name}
                     </h3>
                   </Link>
-                  
-                  <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xl font-bold text-primary">{product.price.toLocaleString()} FCFA</p>
-                      <p className="text-xs text-muted-foreground">Stock: {product.stock}</p>
-                    </div>
-                  </div>
-                  
-                  <Button
-                    onClick={() => handleAddToCart(product)}
-                    className="w-full"
-                    size="sm"
-                  >
-                    Ajouter au panier
-                  </Button>
+
+                  <p className="text-2xl font-bold text-primary">
+                    {product.price.toLocaleString()} FCFA
+                  </p>
+
+                  {product.stock > 0 ? (
+                    <Button
+                      onClick={() => handleAddToCart(product)}
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
+                      size="lg"
+                    >
+                      Ajouter au panier
+                    </Button>
+                  ) : (
+                    <Badge variant="secondary" className="w-full py-3">
+                      Rupture de stock
+                    </Badge>
+                  )}
                 </div>
               </div>
             ))}
           </div>
-        )}
-      </div>
 
-      {/* WhatsApp Floating Button */}
-      {shopSettings?.socialLinks?.whatsapp && (
-        <WhatsAppButton
+          {filteredProducts.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">
+                Aucun produit trouvé
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <ShopFooter 
+        logo={shopSettings.logo}
+        shopName={shopSettings.shopName}
+        aboutText={shopSettings.aboutText}
+        phone={shopSettings.phone}
+        whatsapp={shopSettings.socialLinks?.whatsapp}
+        facebook={shopSettings.socialLinks?.facebook}
+        instagram={shopSettings.socialLinks?.instagram}
+        tiktok={shopSettings.socialLinks?.tiktok}
+      />
+
+      {/* WhatsApp Button */}
+      {shopSettings.socialLinks?.whatsapp && (
+        <WhatsAppButton 
           phoneNumber={shopSettings.socialLinks.whatsapp}
-          message={generateInquiryMessage(shopSettings.shopName)}
-          variant="floating"
+          message={`Bonjour ${shopSettings.shopName}, j'aimerais en savoir plus sur vos produits.`}
         />
       )}
 
       {/* Cart Sheet */}
       <CartSheet 
         open={isCartOpen} 
-        onOpenChange={setIsCartOpen}
-        shopUrl={shopUrl || ''}
-        shopSettings={shopSettings}
+        onOpenChange={setIsCartOpen} 
+        shopUrl={shopUrl || ''} 
+        shopSettings={shopSettings} 
       />
     </div>
   );
