@@ -96,49 +96,61 @@ const StepCard = ({ step, index }: { step: typeof steps[0]; index: number }) => 
   return (
     <div
       ref={elementRef}
-      className={`flex flex-col md:flex-row items-start gap-6 md:gap-8 ${
+      className={`grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center ${
         isVisible ? "animate-fade-in" : "opacity-0"
       }`}
       style={{ animationDelay: `${index * 100}ms` }}
     >
-      {/* Step Number - Discrete on the left */}
-      <div className="flex-shrink-0">
+      {/* Left Column: Number + Text */}
+      <div className="space-y-6 md:space-y-8">
+        {/* Giant Number */}
         <div
-          className={`text-5xl md:text-6xl font-bold bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo} bg-clip-text text-transparent leading-tight`}
+          className={`text-[120px] md:text-[140px] lg:text-[160px] font-bold leading-none bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo} bg-clip-text text-transparent`}
         >
           {step.number}
         </div>
-      </div>
 
-      {/* Content Section */}
-      <div className="flex-1 flex flex-col md:flex-row gap-6 md:gap-8 items-start">
         {/* Text Content */}
-        <div className="flex-1 space-y-2 md:space-y-3">
-          <h3 className="text-2xl md:text-3xl font-bold text-foreground leading-tight">
+        <div className="space-y-3 md:space-y-4">
+          <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
             {step.title}
           </h3>
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
             {step.description}
           </p>
         </div>
+      </div>
 
-        {/* Image Container - Compact */}
-        <div className="w-full md:w-[280px] lg:w-[320px] flex-shrink-0">
-          <div className="relative group">
+      {/* Right Column: Image with Colored Frame */}
+      <div className="relative">
+        {/* Colored border frame effect */}
+        <div className="relative group">
+          {/* Gradient border with stronger colors on right/bottom */}
+          <div
+            className={`absolute inset-0 bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo} rounded-2xl md:rounded-3xl`}
+            style={{
+              padding: '3px',
+            }}
+          >
+            <div className="w-full h-full bg-background rounded-2xl md:rounded-3xl" />
+          </div>
+          
+          {/* Orange/colored accent on right edge */}
+          <div
+            className={`absolute top-0 right-0 bottom-0 w-1 md:w-1.5 bg-gradient-to-b ${step.gradientFrom} ${step.gradientTo} rounded-r-2xl md:rounded-r-3xl`}
+          />
+          
+          {/* Main image container */}
+          <div className="relative bg-gradient-to-br from-muted/50 to-muted rounded-2xl md:rounded-3xl aspect-[3/4] md:aspect-[4/5] flex items-center justify-center overflow-hidden group-hover:scale-[1.02] transition-transform duration-300 border-2 border-transparent">
+            {/* Icon in center */}
             <div
-              className={`absolute -inset-[2px] bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo} rounded-2xl opacity-60 blur-sm group-hover:opacity-100 transition-all duration-300`}
-            />
-            <div className="relative bg-gradient-to-br from-muted/50 to-muted rounded-2xl aspect-[4/3] flex items-center justify-center overflow-hidden group-hover:scale-[1.02] transition-transform duration-300">
-              {/* Icon in center */}
-              <div
-                className={`bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo} rounded-full p-6 shadow-2xl`}
-              >
-                <step.icon className="w-12 h-12 md:w-14 md:h-14 text-white" strokeWidth={1.5} />
-              </div>
-              
-              {/* Subtle grid pattern */}
-              <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
+              className={`bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo} rounded-full p-8 md:p-10 shadow-2xl`}
+            >
+              <step.icon className="w-16 h-16 md:w-20 md:h-20 text-white" strokeWidth={1.5} />
             </div>
+            
+            {/* Subtle grid pattern */}
+            <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
           </div>
         </div>
       </div>
