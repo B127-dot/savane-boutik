@@ -9,9 +9,11 @@ import FeaturesSection from "@/components/FeaturesSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import PricingSection from "@/components/PricingSection";
 import Footer from "@/components/Footer";
+import { use3DScroll, getSection3DStyle } from "@/hooks/use3DScroll";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { scrollY } = use3DScroll();
 
   useEffect(() => {
     // Check if user is already logged in
@@ -22,16 +24,30 @@ const Index = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Navigation />
       <div className="pt-16">
-        <HeroSection />
-        <VideoSection />
-        <ValuePropositionSection />
-        <HowItWorksSection />
-        <FeaturesSection />
-        <TestimonialsSection />
-        <PricingSection />
+        <div style={getSection3DStyle(scrollY, 0)}>
+          <HeroSection />
+        </div>
+        <div style={getSection3DStyle(scrollY, 1)} className="relative z-10">
+          <VideoSection />
+        </div>
+        <div style={getSection3DStyle(scrollY, 2)} className="relative z-10">
+          <ValuePropositionSection />
+        </div>
+        <div style={getSection3DStyle(scrollY, 3)} className="relative z-10">
+          <HowItWorksSection />
+        </div>
+        <div style={getSection3DStyle(scrollY, 4)} className="relative z-10">
+          <FeaturesSection />
+        </div>
+        <div style={getSection3DStyle(scrollY, 5)} className="relative z-10">
+          <TestimonialsSection />
+        </div>
+        <div style={getSection3DStyle(scrollY, 6)} className="relative z-10">
+          <PricingSection />
+        </div>
         <Footer />
       </div>
     </div>
