@@ -26,6 +26,9 @@ import ModernFooter from '@/components/shop/themes/modern/ModernFooter';
 import ElegantHero from '@/components/shop/themes/elegant/ElegantHero';
 import ElegantProductCard from '@/components/shop/themes/elegant/ElegantProductCard';
 import ElegantFooter from '@/components/shop/themes/elegant/ElegantFooter';
+import MinimalHero from '@/components/shop/themes/minimal/MinimalHero';
+import MinimalProductCard from '@/components/shop/themes/minimal/MinimalProductCard';
+import MinimalFooter from '@/components/shop/themes/minimal/MinimalFooter';
 
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
@@ -170,9 +173,28 @@ const Shop = () => {
 
   // Get themed components - support preview from URL
   const currentTheme = previewTheme || shopSettings?.selectedTheme || 'modern';
-  const Hero = currentTheme === 'elegant' ? ElegantHero : ModernHero;
-  const ProductCard = currentTheme === 'elegant' ? ElegantProductCard : ModernProductCard;
-  const Footer = currentTheme === 'elegant' ? ElegantFooter : ModernFooter;
+  
+  const getHero = () => {
+    if (currentTheme === 'elegant') return ElegantHero;
+    if (currentTheme === 'minimal') return MinimalHero;
+    return ModernHero;
+  };
+  
+  const getProductCard = () => {
+    if (currentTheme === 'elegant') return ElegantProductCard;
+    if (currentTheme === 'minimal') return MinimalProductCard;
+    return ModernProductCard;
+  };
+  
+  const getFooter = () => {
+    if (currentTheme === 'elegant') return ElegantFooter;
+    if (currentTheme === 'minimal') return MinimalFooter;
+    return ModernFooter;
+  };
+  
+  const Hero = getHero();
+  const ProductCard = getProductCard();
+  const Footer = getFooter();
 
   if (!shopSettings) {
     return (

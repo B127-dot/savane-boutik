@@ -38,6 +38,19 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       productCard: 'elegant',
       footer: 'elegant'
     }
+  },
+  minimal: {
+    id: 'minimal',
+    name: 'Minimaliste',
+    description: 'Design épuré avec espaces blancs généreux et typographie sans-serif moderne. Pour une esthétique pure et contemporaine.',
+    preview: '/theme-previews/minimal.jpg',
+    category: 'minimal',
+    isAvailable: true,
+    components: {
+      hero: 'minimal',
+      productCard: 'minimal',
+      footer: 'minimal'
+    }
   }
 };
 
