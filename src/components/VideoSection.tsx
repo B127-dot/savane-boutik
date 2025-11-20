@@ -99,10 +99,12 @@ const VideoSection = () => {
               <div className="relative aspect-video">
                 <iframe
                   className="w-full h-full"
-                  src="https://www.youtube.com/embed/qC1xfIx-8aY?autoplay=1&mute=1&loop=1&playlist=qC1xfIx-8aY&controls=0&modestbranding=1&rel=0&showinfo=0&disablekb=1&fs=0&iv_load_policy=3"
+                  src="https://www.youtube.com/embed/qC1xfIx-8aY?autoplay=1&mute=1&loop=1&playlist=qC1xfIx-8aY&controls=0&modestbranding=1&rel=0&showinfo=0&disablekb=1&fs=0&iv_load_policy=3&playsinline=1"
                   title="BurkinaShop - Présentation de la plateforme"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 />
+                {/* Overlay to block YouTube controls from appearing on hover */}
+                <div className="absolute inset-0 pointer-events-none" />
               </div>
 
               {/* Glow effect on hover */}
