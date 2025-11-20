@@ -51,6 +51,19 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       productCard: 'minimal',
       footer: 'minimal'
     }
+  },
+  creative: {
+    id: 'creative',
+    name: 'Créatif',
+    description: 'Design audacieux avec couleurs vives, animations dynamiques et typographies expressives. Parfait pour les boutiques artistiques.',
+    preview: '/theme-previews/creative.jpg',
+    category: 'creative',
+    isAvailable: true,
+    components: {
+      hero: 'creative',
+      productCard: 'creative',
+      footer: 'creative'
+    }
   }
 };
 

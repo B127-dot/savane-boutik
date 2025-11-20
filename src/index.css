@@ -241,6 +241,16 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
   .delay-400 { transition-delay: 0.4s; }
   .delay-500 { transition-delay: 0.5s; }
 
+  /* Animation delays for staggered effects */
+  .animation-delay-100 { animation-delay: 100ms; }
+  .animation-delay-200 { animation-delay: 200ms; }
+  .animation-delay-300 { animation-delay: 300ms; }
+  .animation-delay-400 { animation-delay: 400ms; }
+  .animation-delay-600 { animation-delay: 600ms; }
+  .animation-delay-800 { animation-delay: 800ms; }
+  .animation-delay-2000 { animation-delay: 2s; }
+  .animation-delay-4000 { animation-delay: 4s; }
+
   /* Pause animation on hover */
   .hover\:pause-animation:hover {
     animation-play-state: paused !important;

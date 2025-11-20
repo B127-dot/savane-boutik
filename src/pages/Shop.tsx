@@ -29,6 +29,9 @@ import ElegantFooter from '@/components/shop/themes/elegant/ElegantFooter';
 import MinimalHero from '@/components/shop/themes/minimal/MinimalHero';
 import MinimalProductCard from '@/components/shop/themes/minimal/MinimalProductCard';
 import MinimalFooter from '@/components/shop/themes/minimal/MinimalFooter';
+import { CreativeHero } from '@/components/shop/themes/creative/CreativeHero';
+import { CreativeProductCard } from '@/components/shop/themes/creative/CreativeProductCard';
+import { CreativeFooter } from '@/components/shop/themes/creative/CreativeFooter';
 
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
@@ -177,18 +180,21 @@ const Shop = () => {
   const getHero = () => {
     if (currentTheme === 'elegant') return ElegantHero;
     if (currentTheme === 'minimal') return MinimalHero;
+    if (currentTheme === 'creative') return CreativeHero;
     return ModernHero;
   };
   
   const getProductCard = () => {
     if (currentTheme === 'elegant') return ElegantProductCard;
     if (currentTheme === 'minimal') return MinimalProductCard;
+    if (currentTheme === 'creative') return CreativeProductCard;
     return ModernProductCard;
   };
   
   const getFooter = () => {
     if (currentTheme === 'elegant') return ElegantFooter;
     if (currentTheme === 'minimal') return MinimalFooter;
+    if (currentTheme === 'creative') return CreativeFooter;
     return ModernFooter;
   };
   
