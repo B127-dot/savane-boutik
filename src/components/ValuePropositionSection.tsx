@@ -94,7 +94,7 @@ const ValuePropositionSection = () => {
           {/* Bottom CTA */}
           <div className="text-center">
             <p className="text-lg md:text-xl text-primary/80 mb-6 font-medium">
-              ...tout cela pendant que vous vous concentrez sur l'essentiel : vendre
+              ...tout cela pour que vous puissiez vous concentrer sur ce que vous faites de mieux : vendre
             </p>
             <Button 
               size="lg" 
