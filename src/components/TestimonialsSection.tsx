@@ -95,38 +95,53 @@ const TestimonialsSection = () => {
   const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.2 });
 
   return (
-    <section ref={elementRef} className="py-20 bg-gradient-to-b from-background to-accent/5 overflow-hidden">
+    <section ref={elementRef} className="py-20 bg-gradient-to-b from-background to-accent/5">
       <div className="container mx-auto px-4">
         <div className={cn(
           "text-center mb-12 transition-all duration-700 transform",
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         )}>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
-            Ils nous font confiance
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 text-foreground">
+            Ils l'adorent, pourquoi pas vous ?
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Découvrez les témoignages de nos clients satisfaits qui ont transformé leur activité avec notre plateforme
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+            Rejoignez plus de 300 entrepreneurs qui ont déjà transformé leur activité avec BurkinaShop
           </p>
         </div>
 
-        <div className="relative">
-          {/* Gradient overlays */}
-          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10" />
-          
-          {/* Scrolling container */}
-          <div className="overflow-hidden">
-            <div className="animate-scroll-infinite hover:pause-animation flex">
-              {/* First set */}
-              {testimonials.map((testimonial, index) => (
-                <TestimonialCard key={`first-${index}`} testimonial={testimonial} />
-              ))}
-              {/* Duplicate set for seamless loop */}
-              {testimonials.map((testimonial, index) => (
-                <TestimonialCard key={`second-${index}`} testimonial={testimonial} />
-              ))}
+        <div className={cn(
+          "grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto transition-all duration-700 transform",
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+        )}>
+          {testimonials.map((testimonial, index) => (
+            <div
+              key={index}
+              className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-6 hover:border-primary/30 hover:shadow-lg transition-all duration-300"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="flex gap-1 mb-4">
+                {Array.from({ length: testimonial.rating }).map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-primary text-primary" />
+                ))}
+              </div>
+              
+              <p className="text-foreground leading-relaxed mb-6">
+                "{testimonial.content}"
+              </p>
+
+              <div className="flex items-center gap-3 mt-auto">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+                  {testimonial.avatar}
+                </div>
+                <div>
+                  <h4 className="font-semibold text-foreground text-sm">{testimonial.name}</h4>
+                  <p className="text-xs text-muted-foreground">
+                    {testimonial.role} - {testimonial.company}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
