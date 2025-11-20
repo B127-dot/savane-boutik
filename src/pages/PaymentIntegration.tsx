@@ -94,50 +94,79 @@ const PaymentIntegration = () => {
 
   return (
     <div className="space-y-12 animate-fade-in">
-      {/* Hero Header with gradient background */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-background border border-primary/20 p-8 md:p-12">
+      {/* Hero Header - Enhanced Design */}
+      <div className="relative overflow-hidden rounded-3xl border border-primary/20 shadow-2xl">
+        {/* Animated gradient background layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-primary-glow/10 via-transparent to-accent/10 animate-pulse" style={{ animationDuration: '4s' }} />
+        
+        {/* Grid pattern overlay */}
         <div className="absolute inset-0 bg-grid-white/5 [mask-image:radial-gradient(white,transparent_85%)]" />
-        <div className="relative space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Paiements Sécurisés</span>
+        
+        {/* Glow effects */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/30 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '3s' }} />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary-glow/20 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '5s', animationDelay: '1s' }} />
+        
+        {/* Content */}
+        <div className="relative p-8 md:p-16 space-y-8">
+          {/* Badge with shimmer effect */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 backdrop-blur-sm shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:scale-105">
+            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
+            <span className="text-sm font-semibold text-primary">Paiements Sécurisés</span>
+            <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-            Configuration des Paiements
-          </h1>
-          <p className="text-muted-foreground text-lg max-w-3xl leading-relaxed">
-            Connectez votre compte de paiement pour recevoir l'argent de vos ventes directement. 
-            <span className="text-foreground font-medium"> Nous ne prenons aucune commission</span> sur vos transactions. 
-            L'argent est transféré de manière sécurisée de votre client à vous via nos partenaires.
-          </p>
           
-          {/* Trust badges */}
-          <div className="flex flex-wrap gap-6 pt-4">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
-                <Shield className="w-5 h-5 text-success" />
+          {/* Title with enhanced gradient */}
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight">
+              <span className="bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent animate-gradient-x">
+                Configuration des
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-foreground to-foreground/60 bg-clip-text text-transparent">
+                Paiements
+              </span>
+            </h1>
+            
+            <p className="text-muted-foreground text-xl md:text-2xl max-w-4xl leading-relaxed">
+              Connectez votre compte de paiement pour recevoir l'argent de vos ventes directement.
+              <br />
+              <span className="text-foreground font-bold bg-gradient-to-r from-success to-primary bg-clip-text text-transparent"> 
+                0% de commission
+              </span> 
+              {' '}· Transferts instantanés et sécurisés via nos partenaires certifiés.
+            </p>
+          </div>
+          
+          {/* Enhanced Trust badges */}
+          <div className="flex flex-wrap gap-4 pt-6">
+            <div className="group flex items-center gap-3 px-5 py-3 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-success/20 to-success/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Shield className="w-6 h-6 text-success" />
               </div>
               <div>
-                <p className="text-sm font-medium">100% Sécurisé</p>
-                <p className="text-xs text-muted-foreground">Chiffrement SSL</p>
+                <p className="text-sm font-bold text-foreground">100% Sécurisé</p>
+                <p className="text-xs text-muted-foreground">Chiffrement SSL 256-bit</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <Zap className="w-5 h-5 text-primary" />
+            
+            <div className="group flex items-center gap-3 px-5 py-3 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Zap className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm font-medium">Paiement Instantané</p>
-                <p className="text-xs text-muted-foreground">En temps réel</p>
+                <p className="text-sm font-bold text-foreground">Instantané</p>
+                <p className="text-xs text-muted-foreground">Réception immédiate</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center">
-                <Lock className="w-5 h-5 text-orange-500" />
+            
+            <div className="group flex items-center gap-3 px-5 py-3 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/5 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Lock className="w-6 h-6 text-orange-500" />
               </div>
               <div>
-                <p className="text-sm font-medium">0% Commission</p>
-                <p className="text-xs text-muted-foreground">Aucun frais caché</p>
+                <p className="text-sm font-bold text-foreground">0% Commission</p>
+                <p className="text-xs text-muted-foreground">100% pour vous</p>
               </div>
             </div>
           </div>
