@@ -83,7 +83,7 @@ const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto p-0 border-0 bg-background/95 backdrop-blur-xl">
+      <DialogContent className="max-w-[96vw] max-h-[90vh] overflow-y-auto p-0 border-0 bg-background/95 backdrop-blur-xl">
         {/* Close button */}
         <button
           onClick={() => onOpenChange(false)}
