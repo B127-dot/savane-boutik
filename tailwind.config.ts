@@ -121,6 +121,14 @@ export default {
 					'0%': { transform: 'translateX(0)' },
 					'100%': { transform: 'translateX(-50%)' }
 				},
+				'scroll-left': {
+					'0%': { transform: 'translateX(0)' },
+					'100%': { transform: 'translateX(-50%)' }
+				},
+				'scroll-right': {
+					'0%': { transform: 'translateX(-50%)' },
+					'100%': { transform: 'translateX(0)' }
+				},
 				'blob': {
 					'0%': { transform: 'translate(0px, 0px) scale(1)' },
 					'33%': { transform: 'translate(30px, -50px) scale(1.1)' },
@@ -136,6 +144,8 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'scroll-infinite': 'scroll-infinite 20s linear infinite',
+				'scroll-left': 'scroll-left 50s linear infinite',
+				'scroll-right': 'scroll-right 50s linear infinite',
 				'blob': 'blob 7s infinite',
 				'spin-slow': 'spin-slow 3s linear infinite',
 				'fade-in': 'fadeIn 0.5s ease-out',

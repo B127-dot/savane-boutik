@@ -64,53 +64,9 @@ const testimonials: Testimonial[] = [
   }
 ];
 
-const TestimonialCard = ({ 
-  testimonial, 
-  isVisible, 
-  delay 
-}: { 
-  testimonial: Testimonial; 
-  isVisible: boolean; 
-  delay: string;
-}) => (
-  <div
-    className={cn(
-      "transition-all duration-700 transform",
-      delay,
-      isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-    )}
-  >
-    <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:scale-[1.02] transition-all duration-300 h-full">
-      <CardContent className="p-6">
-        <div className="flex gap-1 mb-4">
-          {Array.from({ length: testimonial.rating }).map((_, i) => (
-            <Star key={i} className="w-4 h-4 fill-primary text-primary" />
-          ))}
-        </div>
-        
-        <p className="text-muted-foreground leading-relaxed mb-6">
-          "{testimonial.content}"
-        </p>
-        
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
-            {testimonial.avatar}
-          </div>
-          <div>
-            <h4 className="font-semibold text-foreground text-sm">{testimonial.name}</h4>
-            <p className="text-xs text-muted-foreground">
-              {testimonial.role}
-            </p>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  </div>
-);
 
 const TestimonialsSection = () => {
   const { elementRef: titleRef, isVisible: titleVisible } = useScrollAnimation({ threshold: 0.2 });
-  const { elementRef: cardsRef, isVisible: cardsVisible } = useScrollAnimation({ threshold: 0.1 });
 
   const handleGetStarted = () => {
     window.location.href = '/signup';
@@ -147,19 +103,133 @@ const TestimonialsSection = () => {
           </Button>
         </div>
 
-        {/* Testimonials Grid */}
-        <div 
-          ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
-        >
-          {testimonials.map((testimonial, index) => (
-            <TestimonialCard
-              key={index}
-              testimonial={testimonial}
-              isVisible={cardsVisible}
-              delay={index % 2 === 0 ? "delay-0" : "delay-150"}
-            />
-          ))}
+        {/* Infinite Horizontal Scrolling Testimonials */}
+        <div className="overflow-hidden space-y-6">
+          {/* First Row - Scroll Left to Right */}
+          <div className="flex gap-6 animate-scroll-left hover:pause">
+            {testimonials.map((testimonial, index) => (
+              <div key={`row1-${index}`} className="flex-shrink-0 w-[380px] md:w-96">
+                <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:scale-[1.02] transition-all duration-300 h-full">
+                  <CardContent className="p-6">
+                    <div className="flex gap-1 mb-4">
+                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                      ))}
+                    </div>
+                    
+                    <p className="text-muted-foreground leading-relaxed mb-6">
+                      "{testimonial.content}"
+                    </p>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+                        {testimonial.avatar}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground text-sm">{testimonial.name}</h4>
+                        <p className="text-xs text-muted-foreground">
+                          {testimonial.role}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+            {/* Duplicate for seamless loop */}
+            {testimonials.map((testimonial, index) => (
+              <div key={`row1-dup-${index}`} className="flex-shrink-0 w-[380px] md:w-96">
+                <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:scale-[1.02] transition-all duration-300 h-full">
+                  <CardContent className="p-6">
+                    <div className="flex gap-1 mb-4">
+                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                      ))}
+                    </div>
+                    
+                    <p className="text-muted-foreground leading-relaxed mb-6">
+                      "{testimonial.content}"
+                    </p>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+                        {testimonial.avatar}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground text-sm">{testimonial.name}</h4>
+                        <p className="text-xs text-muted-foreground">
+                          {testimonial.role}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
+
+          {/* Second Row - Scroll Right to Left */}
+          <div className="flex gap-6 animate-scroll-right hover:pause">
+            {testimonials.map((testimonial, index) => (
+              <div key={`row2-${index}`} className="flex-shrink-0 w-[380px] md:w-96">
+                <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:scale-[1.02] transition-all duration-300 h-full">
+                  <CardContent className="p-6">
+                    <div className="flex gap-1 mb-4">
+                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                      ))}
+                    </div>
+                    
+                    <p className="text-muted-foreground leading-relaxed mb-6">
+                      "{testimonial.content}"
+                    </p>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+                        {testimonial.avatar}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground text-sm">{testimonial.name}</h4>
+                        <p className="text-xs text-muted-foreground">
+                          {testimonial.role}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+            {/* Duplicate for seamless loop */}
+            {testimonials.map((testimonial, index) => (
+              <div key={`row2-dup-${index}`} className="flex-shrink-0 w-[380px] md:w-96">
+                <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:scale-[1.02] transition-all duration-300 h-full">
+                  <CardContent className="p-6">
+                    <div className="flex gap-1 mb-4">
+                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-primary text-primary" />
+                      ))}
+                    </div>
+                    
+                    <p className="text-muted-foreground leading-relaxed mb-6">
+                      "{testimonial.content}"
+                    </p>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+                        {testimonial.avatar}
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground text-sm">{testimonial.name}</h4>
+                        <p className="text-xs text-muted-foreground">
+                          {testimonial.role}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
