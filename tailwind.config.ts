@@ -138,6 +138,10 @@ export default {
 				'spin-slow': {
 					'0%': { transform: 'rotate(0deg)' },
 					'100%': { transform: 'rotate(360deg)' }
+				},
+				'progressGrow': {
+					'0%': { width: '0%' },
+					'100%': { width: '65%' }
 				}
 			},
 			animation: {
@@ -149,6 +153,7 @@ export default {
 				'blob': 'blob 7s infinite',
 				'spin-slow': 'spin-slow 3s linear infinite',
 				'fade-in': 'fadeIn 0.5s ease-out',
+				'progressGrow': 'progressGrow 2s ease-out',
 			},
 			animationDelay: {
 				'100': '100ms',
