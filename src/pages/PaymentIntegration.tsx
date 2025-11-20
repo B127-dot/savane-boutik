@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ExternalLink, CheckCircle2, XCircle, Shield, Zap, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import { ExternalLink, CheckCircle2, XCircle, Shield, Zap, Lock, ArrowRight, Sparkles, Rocket, LayoutDashboard, Key } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 
@@ -336,28 +336,28 @@ const PaymentIntegration = () => {
               title: "Créez votre compte marchand",
               description: "Inscrivez-vous gratuitement sur CynetPay.com et validez votre compte",
               link: "https://www.cynetpay.com",
-              icon: "🚀",
+              IconComponent: Rocket,
               color: "from-blue-500 to-cyan-500"
             },
             {
               step: 2,
               title: "Accédez à votre tableau de bord",
               description: "Connectez-vous à votre espace marchand CynetPay",
-              icon: "📊",
+              IconComponent: LayoutDashboard,
               color: "from-purple-500 to-pink-500"
             },
             {
               step: 3,
               title: "Récupérez vos clés API",
               description: "Trouvez vos identifiants dans la section 'Intégration' ou 'Développeurs'",
-              icon: "🔑",
+              IconComponent: Key,
               color: "from-orange-500 to-red-500"
             },
             {
               step: 4,
               title: "Configurez BurkinaShop",
               description: "Collez vos clés API dans le formulaire ci-dessus et activez les paiements",
-              icon: "✅",
+              IconComponent: CheckCircle2,
               color: "from-green-500 to-emerald-500"
             }
           ].map((item) => (
@@ -370,7 +370,7 @@ const PaymentIntegration = () => {
                   {/* Step Number with gradient */}
                   <div className="relative">
                     <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform`}>
-                      <span className="text-3xl">{item.icon}</span>
+                      <item.IconComponent className="w-8 h-8 text-white" />
                     </div>
                     <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-background border-2 border-primary flex items-center justify-center font-bold text-sm">
                       {item.step}
