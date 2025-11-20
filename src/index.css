@@ -8,6 +8,12 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
 */
 
 @layer base {
+  /* Smooth scroll behavior for anchor navigation */
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Offset for sticky header */
+  }
+
   :root {
     /* Mode clair par défaut - Couleurs adaptées pour le Burkina Faso */
     --background: 0 0% 100%;

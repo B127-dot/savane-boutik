@@ -47,7 +47,7 @@ const FAQSection = () => {
   const { elementRef, isVisible } = useScrollAnimation({ threshold: 0.1 });
 
   return (
-    <section ref={elementRef} className="py-24 px-4 bg-background relative overflow-hidden">
+    <section id="faq" ref={elementRef} className="py-24 px-4 bg-background relative overflow-hidden">
       {/* Subtle background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/50 to-background pointer-events-none" />
       

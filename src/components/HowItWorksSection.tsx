@@ -51,7 +51,7 @@ const HowItWorksSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-24 md:py-32 bg-background overflow-hidden">
+    <section id="how-it-works" className="relative py-24 md:py-32 bg-background overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
