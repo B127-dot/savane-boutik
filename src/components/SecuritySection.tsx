@@ -99,36 +99,40 @@ const SecuritySection = () => {
             </p>
           </div>
 
-          {/* Trust Pillars Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {trustPillars.map((pillar, index) => (
-              <div
-                key={index}
-                ref={pillar.ref}
-                className={`group transition-all duration-700 ${pillar.delay} ${
-                  pillar.visible
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
-              >
-                <div className="h-full p-8 bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl hover:border-primary/30 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
-                  {/* Icon */}
-                  <div className="w-14 h-14 mb-6 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <pillar.icon className="w-7 h-7 text-primary" />
+          {/* Trust Pillars - Single Unified Card */}
+          <div
+            ref={card1Ref}
+            className={`mb-12 transition-all duration-700 delay-200 ${
+              card1Visible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            }`}
+          >
+            <div className="p-8 sm:p-12 bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+                {trustPillars.map((pillar, index) => (
+                  <div
+                    key={index}
+                    className="group text-center md:text-left"
+                  >
+                    {/* Icon */}
+                    <div className="w-14 h-14 mb-6 mx-auto md:mx-0 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <pillar.icon className="w-7 h-7 text-primary" />
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-xl font-semibold text-foreground mb-3">
+                      {pillar.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-muted-foreground leading-relaxed">
+                      {pillar.description}
+                    </p>
                   </div>
-
-                  {/* Title */}
-                  <h3 className="text-xl font-semibold text-foreground mb-3">
-                    {pillar.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-muted-foreground leading-relaxed">
-                    {pillar.description}
-                  </p>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
 
           {/* CTA Section */}
