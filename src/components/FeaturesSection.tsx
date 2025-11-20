@@ -172,7 +172,7 @@ const FeaturesSection = () => {
                 </span>
               </div>
 
-              <h2 className="text-4xl sm:text-5xl font-medium text-foreground tracking-tight transition-colors duration-500">
+              <h2 className="text-4xl sm:text-5xl font-medium text-foreground tracking-tight transition-colors duration-500 text-center lg:text-center">
                 Tout ce dont vous avez besoin pour{" "}
                 <span className="bg-gradient-primary bg-clip-text text-transparent">
                   vendre en ligne
