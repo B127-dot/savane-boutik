@@ -5,6 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Eye, Sparkles, Lock } from 'lucide-react';
 import { getAvailableThemes, Theme } from '@/types/themes';
 import { useToast } from '@/hooks/use-toast';
+import ThemePreviewModal from './ThemePreviewModal';
+import { useApp } from '@/contexts/AppContext';
 
 interface ThemeSelectorProps {
   currentTheme: string;
@@ -13,8 +15,24 @@ interface ThemeSelectorProps {
 
 const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
   const { toast } = useToast();
+  const { shopSettings } = useApp();
   const themes = getAvailableThemes();
   const [selectedTheme, setSelectedTheme] = useState<string>(currentTheme);
+  const [previewTheme, setPreviewTheme] = useState<Theme | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const handlePreview = (theme: Theme) => {
+    if (!theme.isAvailable) {
+      toast({
+        title: "Thème non disponible",
+        description: "Ce thème sera bientôt disponible. Restez connecté !",
+        variant: "destructive"
+      });
+      return;
+    }
+    setPreviewTheme(theme);
+    setIsPreviewOpen(true);
+  };
 
   const handleApplyTheme = (theme: Theme) => {
     if (!theme.isAvailable) {
@@ -132,12 +150,8 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => {
-                        toast({
-                          title: "Aperçu",
-                          description: "La prévisualisation sera disponible prochainement",
-                        });
-                      }}
+                      onClick={() => handlePreview(theme)}
+                      title="Prévisualiser"
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
@@ -165,6 +179,18 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Preview Modal */}
+      {previewTheme && (
+        <ThemePreviewModal
+          isOpen={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
+          onApply={() => handleApplyTheme(previewTheme)}
+          themeId={previewTheme.id}
+          themeName={previewTheme.name}
+          shopUrl={shopSettings.shopUrl}
+        />
+      )}
     </div>
   );
 };
