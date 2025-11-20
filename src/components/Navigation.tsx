@@ -4,6 +4,7 @@ import { Menu, X, Globe, LogOut } from "lucide-react";
 import { useApp } from '@/contexts/AppContext';
 import { useNavigate, Link } from 'react-router-dom';
 import ThemeToggle from "./ThemeToggle";
+import { cn } from "@/lib/utils";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,17 +38,15 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ease-out ${
-      isScrolled 
-        ? 'pt-4 px-4' 
-        : 'pt-0 px-0'
-    }`}>
-      <div className={`transition-all duration-300 ease-out ${
-        isScrolled 
-          ? 'max-w-5xl mx-auto backdrop-blur-md bg-primary/80 border border-white/10 rounded-2xl shadow-2xl shadow-primary/20' 
-          : 'max-w-7xl mx-auto bg-background/90 backdrop-blur-sm border-b border-border'
-      } ${isScrolled ? 'px-6' : 'px-4 sm:px-6 lg:px-8'}`}>
-        <div className="flex justify-between items-center h-16">
+    <nav 
+      data-state={isMenuOpen ? 'active' : 'inactive'}
+      className="fixed top-0 w-full z-50 px-2 group"
+    >
+      <div className={cn(
+        'mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12',
+        isScrolled && 'bg-background/50 max-w-4xl rounded-2xl border backdrop-blur-lg lg:px-5'
+      )}>
+        <div className="flex justify-between items-center py-3 lg:py-4">
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
@@ -96,11 +95,26 @@ const Navigation = () => {
               </>
             ) : (
               <>
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/login">Connexion</Link>
-                </Button>
-                <Button variant="default" size="sm" asChild>
-                  <Link to="/signup">Commencer gratuitement</Link>
+                <div className={cn(
+                  "flex items-center space-x-3 transition-all duration-300",
+                  isScrolled && "md:hidden"
+                )}>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/login">Connexion</Link>
+                  </Button>
+                  <Button size="sm" asChild>
+                    <Link to="/signup">Commencer</Link>
+                  </Button>
+                </div>
+                <Button 
+                  size="sm" 
+                  asChild
+                  className={cn(
+                    "transition-all duration-300",
+                    isScrolled ? "md:inline-flex" : "hidden"
+                  )}
+                >
+                  <Link to="/signup">Commencer</Link>
                 </Button>
               </>
             )}
@@ -108,30 +122,27 @@ const Navigation = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? 'Close Menu' : 'Open Menu'}
+              className="relative -m-2.5 -mr-4 p-2.5"
             >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </Button>
+              <Menu className="group-data-[state=active]:rotate-180 group-data-[state=active]:scale-0 group-data-[state=active]:opacity-0 w-6 h-6 transition-all duration-200" />
+              <X className="group-data-[state=active]:rotate-0 group-data-[state=active]:scale-100 group-data-[state=active]:opacity-100 absolute inset-0 m-auto w-6 h-6 -rotate-180 scale-0 opacity-0 transition-all duration-200" />
+            </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-card border border-border rounded-lg mt-2 p-4 shadow-soft">
-            <div className="flex flex-col space-y-4">
+          <div className="md:hidden bg-background rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 dark:shadow-none mb-6">
+            <div className="flex flex-col space-y-6">
               {navItems.map((item) => (
                 user && item.href.startsWith('/') ? (
                   <Link
                     key={item.label}
                     to={item.href}
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 py-2"
+                    className="text-muted-foreground hover:text-accent-foreground transition-colors duration-150"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.label}
@@ -140,28 +151,28 @@ const Navigation = () => {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 py-2"
+                    className="text-muted-foreground hover:text-accent-foreground transition-colors duration-150"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {item.label}
                   </a>
                 )
               ))}
-              <div className="flex flex-col space-y-2 pt-4 border-t border-border">
+              <div className="flex flex-col space-y-3 pt-4 border-t border-border">
                 <div className="flex items-center justify-between">
                   <ThemeToggle />
                 </div>
                 {user ? (
-                  <Button variant="ghost" size="sm" onClick={handleLogout} className="justify-start">
+                  <Button variant="outline" size="sm" onClick={handleLogout} className="justify-start">
                     <LogOut className="w-4 h-4 mr-2" />
                     Se déconnecter
                   </Button>
                 ) : (
                   <>
-                    <Button variant="ghost" size="sm" className="justify-start" asChild>
+                    <Button variant="outline" size="sm" className="justify-start" asChild>
                       <Link to="/login">Connexion</Link>
                     </Button>
-                    <Button variant="default" size="sm" asChild>
+                    <Button size="sm" asChild>
                       <Link to="/signup">Commencer gratuitement</Link>
                     </Button>
                   </>
