@@ -68,11 +68,14 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  originalPrice?: number;
   images: string[];
   categoryId: string;
   stock: number;
   status: 'active' | 'inactive';
   userId: string;
+  featured?: boolean;
+  createdAt?: string;
   variants?: {
     [key: string]: string[];
   };

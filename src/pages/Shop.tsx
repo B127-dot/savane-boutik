@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useApp, Product, ShopSettings } from '@/contexts/AppContext';
 import { CartSheet } from '@/components/CartSheet';
 import { useToast } from '@/hooks/use-toast';
@@ -13,6 +11,15 @@ import ShopHeader from '@/components/shop/ShopHeader';
 import ShopHero from '@/components/shop/ShopHero';
 import TrustBar from '@/components/shop/TrustBar';
 import ShopFooter from '@/components/shop/ShopFooter';
+import ProductCardPremium from '@/components/shop/ProductCardPremium';
+import SkeletonProductCard from '@/components/shop/SkeletonProductCard';
+import NewArrivalsCarousel from '@/components/shop/NewArrivalsCarousel';
+import CategoryShowcase from '@/components/shop/CategoryShowcase';
+import SocialProofSection from '@/components/shop/SocialProofSection';
+import NewsletterSection from '@/components/shop/NewsletterSection';
+import WhyBuySection from '@/components/shop/WhyBuySection';
+import QuickViewModal from '@/components/shop/QuickViewModal';
+import BottomNavMobile from '@/components/shop/BottomNavMobile';
 
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
@@ -23,9 +30,14 @@ const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [wishlist, setWishlist] = useState<string[]>([]);
+  const [sortBy, setSortBy] = useState<'recent' | 'price-asc' | 'price-desc' | 'name'>('recent');
 
   useEffect(() => {
     // Load shop settings from localStorage
+    setIsLoading(true);
     let settings = null;
     
     // Try generic key first
@@ -47,10 +59,18 @@ const Shop = () => {
     }
     
     setShopSettings(settings);
+    
+    // Load wishlist
+    const savedWishlist = localStorage.getItem('wishlist');
+    if (savedWishlist) {
+      setWishlist(JSON.parse(savedWishlist));
+    }
+    
+    setTimeout(() => setIsLoading(false), 500);
   }, [shopUrl]);
 
   useEffect(() => {
-    // Filter products
+    // Filter and sort products
     let filtered = products.filter(p => p.status === 'active' && p.stock > 0);
     
     if (searchQuery) {
@@ -66,9 +86,29 @@ const Shop = () => {
         filtered = filtered.filter(p => p.categoryId === category.id);
       }
     }
+
+    // Sort
+    switch (sortBy) {
+      case 'price-asc':
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case 'name':
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'recent':
+      default:
+        filtered.sort((a, b) => {
+          const dateA = new Date(a.createdAt || 0).getTime();
+          const dateB = new Date(b.createdAt || 0).getTime();
+          return dateB - dateA;
+        });
+    }
     
     setFilteredProducts(filtered);
-  }, [products, searchQuery, selectedCategory]);
+  }, [products, searchQuery, selectedCategory, sortBy, categories]);
 
   const handleAddToCart = (product: Product) => {
     addToCart({ productId: product.id, quantity: 1 });
@@ -77,6 +117,43 @@ const Shop = () => {
       description: `${product.name} a été ajouté au panier`,
     });
     setIsCartOpen(true);
+  };
+
+  const handleToggleWishlist = (productId: string) => {
+    const newWishlist = wishlist.includes(productId)
+      ? wishlist.filter(id => id !== productId)
+      : [...wishlist, productId];
+    
+    setWishlist(newWishlist);
+    localStorage.setItem('wishlist', JSON.stringify(newWishlist));
+    
+    toast({
+      title: wishlist.includes(productId) ? "Retiré des favoris" : "Ajouté aux favoris",
+      description: wishlist.includes(productId) 
+        ? "Le produit a été retiré de vos favoris"
+        : "Le produit a été ajouté à vos favoris"
+    });
+  };
+
+  const getNewArrivals = () => {
+    return products
+      .filter(p => p.status === 'active' && p.stock > 0)
+      .sort((a, b) => {
+        const dateA = new Date(a.createdAt || 0).getTime();
+        const dateB = new Date(b.createdAt || 0).getTime();
+        return dateB - dateA;
+      })
+      .slice(0, 8);
+  };
+
+  const scrollToProducts = () => {
+    const element = document.getElementById('products');
+    element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const scrollToCategories = () => {
+    const element = document.getElementById('categories');
+    element?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -90,8 +167,7 @@ const Shop = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
       <ShopHeader 
         logo={shopSettings.logo}
         shopName={shopSettings.shopName}
@@ -99,7 +175,6 @@ const Shop = () => {
         onCartClick={() => setIsCartOpen(true)}
       />
 
-      {/* Hero Section */}
       <ShopHero 
         heroImage={shopSettings.heroImage}
         heroTitle={shopSettings.heroTitle}
@@ -108,139 +183,172 @@ const Shop = () => {
         heroButtonLink={shopSettings.heroButtonLink}
       />
 
-      {/* Trust Bar */}
       <TrustBar trustItems={shopSettings.trustBar} />
 
-      {/* Products Section */}
-      <section id="products" className="py-16 md:py-24">
+      <NewArrivalsCarousel 
+        products={getNewArrivals()}
+        onAddToCart={handleAddToCart}
+        onQuickView={setQuickViewProduct}
+      />
+
+      <div id="categories">
+        <CategoryShowcase 
+          categories={categories}
+          products={products}
+          onCategoryClick={(categoryName) => {
+            setSelectedCategory(categoryName);
+            scrollToProducts();
+          }}
+        />
+      </div>
+
+      <section id="products" className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4">
-          {/* Section Title */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Nos Produits
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+              Tous Nos Produits
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Découvrez notre sélection de produits de qualité
+            <p className="text-lg text-muted-foreground">
+              Parcourez notre collection complète
             </p>
           </div>
 
-          {/* Search and Filters */}
           <div className="mb-8 space-y-4">
-            <div className="relative max-w-md mx-auto">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <div className="relative max-w-2xl mx-auto">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder="Rechercher un produit..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12"
+                className="pl-12 h-14 text-lg border-2 focus:border-primary"
               />
             </div>
 
-            {/* Category Filters */}
             <div className="flex flex-wrap gap-2 justify-center">
               <Button
                 variant={selectedCategory === 'all' ? 'default' : 'outline'}
                 onClick={() => setSelectedCategory('all')}
-                size="sm"
+                className="rounded-full"
               >
-                Tous
+                Tous ({products.filter(p => p.status === 'active' && p.stock > 0).length})
               </Button>
-              {categories.map(category => (
-                <Button
-                  key={category.id}
-                  variant={selectedCategory === category.name ? 'default' : 'outline'}
-                  onClick={() => setSelectedCategory(category.name)}
-                  size="sm"
-                >
-                  {category.name}
-                </Button>
-              ))}
+              {categories.map((category) => {
+                const count = products.filter(
+                  p => p.categoryId === category.id && p.status === 'active' && p.stock > 0
+                ).length;
+                if (count === 0) return null;
+                
+                return (
+                  <Button
+                    key={category.id}
+                    variant={selectedCategory === category.name ? 'default' : 'outline'}
+                    onClick={() => setSelectedCategory(category.name)}
+                    className="rounded-full"
+                  >
+                    {category.name} ({count})
+                  </Button>
+                );
+              })}
+            </div>
+
+            <div className="flex flex-wrap gap-3 justify-center items-center">
+              <span className="text-sm text-muted-foreground">Trier par:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="px-4 py-2 rounded-lg border border-border bg-card text-foreground"
+              >
+                <option value="recent">Plus récent</option>
+                <option value="price-asc">Prix croissant</option>
+                <option value="price-desc">Prix décroissant</option>
+                <option value="name">Nom A-Z</option>
+              </select>
             </div>
           </div>
 
-          {/* Products Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map(product => (
-              <div
-                key={product.id}
-                className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
-              >
-                <Link to={`/product/${product.id}`}>
-                  <AspectRatio ratio={1}>
-                    <img
-                      src={product.images[0] || '/placeholder.svg'}
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </AspectRatio>
-                </Link>
-
-                <div className="p-6 space-y-4 text-center">
-                  <Link to={`/product/${product.id}`}>
-                    <h3 className="font-semibold text-lg text-foreground hover:text-primary transition-colors">
-                      {product.name}
-                    </h3>
-                  </Link>
-
-                  <p className="text-2xl font-bold text-primary">
-                    {product.price.toLocaleString()} FCFA
-                  </p>
-
-                  {product.stock > 0 ? (
-                    <Button
-                      onClick={() => handleAddToCart(product)}
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
-                      size="lg"
-                    >
-                      Ajouter au panier
-                    </Button>
-                  ) : (
-                    <Badge variant="secondary" className="w-full py-3">
-                      Rupture de stock
-                    </Badge>
-                  )}
-                </div>
+          {isLoading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <SkeletonProductCard key={i} />
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCardPremium
+                  key={product.id}
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                  onQuickView={setQuickViewProduct}
+                  onToggleWishlist={handleToggleWishlist}
+                  isInWishlist={wishlist.includes(product.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-muted rounded-full mb-4">
+                <Search className="h-10 w-10 text-muted-foreground" />
               </div>
-            ))}
-          </div>
-
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground text-lg">
+              <h3 className="text-xl font-semibold text-foreground mb-2">
                 Aucun produit trouvé
+              </h3>
+              <p className="text-muted-foreground mb-6">
+                Essayez de modifier vos critères de recherche
               </p>
+              <Button onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('all');
+              }}>
+                Réinitialiser les filtres
+              </Button>
             </div>
           )}
         </div>
       </section>
 
-      {/* Footer */}
+      <SocialProofSection />
+      <WhyBuySection />
+      <NewsletterSection />
+
       <ShopFooter 
         logo={shopSettings.logo}
         shopName={shopSettings.shopName}
         aboutText={shopSettings.aboutText}
         phone={shopSettings.phone}
-        whatsapp={shopSettings.socialLinks?.whatsapp}
-        facebook={shopSettings.socialLinks?.facebook}
-        instagram={shopSettings.socialLinks?.instagram}
-        tiktok={shopSettings.socialLinks?.tiktok}
+        whatsapp={shopSettings.socialLinks.whatsapp}
+        facebook={shopSettings.socialLinks.facebook}
+        instagram={shopSettings.socialLinks.instagram}
+        tiktok={shopSettings.socialLinks.tiktok}
       />
 
-      {/* WhatsApp Button */}
-      {shopSettings.socialLinks?.whatsapp && (
+      {shopSettings.socialLinks.whatsapp && (
         <WhatsAppButton 
           phoneNumber={shopSettings.socialLinks.whatsapp}
-          message={`Bonjour ${shopSettings.shopName}, j'aimerais en savoir plus sur vos produits.`}
+          message="Bonjour, je visite votre boutique en ligne !"
         />
       )}
 
-      {/* Cart Sheet */}
-      <CartSheet 
-        open={isCartOpen} 
-        onOpenChange={setIsCartOpen} 
-        shopUrl={shopUrl || ''} 
-        shopSettings={shopSettings} 
+      <BottomNavMobile 
+        cartItemsCount={cartItemsCount}
+        onCartClick={() => setIsCartOpen(true)}
+        onCategoriesClick={scrollToCategories}
+        onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      />
+
+      <CartSheet
+        open={isCartOpen}
+        onOpenChange={setIsCartOpen}
+        shopUrl={shopUrl || ''}
+        shopSettings={shopSettings}
+      />
+
+      <QuickViewModal
+        product={quickViewProduct}
+        isOpen={!!quickViewProduct}
+        onClose={() => setQuickViewProduct(null)}
+        onAddToCart={handleAddToCart}
       />
     </div>
   );
