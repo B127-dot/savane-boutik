@@ -1,6 +1,7 @@
 import { Pricing } from "@/components/ui/pricing";
 import useScrollAnimation from "@/hooks/useScrollAnimation";
 import { motion } from "framer-motion";
+import ShimmerText from '@/components/ui/shimmer-text';
 
 const plans = [
   {

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useThrottle } from '@/hooks/useThrottle';
+import ShimmerText from '@/components/ui/shimmer-text';
 
 const VideoSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -67,9 +68,10 @@ const VideoSection = () => {
         <div className="max-w-7xl mx-auto">
           {/* Section Title */}
           <div className="text-center mb-16 md:mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              Découvrez BurkinaShop en action
-            </h2>
+            <ShimmerText 
+              text="Découvrez BurkinaShop en action"
+              className="text-3xl md:text-5xl font-bold mb-4"
+            />
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Voyez comment notre plateforme transforme la façon dont les vendeurs burkinabè 
               gèrent leur commerce en ligne

@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import useScrollAnimation from "@/hooks/useScrollAnimation";
 import { cn } from "@/lib/utils";
+import ShimmerText from '@/components/ui/shimmer-text';
 
 interface Testimonial {
   name: string;
@@ -83,12 +84,10 @@ const TestimonialsSection = () => {
             titleVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           )}
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">
-            Ils l'adorent,{" "}
-            <span className="bg-gradient-primary bg-clip-text text-transparent">
-              pourquoi pas vous ?
-            </span>
-          </h2>
+          <ShimmerText 
+            text="Ils l'adorent, pourquoi pas vous ?"
+            className="text-3xl md:text-5xl font-bold mb-6"
+          />
           <p className="text-muted-foreground max-w-2xl mx-auto mb-8 text-lg">
             Rejoignez plus de 300 entrepreneurs burkinabè qui développent leur commerce avec BurkinaShop
           </p>

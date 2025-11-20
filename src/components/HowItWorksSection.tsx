@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { UserPlus, Store, Smartphone, Share2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ShimmerText from '@/components/ui/shimmer-text';
 import useScrollAnimation from "@/hooks/useScrollAnimation";
 const steps = [{
   number: "01",
@@ -55,9 +56,10 @@ const HowItWorksSection = () => {
           <Badge variant="secondary" className="mb-4 text-sm px-4 py-2">
             Simple et Rapide
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
-            Comment ça marche ?
-          </h2>
+          <ShimmerText 
+            text="Comment ça marche ?"
+            className="text-4xl md:text-5xl font-bold mb-6"
+          />
           <p className="text-lg md:text-xl text-muted-foreground">
             Lancez votre boutique en ligne en quelques minutes, sans compétences techniques
           </p>

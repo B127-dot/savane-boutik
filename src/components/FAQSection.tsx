@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { MessageCircle } from "lucide-react";
+import ShimmerText from '@/components/ui/shimmer-text';
 
 const faqs = [
   {
@@ -58,9 +59,10 @@ const FAQSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Questions <span className="text-primary">Fréquentes</span>
-          </h2>
+          <ShimmerText 
+            text="Questions Fréquentes"
+            className="text-3xl md:text-4xl font-bold mb-4"
+          />
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Tout ce que vous devez savoir sur BurkinaShop. Vous avez d'autres questions ? Contactez-nous sur WhatsApp.
           </p>
