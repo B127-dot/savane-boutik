@@ -7,11 +7,9 @@ import { useApp, Product, ShopSettings } from '@/contexts/AppContext';
 import { CartSheet } from '@/components/CartSheet';
 import { useToast } from '@/hooks/use-toast';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import ShopHeader from '@/components/shop/ShopHeader';
-import ShopHero from '@/components/shop/ShopHero';
 import TrustBar from '@/components/shop/TrustBar';
-import ShopFooter from '@/components/shop/ShopFooter';
-import ProductCardPremium from '@/components/shop/ProductCardPremium';
 import SkeletonProductCard from '@/components/shop/SkeletonProductCard';
 import NewArrivalsCarousel from '@/components/shop/NewArrivalsCarousel';
 import CategoryShowcase from '@/components/shop/CategoryShowcase';
@@ -20,6 +18,14 @@ import NewsletterSection from '@/components/shop/NewsletterSection';
 import WhyBuySection from '@/components/shop/WhyBuySection';
 import QuickViewModal from '@/components/shop/QuickViewModal';
 import BottomNavMobile from '@/components/shop/BottomNavMobile';
+
+// Theme components
+import ModernHero from '@/components/shop/themes/modern/ModernHero';
+import ModernProductCard from '@/components/shop/themes/modern/ModernProductCard';
+import ModernFooter from '@/components/shop/themes/modern/ModernFooter';
+import ElegantHero from '@/components/shop/themes/elegant/ElegantHero';
+import ElegantProductCard from '@/components/shop/themes/elegant/ElegantProductCard';
+import ElegantFooter from '@/components/shop/themes/elegant/ElegantFooter';
 
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
@@ -158,6 +164,12 @@ const Shop = () => {
 
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  // Get themed components
+  const currentTheme = shopSettings?.selectedTheme || 'modern';
+  const Hero = currentTheme === 'elegant' ? ElegantHero : ModernHero;
+  const ProductCard = currentTheme === 'elegant' ? ElegantProductCard : ModernProductCard;
+  const Footer = currentTheme === 'elegant' ? ElegantFooter : ModernFooter;
+
   if (!shopSettings) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -167,21 +179,22 @@ const Shop = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-20 md:pb-0">
-      <ShopHeader 
-        logo={shopSettings.logo}
-        shopName={shopSettings.shopName}
-        cartItemsCount={cartItemsCount}
-        onCartClick={() => setIsCartOpen(true)}
-      />
+    <ThemeProvider themeId={currentTheme}>
+      <div className="min-h-screen bg-background pb-20 md:pb-0">
+        <ShopHeader 
+          logo={shopSettings.logo}
+          shopName={shopSettings.shopName}
+          cartItemsCount={cartItemsCount}
+          onCartClick={() => setIsCartOpen(true)}
+        />
 
-      <ShopHero 
-        heroImage={shopSettings.heroImage}
-        heroTitle={shopSettings.heroTitle}
-        heroSubtitle={shopSettings.heroSubtitle}
-        heroButtonText={shopSettings.heroButtonText}
-        heroButtonLink={shopSettings.heroButtonLink}
-      />
+        <Hero 
+          heroImage={shopSettings.heroImage}
+          heroTitle={shopSettings.heroTitle}
+          heroSubtitle={shopSettings.heroSubtitle}
+          heroButtonText={shopSettings.heroButtonText}
+          heroButtonLink={shopSettings.heroButtonLink}
+        />
 
       <TrustBar trustItems={shopSettings.trustBar} />
 
@@ -279,7 +292,7 @@ const Shop = () => {
           ) : filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {filteredProducts.map((product) => (
-              <ProductCardPremium
+              <ProductCard
                 key={product.id}
                 product={product}
                 shopUrl={shopUrl!}
@@ -316,7 +329,7 @@ const Shop = () => {
       <WhyBuySection />
       <NewsletterSection />
 
-      <ShopFooter 
+      <Footer 
         logo={shopSettings.logo}
         shopName={shopSettings.shopName}
         aboutText={shopSettings.aboutText}
@@ -354,7 +367,8 @@ const Shop = () => {
         onClose={() => setQuickViewProduct(null)}
         onAddToCart={handleAddToCart}
       />
-    </div>
+      </div>
+    </ThemeProvider>
   );
 };
 
