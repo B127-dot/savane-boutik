@@ -221,6 +221,222 @@ const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
             Tous les plans incluent 14 jours d'essai gratuit • Annulez à tout moment
           </p>
         </div>
+
+        {/* Questions Fréquentes Section */}
+        <div className="px-6 py-16 bg-muted/20">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">Questions fréquentes</h2>
+              <p className="text-muted-foreground">
+                Trouvez les réponses aux questions les plus courantes
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
+                <h3 className="font-semibold text-lg mb-3">
+                  Puis-je changer de plan à tout moment ?
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Oui, vous pouvez passer à un plan supérieur ou inférieur à tout moment. 
+                  Les changements sont appliqués immédiatement.
+                </p>
+              </Card>
+
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
+                <h3 className="font-semibold text-lg mb-3">
+                  Comment fonctionne l'essai gratuit ?
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Profitez de 14 jours d'essai gratuit sur tous les plans premium. 
+                  Aucune carte bancaire requise pour commencer.
+                </p>
+              </Card>
+
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
+                <h3 className="font-semibold text-lg mb-3">
+                  Que se passe-t-il si je dépasse mes limites ?
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Vous recevrez une notification avant d'atteindre vos limites. 
+                  Vous pourrez alors mettre à niveau votre plan facilement.
+                </p>
+              </Card>
+
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
+                <h3 className="font-semibold text-lg mb-3">
+                  Le paiement est-il sécurisé ?
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Absolument. Nous utilisons les meilleurs standards de sécurité 
+                  pour protéger vos données et transactions.
+                </p>
+              </Card>
+
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
+                <h3 className="font-semibold text-lg mb-3">
+                  Puis-je annuler mon abonnement ?
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Oui, vous pouvez annuler à tout moment. Votre accès restera 
+                  actif jusqu'à la fin de votre période de facturation.
+                </p>
+              </Card>
+
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50">
+                <h3 className="font-semibold text-lg mb-3">
+                  Offrez-vous du support technique ?
+                </h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Tous nos plans incluent un support par email. Les plans Pro et 
+                  Business bénéficient d'un support prioritaire et dédié.
+                </p>
+              </Card>
+            </div>
+          </div>
+        </div>
+
+        {/* Testimonials Section */}
+        <div className="px-6 py-16">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4">
+                Ils l'adorent, pourquoi pas vous ?
+              </h2>
+              <p className="text-muted-foreground">
+                Rejoignez plus de 300 entrepreneurs qui développent déjà leur activité avec BurkinaShop
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-colors">
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-yellow-500">★</span>
+                  ))}
+                </div>
+                <p className="text-sm mb-6 leading-relaxed">
+                  "J'ai créé ma boutique en moins de 30 minutes. Les ventes ont dépassé 
+                  mes attentes dès le premier mois !"
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-primary">AM</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">Aminata Diallo</p>
+                    <p className="text-xs text-muted-foreground">Créatrice de mode</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-colors">
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-yellow-500">★</span>
+                  ))}
+                </div>
+                <p className="text-sm mb-6 leading-relaxed">
+                  "Le système WhatsApp intégré a révolutionné ma façon de gérer les commandes. 
+                  Mes clients adorent la simplicité !"
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-primary">IK</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">Ibrahim Koné</p>
+                    <p className="text-xs text-muted-foreground">Vendeur électronique</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-colors">
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-yellow-500">★</span>
+                  ))}
+                </div>
+                <p className="text-sm mb-6 leading-relaxed">
+                  "Analytics super détaillées qui m'aident à comprendre mes ventes. 
+                  J'ai augmenté mon CA de 40% en 2 mois !"
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-primary">FO</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">Fatoumata Ouédraogo</p>
+                    <p className="text-xs text-muted-foreground">Artisane bijoutière</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-colors">
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-yellow-500">★</span>
+                  ))}
+                </div>
+                <p className="text-sm mb-6 leading-relaxed">
+                  "Interface très intuitive. Même sans connaissances techniques, 
+                  j'ai pu créer une boutique professionnelle."
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-primary">MS</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">Moussa Sawadogo</p>
+                    <p className="text-xs text-muted-foreground">Vendeur d'artisanat</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-colors">
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-yellow-500">★</span>
+                  ))}
+                </div>
+                <p className="text-sm mb-6 leading-relaxed">
+                  "Le QR code pour partager ma boutique est génial ! 
+                  Mes clients scannent et commandent en quelques secondes."
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-primary">ST</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">Salif Traoré</p>
+                    <p className="text-xs text-muted-foreground">Vendeur de produits bio</p>
+                  </div>
+                </div>
+              </Card>
+
+              <Card className="p-6 bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-colors">
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-yellow-500">★</span>
+                  ))}
+                </div>
+                <p className="text-sm mb-6 leading-relaxed">
+                  "Support client réactif et compétent. Ils m'ont aidé à configurer 
+                  ma boutique en un temps record."
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-primary">MK</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-sm">Mariam Kaboré</p>
+                    <p className="text-xs text-muted-foreground">Boutique cosmétiques</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
