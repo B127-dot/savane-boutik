@@ -2,8 +2,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Product } from '@/contexts/AppContext';
-import { ShoppingCart, X, Star } from 'lucide-react';
+import { ShoppingCart, X, Star, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 interface QuickViewModalProps {
   product: Product | null;
@@ -14,6 +16,8 @@ interface QuickViewModalProps {
 
 const QuickViewModal = ({ product, isOpen, onClose, onAddToCart }: QuickViewModalProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
+  const navigate = useNavigate();
+  const { shopUrl } = useParams<{ shopUrl: string }>();
 
   if (!product) return null;
 
@@ -33,14 +37,31 @@ const QuickViewModal = ({ product, isOpen, onClose, onAddToCart }: QuickViewModa
         <div className="grid md:grid-cols-2 gap-8">
           {/* Images Column */}
           <div className="space-y-4">
-            {/* Main Image */}
-            <AspectRatio ratio={1}>
-              <img 
-                src={product.images[selectedImage] || '/placeholder.svg'} 
-                alt={product.name}
-                className="w-full h-full object-cover rounded-lg"
-              />
-            </AspectRatio>
+            {/* Main Carousel */}
+            <Carousel className="w-full">
+              <CarouselContent>
+                {product.images.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <AspectRatio ratio={1}>
+                      <img 
+                        src={image} 
+                        alt={`${product.name} ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </AspectRatio>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </Carousel>
+
+            {/* Image Position Indicator */}
+            {product.images.length > 1 && (
+              <div className="text-center text-sm text-muted-foreground">
+                Image {selectedImage + 1} / {product.images.length}
+              </div>
+            )}
 
             {/* Thumbnails */}
             {product.images.length > 1 && (

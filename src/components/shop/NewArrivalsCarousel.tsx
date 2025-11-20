@@ -6,11 +6,21 @@ import ProductCardPremium from './ProductCardPremium';
 
 interface NewArrivalsCarouselProps {
   products: Product[];
+  shopUrl: string;
   onAddToCart: (product: Product) => void;
   onQuickView: (product: Product) => void;
+  onToggleWishlist: (productId: string) => void;
+  wishlist: string[];
 }
 
-const NewArrivalsCarousel = ({ products, onAddToCart, onQuickView }: NewArrivalsCarouselProps) => {
+const NewArrivalsCarousel = ({ 
+  products, 
+  shopUrl,
+  onAddToCart, 
+  onQuickView,
+  onToggleWishlist,
+  wishlist 
+}: NewArrivalsCarouselProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -76,8 +86,11 @@ const NewArrivalsCarousel = ({ products, onAddToCart, onQuickView }: NewArrivals
             >
               <ProductCardPremium
                 product={product}
+                shopUrl={shopUrl}
                 onAddToCart={onAddToCart}
                 onQuickView={onQuickView}
+                onToggleWishlist={onToggleWishlist}
+                isInWishlist={wishlist.includes(product.id)}
               />
             </div>
           ))}
