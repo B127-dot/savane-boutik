@@ -99,7 +99,7 @@ const VideoSection = () => {
               <div className="relative aspect-video">
                 <iframe
                   className="w-full h-full"
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=1&modestbranding=1&rel=0"
+                  src="https://www.youtube.com/embed/qC1xfIx-8aY?controls=1&modestbranding=1&rel=0"
                   title="BurkinaShop - Présentation de la plateforme"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
