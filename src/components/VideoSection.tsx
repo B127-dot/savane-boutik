@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useThrottle } from '@/hooks/useThrottle';
 
 const VideoSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -27,12 +28,22 @@ const VideoSection = () => {
       setScrollProgress(Math.min(Math.max(progress, 0), 1));
     };
 
+    // Throttle scroll handler to improve performance (100ms)
+    const throttledHandleScroll = () => {
+      const now = Date.now();
+      const lastRan = (window as any).__lastScrollRan || 0;
+      if (now - lastRan >= 100) {
+        handleScroll();
+        (window as any).__lastScrollRan = now;
+      }
+    };
+
     handleScroll(); // Initial check
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', throttledHandleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', throttledHandleScroll);
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
@@ -104,6 +115,7 @@ const VideoSection = () => {
                   loop
                   playsInline
                   preload="metadata"
+                  poster="/videos/burkinashop-demo-poster.jpg"
                 >
                   <source src="/videos/burkinashop-demo.mp4" type="video/mp4" />
                   <source src="/videos/burkinashop-demo.webm" type="video/webm" />

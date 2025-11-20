@@ -1,4 +1,4 @@
-import { ArrowRight, Store, Smartphone, TrendingUp } from "lucide-react";
+import { ArrowRight, Store, Smartphone, TrendingUp, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import heroImage from "@/assets/hero-ecommerce.jpg";
@@ -39,9 +39,10 @@ const HeroSection = () => {
           {/* Content Left */}
           <div className="text-center lg:text-left space-y-8">
             <AnimatedGroup className="space-y-6" preset="blur-slide">
-              <div className="inline-flex items-center px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border shadow-soft">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-card/50 backdrop-blur-sm rounded-full border border-border shadow-soft">
+                <Rocket className="w-4 h-4 text-primary" />
                 <span className="text-sm text-muted-foreground">
-                  🚀 La solution e-commerce made in Burkina Faso
+                  La solution e-commerce made in Burkina Faso
                 </span>
               </div>
               
