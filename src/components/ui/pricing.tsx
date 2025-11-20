@@ -45,7 +45,7 @@ export function Pricing({
       const y = rect.top + rect.height / 2;
 
       confetti({
-        particleCount: 50,
+        particleCount: 60,
         spread: 60,
         origin: {
           x: x / window.innerWidth,
