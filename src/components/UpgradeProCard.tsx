@@ -12,24 +12,25 @@ const UpgradeProCard = ({ isCollapsed }: UpgradeProCardProps) => {
   if (isCollapsed) return null;
 
   return (
-    <div className="mx-3 mb-3 p-4 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900 border border-white/10 shadow-xl animate-fade-in">
+    <div className="mx-3 mb-3 p-3 rounded-lg bg-gradient-to-br from-primary/5 to-primary/10 border border-border/30 shadow-sm animate-fade-in">
       {/* Icône avec fond */}
-      <div className="w-12 h-12 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center mb-3">
-        <Crown className="w-6 h-6 text-yellow-400" />
+      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
+        <Crown className="w-4 h-4 text-primary" />
       </div>
       
       {/* Contenu */}
-      <h3 className="font-bold text-white mb-1">Upgrade Pro</h3>
-      <p className="text-xs text-white/60 mb-3 leading-relaxed">
-        Découvrez les bonus et avantages du compte Pro
+      <h3 className="font-semibold text-sm text-foreground mb-1">Upgrade Pro</h3>
+      <p className="text-[11px] text-muted-foreground mb-2 leading-relaxed">
+        Débloquez toutes les fonctionnalités
       </p>
       
       {/* Bouton CTA */}
       <Button 
         onClick={() => navigate('/subscription')}
-        className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02]"
+        size="sm"
+        className="w-full h-8 text-xs font-medium"
       >
-        Upgrade $30
+        Découvrir
       </Button>
     </div>
   );
