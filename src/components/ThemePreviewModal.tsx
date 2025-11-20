@@ -1,4 +1,4 @@
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { X, Check } from 'lucide-react';
 
@@ -27,12 +27,12 @@ const ThemePreviewModal = ({
         {/* Header with controls */}
         <div className="sticky top-0 z-50 flex items-center justify-between px-6 py-4 bg-background/95 backdrop-blur-sm border-b">
           <div>
-            <h2 className="text-lg font-semibold text-foreground">
+            <DialogTitle className="text-lg font-semibold text-foreground">
               Aperçu : {themeName}
-            </h2>
-            <p className="text-sm text-muted-foreground">
+            </DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground">
               Prévisualisation du thème avant application
-            </p>
+            </DialogDescription>
           </div>
           
           <div className="flex items-center gap-3">
