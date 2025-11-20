@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import VideoSection from "@/components/VideoSection";
+import ThreePillarsSection from "@/components/ThreePillarsSection";
 import ValuePropositionSection from "@/components/ValuePropositionSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import FeaturesSection from "@/components/FeaturesSection";
@@ -27,6 +28,7 @@ const Index = () => {
       <div className="pt-16">
         <HeroSection />
         <VideoSection />
+        <ThreePillarsSection />
         <ValuePropositionSection />
         <HowItWorksSection />
         <FeaturesSection />
