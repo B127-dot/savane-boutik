@@ -108,8 +108,11 @@ const SecuritySection = () => {
                 : "opacity-0 translate-y-8"
             }`}
           >
-            <div className="p-8 sm:p-12 bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+            <div className="relative p-8 sm:p-12 bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl hover:border-primary/30 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 shadow-lg shadow-primary/5">
+              {/* Subtle green glow gradient overlay */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none" />
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative z-10">
                 {trustPillars.map((pillar, index) => (
                   <div
                     key={index}
