@@ -2,7 +2,6 @@ import { Store, Smartphone, TrendingUp, Clock, Zap, Layers, BarChart3 } from 'lu
 import { motion, useScroll, useTransform, Variants } from 'framer-motion';
 import { useRef } from 'react';
 import useScrollAnimation from '@/hooks/useScrollAnimation';
-import ShimmerText from '@/components/ui/shimmer-text';
 
 const ThreePillarsSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -62,10 +61,9 @@ const ThreePillarsSection = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-12"
         >
-          <ShimmerText 
-            text="Nos 3 Piliers"
-            className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4"
-          />
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Nos 3 Piliers
+          </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Une solution complète pour transformer votre commerce en Afrique
           </p>

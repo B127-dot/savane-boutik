@@ -1,6 +1,5 @@
 import { Store, Smartphone, MessageCircle, TrendingUp } from 'lucide-react';
 import { Button } from './ui/button';
-import ShimmerText from '@/components/ui/shimmer-text';
 
 const ValuePropositionSection = () => {
   const benefits = [
@@ -58,10 +57,10 @@ const ValuePropositionSection = () => {
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16 md:mb-20">
-            <ShimmerText 
-              text="Et si on vous disait que vous pouviez lancer votre boutique en ligne aujourd'hui ?"
-              className="text-3xl md:text-5xl font-bold mb-6 leading-tight"
-            />
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+              Et si on vous disait que vous pouviez<br />
+              <span className="text-primary">lancer votre boutique en ligne aujourd'hui ?</span>
+            </h2>
           </div>
 
           {/* Benefits Grid */}

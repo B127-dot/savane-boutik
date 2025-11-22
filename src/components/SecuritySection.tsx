@@ -1,7 +1,6 @@
 import { Shield, Database, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useScrollAnimation from "@/hooks/useScrollAnimation";
-import ShimmerText from '@/components/ui/shimmer-text';
 
 const SecuritySection = () => {
   const { elementRef: badgeRef, isVisible: badgeVisible } = useScrollAnimation({
@@ -86,10 +85,12 @@ const SecuritySection = () => {
                 : "opacity-0 translate-y-4"
             }`}
           >
-            <ShimmerText 
-              text="BurkinaShop est Digne de Confiance"
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight"
-            />
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">
+              BurkinaShop est{" "}
+              <span className="bg-gradient-primary bg-clip-text text-transparent">
+                Digne de Confiance
+              </span>
+            </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               La sécurité de vos transactions et la protection de vos données
               sont au cœur de notre mission. BurkinaShop vous offre une
