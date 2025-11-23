@@ -107,7 +107,7 @@ const ThreePillarsSection = () => {
               <Store className="w-5 h-5 text-primary" />
             </div>
             
-            <h3 className="relative mt-5 text-2xl sm:text-3xl font-semibold tracking-tight">
+            <h3 className="relative mt-5 text-2xl sm:text-3xl font-semibold tracking-tight text-center">
               Lancez en 5 minutes
             </h3>
             <p className="relative mt-2 text-muted-foreground text-sm sm:text-base">
