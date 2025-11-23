@@ -176,8 +176,8 @@ const ThreePillarsSection = () => {
               <Smartphone className="w-5 h-5 text-primary" />
             </div>
             
-            <h3 className="relative mt-5 text-2xl sm:text-3xl font-semibold tracking-tight">
-              Paiements Locaux
+            <h3 className="relative mt-5 text-2xl sm:text-3xl font-semibold tracking-tight text-center">
+              ​Paiements Locaux
             </h3>
             <p className="relative mt-2 text-muted-foreground text-sm sm:text-base">
               Tous les moyens de paiement que vos clients utilisent déjà au Burkina Faso.
