@@ -111,7 +111,7 @@ const ThreePillarsSection = () => {
               Lancez en 5 minutes
             </h3>
             <p className="relative mt-2 text-muted-foreground text-sm sm:text-base">
-              Gérez produits, stock et commandes depuis un seul tableau de bord intuitif.
+              Gérez vos produits, stock et commandes depuis un seul tableau de bord intuitif.
             </p>
 
             {/* Illustration: Product icons converging */}
