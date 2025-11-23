@@ -1,33 +1,15 @@
-import { 
-  Store, 
-  Smartphone, 
-  CreditCard, 
-  MessageCircle, 
-  BarChart3,
-  Palette,
-  Users,
-  Shield,
-  ArrowRight,
-  TrendingUp,
-  ShoppingBag,
-  Package
-} from "lucide-react";
+import { Store, Smartphone, CreditCard, MessageCircle, BarChart3, Palette, Users, Shield, ArrowRight, TrendingUp, ShoppingBag, Package } from "lucide-react";
 import { AnimatedGroup } from "@/components/ui/animated-group";
-
 const FeaturesSection = () => {
-  return (
-    <section id="features" className="py-16 sm:py-24 md:py-32 bg-background relative overflow-hidden">
+  return <section id="features" className="py-16 sm:py-24 md:py-32 bg-background relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         <AnimatedGroup preset="fade" className="grid gap-12 lg:grid-cols-2 items-center">
           {/* Left Column - Animated Mockup */}
           <div className="relative order-2 lg:order-1">
-            <div 
-              className="relative rounded-[36px] p-5 bg-gradient-to-br from-primary/5 via-background to-background border border-border/50 shadow-2xl"
-              style={{
-                maskImage: 'linear-gradient(130deg, transparent, black 10%, black 70%, transparent)',
-                WebkitMaskImage: 'linear-gradient(130deg, transparent, black 10%, black 70%, transparent)'
-              }}
-            >
+            <div className="relative rounded-[36px] p-5 bg-gradient-to-br from-primary/5 via-background to-background border border-border/50 shadow-2xl" style={{
+            maskImage: 'linear-gradient(130deg, transparent, black 10%, black 70%, transparent)',
+            WebkitMaskImage: 'linear-gradient(130deg, transparent, black 10%, black 70%, transparent)'
+          }}>
               <article className="group relative overflow-hidden transition-shadow hover:shadow-lg bg-background/70 border-border/50 border rounded-3xl shadow-xl backdrop-blur-xl">
                 <div className="p-6 sm:p-10">
                   {/* Header */}
@@ -149,10 +131,7 @@ const FeaturesSection = () => {
 
                   {/* CTA */}
                   <div>
-                    <a
-                      href="#"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group"
-                    >
+                    <a href="#" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group">
                       Explorer toutes les fonctionnalités
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </a>
@@ -168,7 +147,7 @@ const FeaturesSection = () => {
               {/* Header */}
               <div className="inline-flex items-center px-4 py-2 bg-card rounded-full border border-border">
                 <span className="text-sm text-muted-foreground">
-                  ✨ Fonctionnalités pensées pour vous
+                  ✨Tout ce dont votre business a besoin  
                 </span>
               </div>
 
@@ -296,10 +275,7 @@ const FeaturesSection = () => {
 
               {/* CTA Button */}
               <div className="border-t border-border pt-6">
-                <a
-                  href="#"
-                  className="inline-flex items-center justify-center gap-2 h-10 hover:bg-primary/90 transition text-sm font-normal text-primary-foreground bg-primary rounded-full px-6 shadow-glow"
-                >
+                <a href="#" className="inline-flex items-center justify-center gap-2 h-10 hover:bg-primary/90 transition text-sm font-normal text-primary-foreground bg-primary rounded-full px-6 shadow-glow">
                   Commencer gratuitement
                   <ArrowRight className="h-4 w-4" />
                 </a>
@@ -308,8 +284,6 @@ const FeaturesSection = () => {
           </div>
         </AnimatedGroup>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default FeaturesSection;

@@ -138,7 +138,7 @@ const ThreePillarsSection = () => {
               </div>
 
               {/* Curves to center */}
-              <svg className="relative max-w-[320px] opacity-80 mt-6 mx-auto w-full h-[24px]" viewBox="0 0 320 100" fill="none" strokeWidth="2">
+              <svg viewBox="0 0 320 100" fill="none" strokeWidth="2" className="relative max-w-[320px] mt-6 mx-auto w-full h-[24px] opacity-95">
                 <defs>
                   <linearGradient id="g1" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
