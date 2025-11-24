@@ -52,7 +52,7 @@ const Navigation = () => {
             <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Globe className="w-5 h-5 text-primary-foreground" />
             </div>
-            <Link to="/" className="text-xl font-bold text-foreground">
+            <Link to="/" className="text-xl font-display font-bold text-foreground">
               BurkE-Shop
             </Link>
           </div>
@@ -64,7 +64,7 @@ const Navigation = () => {
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium"
                 >
                   {item.label}
                 </Link>
@@ -72,7 +72,7 @@ const Navigation = () => {
                 <a
                   key={item.label}
                   href={item.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200"
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium"
                 >
                   {item.label}
                 </a>
@@ -85,7 +85,7 @@ const Navigation = () => {
             <ThemeToggle />
             {user ? (
               <>
-                <span className="text-sm text-foreground/80">
+                <span className="text-sm text-foreground/80 font-medium">
                   Bienvenue, {user.name}
                 </span>
                 <Button variant="ghost" size="sm" onClick={handleLogout}>

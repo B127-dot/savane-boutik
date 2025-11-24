@@ -25,11 +25,11 @@ const CTASection = () => {
         >
           {/* Main heading */}
           <div className="space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground leading-tight">
               Créez votre boutique en ligne{" "}
               <span className="text-primary">gratuitement</span>
             </h2>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-body">
               Rejoignez des centaines de vendeurs burkinabè qui font confiance à BurkinaShop 
               pour développer leur activité en ligne
             </p>
@@ -61,8 +61,8 @@ const CTASection = () => {
                   <Star key={i} className="w-5 h-5 fill-primary text-primary" />
                 ))}
               </div>
-              <p className="text-sm text-muted-foreground">
-                <span className="font-bold text-foreground">4.9/5</span> · Plus de 500+ vendeurs satisfaits
+              <p className="text-sm text-muted-foreground font-body">
+                <span className="font-display font-bold text-foreground">4.9/5</span> · Plus de 500+ vendeurs satisfaits
               </p>
             </div>
           </motion.div>
@@ -84,7 +84,7 @@ const CTASection = () => {
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
             </Button>
             
-            <p className="text-sm text-muted-foreground flex items-center gap-2">
+            <p className="text-sm text-muted-foreground flex items-center gap-2 font-body">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               Aucune carte bancaire requise · Configuration en 5 minutes
             </p>
@@ -99,16 +99,16 @@ const CTASection = () => {
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
               <div>
-                <div className="text-3xl font-bold text-primary mb-1">500+</div>
-                <div className="text-sm text-muted-foreground">Boutiques actives</div>
+                <div className="text-3xl font-display font-bold text-primary mb-1">500+</div>
+                <div className="text-sm text-muted-foreground font-body">Boutiques actives</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-primary mb-1">10k+</div>
-                <div className="text-sm text-muted-foreground">Commandes traitées</div>
+                <div className="text-3xl font-display font-bold text-primary mb-1">10k+</div>
+                <div className="text-sm text-muted-foreground font-body">Commandes traitées</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-primary mb-1">98%</div>
-                <div className="text-sm text-muted-foreground">Taux de satisfaction</div>
+                <div className="text-3xl font-display font-bold text-primary mb-1">98%</div>
+                <div className="text-sm text-muted-foreground font-body">Taux de satisfaction</div>
               </div>
             </div>
           </motion.div>
