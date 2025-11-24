@@ -57,10 +57,10 @@ const HowItWorksSection = () => {
           <Badge variant="secondary" className="mb-4 text-sm px-4 py-2">
             Simple et Rapide
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
             Lancez votre boutique en 4 étapes simples
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground">
+          <p className="text-lg md:text-xl text-muted-foreground font-body">
             Lancez votre boutique en ligne en quelques minutes, sans compétences techniques
           </p>
         </div>
@@ -72,7 +72,7 @@ const HowItWorksSection = () => {
 
         {/* Final CTA */}
         <div className="text-center mt-24 md:mt-32">
-          <p className="text-xl md:text-2xl font-semibold text-foreground mb-6">
+          <p className="text-xl md:text-2xl font-display font-semibold text-foreground mb-6">
             Prêt à lancer votre boutique en ligne ?
           </p>
           <Button size="lg" variant="hero" onClick={() => navigate("/signup")} className="text-lg px-8 py-6 h-auto" aria-label="Commencer gratuitement - Créer votre boutique en ligne">
@@ -127,12 +127,12 @@ const StepCard = ({
             </Badge>
 
             {/* Title */}
-            <h3 className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight">
+            <h3 className="text-2xl sm:text-3xl font-display font-semibold text-foreground tracking-tight">
               {step.title}
             </h3>
 
             {/* Description */}
-            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed font-body">
               {step.description}
             </p>
 
@@ -144,7 +144,7 @@ const StepCard = ({
                   <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 rounded-xl ring-1 ring-border/50 bg-card/50">
                     <div className="w-2 h-2 rounded-full bg-gradient-to-br from-primary to-primary-glow" />
                   </span>
-                  <span className="font-medium tracking-[-0.01em]">{feature}</span>
+                  <span className="font-medium tracking-[-0.01em] font-body">{feature}</span>
                 </div>)}
             </div>
           </div>

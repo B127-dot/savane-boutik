@@ -35,7 +35,7 @@ const HeroSection = () => {
                 </span>
               </div>
               
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-tight">
                 Transformez votre
                 <span className="block bg-gradient-primary bg-clip-text text-transparent">
                   commerce local
@@ -43,7 +43,7 @@ const HeroSection = () => {
                 en boutique digitale
               </h1>
               
-              <p className="text-xl text-muted-foreground max-w-2xl">
+              <p className="text-xl text-muted-foreground max-w-2xl font-body">
                 Créez votre boutique en 5 minutes. 
 Vendez sur WhatsApp et acceptez Orange Money..
               </p>
@@ -71,8 +71,8 @@ Vendez sur WhatsApp et acceptez Orange Money..
                     </div>)}
                 </div>
                 <div className="text-sm">
-                  <div className="font-semibold">4.9/5</div>
-                  <div className="text-muted-foreground">300+ commerçants</div>
+                  <div className="font-display font-semibold">4.9/5</div>
+                  <div className="text-muted-foreground font-body">300+ commerçants</div>
                 </div>
               </div>
             </AnimatedGroup>
@@ -107,8 +107,8 @@ Vendez sur WhatsApp et acceptez Orange Money..
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-primary/10 border border-primary/20 group-hover:bg-gradient-primary/20 transition-colors">
                 <stat.icon className="w-6 h-6 text-primary" />
               </div>
-              <div className="text-3xl font-bold text-foreground">{stat.value}</div>
-              <div className="text-muted-foreground">{stat.label}</div>
+              <div className="text-3xl font-display font-bold text-foreground">{stat.value}</div>
+              <div className="text-muted-foreground font-body">{stat.label}</div>
             </div>)}
         </AnimatedGroup>
       </div>
