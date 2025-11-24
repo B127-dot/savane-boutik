@@ -81,6 +81,7 @@ const Checkout = () => {
       customerEmail: formData.customerEmail || '',
       customerPhone: formData.phone,
       deliveryAddress: formData.address,
+      notes: formData.notes || undefined,
       paymentMethod: 'cod'
     };
 
