@@ -371,7 +371,7 @@ const Orders = () => {
                           Voir
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
+                      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
                         <DialogHeader>
                           <DialogTitle>Détails de la commande #{order.id}</DialogTitle>
                           <DialogDescription>
