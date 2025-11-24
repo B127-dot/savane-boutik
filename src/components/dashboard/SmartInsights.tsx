@@ -1,13 +1,14 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, PackageX, Clock, MessageCircle } from 'lucide-react';
+import { AlertCircle, PackageX, Clock, MessageCircle, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import type { Product, Order, ShopSettings } from '@/contexts/AppContext';
+import type { Product, Order, ShopSettings, AbandonedCart } from '@/contexts/AppContext';
 
 interface SmartInsightsProps {
   products: Product[];
   orders: Order[];
   shopSettings: ShopSettings | null;
+  abandonedCarts: AbandonedCart[];
 }
 
 interface Insight {
@@ -19,7 +20,7 @@ interface Insight {
   link: string;
 }
 
-const SmartInsights = ({ products, orders, shopSettings }: SmartInsightsProps) => {
+const SmartInsights = ({ products, orders, shopSettings, abandonedCarts }: SmartInsightsProps) => {
   const insights: Insight[] = [];
 
   // Produits en rupture de stock (Critical)
@@ -32,6 +33,18 @@ const SmartInsights = ({ products, orders, shopSettings }: SmartInsightsProps) =
       message: `${outOfStockProducts.length} produits ne peuvent plus être vendus`,
       action: 'Réapprovisionner',
       link: '/products'
+    });
+  }
+
+  // Paniers abandonnés (Warning)
+  if (abandonedCarts.length > 0) {
+    insights.push({
+      type: 'warning',
+      icon: ShoppingCart,
+      title: 'Paniers abandonnés',
+      message: `${abandonedCarts.length} client${abandonedCarts.length > 1 ? 's ont' : ' a'} abandonné leur panier`,
+      action: 'Relancer les clients',
+      link: '/marketing'
     });
   }
 

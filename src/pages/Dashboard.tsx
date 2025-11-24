@@ -19,7 +19,7 @@ import ShopQRCode from '@/components/ShopQRCode';
 import NotificationCenter, { Notification } from '@/components/dashboard/NotificationCenter';
 
 const Dashboard = () => {
-  const { user, products, orders, categories, shopSettings } = useApp();
+  const { user, products, orders, categories, shopSettings, getAbandonedCarts } = useApp();
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
   const [period, setPeriod] = useState<Period>('today');
@@ -378,6 +378,7 @@ const Dashboard = () => {
           products={products} 
           orders={orders} 
           shopSettings={shopSettings}
+          abandonedCarts={getAbandonedCarts()}
         />
       </div>
 
