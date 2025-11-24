@@ -110,19 +110,19 @@ const ProductCardPremium = ({
         </div>
 
         {/* Product Name */}
-        <h3 className="font-semibold text-foreground text-center line-clamp-2 min-h-[3rem]">
+        <h3 className="font-display font-semibold text-foreground text-center line-clamp-2 min-h-[3rem]">
           {product.name}
         </h3>
 
         {/* Price */}
         <div className="flex flex-col items-center gap-1">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-foreground">
+            <span className="text-2xl font-display font-bold text-foreground">
               {formatPrice(product.price)}
             </span>
           </div>
           {hasDiscount && (
-            <span className="text-sm text-muted-foreground line-through">
+            <span className="text-sm font-body text-muted-foreground line-through">
               {formatPrice(product.originalPrice!)}
             </span>
           )}
@@ -130,7 +130,7 @@ const ProductCardPremium = ({
 
         {/* Add to Cart Button */}
         <Button 
-          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-glow"
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display font-semibold shadow-glow"
           onClick={() => onAddToCart(product)}
         >
           <ShoppingCart className="h-4 w-4 mr-2" />

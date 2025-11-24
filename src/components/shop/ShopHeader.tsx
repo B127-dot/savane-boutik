@@ -29,7 +29,7 @@ const ShopHeader = ({ logo, shopName, cartItemsCount, onCartClick }: ShopHeaderP
                 </span>
               </div>
             )}
-            <span className="text-xl font-bold text-foreground hidden sm:block">
+            <span className="text-xl font-display font-bold text-foreground hidden sm:block">
               {shopName}
             </span>
           </div>

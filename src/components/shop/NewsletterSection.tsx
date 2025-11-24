@@ -53,10 +53,10 @@ const NewsletterSection = () => {
           </div>
 
           {/* Heading */}
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
             Restez Informé de Nos Nouveautés
           </h2>
-          <p className="text-lg text-white/90 mb-8">
+          <p className="text-lg font-body text-white/90 mb-8">
             Inscrivez-vous à notre newsletter et recevez nos offres exclusives
           </p>
 
@@ -82,14 +82,14 @@ const NewsletterSection = () => {
           ) : (
             <div className="flex items-center justify-center gap-3 p-6 bg-white/20 rounded-lg backdrop-blur-sm animate-fade-in">
               <CheckCircle className="h-8 w-8 text-white" />
-              <span className="text-xl font-semibold text-white">
+              <span className="text-xl font-display font-semibold text-white">
                 Merci pour votre inscription !
               </span>
             </div>
           )}
 
           {/* Benefits */}
-          <div className="flex flex-wrap justify-center gap-6 mt-8 text-white/90">
+          <div className="flex flex-wrap justify-center gap-6 mt-8 font-body text-white/90">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-5 w-5" />
               <span>Offres exclusives</span>

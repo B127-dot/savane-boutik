@@ -42,10 +42,10 @@ const SocialProofSection = () => {
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
             Ce Que Disent Nos Clients
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg font-body text-muted-foreground">
             Rejoignez des milliers de clients satisfaits
           </p>
         </div>
@@ -71,18 +71,18 @@ const SocialProofSection = () => {
               </div>
 
               {/* Testimonial Text */}
-              <p className="text-xl md:text-2xl text-foreground text-center mb-8 leading-relaxed">
+              <p className="text-xl md:text-2xl font-body text-foreground text-center mb-8 leading-relaxed">
                 "{defaultTestimonials[currentIndex].text}"
               </p>
 
               {/* Author */}
               <div className="flex items-center justify-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-lg font-bold text-primary">
+                  <span className="text-lg font-display font-bold text-primary">
                     {defaultTestimonials[currentIndex].name.charAt(0)}
                   </span>
                 </div>
-                <p className="font-semibold text-foreground">
+                <p className="font-display font-semibold text-foreground">
                   {defaultTestimonials[currentIndex].name}
                 </p>
               </div>
@@ -117,10 +117,10 @@ const SocialProofSection = () => {
               key={index}
               className="text-center p-6 bg-card rounded-xl border border-border hover:shadow-lg transition-shadow"
             >
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">
+              <div className="text-3xl md:text-4xl font-display font-bold text-primary mb-2">
                 {stat.value}
               </div>
-              <div className="text-sm md:text-base text-muted-foreground">
+              <div className="text-sm md:text-base font-body text-muted-foreground">
                 {stat.label}
               </div>
             </div>
