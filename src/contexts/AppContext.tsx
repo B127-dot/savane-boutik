@@ -64,6 +64,25 @@ export interface PromoCode {
   isActive: boolean;
 }
 
+export interface AbandonedCart {
+  id: string;
+  cart: CartItem[];
+  timestamp: number;
+  customerInfo?: {
+    phone?: string;
+    name?: string;
+  };
+  total: number;
+  productDetails: {
+    id: string;
+    name: string;
+    price: number;
+    image: string;
+  }[];
+  isRecovered: boolean;
+  recoveryPromoCode?: string;
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -113,6 +132,7 @@ interface AppContextType {
   shopSettings: ShopSettings | null;
   cart: CartItem[];
   promoCodes: PromoCode[];
+  abandonedCarts: AbandonedCart[];
   
   // Auth
   login: (email: string, password: string) => Promise<boolean>;
@@ -146,6 +166,10 @@ interface AppContextType {
   addPromoCode: (promoCode: Omit<PromoCode, 'id' | 'userId'>) => void;
   updatePromoCode: (id: string, promoCode: Partial<PromoCode>) => void;
   deletePromoCode: (id: string) => void;
+  
+  // Abandoned Carts
+  getAbandonedCarts: () => AbandonedCart[];
+  markCartAsRecovered: (cartId: string) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -228,6 +252,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [shopSettings, setShopSettings] = useState<ShopSettings | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
+  const [abandonedCarts, setAbandonedCarts] = useState<AbandonedCart[]>([]);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -267,6 +292,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const userPromoCodes = localStorage.getItem(`promoCodes_${user.id}`);
       if (userPromoCodes) {
         setPromoCodes(JSON.parse(userPromoCodes));
+      }
+      
+      const userAbandonedCarts = localStorage.getItem(`abandonedCarts_${user.id}`);
+      if (userAbandonedCarts) {
+        setAbandonedCarts(JSON.parse(userAbandonedCarts));
       }
     }
   }, []);
@@ -465,6 +495,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem(`promoCodes_${user.id}`, JSON.stringify(updatedPromoCodes));
   };
 
+  // Abandoned Carts
+  const getAbandonedCarts = () => {
+    return abandonedCarts.filter(ac => !ac.isRecovered);
+  };
+
+  const markCartAsRecovered = (cartId: string) => {
+    if (!user) return;
+    const updatedCarts = abandonedCarts.map(ac =>
+      ac.id === cartId ? { ...ac, isRecovered: true } : ac
+    );
+    setAbandonedCarts(updatedCarts);
+    localStorage.setItem(`abandonedCarts_${user.id}`, JSON.stringify(updatedCarts));
+  };
+
   return (
     <AppContext.Provider value={{
       user,
@@ -474,6 +518,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       shopSettings,
       cart,
       promoCodes,
+      abandonedCarts,
       login,
       logout,
       signup,
@@ -492,7 +537,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updateShopSettings,
       addPromoCode,
       updatePromoCode,
-      deletePromoCode
+      deletePromoCode,
+      getAbandonedCarts,
+      markCartAsRecovered
     }}>
       {children}
     </AppContext.Provider>

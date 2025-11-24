@@ -10,13 +10,15 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ShopQRCode from '@/components/ShopQRCode';
-import { Plus, Edit, Trash2, Percent, DollarSign, Tag, Share, Users } from 'lucide-react';
+import { Plus, Edit, Trash2, Percent, DollarSign, Tag, Share, Users, ShoppingCart, MessageCircle, Clock, TrendingUp } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import type { PromoCode } from '@/contexts/AppContext';
+import type { PromoCode, AbandonedCart } from '@/contexts/AppContext';
+import { generateAbandonedCartRecoveryMessage, openWhatsApp } from '@/lib/whatsapp';
 
 const Marketing = () => {
-  const { promoCodes, addPromoCode, updatePromoCode, deletePromoCode, shopSettings } = useApp();
+  const { promoCodes, addPromoCode, updatePromoCode, deletePromoCode, shopSettings, getAbandonedCarts, markCartAsRecovered } = useApp();
   const { toast } = useToast();
+  const abandonedCarts = getAbandonedCarts();
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingPromo, setEditingPromo] = useState<PromoCode | null>(null);
   const [formData, setFormData] = useState({
@@ -83,6 +85,54 @@ const Marketing = () => {
     setFormData({ ...formData, code: result });
   };
 
+  const handleRecoverCart = (abandonedCart: AbandonedCart) => {
+    // Generate a unique promo code
+    const promoCode = `RECOVER${Date.now().toString().slice(-6)}`;
+    const discountValue = 10; // 10% discount
+
+    // Create the promo code
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 48);
+    
+    addPromoCode({
+      code: promoCode,
+      type: 'percentage',
+      value: discountValue,
+      expiresAt: expiresAt.toISOString(),
+      isActive: true
+    });
+
+    // Generate WhatsApp message
+    const message = generateAbandonedCartRecoveryMessage(
+      abandonedCart.productDetails.map(p => ({
+        name: p.name,
+        quantity: abandonedCart.cart.find(c => c.productId === p.id)?.quantity || 1,
+        price: p.price
+      })),
+      abandonedCart.total,
+      shopSettings?.shopName || 'Notre Boutique',
+      promoCode,
+      discountValue
+    );
+
+    // Open WhatsApp
+    if (shopSettings?.socialLinks.whatsapp) {
+      openWhatsApp(shopSettings.socialLinks.whatsapp, message);
+      markCartAsRecovered(abandonedCart.id);
+      
+      toast({
+        title: "Message généré !",
+        description: `Code promo ${promoCode} créé et message WhatsApp ouvert`,
+      });
+    } else {
+      toast({
+        title: "Erreur",
+        description: "Veuillez configurer votre numéro WhatsApp dans les paramètres",
+        variant: "destructive"
+      });
+    }
+  };
+
   const shareLinks = {
     whatsapp: `https://wa.me/?text=Découvrez ma boutique ${shopSettings?.shopName} sur burkinashop.com/${shopSettings?.shopUrl}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=https://burkinashop.com/${shopSettings?.shopUrl}`,
@@ -103,6 +153,15 @@ const Marketing = () => {
           <TabsTrigger value="promos">
             <Tag className="w-4 h-4 mr-2" />
             Codes promo
+          </TabsTrigger>
+          <TabsTrigger value="abandoned">
+            <ShoppingCart className="w-4 h-4 mr-2" />
+            Paniers abandonnés
+            {abandonedCarts.length > 0 && (
+              <Badge variant="destructive" className="ml-2">
+                {abandonedCarts.length}
+              </Badge>
+            )}
           </TabsTrigger>
           <TabsTrigger value="share">
             <Share className="w-4 h-4 mr-2" />
@@ -276,6 +335,174 @@ const Marketing = () => {
               </Card>
             ))}
           </div>
+        </TabsContent>
+
+        <TabsContent value="abandoned" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2 font-display">
+                    <ShoppingCart className="w-5 h-5" />
+                    Récupération de Paniers Abandonnés
+                  </CardTitle>
+                  <CardDescription className="font-body">
+                    Relancez les clients qui ont abandonné leur panier avec un code promo automatique
+                  </CardDescription>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-display font-bold text-foreground">{abandonedCarts.length}</div>
+                  <div className="text-sm font-body text-muted-foreground">Panier(s) à relancer</div>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
+
+          {/* Statistics Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center">
+                    <Clock className="w-6 h-6 text-orange-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-body text-muted-foreground">Dernières 24h</p>
+                    <p className="text-2xl font-display font-bold text-foreground">
+                      {abandonedCarts.filter(c => Date.now() - c.timestamp < 24 * 60 * 60 * 1000).length}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
+                    <DollarSign className="w-6 h-6 text-blue-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-body text-muted-foreground">Valeur totale</p>
+                    <p className="text-2xl font-display font-bold text-foreground">
+                      {abandonedCarts.reduce((sum, c) => sum + c.total, 0).toLocaleString()} FCFA
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-green-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-body text-muted-foreground">Panier moyen</p>
+                    <p className="text-2xl font-display font-bold text-foreground">
+                      {abandonedCarts.length > 0 
+                        ? Math.round(abandonedCarts.reduce((sum, c) => sum + c.total, 0) / abandonedCarts.length).toLocaleString() 
+                        : 0} FCFA
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Abandoned Carts List */}
+          {abandonedCarts.length === 0 ? (
+            <Card>
+              <CardContent className="p-12 text-center">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
+                  <ShoppingCart className="w-8 h-8 text-muted-foreground" />
+                </div>
+                <h3 className="text-lg font-display font-semibold mb-2">Aucun panier abandonné</h3>
+                <p className="font-body text-muted-foreground">
+                  Les paniers abandonnés apparaîtront ici automatiquement après 5 minutes d'inactivité
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid gap-6">
+              {abandonedCarts.map((cart) => (
+                <Card key={cart.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <CardHeader className="bg-muted/30">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                          <ShoppingCart className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-lg font-display">
+                            Panier #{cart.id.slice(-8)}
+                          </CardTitle>
+                          <CardDescription className="font-body">
+                            <Clock className="w-3 h-3 inline mr-1" />
+                            {new Date(cart.timestamp).toLocaleDateString('fr-FR', {
+                              day: 'numeric',
+                              month: 'long',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </CardDescription>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="text-lg font-display font-bold">
+                        {cart.total.toLocaleString()} FCFA
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      {/* Products */}
+                      <div className="space-y-3">
+                        <p className="text-sm font-display font-semibold text-muted-foreground">Articles dans le panier :</p>
+                        {cart.productDetails.map((product, idx) => {
+                          const cartItem = cart.cart.find(c => c.productId === product.id);
+                          return (
+                            <div key={product.id} className="flex items-center gap-3 p-3 bg-muted/20 rounded-lg">
+                              <img 
+                                src={product.image} 
+                                alt={product.name}
+                                className="w-12 h-12 object-cover rounded"
+                              />
+                              <div className="flex-1">
+                                <p className="font-display font-medium">{product.name}</p>
+                                <p className="text-sm font-body text-muted-foreground">
+                                  Quantité: {cartItem?.quantity || 1}
+                                </p>
+                              </div>
+                              <p className="font-display font-bold">
+                                {(product.price * (cartItem?.quantity || 1)).toLocaleString()} FCFA
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Recovery Action */}
+                      <div className="pt-4 border-t">
+                        <Button 
+                          onClick={() => handleRecoverCart(cart)}
+                          className="w-full gap-2"
+                          size="lg"
+                        >
+                          <MessageCircle className="w-5 h-5" />
+                          Relancer via WhatsApp avec -10%
+                        </Button>
+                        <p className="text-xs font-body text-muted-foreground text-center mt-2">
+                          Un code promo unique sera automatiquement généré et envoyé
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="share" className="space-y-6">

@@ -8,6 +8,7 @@ import { CartSheet } from '@/components/CartSheet';
 import { useToast } from '@/hooks/use-toast';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { useAbandonedCartTracker } from '@/hooks/useAbandonedCartTracker';
 import ShopHeader from '@/components/shop/ShopHeader';
 import TrustBar from '@/components/shop/TrustBar';
 import SkeletonProductCard from '@/components/shop/SkeletonProductCard';
@@ -36,9 +37,12 @@ import { CreativeFooter } from '@/components/shop/themes/creative/CreativeFooter
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
   const [searchParams] = useSearchParams();
-  const { products, categories, addToCart, cart } = useApp();
+  const { products, categories, addToCart, cart, user } = useApp();
   const { toast } = useToast();
   const [shopSettings, setShopSettings] = useState<ShopSettings | null>(null);
+  
+  // Track abandoned carts automatically
+  useAbandonedCartTracker(cart, products, user?.id || 'guest');
   
   // Support preview theme from URL parameter
   const previewTheme = searchParams.get('previewTheme');
