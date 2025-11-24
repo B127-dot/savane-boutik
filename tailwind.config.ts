@@ -19,6 +19,13 @@ export default {
 		},
 		extend: {
 			fontFamily: {
+				// Switzer - Police principale inspirée de Wazzap.ai
+				'sans': ['Switzer', 'Inter', 'system-ui', 'sans-serif'],
+				'switzer': ['Switzer', 'sans-serif'],
+				'display': ['Switzer', 'sans-serif'],
+				'body': ['Switzer', 'Inter', 'sans-serif'],
+				
+				// Polices de thèmes (conservées pour les boutiques)
 				'playfair': ['Playfair Display', 'serif'],
 				'cormorant': ['Cormorant Garamond', 'serif'],
 				'inter': ['Inter', 'sans-serif'],
