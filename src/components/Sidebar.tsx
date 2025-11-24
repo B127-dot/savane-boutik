@@ -32,6 +32,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Badge } from '@/components/ui/badge';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface SidebarSection {
   label: string;
@@ -54,6 +57,7 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>(['/products']);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, shopSettings, logout, orders } = useApp();
@@ -109,8 +113,19 @@ const Sidebar = () => {
   ];
 
   const handleLogout = () => {
+    setShowLogoutDialog(false);
     logout();
     navigate('/');
+  };
+
+  const getUserInitials = () => {
+    if (!user?.name) return 'U';
+    return user.name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   const toggleSidebar = () => {
@@ -288,7 +303,7 @@ const Sidebar = () => {
         ))}
       </nav>
 
-      {/* Footer avec Upgrade Pro Card + ThemeToggle + Logout */}
+      {/* Footer avec Upgrade Pro Card + ThemeToggle + User Profile */}
       <div className="border-t border-border/50 p-2 space-y-1">
         {/* Upgrade Pro Card */}
         <UpgradeProCard isCollapsed={isCollapsed} />
@@ -300,21 +315,80 @@ const Sidebar = () => {
           </div>
         )}
         
-        {/* Logout Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleLogout}
-          className={`w-full h-8 transition-all duration-200 ${
-            isCollapsed 
-              ? 'justify-center px-0' 
-              : 'justify-start text-destructive hover:text-destructive hover:bg-destructive/10'
-          }`}
-        >
-          <LogOut className={`w-3.5 h-3.5 ${isCollapsed ? '' : 'mr-2'}`} />
-          {!isCollapsed && <span className="text-xs">Déconnexion</span>}
-        </Button>
+        {/* User Profile avec Popover */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`w-full transition-all duration-200 hover:bg-accent ${
+                isCollapsed 
+                  ? 'h-10 justify-center px-0' 
+                  : 'h-12 justify-start gap-3 px-2'
+              }`}
+            >
+              <Avatar className="h-8 w-8 border-2 border-border">
+                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground font-semibold text-sm">
+                  {getUserInitials()}
+                </AvatarFallback>
+              </Avatar>
+              {!isCollapsed && (
+                <div className="flex-1 text-left min-w-0">
+                  <p className="text-xs font-medium truncate">{user?.name}</p>
+                  <p className="text-[10px] text-muted-foreground truncate">Gratuit</p>
+                </div>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent 
+            className="w-64 p-0" 
+            side={isCollapsed ? "right" : "top"}
+            align="start"
+          >
+            <div className="p-4 space-y-3">
+              <div className="flex items-center gap-3">
+                <Avatar className="h-10 w-10 border-2 border-border">
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground font-semibold">
+                    {getUserInitials()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-sm truncate">{user?.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                </div>
+              </div>
+              
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowLogoutDialog(true)}
+                className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10 gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Se déconnecter</span>
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
+      
+      {/* Alert Dialog de confirmation de déconnexion */}
+      <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmer la déconnexion</AlertDialogTitle>
+            <AlertDialogDescription>
+              Êtes-vous sûr de vouloir vous déconnecter ? Vous devrez vous reconnecter pour accéder à votre tableau de bord.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleLogout} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Se déconnecter
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 
