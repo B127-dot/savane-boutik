@@ -19,7 +19,8 @@ import {
   Tags,
   Grid3x3,
   Menu,
-  X
+  X,
+  Star
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -84,6 +85,11 @@ const Sidebar = () => {
           href: '/orders', 
           icon: ShoppingCart,
           badge: pendingOrdersCount > 0 ? pendingOrdersCount : undefined
+        },
+        { 
+          label: 'Avis clients', 
+          href: '/reviews', 
+          icon: Star
         },
         { label: 'Ma boutique', href: '/shop-settings', icon: Palette },
       ]
