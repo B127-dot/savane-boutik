@@ -5,6 +5,7 @@ import { TrendingUp, TrendingDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCountUp } from '@/hooks/useCountUp';
 import MiniSparkline from './MiniSparkline';
+import IconContainer from './IconContainer';
 import { useMemo } from 'react';
 
 interface KPICardProps {
@@ -76,6 +77,30 @@ const KPICard = ({
     }
   };
 
+  // Determine icon type based on title or badge
+  const getIconType = (): 'revenue' | 'orders' | 'products' | 'conversion' | 'danger' | 'neutral' => {
+    const titleLower = title.toLowerCase();
+    
+    // Check badge variant first for danger state
+    if (badge?.variant === 'destructive') return 'danger';
+    
+    // Detect type from title
+    if (titleLower.includes('chiffre') || titleLower.includes('revenue') || titleLower.includes('ventes')) {
+      return 'revenue';
+    }
+    if (titleLower.includes('commande') || titleLower.includes('order') || titleLower.includes('attente')) {
+      return 'orders';
+    }
+    if (titleLower.includes('stock') || titleLower.includes('produit') || titleLower.includes('product')) {
+      return 'products';
+    }
+    if (titleLower.includes('conversion') || titleLower.includes('taux')) {
+      return 'conversion';
+    }
+    
+    return 'neutral';
+  };
+
   return (
     <Card className={`${shadowClass} ${borderClass} hover:scale-[1.02] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group`}>
       <CardContent className="p-6">
@@ -85,7 +110,11 @@ const KPICard = ({
             <p className="text-3xl font-display font-extrabold tabular-nums">{displayValue}</p>
           </div>
           <div className="flex flex-col items-end gap-2">
-            <Icon className={`${iconSize} text-primary transition-all duration-300 group-hover:rotate-6 group-hover:scale-110`} />
+            <IconContainer 
+              icon={Icon}
+              type={getIconType()}
+              size={level === 1 ? 'lg' : level === 2 ? 'md' : 'sm'}
+            />
             {badge && (
               <Badge className={`${getBadgeClass(badge.variant)} ${badge.variant === 'destructive' ? 'animate-pulse' : ''}`}>
                 {badge.text}
