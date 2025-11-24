@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Search, Package, Eye } from 'lucide-react';
+import { Search, Package, Eye, User, Mail, Phone, MapPin, FileText, Copy } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import type { Order } from '@/contexts/AppContext';
+import { WhatsAppButton } from '@/components/WhatsAppButton';
 
 const Orders = () => {
   const { orders, products, updateOrderStatus } = useApp();
@@ -20,7 +21,9 @@ const Orders = () => {
 
   const filteredOrders = orders.filter(order => {
     const matchesSearch = order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         order.customerEmail.toLowerCase().includes(searchTerm.toLowerCase());
+                         order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         order.customerEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         order.customerPhone.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -55,36 +58,164 @@ const Orders = () => {
     }
   };
 
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: "Copié !",
+      description: `${label} copié dans le presse-papiers`,
+    });
+  };
+
   const OrderDetails = ({ order }: { order: Order }) => {
     return (
-      <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <h4 className="font-semibold">Informations de la commande</h4>
-            <p className="text-sm text-muted-foreground">ID: #{order.id}</p>
-            <p className="text-sm text-muted-foreground">Client: {order.customerEmail}</p>
-            <p className="text-sm text-muted-foreground">
-              Date: {new Date(order.createdAt).toLocaleDateString('fr-FR')}
-            </p>
-          </div>
-          <div>
-            <h4 className="font-semibold">Statut et Total</h4>
-            <Badge variant={getStatusColor(order.status)} className="mb-2">
-              {getStatusLabel(order.status)}
-            </Badge>
-            <p className="text-lg font-bold">
-              {order.total.toLocaleString('fr-FR')} €
-            </p>
+      <div className="space-y-6">
+        {/* Section 1: Informations de la commande */}
+        <div className="space-y-3">
+          <h4 className="font-semibold text-lg">Informations de la commande</h4>
+          <div className="grid grid-cols-2 gap-4 p-4 bg-muted/30 rounded-lg">
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">ID de commande</p>
+              <p className="font-medium">#{order.id}</p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">Date</p>
+              <p className="font-medium">
+                {new Date(order.createdAt).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">Statut</p>
+              <Badge variant={getStatusColor(order.status)}>
+                {getStatusLabel(order.status)}
+              </Badge>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">Total</p>
+              <p className="text-lg font-bold text-primary">
+                {order.total.toLocaleString('fr-FR')} FCFA
+              </p>
+            </div>
+            {order.promoCode && (
+              <div className="space-y-2 col-span-2">
+                <p className="text-sm text-muted-foreground">Code promo utilisé</p>
+                <p className="font-medium">{order.promoCode}</p>
+              </div>
+            )}
           </div>
         </div>
 
-        <div>
-          <h4 className="font-semibold mb-2">Produits commandés</h4>
+        {/* Section 2: Informations du client */}
+        <div className="space-y-3">
+          <h4 className="font-semibold text-lg">Informations du client</h4>
+          <div className="space-y-3 p-4 bg-muted/30 rounded-lg">
+            {/* Nom */}
+            <div className="flex items-start gap-3">
+              <User className="w-5 h-5 text-muted-foreground mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Nom complet</p>
+                <p className="font-medium">{order.customerName}</p>
+              </div>
+            </div>
+
+            {/* Email */}
+            {order.customerEmail && (
+              <div className="flex items-start gap-3">
+                <Mail className="w-5 h-5 text-muted-foreground mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm text-muted-foreground">Email</p>
+                  <p className="font-medium">{order.customerEmail}</p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => copyToClipboard(order.customerEmail, "Email")}
+                >
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
+            )}
+
+            {/* Téléphone */}
+            <div className="flex items-start gap-3">
+              <Phone className="w-5 h-5 text-muted-foreground mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Téléphone</p>
+                <p className="font-medium">{order.customerPhone}</p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => copyToClipboard(order.customerPhone, "Téléphone")}
+                >
+                  <Copy className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  asChild
+                >
+                  <a href={`tel:${order.customerPhone}`}>
+                    <Phone className="w-4 h-4" />
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            {/* Adresse */}
+            <div className="flex items-start gap-3">
+              <MapPin className="w-5 h-5 text-muted-foreground mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Adresse de livraison</p>
+                <p className="font-medium">{order.deliveryAddress}</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => copyToClipboard(order.deliveryAddress, "Adresse")}
+              >
+                <Copy className="w-4 h-4" />
+              </Button>
+            </div>
+
+            {/* Notes */}
+            {order.notes && (
+              <div className="flex items-start gap-3">
+                <FileText className="w-5 h-5 text-muted-foreground mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm text-muted-foreground">Notes supplémentaires</p>
+                  <p className="font-medium">{order.notes}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Bouton WhatsApp */}
+            <div className="pt-3 border-t">
+              <WhatsAppButton
+                phoneNumber={order.customerPhone}
+                message={`Bonjour ${order.customerName}, concernant votre commande #${order.id}...`}
+                variant="default"
+                label="Contacter sur WhatsApp"
+                className="w-full"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3: Produits commandés */}
+        <div className="space-y-3">
+          <h4 className="font-semibold text-lg">Produits commandés</h4>
           <div className="space-y-2">
             {order.products.map((item, index) => {
               const product = products.find(p => p.id === item.productId);
               return (
-                <div key={index} className="flex gap-3 p-3 border rounded">
+                <div key={index} className="flex gap-3 p-3 border rounded-lg">
                   {/* Product Image */}
                   <div className="w-16 h-16 rounded-md overflow-hidden bg-muted flex-shrink-0">
                     {product?.images?.[0] ? (
@@ -111,10 +242,10 @@ const Orders = () => {
                   {/* Price Info */}
                   <div className="text-right">
                     <p className="font-medium">
-                      {(item.price * item.quantity).toLocaleString('fr-FR')} €
+                      {(item.price * item.quantity).toLocaleString('fr-FR')} FCFA
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {item.price.toLocaleString('fr-FR')} € × {item.quantity}
+                      {item.price.toLocaleString('fr-FR')} FCFA × {item.quantity}
                     </p>
                   </div>
                 </div>
@@ -123,6 +254,7 @@ const Orders = () => {
           </div>
         </div>
 
+        {/* Section 4: Changer le statut */}
         <div className="pt-4 border-t">
           <h4 className="font-semibold mb-2">Changer le statut</h4>
           <Select
@@ -159,7 +291,7 @@ const Orders = () => {
         <div className="flex items-center space-x-2">
           <Search className="w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Rechercher par ID ou email..."
+            placeholder="Rechercher par ID, nom, email ou téléphone..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="max-w-sm"
@@ -196,6 +328,7 @@ const Orders = () => {
               <TableRow>
                 <TableHead>ID</TableHead>
                 <TableHead>Client</TableHead>
+                <TableHead>Téléphone</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Statut</TableHead>
                 <TableHead>Total</TableHead>
@@ -206,7 +339,15 @@ const Orders = () => {
               {filteredOrders.map((order) => (
                 <TableRow key={order.id}>
                   <TableCell className="font-medium">#{order.id}</TableCell>
-                  <TableCell>{order.customerEmail}</TableCell>
+                  <TableCell>
+                    <div>
+                      <p className="font-medium">{order.customerName}</p>
+                      {order.customerEmail && (
+                        <p className="text-sm text-muted-foreground">{order.customerEmail}</p>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell className="font-medium">{order.customerPhone}</TableCell>
                   <TableCell>
                     {new Date(order.createdAt).toLocaleDateString('fr-FR')}
                   </TableCell>
@@ -216,7 +357,7 @@ const Orders = () => {
                     </Badge>
                   </TableCell>
                   <TableCell className="font-medium">
-                    {order.total.toLocaleString('fr-FR')} €
+                    {order.total.toLocaleString('fr-FR')} FCFA
                   </TableCell>
                   <TableCell>
                     <Dialog open={selectedOrder?.id === order.id} onOpenChange={(open) => !open && setSelectedOrder(null)}>

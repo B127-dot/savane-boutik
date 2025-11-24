@@ -131,6 +131,7 @@ export interface Order {
   customerEmail: string;
   customerPhone: string;
   deliveryAddress: string;
+  notes?: string;
   paymentMethod: 'orange_money' | 'moov_money' | 'cod' | 'wave';
   promoCode?: string;
   discount?: number;
