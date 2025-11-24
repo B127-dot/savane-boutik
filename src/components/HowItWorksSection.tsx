@@ -3,42 +3,44 @@ import { Badge } from "@/components/ui/badge";
 import { UserPlus, Store, Smartphone, Share2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useScrollAnimation from "@/hooks/useScrollAnimation";
+
+// Import step images
+import step1Image from "@/assets/how-it-works-step-1.jpg";
+import step2Image from "@/assets/how-it-works-step-2.jpg";
+import step3Image from "@/assets/how-it-works-step-3.jpg";
+import step4Image from "@/assets/how-it-works-step-4.jpg";
 const steps = [{
   number: "01",
   badge: "Étape 1",
   title: "Inscrivez-vous gratuitement",
   description: "Créez votre compte en 30 secondes. Aucune carte bancaire requise.",
   icon: UserPlus,
-  gradientFrom: "from-green-500",
-  gradientTo: "to-emerald-600",
-  position: "left" as const
+  position: "left" as const,
+  image: step1Image
 }, {
   number: "02",
   badge: "Étape 2",
   title: "Configurez votre boutique",
   description: "Ajoutez vos produits, prix et photos. Personnalisez votre vitrine en quelques clics.",
   icon: Store,
-  gradientFrom: "from-orange-500",
-  gradientTo: "to-amber-600",
-  position: "right" as const
+  position: "right" as const,
+  image: step2Image
 }, {
   number: "03",
   badge: "Étape 3",
   title: "Activez les paiements mobiles",
   description: "Connectez Orange Money et Moov Money. Recevez vos paiements instantanément.",
   icon: Smartphone,
-  gradientFrom: "from-violet-500",
-  gradientTo: "to-purple-600",
-  position: "left" as const
+  position: "left" as const,
+  image: step3Image
 }, {
   number: "04",
   badge: "Étape 4",
   title: "Partagez et vendez",
   description: "Partagez votre lien boutique via WhatsApp, Facebook, Instagram. Vos clients commandent 24h/24.",
   icon: Share2,
-  gradientFrom: "from-blue-500",
-  gradientTo: "to-cyan-600",
-  position: "right" as const
+  position: "right" as const,
+  image: step4Image
 }];
 const HowItWorksSection = () => {
   const navigate = useNavigate();
@@ -73,7 +75,7 @@ const HowItWorksSection = () => {
           <p className="text-xl md:text-2xl font-semibold text-foreground mb-6">
             Prêt à lancer votre boutique en ligne ?
           </p>
-          <Button size="lg" variant="hero" onClick={() => navigate("/signup")} className="text-lg px-8 py-6 h-auto">
+          <Button size="lg" variant="hero" onClick={() => navigate("/signup")} className="text-lg px-8 py-6 h-auto" aria-label="Commencer gratuitement - Créer votre boutique en ligne">
             Commencer gratuitement
           </Button>
         </div>
@@ -112,7 +114,7 @@ const StepCard = ({
         <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Giant Number - Left side */}
           <div className="lg:col-span-2 flex items-center justify-center">
-            <span className={`text-[140px] sm:text-[180px] leading-none font-semibold tracking-tight select-none bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo} bg-clip-text text-transparent opacity-10`}>
+            <span className="text-[140px] sm:text-[180px] leading-none font-semibold tracking-tight select-none bg-gradient-to-br from-primary to-primary-glow bg-clip-text text-transparent opacity-[0.15] dark:opacity-20">
               {step.number.replace('0', '')}
             </span>
           </div>
@@ -120,7 +122,7 @@ const StepCard = ({
           {/* Text Content - Middle */}
           <div className="lg:col-span-5 space-y-6">
             {/* Badge */}
-            <Badge variant="outline" className={`bg-gradient-to-r ${step.gradientFrom} ${step.gradientTo} text-white border-0 px-4 py-1.5 text-sm font-medium`}>
+            <Badge variant="outline" className="bg-gradient-to-r from-primary to-primary-glow text-white border-0 px-4 py-1.5 text-sm font-medium">
               {step.badge}
             </Badge>
 
@@ -140,7 +142,7 @@ const StepCard = ({
               boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)'
             }}>
                   <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 rounded-xl ring-1 ring-border/50 bg-card/50">
-                    <div className={`w-2 h-2 rounded-full bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo}`} />
+                    <div className="w-2 h-2 rounded-full bg-gradient-to-br from-primary to-primary-glow" />
                   </span>
                   <span className="font-medium tracking-[-0.01em]">{feature}</span>
                 </div>)}
@@ -150,9 +152,7 @@ const StepCard = ({
           {/* Visual Container - Right side */}
           <div className="lg:col-span-5 relative">
             {/* Gradient blur effect behind */}
-            <div className="absolute -inset-1 rounded-2xl opacity-60 blur-xl pointer-events-none" style={{
-            background: `radial-gradient(60% 60% at 50% 50%, ${step.gradientFrom.replace('from-', 'hsl(var(--')})/.22, transparent 70%)`
-          }} />
+            <div className="absolute -inset-1 rounded-2xl opacity-60 blur-xl pointer-events-none bg-primary/10" />
 
             {/* Main visual card with placeholder */}
             <div className="relative overflow-hidden rounded-2xl border border-border/50 bg-card/30 shadow-lg aspect-[4/3] backdrop-blur-sm">
@@ -165,43 +165,18 @@ const StepCard = ({
               {/* Inner ring */}
               <div className="absolute inset-0 rounded-2xl ring-1 ring-white/10 pointer-events-none" />
 
-              {/* Placeholder Content - Centered */}
-              <div className="absolute inset-0 flex items-center justify-center p-8">
-                <div className="text-center space-y-6 max-w-md">
-                  {/* Icon with gradient background */}
-                  <div className="flex justify-center">
-                    <div className={`h-20 w-20 rounded-2xl bg-gradient-to-br ${step.gradientFrom} ${step.gradientTo} flex items-center justify-center shadow-lg`}>
-                      <step.icon className="w-10 h-10 text-white" strokeWidth={2} />
-                    </div>
-                  </div>
-
-                  {/* Placeholder text */}
-                  <div className="space-y-3">
-                    <h4 className="text-xl font-semibold text-foreground">
-                      Aperçu visuel à venir
-                    </h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Une démonstration visuelle de cette étape sera bientôt disponible
-                    </p>
-                  </div>
-
-                  {/* Decorative elements */}
-                  <div className="flex items-center justify-center gap-2 pt-2">
-                    <div className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${step.gradientFrom} ${step.gradientTo} animate-pulse`} />
-                    <div className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${step.gradientFrom} ${step.gradientTo} animate-pulse`} style={{
-                    animationDelay: '0.2s'
-                  }} />
-                    <div className={`h-1.5 w-1.5 rounded-full bg-gradient-to-r ${step.gradientFrom} ${step.gradientTo} animate-pulse`} style={{
-                    animationDelay: '0.4s'
-                  }} />
-                  </div>
-                </div>
+              {/* Image Content */}
+              <div className="absolute inset-0">
+              <img 
+                  src={step.image} 
+                  alt={`Illustration de l'étape ${step.number}: ${step.title}`}
+                  className="w-full h-full object-cover rounded-2xl"
+                  loading="lazy"
+                />
               </div>
 
               {/* Gradient overlay effect */}
-              <div className="absolute -inset-1 rounded-2xl opacity-40 blur-xl pointer-events-none" style={{
-              background: `radial-gradient(60% 60% at 50% 50%, ${step.gradientFrom.replace('from-', 'hsl(var(--')})/.15, transparent 70%)`
-            }} />
+              <div className="absolute -inset-1 rounded-2xl opacity-40 blur-xl pointer-events-none bg-primary/10" />
             </div>
           </div>
         </div>

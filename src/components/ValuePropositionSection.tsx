@@ -68,14 +68,22 @@ const ValuePropositionSection = () => {
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className="group relative bg-card/50 backdrop-blur-sm border border-border rounded-2xl p-8 hover:bg-card/80 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+                className="group relative overflow-hidden bg-card/50 backdrop-blur-md border border-border/50 rounded-2xl p-8 hover:bg-card/80 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl shadow-xl shadow-black/5"
                 style={{
                   animation: `fade-in 0.5s ease-out ${index * 0.1}s both`
                 }}
               >
+                {/* Grid pattern background */}
+                <div className="pointer-events-none absolute inset-0 opacity-20 rounded-2xl" style={{
+                  backgroundImage: 'linear-gradient(0deg, rgba(255,255,255,0.06) 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, rgba(0,0,0,0) 1px)',
+                  backgroundSize: '48px 48px'
+                }}></div>
+                
+                {/* Inner ring effect */}
+                <div className="absolute inset-0 rounded-2xl ring-1 ring-white/10 pointer-events-none" />
                 {/* Icon */}
-                <div className="mb-6">
-                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
+                <div className="mb-6 relative">
+                  <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300 ring-1 ring-primary/20">
                     <benefit.icon className="w-7 h-7 text-primary" />
                   </div>
                 </div>
@@ -100,9 +108,10 @@ const ValuePropositionSection = () => {
               size="lg" 
               className="px-8 py-6 text-lg hover:scale-105 transition-transform duration-300"
               onClick={() => window.location.href = '/signup'}
+              aria-label="Créer ma boutique gratuitement - Inscription en 5 minutes"
             >
               Créer ma boutique gratuitement
-              <span className="ml-2">→</span>
+              <span className="ml-2" aria-hidden="true">→</span>
             </Button>
           </div>
         </div>
