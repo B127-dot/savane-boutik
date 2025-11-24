@@ -148,8 +148,8 @@ const Orders = () => {
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Gestion des Commandes</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-3xl font-display font-bold">Gestion des Commandes</h1>
+          <p className="font-body text-muted-foreground">
             Suivez et gérez toutes les commandes
           </p>
         </div>

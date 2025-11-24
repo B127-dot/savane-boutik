@@ -99,8 +99,8 @@ const ShopSettings = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Ma boutique</h1>
-        <p className="text-muted-foreground">Personnalisez l'apparence et les informations de votre boutique</p>
+        <h1 className="text-3xl font-display font-bold text-foreground">Ma boutique</h1>
+        <p className="font-body text-muted-foreground">Personnalisez l'apparence et les informations de votre boutique</p>
       </div>
 
       {/* Lien de la boutique */}
@@ -374,14 +374,14 @@ const ShopSettings = () => {
                       <Globe className="w-8 h-8 text-primary-foreground" />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold" style={{ color: formData.primaryColor }}>
+                      <h2 className="text-2xl font-display font-bold" style={{ color: formData.primaryColor }}>
                         {formData.shopName || 'Nom de votre boutique'}
                       </h2>
-                      <p className="text-muted-foreground">
+                      <p className="font-body text-muted-foreground">
                         burkinashop.com/{formData.shopUrl || 'votre-boutique'}
                       </p>
                     </div>
-                    <p className="text-center max-w-md mx-auto">
+                    <p className="text-center font-body max-w-md mx-auto">
                       {formData.description || 'Description de votre boutique'}
                     </p>
                     <div className="flex justify-center space-x-4 text-sm text-muted-foreground">
