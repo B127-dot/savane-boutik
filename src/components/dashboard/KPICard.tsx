@@ -81,8 +81,8 @@ const KPICard = ({
       <CardContent className="p-6">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
-            <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
-            <p className="text-3xl font-extrabold tabular-nums">{displayValue}</p>
+            <p className="text-sm font-display font-medium text-muted-foreground mb-1">{title}</p>
+            <p className="text-3xl font-display font-extrabold tabular-nums">{displayValue}</p>
           </div>
           <div className="flex flex-col items-end gap-2">
             <Icon className={`${iconSize} text-primary transition-all duration-300 group-hover:rotate-6 group-hover:scale-110`} />

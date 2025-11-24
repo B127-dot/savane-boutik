@@ -149,8 +149,8 @@ const Analytics = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Statistiques</h1>
-          <p className="text-muted-foreground">Analysez les performances de votre boutique</p>
+          <h1 className="text-3xl font-display font-bold text-foreground">Statistiques</h1>
+          <p className="font-body text-muted-foreground">Analysez les performances de votre boutique</p>
         </div>
         <div className="flex items-center gap-4">
           <Select value={period.toString()} onValueChange={(val) => setPeriod(Number(val))}>

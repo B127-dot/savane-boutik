@@ -253,10 +253,10 @@ const Shop = () => {
       <section id="products" className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
               Tous Nos Produits
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg font-body text-muted-foreground">
               Parcourez notre collection complète
             </p>
           </div>
@@ -340,10 +340,10 @@ const Shop = () => {
               <div className="inline-flex items-center justify-center w-20 h-20 bg-muted rounded-full mb-4">
                 <Search className="h-10 w-10 text-muted-foreground" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">
+              <h3 className="text-xl font-display font-semibold text-foreground mb-2">
                 Aucun produit trouvé
               </h3>
-              <p className="text-muted-foreground mb-6">
+              <p className="font-body text-muted-foreground mb-6">
                 Essayez de modifier vos critères de recherche
               </p>
               <Button onClick={() => {

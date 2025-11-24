@@ -269,8 +269,8 @@ const Dashboard = () => {
             </AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight">Bienvenue, {user?.name}</h1>
-            <p className="text-xs md:text-sm text-muted-foreground">
+            <h1 className="text-xl md:text-2xl font-display font-bold tracking-tight">Bienvenue, {user?.name}</h1>
+            <p className="text-xs md:text-sm font-body text-muted-foreground">
               Voici un aperçu de votre activité
             </p>
           </div>
@@ -292,7 +292,7 @@ const Dashboard = () => {
       {/* KPIs Zone */}
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-          <h2 className="text-lg md:text-xl font-bold">Indicateurs Clés</h2>
+          <h2 className="text-lg md:text-xl font-display font-bold">Indicateurs Clés</h2>
           <div className="flex items-center gap-2">
             <Switch 
               id="comparison-mode" 
@@ -383,7 +383,7 @@ const Dashboard = () => {
 
       {/* Performance Charts Zone */}
       <div className={`animate-fade-up delay-200 ${isVisible ? 'visible' : ''}`}>
-        <h2 className="text-lg md:text-xl font-bold mb-4">Performance</h2>
+        <h2 className="text-lg md:text-xl font-display font-bold mb-4">Performance</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           <RevenueChart orders={filteredOrders} period={7} />
           <CategoryPieChart 
@@ -396,7 +396,7 @@ const Dashboard = () => {
 
       {/* Activity Zone */}
       <div className={`animate-fade-up delay-300 ${isVisible ? 'visible' : ''}`}>
-        <h2 className="text-lg md:text-xl font-bold mb-4">Activité Récente</h2>
+        <h2 className="text-lg md:text-xl font-display font-bold mb-4">Activité Récente</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {/* Recent Orders */}
           <Card>
