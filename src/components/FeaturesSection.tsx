@@ -14,9 +14,9 @@ const FeaturesSection = () => {
                 <div className="p-6 sm:p-10">
                   {/* Header */}
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-                    <h3 className="text-2xl font-semibold tracking-tight text-foreground">
-                      Tableau de Bord BurkinaShop
-                    </h3>
+                  <h3 className="text-2xl font-display font-semibold tracking-tight text-foreground">
+                    Tableau de Bord BurkinaShop
+                  </h3>
                     <span className="inline-flex items-center gap-2 text-xs text-muted-foreground bg-card border border-border rounded-full px-3 py-1 backdrop-blur-sm">
                       <TrendingUp className="text-primary w-4 h-4" />
                       En Temps Réel
@@ -116,14 +116,14 @@ const FeaturesSection = () => {
                   {/* Features Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 mb-8 gap-x-6 gap-y-6">
                     <div>
-                      <h4 className="text-lg font-semibold text-foreground tracking-tight">Gestion Simplifiée</h4>
-                      <p className="mt-2 text-sm text-muted-foreground">
+                      <h4 className="text-lg font-display font-semibold text-foreground tracking-tight">Gestion Simplifiée</h4>
+                      <p className="mt-2 text-sm font-body text-muted-foreground">
                         Tableau de bord intuitif avec toutes vos données en un coup d'œil.
                       </p>
                     </div>
                     <div>
-                      <h4 className="text-lg font-semibold tracking-tight text-foreground">Paiements Intégrés</h4>
-                      <p className="mt-2 text-sm text-muted-foreground">
+                      <h4 className="text-lg font-display font-semibold tracking-tight text-foreground">Paiements Intégrés</h4>
+                      <p className="mt-2 text-sm font-body text-muted-foreground">
                         Orange Money, Moov Money et paiement à la livraison natifs.
                       </p>
                     </div>
@@ -151,7 +151,7 @@ const FeaturesSection = () => {
                 </span>
               </div>
 
-              <h2 className="text-4xl sm:text-5xl font-medium text-foreground tracking-tight transition-colors duration-500 text-center lg:text-center max-w-3xl">
+              <h2 className="text-4xl sm:text-5xl font-display font-bold text-foreground tracking-tight transition-colors duration-500 text-center lg:text-center max-w-3xl">
                 Tout ce dont vous avez besoin pour{" "}
                 <span className="bg-gradient-primary bg-clip-text text-transparent">
                   vendre en ligne
@@ -160,7 +160,7 @@ const FeaturesSection = () => {
 
               {/* Core Features */}
               <div className="border-t border-border pt-6 w-full max-w-2xl">
-                <h4 className="text-lg font-semibold text-foreground mb-4 text-center lg:text-center">Fonctionnalités Principales</h4>
+                <h4 className="text-lg font-display font-semibold text-foreground mb-4 text-center lg:text-center">Fonctionnalités Principales</h4>
                 <div className="space-y-4">
                   {/* Feature 1 */}
                   <div className="flex items-start gap-3">
@@ -168,8 +168,8 @@ const FeaturesSection = () => {
                       <Store className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <h5 className="font-medium text-foreground">Boutique Clé en Main</h5>
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <h5 className="font-display font-medium text-foreground">Boutique Clé en Main</h5>
+                      <p className="text-sm font-body text-muted-foreground mt-1">
                         Créez votre boutique en ligne en 5 minutes avec des templates adaptés au marché burkinabé.
                       </p>
                     </div>
@@ -181,8 +181,8 @@ const FeaturesSection = () => {
                       <Smartphone className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <h5 className="font-medium text-foreground">100% Mobile Optimisé</h5>
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <h5 className="font-display font-medium text-foreground">100% Mobile Optimisé</h5>
+                      <p className="text-sm font-body text-muted-foreground mt-1">
                         Interface parfaitement optimisée pour mobile. Vos clients commandent facilement depuis leur téléphone.
                       </p>
                     </div>
@@ -194,8 +194,8 @@ const FeaturesSection = () => {
                       <CreditCard className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <h5 className="font-medium text-foreground">Paiements Locaux</h5>
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <h5 className="font-display font-medium text-foreground">Paiements Locaux</h5>
+                      <p className="text-sm font-body text-muted-foreground mt-1">
                         Orange Money, Moov Money et paiement à la livraison intégrés nativement dans votre boutique.
                       </p>
                     </div>
@@ -207,8 +207,8 @@ const FeaturesSection = () => {
                       <MessageCircle className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <h5 className="font-medium text-foreground">Vente WhatsApp Intégrée</h5>
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <h5 className="font-display font-medium text-foreground">Vente WhatsApp Intégrée</h5>
+                      <p className="text-sm font-body text-muted-foreground mt-1">
                         Synchronisez vos produits avec WhatsApp Business et vendez directement dans vos discussions.
                       </p>
                     </div>
@@ -220,8 +220,8 @@ const FeaturesSection = () => {
                       <BarChart3 className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <h5 className="font-medium text-foreground">Tableau de Bord Analytics</h5>
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <h5 className="font-display font-medium text-foreground">Tableau de Bord Analytics</h5>
+                      <p className="text-sm font-body text-muted-foreground mt-1">
                         Suivez vos ventes, stock et clients en temps réel avec des analytics simples et efficaces.
                       </p>
                     </div>

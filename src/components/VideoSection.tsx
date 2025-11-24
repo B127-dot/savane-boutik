@@ -67,10 +67,10 @@ const VideoSection = () => {
         <div className="max-w-7xl mx-auto">
           {/* Section Title */}
           <div className="text-center mb-16 md:mb-20">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
               Découvrez BurkinaShop en action
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg font-body text-muted-foreground max-w-2xl mx-auto">
               Voyez comment notre plateforme transforme la façon dont les vendeurs burkinabè 
               gèrent leur commerce en ligne
             </p>
@@ -152,16 +152,16 @@ const VideoSection = () => {
           {/* Stats below video */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-4xl mx-auto">
             <div className="text-center p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">1000+</div>
-              <div className="text-sm text-muted-foreground">Vendeurs actifs</div>
+              <div className="text-3xl md:text-4xl font-display font-bold text-primary mb-2">1000+</div>
+              <div className="text-sm font-body text-muted-foreground">Vendeurs actifs</div>
             </div>
             <div className="text-center p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">50K+</div>
-              <div className="text-sm text-muted-foreground">Produits en ligne</div>
+              <div className="text-3xl md:text-4xl font-display font-bold text-primary mb-2">50K+</div>
+              <div className="text-sm font-body text-muted-foreground">Produits en ligne</div>
             </div>
             <div className="text-center p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">98%</div>
-              <div className="text-sm text-muted-foreground">Satisfaction client</div>
+              <div className="text-3xl md:text-4xl font-display font-bold text-primary mb-2">98%</div>
+              <div className="text-sm font-body text-muted-foreground">Satisfaction client</div>
             </div>
           </div>
         </div>

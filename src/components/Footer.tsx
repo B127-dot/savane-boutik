@@ -57,12 +57,12 @@ const Footer = () => {
                 <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
                   <Globe className="w-5 h-5 text-primary-foreground" />
                 </div>
-                <span className="text-xl font-bold text-foreground">
+                <span className="text-xl font-display font-bold text-foreground">
                   BurkE-Shop
                 </span>
               </div>
               
-              <p className="text-sm leading-relaxed text-muted-foreground">
+              <p className="text-sm font-body leading-relaxed text-muted-foreground">
                 La première plateforme e-commerce pensée pour les commerçants du Burkina Faso. Vendez en ligne facilement.
               </p>
 
@@ -82,7 +82,7 @@ const Footer = () => {
             {/* Footer Links Columns */}
             {footerSections.map((section, index) => (
               <div key={index}>
-                <h4 className="text-xs tracking-wider text-foreground/90 uppercase">
+                <h4 className="text-xs font-display tracking-wider text-foreground/90 uppercase">
                   {section.title}
                 </h4>
                 <ul className="mt-3 space-y-2">

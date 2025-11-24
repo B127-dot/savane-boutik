@@ -78,10 +78,10 @@ const ThreePillarsSection = () => {
         duration: 0.6,
         ease: "easeOut"
       }} className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
             Nos 3 Piliers
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg font-body text-muted-foreground max-w-2xl mx-auto">
             Une solution complète pour transformer votre commerce en Afrique
           </p>
         </motion.div>
@@ -110,10 +110,10 @@ const ThreePillarsSection = () => {
               <Store className="w-5 h-5 text-primary" />
             </div>
             
-            <h3 className="relative mt-5 text-2xl sm:text-3xl font-semibold tracking-tight text-center">
+            <h3 className="relative mt-5 text-2xl sm:text-3xl font-display font-semibold tracking-tight text-center">
               Lancez en 5 minutes
             </h3>
-            <p className="relative mt-2 text-muted-foreground text-sm sm:text-base">
+            <p className="relative mt-2 font-body text-muted-foreground text-sm sm:text-base">
               Gérez vos produits, stock et commandes depuis un seul tableau de bord intuitif.
             </p>
 
@@ -183,10 +183,10 @@ const ThreePillarsSection = () => {
               <Smartphone className="w-5 h-5 text-primary" />
             </div>
             
-            <h3 className="relative mt-5 text-2xl sm:text-3xl font-semibold tracking-tight text-center">
+            <h3 className="relative mt-5 text-2xl sm:text-3xl font-display font-semibold tracking-tight text-center">
               ​Paiements Locaux
             </h3>
-            <p className="relative mt-2 text-muted-foreground text-sm sm:text-base">
+            <p className="relative mt-2 font-body text-muted-foreground text-sm sm:text-base">
               Tous les moyens de paiement que vos clients utilisent déjà au Burkina Faso.
             </p>
 
@@ -237,10 +237,10 @@ const ThreePillarsSection = () => {
               <TrendingUp className="w-5 h-5 text-primary" />
             </div>
             
-            <h3 className="relative mt-5 text-2xl sm:text-3xl font-semibold tracking-tight text-center">
+            <h3 className="relative mt-5 text-2xl sm:text-3xl font-display font-semibold tracking-tight text-center">
               Vendez 3x plus
             </h3>
-            <p className="relative mt-2 text-muted-foreground text-sm sm:text-base">
+            <p className="relative mt-2 font-body text-muted-foreground text-sm sm:text-base">
               Analytics en temps réel pour piloter votre business et maximiser vos ventes.
             </p>
 
@@ -294,8 +294,8 @@ const ThreePillarsSection = () => {
                 <Clock className="w-[18px] h-[18px] text-primary" />
               </span>
               <div>
-                <p className="text-sm font-medium text-foreground">Temps Réel</p>
-                <p className="text-sm text-muted-foreground mt-1">Gestion instantanée de vos commandes.</p>
+                <p className="text-sm font-display font-medium text-foreground">Temps Réel</p>
+                <p className="text-sm font-body text-muted-foreground mt-1">Gestion instantanée de vos commandes.</p>
               </div>
             </motion.div>
             <motion.div initial="hidden" animate={bulletsVisible ? "visible" : "hidden"} variants={bulletVariants} transition={{
@@ -307,8 +307,8 @@ const ThreePillarsSection = () => {
                 <Zap className="w-[18px] h-[18px] text-primary" />
               </span>
               <div>
-                <p className="text-sm font-medium text-foreground">Automatisation Intelligente</p>
-                <p className="text-sm text-muted-foreground mt-1">Workflows qui s'adaptent à votre business.</p>
+                <p className="text-sm font-display font-medium text-foreground">Automatisation Intelligente</p>
+                <p className="text-sm font-body text-muted-foreground mt-1">Workflows qui s'adaptent à votre business.</p>
               </div>
             </motion.div>
             <motion.div initial="hidden" animate={bulletsVisible ? "visible" : "hidden"} variants={bulletVariants} transition={{
@@ -320,8 +320,8 @@ const ThreePillarsSection = () => {
                 <Layers className="w-[18px] h-[18px] text-primary" />
               </span>
               <div>
-                <p className="text-sm font-medium text-foreground">Architecture Évolutive</p>
-                <p className="text-sm text-muted-foreground mt-1">Grandit avec votre entreprise.</p>
+                <p className="text-sm font-display font-medium text-foreground">Architecture Évolutive</p>
+                <p className="text-sm font-body text-muted-foreground mt-1">Grandit avec votre entreprise.</p>
               </div>
             </motion.div>
             <motion.div initial="hidden" animate={bulletsVisible ? "visible" : "hidden"} variants={bulletVariants} transition={{
@@ -333,8 +333,8 @@ const ThreePillarsSection = () => {
                 <TrendingUp className="w-[18px] h-[18px] text-primary" />
               </span>
               <div>
-                <p className="text-sm font-medium text-foreground">Analytics Avancés</p>
-                <p className="text-sm text-muted-foreground mt-1">Insights précis pour décider mieux.</p>
+                <p className="text-sm font-display font-medium text-foreground">Analytics Avancés</p>
+                <p className="text-sm font-body text-muted-foreground mt-1">Insights précis pour décider mieux.</p>
               </div>
             </motion.div>
           </div>

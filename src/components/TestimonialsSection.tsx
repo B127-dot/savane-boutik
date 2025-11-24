@@ -83,13 +83,13 @@ const TestimonialsSection = () => {
             titleVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           )}
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-foreground">
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 text-foreground">
             Ils l'adorent,{" "}
             <span className="bg-gradient-primary bg-clip-text text-transparent">
               pourquoi pas vous ?
             </span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mb-8 text-lg">
+          <p className="font-body text-muted-foreground max-w-2xl mx-auto mb-8 text-lg">
             Rejoignez plus de 300 entrepreneurs burkinabè qui développent leur commerce avec BurkinaShop
           </p>
           <Button 
@@ -117,17 +117,17 @@ const TestimonialsSection = () => {
                       ))}
                     </div>
                     
-                    <p className="text-muted-foreground leading-relaxed mb-6">
+                    <p className="font-body text-muted-foreground leading-relaxed mb-6">
                       "{testimonial.content}"
                     </p>
                     
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-sm">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-display font-semibold text-sm">
                         {testimonial.avatar}
                       </div>
                       <div>
-                        <h4 className="font-semibold text-foreground text-sm">{testimonial.name}</h4>
-                        <p className="text-xs text-muted-foreground">
+                        <h4 className="font-display font-semibold text-foreground text-sm">{testimonial.name}</h4>
+                        <p className="text-xs font-body text-muted-foreground">
                           {testimonial.role}
                         </p>
                       </div>

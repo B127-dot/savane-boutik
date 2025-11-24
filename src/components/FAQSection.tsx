@@ -58,10 +58,10 @@ const FAQSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
             Questions <span className="text-primary">Fréquentes</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="font-body text-muted-foreground text-lg max-w-2xl mx-auto">
             Tout ce que vous devez savoir sur BurkinaShop. Vous avez d'autres questions ? Contactez-nous sur WhatsApp.
           </p>
         </motion.div>
@@ -84,9 +84,9 @@ const FAQSection = () => {
                   className="border border-border rounded-lg px-6 bg-card hover:border-primary/50 transition-colors"
                 >
                   <AccordionTrigger className="text-left hover:no-underline py-5">
-                    <span className="font-semibold text-foreground">{faq.question}</span>
+                    <span className="font-display font-semibold text-foreground">{faq.question}</span>
                   </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
+                  <AccordionContent className="font-body text-muted-foreground pb-5 leading-relaxed">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
