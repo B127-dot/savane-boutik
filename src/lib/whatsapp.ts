@@ -163,3 +163,39 @@ export function trackWhatsAppClick(): void {
 export function getWhatsAppClickCount(): number {
   return parseInt(localStorage.getItem('whatsappClickCount') || '0');
 }
+
+/**
+ * Generate WhatsApp message for abandoned cart recovery with promo code
+ */
+export function generateAbandonedCartRecoveryMessage(
+  cartItems: Array<{ name: string; quantity: number; price: number }>,
+  total: number,
+  shopName: string,
+  promoCode: string,
+  discountValue: number
+): string {
+  const itemsList = cartItems
+    .map(item => `🛒 ${item.name} × ${item.quantity} - ${(item.price * item.quantity).toLocaleString()} FCFA`)
+    .join('\n');
+
+  const finalTotal = total - (total * discountValue / 100);
+
+  const message = `Bonjour ! 👋
+
+Nous avons remarqué que vous avez laissé des articles dans votre panier chez ${shopName} :
+
+${itemsList}
+
+💰 Total : ${total.toLocaleString()} FCFA
+
+🎁 OFFRE SPÉCIALE : Utilisez le code *${promoCode}* pour bénéficier de *-${discountValue}%* sur votre commande !
+
+✨ Nouveau total : ${finalTotal.toLocaleString()} FCFA
+
+Cette offre est valable pendant 48h. Ne la ratez pas !
+
+Je souhaite finaliser ma commande 🛍️`;
+
+  return encodeURIComponent(message);
+}
+
