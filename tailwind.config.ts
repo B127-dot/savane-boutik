@@ -142,10 +142,6 @@ export default {
 				'progressGrow': {
 					'0%': { width: '0%' },
 					'100%': { width: '65%' }
-				},
-				'shimmer': {
-					'0%': { transform: 'translateX(-100%)' },
-					'100%': { transform: 'translateX(100%)' }
 				}
 			},
 			animation: {
@@ -158,7 +154,6 @@ export default {
 				'spin-slow': 'spin-slow 3s linear infinite',
 				'fade-in': 'fadeIn 0.5s ease-out',
 				'progressGrow': 'progressGrow 2s ease-out',
-				'shimmer': 'shimmer 2s infinite',
 			},
 			animationDelay: {
 				'100': '100ms',

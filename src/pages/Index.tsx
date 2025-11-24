@@ -2,7 +2,17 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
-import LazySection from "@/components/LazySection";
+import VideoSection from "@/components/VideoSection";
+import ThreePillarsSection from "@/components/ThreePillarsSection";
+import ValuePropositionSection from "@/components/ValuePropositionSection";
+import HowItWorksSection from "@/components/HowItWorksSection";
+import FeaturesSection from "@/components/FeaturesSection";
+import SecuritySection from "@/components/SecuritySection";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import PricingSection from "@/components/PricingSection";
+import FAQSection from "@/components/FAQSection";
+import CTASection from "@/components/CTASection";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -19,64 +29,18 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       <div className="pt-16">
-        {/* Critical above-the-fold content loaded immediately */}
         <HeroSection />
-        
-        {/* Non-critical sections lazy loaded only when visible (Intersection Observer) */}
-        <LazySection 
-          importFunc={() => import("@/components/VideoSection")} 
-          skeletonHeight="h-[600px]" 
-        />
-        
-        <LazySection 
-          importFunc={() => import("@/components/ThreePillarsSection")} 
-          skeletonHeight="h-[800px]" 
-        />
-        
-        <LazySection 
-          importFunc={() => import("@/components/ValuePropositionSection")} 
-          skeletonHeight="h-[600px]" 
-        />
-        
-        <LazySection 
-          importFunc={() => import("@/components/HowItWorksSection")} 
-          skeletonHeight="h-[900px]" 
-        />
-        
-        <LazySection 
-          importFunc={() => import("@/components/FeaturesSection")} 
-          skeletonHeight="h-[800px]" 
-        />
-        
-        <LazySection 
-          importFunc={() => import("@/components/SecuritySection")} 
-          skeletonHeight="h-[600px]" 
-        />
-        
-        <LazySection 
-          importFunc={() => import("@/components/TestimonialsSection")} 
-          skeletonHeight="h-[700px]" 
-        />
-        
-        <LazySection 
-          importFunc={() => import("@/components/PricingSection")} 
-          skeletonHeight="h-[800px]" 
-        />
-        
-        <LazySection 
-          importFunc={() => import("@/components/FAQSection")} 
-          skeletonHeight="h-[700px]" 
-        />
-        
-        <LazySection 
-          importFunc={() => import("@/components/CTASection")} 
-          skeletonHeight="h-[600px]" 
-        />
-        
-        <LazySection 
-          importFunc={() => import("@/components/Footer")} 
-          skeletonHeight="h-96" 
-        />
+        <VideoSection />
+        <ThreePillarsSection />
+        <ValuePropositionSection />
+        <HowItWorksSection />
+        <FeaturesSection />
+        <SecuritySection />
+        <TestimonialsSection />
+        <PricingSection />
+        <FAQSection />
+        <CTASection />
+        <Footer />
       </div>
     </div>
   );
