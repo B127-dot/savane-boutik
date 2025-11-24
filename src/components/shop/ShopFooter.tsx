@@ -42,17 +42,17 @@ const ShopFooter = ({
                   </span>
                 </div>
               )}
-              <span className="text-xl font-bold">{shopName}</span>
+              <span className="text-xl font-display font-bold">{shopName}</span>
             </div>
-            <p className="text-white/70 leading-relaxed">
+            <p className="font-body text-white/70 leading-relaxed">
               {aboutText}
             </p>
           </div>
 
           {/* Column 2: Navigation Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Navigation</h3>
-            <ul className="space-y-3">
+            <h3 className="text-lg font-display font-semibold">Navigation</h3>
+            <ul className="space-y-3 font-body">
               <li>
                 <Link to="#products" className="text-white/70 hover:text-[#10B981] transition-colors">
                   Produits
@@ -78,8 +78,8 @@ const ShopFooter = ({
 
           {/* Column 3: Contact + Social */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Contact</h3>
-            <div className="space-y-3">
+            <h3 className="text-lg font-display font-semibold">Contact</h3>
+            <div className="space-y-3 font-body">
               {phone && (
                 <div className="flex items-center gap-3">
                   <Phone className="h-5 w-5 text-[#10B981]" />

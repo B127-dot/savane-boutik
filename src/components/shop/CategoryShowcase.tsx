@@ -26,10 +26,10 @@ const CategoryShowcase = ({ categories, products, onCategoryClick }: CategorySho
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
             Parcourir par Catégorie
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg font-body text-muted-foreground">
             Explorez nos collections organisées pour vous
           </p>
         </div>
@@ -58,10 +58,10 @@ const CategoryShowcase = ({ categories, products, onCategoryClick }: CategorySho
                   
                   {/* Content */}
                   <div className="absolute inset-0 flex flex-col justify-end p-6">
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                    <h3 className="text-2xl md:text-3xl font-display font-bold text-white mb-2">
                       {category.name}
                     </h3>
-                    <p className="text-white/90 mb-4">
+                    <p className="font-body text-white/90 mb-4">
                       {productCount} produit{productCount > 1 ? 's' : ''}
                     </p>
                     

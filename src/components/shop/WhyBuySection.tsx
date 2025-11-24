@@ -29,10 +29,10 @@ const WhyBuySection = () => {
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
             Pourquoi Acheter Chez Nous ?
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg font-body text-muted-foreground">
             Votre satisfaction est notre priorité
           </p>
         </div>
@@ -50,12 +50,12 @@ const WhyBuySection = () => {
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-bold text-foreground mb-2">
+              <h3 className="text-xl font-display font-bold text-foreground mb-2">
                 {benefit.title}
               </h3>
 
               {/* Description */}
-              <p className="text-muted-foreground">
+              <p className="font-body text-muted-foreground">
                 {benefit.description}
               </p>
             </div>

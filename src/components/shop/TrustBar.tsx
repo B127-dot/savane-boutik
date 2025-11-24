@@ -39,10 +39,10 @@ const TrustBar = ({ trustItems = defaultTrustItems }: TrustBarProps) => {
                   </div>
                 </div>
                 <div>
-                  <p className="text-lg md:text-xl font-bold text-foreground mb-1">
+                  <p className="text-lg md:text-xl font-display font-bold text-foreground mb-1">
                     {item.text}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm font-body text-muted-foreground">
                     {index === 0 && "Orange Money • Moov Money"}
                     {index === 1 && "Livraison dans tout Ouaga"}
                     {index === 2 && "Réponse en moins d'1h"}
