@@ -96,12 +96,15 @@ const ThreePillarsSection = () => {
         }} whileHover={{
           y: -8,
           scale: 1.02
-        }} className="group relative overflow-hidden rounded-3xl border border-border bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300">
-            {/* Dot pattern background */}
-            <div className="pointer-events-none absolute inset-0 opacity-[0.08]" style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, hsl(var(--foreground)) 1px, transparent 1px)',
-            backgroundSize: '14px 14px'
+        }} className="group relative overflow-hidden rounded-3xl border border-border/50 bg-card/50 backdrop-blur-md p-6 sm:p-8 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 shadow-xl shadow-black/5">
+            {/* Grid pattern background */}
+            <div className="pointer-events-none absolute inset-0 opacity-20 rounded-3xl" style={{
+            backgroundImage: 'linear-gradient(0deg, rgba(255,255,255,0.06) 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, rgba(0,0,0,0) 1px)',
+            backgroundSize: '48px 48px'
           }}></div>
+            
+            {/* Inner ring effect */}
+            <div className="absolute inset-0 rounded-3xl ring-1 ring-white/10 pointer-events-none" />
             
             <div className="relative flex w-10 h-10 ring-1 ring-primary/20 bg-primary/10 rounded-full shadow-lg items-center justify-center">
               <Store className="w-5 h-5 text-primary" />
@@ -166,11 +169,15 @@ const ThreePillarsSection = () => {
         }} whileHover={{
           y: -8,
           scale: 1.02
-        }} className="group relative overflow-hidden rounded-3xl border border-border bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300">
-            <div className="pointer-events-none absolute inset-0 opacity-[0.08]" style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, hsl(var(--foreground)) 1px, transparent 1px)',
-            backgroundSize: '14px 14px'
+        }} className="group relative overflow-hidden rounded-3xl border border-border/50 bg-card/50 backdrop-blur-md p-6 sm:p-8 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 shadow-xl shadow-black/5">
+            {/* Grid pattern background */}
+            <div className="pointer-events-none absolute inset-0 opacity-20 rounded-3xl" style={{
+            backgroundImage: 'linear-gradient(0deg, rgba(255,255,255,0.06) 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, rgba(0,0,0,0) 1px)',
+            backgroundSize: '48px 48px'
           }}></div>
+            
+            {/* Inner ring effect */}
+            <div className="absolute inset-0 rounded-3xl ring-1 ring-white/10 pointer-events-none" />
             
             <div className="relative flex w-10 h-10 ring-1 ring-primary/20 bg-primary/10 rounded-full shadow-lg items-center justify-center">
               <Smartphone className="w-5 h-5 text-primary" />
@@ -216,11 +223,15 @@ const ThreePillarsSection = () => {
         }} whileHover={{
           y: -8,
           scale: 1.02
-        }} className="group relative overflow-hidden rounded-3xl border border-border bg-card/50 backdrop-blur-sm p-6 sm:p-8 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300">
-            <div className="pointer-events-none absolute inset-0 opacity-[0.08]" style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, hsl(var(--foreground)) 1px, transparent 1px)',
-            backgroundSize: '14px 14px'
+        }} className="group relative overflow-hidden rounded-3xl border border-border/50 bg-card/50 backdrop-blur-md p-6 sm:p-8 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300 shadow-xl shadow-black/5">
+            {/* Grid pattern background */}
+            <div className="pointer-events-none absolute inset-0 opacity-20 rounded-3xl" style={{
+            backgroundImage: 'linear-gradient(0deg, rgba(255,255,255,0.06) 1px, rgba(0,0,0,0) 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, rgba(0,0,0,0) 1px)',
+            backgroundSize: '48px 48px'
           }}></div>
+            
+            {/* Inner ring effect */}
+            <div className="absolute inset-0 rounded-3xl ring-1 ring-white/10 pointer-events-none" />
             
             <div className="relative flex w-10 h-10 ring-1 ring-primary/20 bg-primary/10 rounded-full shadow-lg items-center justify-center">
               <TrendingUp className="w-5 h-5 text-primary" />

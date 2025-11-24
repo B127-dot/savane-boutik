@@ -78,9 +78,10 @@ const CTASection = () => {
               size="lg"
               onClick={() => navigate('/signup')}
               className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+              aria-label="Créer votre boutique en ligne gratuitement"
             >
               Commencer gratuitement
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
             </Button>
             
             <p className="text-sm text-muted-foreground flex items-center gap-2">

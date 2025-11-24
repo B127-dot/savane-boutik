@@ -8,6 +8,18 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
 */
 
 @layer base {
+  /* Respect user motion preferences for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   /* Smooth scroll behavior for anchor navigation */
   html {
     scroll-behavior: smooth;

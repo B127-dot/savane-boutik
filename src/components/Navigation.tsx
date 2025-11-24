@@ -124,8 +124,10 @@ const Navigation = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label={isMenuOpen ? 'Close Menu' : 'Open Menu'}
-              className="relative -m-2.5 -mr-4 p-2.5"
+              aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+              className="relative -m-2.5 -mr-4 p-2.5 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg"
             >
               <Menu className="group-data-[state=active]:rotate-180 group-data-[state=active]:scale-0 group-data-[state=active]:opacity-0 w-6 h-6 transition-all duration-200" />
               <X className="group-data-[state=active]:rotate-0 group-data-[state=active]:scale-100 group-data-[state=active]:opacity-100 absolute inset-0 m-auto w-6 h-6 -rotate-180 scale-0 opacity-0 transition-all duration-200" />
@@ -135,7 +137,7 @@ const Navigation = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden bg-background rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 dark:shadow-none mb-6">
+          <div id="mobile-menu" className="md:hidden bg-background rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 dark:shadow-none mb-6" role="navigation" aria-label="Menu mobile">
             <div className="flex flex-col space-y-6">
               {navItems.map((item) => (
                 user && item.href.startsWith('/') ? (
