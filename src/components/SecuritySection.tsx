@@ -85,13 +85,13 @@ const SecuritySection = () => {
                 : "opacity-0 translate-y-4"
             }`}
           >
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 tracking-tight">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-foreground mb-6 tracking-tight">
               BurkinaShop est{" "}
               <span className="bg-gradient-primary bg-clip-text text-transparent">
                 Digne de Confiance
               </span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg font-body text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               La sécurité de vos transactions et la protection de vos données
               sont au cœur de notre mission. BurkinaShop vous offre une
               plateforme fiable et sécurisée pour développer votre commerce en
@@ -124,12 +124,12 @@ const SecuritySection = () => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl font-semibold text-foreground mb-3">
+                    <h3 className="text-xl font-display font-semibold text-foreground mb-3">
                       {pillar.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-muted-foreground leading-relaxed">
+                    <p className="font-body text-muted-foreground leading-relaxed">
                       {pillar.description}
                     </p>
                   </div>
