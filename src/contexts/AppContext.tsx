@@ -83,6 +83,18 @@ export interface AbandonedCart {
   recoveryPromoCode?: string;
 }
 
+export interface Review {
+  id: string;
+  productId: string;
+  customerName: string;
+  rating: number; // 1-5
+  comment: string;
+  orderId?: string;
+  createdAt: string;
+  verified: boolean; // true si lié à une commande
+  status: 'pending' | 'approved' | 'rejected';
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -133,6 +145,7 @@ interface AppContextType {
   cart: CartItem[];
   promoCodes: PromoCode[];
   abandonedCarts: AbandonedCart[];
+  reviews: Review[];
   
   // Auth
   login: (email: string, password: string) => Promise<boolean>;
@@ -170,6 +183,14 @@ interface AppContextType {
   // Abandoned Carts
   getAbandonedCarts: () => AbandonedCart[];
   markCartAsRecovered: (cartId: string) => void;
+  
+  // Reviews
+  addReview: (review: Omit<Review, 'id' | 'createdAt'>) => void;
+  getProductReviews: (productId: string) => Review[];
+  getApprovedReviews: (productId: string) => Review[];
+  updateReviewStatus: (reviewId: string, status: Review['status']) => void;
+  deleteReview: (reviewId: string) => void;
+  getProductRating: (productId: string) => { average: number; count: number };
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -253,6 +274,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
   const [abandonedCarts, setAbandonedCarts] = useState<AbandonedCart[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -297,6 +319,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const userAbandonedCarts = localStorage.getItem(`abandonedCarts_${user.id}`);
       if (userAbandonedCarts) {
         setAbandonedCarts(JSON.parse(userAbandonedCarts));
+      }
+      
+      const userReviews = localStorage.getItem(`reviews_${user.id}`);
+      if (userReviews) {
+        setReviews(JSON.parse(userReviews));
       }
     }
   }, []);
@@ -509,6 +536,55 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem(`abandonedCarts_${user.id}`, JSON.stringify(updatedCarts));
   };
 
+  // Reviews
+  const addReview = (review: Omit<Review, 'id' | 'createdAt'>) => {
+    if (!user) return;
+    const newReview: Review = {
+      ...review,
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString()
+    };
+    const updatedReviews = [...reviews, newReview];
+    setReviews(updatedReviews);
+    localStorage.setItem(`reviews_${user.id}`, JSON.stringify(updatedReviews));
+  };
+
+  const getProductReviews = (productId: string) => {
+    return reviews.filter(r => r.productId === productId);
+  };
+
+  const getApprovedReviews = (productId: string) => {
+    return reviews.filter(r => r.productId === productId && r.status === 'approved');
+  };
+
+  const updateReviewStatus = (reviewId: string, status: Review['status']) => {
+    if (!user) return;
+    const updatedReviews = reviews.map(r =>
+      r.id === reviewId ? { ...r, status } : r
+    );
+    setReviews(updatedReviews);
+    localStorage.setItem(`reviews_${user.id}`, JSON.stringify(updatedReviews));
+  };
+
+  const deleteReview = (reviewId: string) => {
+    if (!user) return;
+    const updatedReviews = reviews.filter(r => r.id !== reviewId);
+    setReviews(updatedReviews);
+    localStorage.setItem(`reviews_${user.id}`, JSON.stringify(updatedReviews));
+  };
+
+  const getProductRating = (productId: string) => {
+    const approvedReviews = getApprovedReviews(productId);
+    if (approvedReviews.length === 0) {
+      return { average: 0, count: 0 };
+    }
+    const sum = approvedReviews.reduce((acc, r) => acc + r.rating, 0);
+    return {
+      average: Math.round((sum / approvedReviews.length) * 10) / 10,
+      count: approvedReviews.length
+    };
+  };
+
   return (
     <AppContext.Provider value={{
       user,
@@ -519,6 +595,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       cart,
       promoCodes,
       abandonedCarts,
+      reviews,
       login,
       logout,
       signup,
@@ -539,7 +616,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       updatePromoCode,
       deletePromoCode,
       getAbandonedCarts,
-      markCartAsRecovered
+      markCartAsRecovered,
+      addReview,
+      getProductReviews,
+      getApprovedReviews,
+      updateReviewStatus,
+      deleteReview,
+      getProductRating
     }}>
       {children}
     </AppContext.Provider>

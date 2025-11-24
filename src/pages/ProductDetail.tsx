@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ShoppingCart, Minus, Plus } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Minus, Plus, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useApp, Product } from '@/contexts/AppContext';
@@ -9,6 +9,9 @@ import ThemeToggle from '@/components/ThemeToggle';
 import { useToast } from '@/hooks/use-toast';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { generateProductMessage } from '@/lib/whatsapp';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Carousel,
   CarouselContent,
@@ -20,18 +23,27 @@ import {
 const ProductDetail = () => {
   const { shopUrl, productId } = useParams<{ shopUrl: string; productId: string }>();
   const navigate = useNavigate();
-  const { products, categories, addToCart, cart, shopSettings } = useApp();
+  const { products, categories, addToCart, cart, shopSettings, addReview, getApprovedReviews, getProductRating } = useApp();
   const { toast } = useToast();
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [rating, setRating] = useState<{ average: number; count: number }>({ average: 0, count: 0 });
+  
+  // Review form
+  const [reviewName, setReviewName] = useState('');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState('');
 
   useEffect(() => {
     const foundProduct = products.find(p => p.id === productId);
     if (foundProduct) {
       setProduct(foundProduct);
+      setReviews(getApprovedReviews(foundProduct.id));
+      setRating(getProductRating(foundProduct.id));
     }
-  }, [productId, products]);
+  }, [productId, products, getApprovedReviews, getProductRating]);
 
   const handleAddToCart = () => {
     if (product) {
@@ -50,6 +62,42 @@ const ProductDetail = () => {
       });
       setIsCartOpen(true);
     }
+  };
+
+  const handleSubmitReview = () => {
+    if (!product) return;
+    
+    if (!reviewName.trim() || !reviewComment.trim()) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez remplir tous les champs",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    addReview({
+      productId: product.id,
+      customerName: reviewName,
+      rating: reviewRating,
+      comment: reviewComment,
+      verified: false,
+      status: 'pending'
+    });
+
+    toast({
+      title: "Avis envoyé !",
+      description: "Votre avis sera publié après validation",
+    });
+
+    // Reset form
+    setReviewName('');
+    setReviewRating(5);
+    setReviewComment('');
+    
+    // Reload reviews
+    setReviews(getApprovedReviews(product.id));
+    setRating(getProductRating(product.id));
   };
 
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -226,6 +274,118 @@ const ProductDetail = () => {
                 )}
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-16 border-t pt-8">
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4">Avis clients</h2>
+            {rating.count > 0 && (
+              <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-2">
+                  <Star className="h-6 w-6 fill-primary text-primary" />
+                  <span className="text-3xl font-bold">{rating.average}</span>
+                  <span className="text-muted-foreground">/ 5</span>
+                </div>
+                <span className="text-muted-foreground">
+                  {rating.count} avis
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Reviews List */}
+          {reviews.length > 0 ? (
+            <div className="space-y-6 mb-8">
+              {reviews.map((review) => (
+                <div key={review.id} className="border rounded-lg p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <p className="font-semibold">{review.customerName}</p>
+                      <div className="flex gap-1 my-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`h-4 w-4 ${
+                              star <= review.rating
+                                ? 'fill-primary text-primary'
+                                : 'text-muted'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {new Date(review.createdAt).toLocaleDateString('fr-FR')}
+                    </span>
+                  </div>
+                  <p className="text-foreground">{review.comment}</p>
+                  {review.verified && (
+                    <Badge variant="secondary" className="mt-2">
+                      Achat vérifié
+                    </Badge>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted-foreground mb-8">
+              Aucun avis pour le moment. Soyez le premier à donner votre avis !
+            </p>
+          )}
+
+          {/* Add Review Form */}
+          <div className="border rounded-lg p-6 bg-card">
+            <h3 className="text-xl font-semibold mb-4">Laisser un avis</h3>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="reviewName">Nom</Label>
+                <Input
+                  id="reviewName"
+                  value={reviewName}
+                  onChange={(e) => setReviewName(e.target.value)}
+                  placeholder="Votre nom"
+                />
+              </div>
+              
+              <div>
+                <Label>Note</Label>
+                <div className="flex gap-2 mt-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setReviewRating(star)}
+                      className="transition-transform hover:scale-110"
+                    >
+                      <Star
+                        className={`h-8 w-8 cursor-pointer ${
+                          star <= reviewRating
+                            ? 'fill-primary text-primary'
+                            : 'text-muted'
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="reviewComment">Commentaire</Label>
+                <Textarea
+                  id="reviewComment"
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  placeholder="Partagez votre expérience avec ce produit..."
+                  rows={4}
+                />
+              </div>
+
+              <Button onClick={handleSubmitReview} className="w-full">
+                Publier l'avis
+              </Button>
+            </div>
           </div>
         </div>
       </div>
