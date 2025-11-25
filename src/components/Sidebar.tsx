@@ -20,7 +20,8 @@ import {
   Grid3x3,
   Menu,
   X,
-  Star
+  Star,
+  Settings
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -108,6 +109,12 @@ const Sidebar = () => {
       label: "INTÉGRATION",
       items: [
         { label: 'Moyen de paiement', href: '/payment-integration', icon: CreditCard },
+      ]
+    },
+    {
+      label: "COMPTE",
+      items: [
+        { label: 'Paramètres', href: '/settings', icon: Settings },
       ]
     }
   ];

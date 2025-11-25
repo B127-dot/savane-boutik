@@ -15,6 +15,7 @@ import Orders from "./pages/Orders";
 import Reviews from "./pages/Reviews";
 import Categories from "./pages/Categories";
 import ShopSettings from "./pages/ShopSettings";
+import Settings from "./pages/Settings";
 import Analytics from "./pages/Analytics";
 import Marketing from "./pages/Marketing";
 import PaymentIntegration from "./pages/PaymentIntegration";
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
             <Route path="/reviews" element={<ProtectedRoute><Reviews /></ProtectedRoute>} />
             <Route path="/shop-settings" element={<ProtectedRoute><ShopSettings /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
             <Route path="/marketing" element={<ProtectedRoute><Marketing /></ProtectedRoute>} />
             <Route path="/payment-integration" element={<ProtectedRoute><PaymentIntegration /></ProtectedRoute>} />
