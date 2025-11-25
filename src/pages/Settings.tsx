@@ -319,71 +319,26 @@ const Settings = () => {
               </Card>
 
               {/* Billing Toggle */}
-              <div className="flex items-center justify-center py-6">
-                <motion.div 
-                  className="inline-flex items-center gap-1 p-1 rounded-full bg-muted border border-border/50 shadow-lg"
-                  initial={{ scale: 0.95, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <motion.button
-                    onClick={() => setIsAnnual(false)}
-                    className={`relative px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
-                      !isAnnual 
-                        ? 'text-primary-foreground' 
-                        : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {!isAnnual && (
-                      <motion.div
-                        layoutId="activeBilling"
-                        className="absolute inset-0 bg-gradient-to-br from-primary to-primary/90 rounded-full shadow-lg shadow-primary/30"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                      />
-                    )}
-                    <span className="relative z-10 flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      Mensuel
-                    </span>
-                  </motion.button>
-                  
-                  <motion.button
-                    onClick={() => setIsAnnual(true)}
-                    className={`relative px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
-                      isAnnual 
-                        ? 'text-primary-foreground' 
-                        : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {isAnnual && (
-                      <motion.div
-                        layoutId="activeBilling"
-                        className="absolute inset-0 bg-gradient-to-br from-primary to-primary/90 rounded-full shadow-lg shadow-primary/30"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                      />
-                    )}
-                    <span className="relative z-10 flex items-center gap-2">
-                      <Sparkles className="w-4 h-4" />
-                      Annuel
-                    </span>
-                  </motion.button>
-                </motion.div>
-                
+              <div className="flex items-center justify-center gap-4 py-6">
+                <span className={`text-sm font-semibold transition-colors ${!isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  Mensuel
+                </span>
+                <Switch
+                  checked={isAnnual}
+                  onCheckedChange={setIsAnnual}
+                  className="data-[state=checked]:bg-primary"
+                />
+                <span className={`text-sm font-semibold transition-colors ${isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  Annuel
+                </span>
                 <AnimatePresence>
                   {isAnnual && (
                     <motion.div
-                      initial={{ scale: 0.8, opacity: 0, x: -10 }}
-                      animate={{ scale: 1, opacity: 1, x: 0 }}
-                      exit={{ scale: 0.8, opacity: 0, x: -10 }}
-                      transition={{ type: "spring", bounce: 0.4 }}
-                      className="ml-3"
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.8, opacity: 0 }}
                     >
-                      <Badge className="bg-primary/10 text-primary border-primary/20 shadow-sm px-3 py-1">
-                        <Sparkles className="w-3 h-3 mr-1" />
+                      <Badge variant="secondary" className="ml-2 shadow-sm">
                         Économisez 20%
                       </Badge>
                     </motion.div>
