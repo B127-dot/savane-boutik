@@ -14,7 +14,12 @@ import {
   ShoppingCart,
   TrendingUp,
   DollarSign,
-  Sparkles
+  Sparkles,
+  Save,
+  Lock,
+  AlertTriangle,
+  Star,
+  Zap
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,19 +28,18 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
-import { motion } from 'framer-motion';
-
-type TabType = 'profile' | 'subscription' | 'privacy';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Settings = () => {
   const { user, products, orders, logout } = useApp();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<TabType>('profile');
   const [isAnnual, setIsAnnual] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [userName, setUserName] = useState(user?.name || '');
+  const [isSaving, setIsSaving] = useState(false);
 
   const getUserInitials = () => {
     if (!user?.name) return 'U';
@@ -61,13 +65,17 @@ const Settings = () => {
 
   const stats = getUserStats();
 
-  const handleSaveProfile = () => {
-    // Update user name in localStorage
+  const handleSaveProfile = async () => {
+    setIsSaving(true);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
     if (user) {
       const updatedUser = { ...user, name: userName };
       localStorage.setItem('user', JSON.stringify(updatedUser));
       toast.success('Profil mis à jour avec succès');
     }
+    setIsSaving(false);
   };
 
   const handleDeleteAccount = () => {
@@ -82,6 +90,8 @@ const Settings = () => {
     {
       name: 'Gratuit',
       price: { monthly: 0, annual: 0 },
+      description: 'Pour démarrer votre activité',
+      icon: Package,
       features: [
         'Jusqu\'à 50 produits',
         'Paiements Orange & Moov Money',
@@ -95,6 +105,8 @@ const Settings = () => {
     {
       name: 'Pro',
       price: { monthly: 9900, annual: 99000 },
+      description: 'Pour les commerçants actifs',
+      icon: Star,
       badge: '82% des vendeurs',
       features: [
         'Produits illimités',
@@ -111,6 +123,8 @@ const Settings = () => {
     {
       name: 'Business',
       price: { monthly: 24900, annual: 249000 },
+      description: 'Pour les entreprises établies',
+      icon: Zap,
       features: [
         'Tout du plan Pro',
         'Multi-boutiques',
@@ -124,322 +138,414 @@ const Settings = () => {
     }
   ];
 
-  const tabs = [
-    { id: 'profile', label: 'Profil', icon: User },
-    { id: 'subscription', label: 'Abonnement', icon: CreditCard },
-    { id: 'privacy', label: 'Confidentialité & Données', icon: Shield }
-  ];
-
   return (
     <div className="min-h-screen bg-background">
-      <div className="flex h-screen overflow-hidden">
-        {/* Sidebar Navigation */}
-        <div className="w-64 border-r border-border/50 p-4 space-y-2 overflow-y-auto">
-          <div className="mb-6">
-            <h2 className="text-xl font-bold mb-1">Paramètres</h2>
-            <p className="text-sm text-muted-foreground">Gérez votre compte</p>
-          </div>
-          
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as TabType)}
-              className={`
-                w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
-                ${activeTab === tab.id 
-                  ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30' 
-                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                }
-              `}
-            >
-              <tab.icon className="w-5 h-5" />
-              <span className="font-medium text-sm">{tab.label}</span>
-            </button>
-          ))}
+      {/* Header */}
+      <div className="border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="max-w-7xl mx-auto px-8 py-6">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h1 className="text-3xl font-bold mb-2">Paramètres</h1>
+            <p className="text-muted-foreground">Gérez votre compte et vos préférences</p>
+          </motion.div>
         </div>
+      </div>
 
-        {/* Main Content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="max-w-5xl mx-auto p-8">
-            {/* Profile Tab */}
-            {activeTab === 'profile' && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-6"
-              >
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">Profil</h1>
-                  <p className="text-muted-foreground">Gérez vos informations personnelles</p>
-                </div>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-8 py-8">
+        <Tabs defaultValue="profile" className="space-y-8">
+          <TabsList className="grid w-full grid-cols-3 max-w-2xl h-auto p-1 bg-muted/50">
+            <TabsTrigger 
+              value="profile" 
+              className="gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-3"
+            >
+              <User className="w-4 h-4" />
+              <span className="hidden sm:inline">Profil</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="subscription"
+              className="gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-3"
+            >
+              <CreditCard className="w-4 h-4" />
+              <span className="hidden sm:inline">Abonnement</span>
+            </TabsTrigger>
+            <TabsTrigger 
+              value="privacy"
+              className="gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-3"
+            >
+              <Shield className="w-4 h-4" />
+              <span className="hidden sm:inline">Confidentialité</span>
+            </TabsTrigger>
+          </TabsList>
 
-                <Card className="p-6">
-                  <div className="flex items-center gap-6 mb-8">
-                    <Avatar className="w-20 h-20 border-4 border-border">
-                      <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground font-bold text-2xl">
-                        {getUserInitials()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h3 className="text-xl font-semibold">{user?.name}</h3>
-                      <p className="text-muted-foreground">{user?.email}</p>
-                      <Badge variant="outline" className="mt-2">
-                        <Calendar className="w-3 h-3 mr-1" />
-                        Membre depuis {new Date(user?.id || Date.now()).toLocaleDateString('fr-FR')}
-                      </Badge>
+          {/* Profile Tab */}
+          <TabsContent value="profile" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="grid gap-6"
+            >
+              {/* Profile Card */}
+              <Card className="overflow-hidden border-border/50 bg-gradient-to-br from-card via-card to-card/50">
+                <div className="p-6 space-y-6">
+                  {/* Avatar Section */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 pb-6 border-b border-border/50">
+                    <div className="relative group">
+                      <Avatar className="w-24 h-24 border-4 border-primary/20 shadow-lg shadow-primary/10">
+                        <AvatarFallback className="bg-gradient-to-br from-primary via-primary to-primary/80 text-primary-foreground font-bold text-3xl">
+                          {getUserInitials()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </div>
+                    <div className="flex-1 space-y-2">
+                      <h3 className="text-2xl font-bold">{user?.name}</h3>
+                      <p className="text-muted-foreground flex items-center gap-2">
+                        <Lock className="w-3.5 h-3.5" />
+                        {user?.email}
+                      </p>
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        <Badge variant="secondary" className="gap-1.5">
+                          <Calendar className="w-3 h-3" />
+                          Membre depuis {new Date(user?.id || Date.now()).toLocaleDateString('fr-FR')}
+                        </Badge>
+                        <Badge className="bg-primary/10 text-primary border-primary/20 gap-1.5">
+                          <Sparkles className="w-3 h-3" />
+                          Plan Gratuit
+                        </Badge>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="space-y-4 mb-6">
-                    <div>
-                      <Label htmlFor="name">Nom complet</Label>
+                  {/* Form Fields */}
+                  <div className="space-y-5">
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="text-sm font-semibold">Nom complet</Label>
                       <Input
                         id="name"
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
                         placeholder="Votre nom"
-                        className="mt-2"
+                        className="h-11 bg-background/50"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        value={user?.email}
-                        disabled
-                        className="mt-2 bg-muted"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">L'email ne peut pas être modifié</p>
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm font-semibold">Adresse email</Label>
+                      <div className="relative">
+                        <Input
+                          id="email"
+                          value={user?.email}
+                          disabled
+                          className="h-11 bg-muted/50 pl-9"
+                        />
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      </div>
+                      <p className="text-xs text-muted-foreground">L'email ne peut pas être modifié pour des raisons de sécurité</p>
                     </div>
                   </div>
 
-                  <Button onClick={handleSaveProfile} className="w-full sm:w-auto">
-                    Enregistrer les modifications
-                  </Button>
-                </Card>
-
-                {/* Statistics */}
-                <Card className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Statistiques</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="p-4 rounded-lg bg-accent/50 border border-border/50">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Package className="w-4 h-4 text-primary" />
-                        <p className="text-xs text-muted-foreground">Produits créés</p>
-                      </div>
-                      <p className="text-2xl font-bold">{stats.productsCreated}</p>
-                    </div>
-                    <div className="p-4 rounded-lg bg-accent/50 border border-border/50">
-                      <div className="flex items-center gap-2 mb-2">
-                        <ShoppingCart className="w-4 h-4 text-primary" />
-                        <p className="text-xs text-muted-foreground">Commandes</p>
-                      </div>
-                      <p className="text-2xl font-bold">{stats.ordersReceived}</p>
-                    </div>
-                    <div className="p-4 rounded-lg bg-accent/50 border border-border/50">
-                      <div className="flex items-center gap-2 mb-2">
-                        <TrendingUp className="w-4 h-4 text-primary" />
-                        <p className="text-xs text-muted-foreground">Jours actifs</p>
-                      </div>
-                      <p className="text-2xl font-bold">{stats.activeDays}</p>
-                    </div>
-                    <div className="p-4 rounded-lg bg-accent/50 border border-border/50">
-                      <div className="flex items-center gap-2 mb-2">
-                        <DollarSign className="w-4 h-4 text-primary" />
-                        <p className="text-xs text-muted-foreground">Revenus</p>
-                      </div>
-                      <p className="text-2xl font-bold">{stats.revenueGenerated.toLocaleString()} F</p>
-                    </div>
+                  {/* Action Button */}
+                  <div className="pt-4">
+                    <Button 
+                      onClick={handleSaveProfile} 
+                      disabled={isSaving}
+                      className="w-full sm:w-auto gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300"
+                    >
+                      <Save className="w-4 h-4" />
+                      {isSaving ? 'Enregistrement...' : 'Enregistrer les modifications'}
+                    </Button>
                   </div>
-                </Card>
-              </motion.div>
-            )}
-
-            {/* Subscription Tab */}
-            {activeTab === 'subscription' && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-6"
-              >
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">Abonnement</h1>
-                  <p className="text-muted-foreground">Gérez votre plan et facturation</p>
                 </div>
+              </Card>
 
-                {/* Current Plan */}
-                <Card className="p-6 bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-xl font-semibold">Plan actuel : Gratuit</h3>
-                        <Badge className="bg-primary/20 text-primary border-primary/30">
+              {/* Statistics Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {[
+                  { icon: Package, label: 'Produits créés', value: stats.productsCreated, color: 'from-blue-500/10 to-blue-500/5', iconColor: 'text-blue-500' },
+                  { icon: ShoppingCart, label: 'Commandes', value: stats.ordersReceived, color: 'from-green-500/10 to-green-500/5', iconColor: 'text-green-500' },
+                  { icon: TrendingUp, label: 'Jours actifs', value: stats.activeDays, color: 'from-orange-500/10 to-orange-500/5', iconColor: 'text-orange-500' },
+                  { icon: DollarSign, label: 'Revenus', value: `${stats.revenueGenerated.toLocaleString()} F`, color: 'from-primary/10 to-primary/5', iconColor: 'text-primary' }
+                ].map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                  >
+                    <Card className={`p-5 bg-gradient-to-br ${stat.color} border-border/50 hover:shadow-lg hover:scale-[1.02] transition-all duration-300`}>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className={`p-2.5 rounded-lg bg-background/50 ${stat.iconColor}`}>
+                          <stat.icon className="w-5 h-5" />
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-1">{stat.label}</p>
+                      <p className="text-2xl font-bold">{stat.value}</p>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </TabsContent>
+
+          {/* Subscription Tab */}
+          <TabsContent value="subscription" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="space-y-6"
+            >
+              {/* Current Plan Banner */}
+              <Card className="overflow-hidden border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-background shadow-lg shadow-primary/10">
+                <div className="p-6">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-2xl font-bold">Plan actuel : Gratuit</h3>
+                        <Badge className="bg-primary text-primary-foreground shadow-sm">
                           <Check className="w-3 h-3 mr-1" />
                           Actif
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">Vous utilisez le plan gratuit</p>
+                      <p className="text-muted-foreground">Vous utilisez le plan gratuit de BurkinaShop</p>
                     </div>
-                    <Sparkles className="w-12 h-12 text-primary/40" />
+                    <Sparkles className="w-16 h-16 text-primary/30" />
                   </div>
-                </Card>
-
-                {/* Billing Toggle */}
-                <div className="flex items-center justify-center gap-4 py-4">
-                  <span className={`text-sm font-medium ${!isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
-                    Mensuel
-                  </span>
-                  <Switch
-                    checked={isAnnual}
-                    onCheckedChange={setIsAnnual}
-                  />
-                  <span className={`text-sm font-medium ${isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
-                    Annuel
-                  </span>
-                  {isAnnual && (
-                    <Badge variant="secondary" className="ml-2">
-                      Économisez 20%
-                    </Badge>
-                  )}
                 </div>
+              </Card>
 
-                {/* Pricing Cards */}
-                <div className="grid md:grid-cols-3 gap-6">
-                  {pricingPlans.map((plan) => (
-                    <Card 
-                      key={plan.name}
-                      className={`p-6 relative ${plan.popular ? 'border-2 border-primary shadow-lg shadow-primary/20' : ''}`}
+              {/* Billing Toggle */}
+              <div className="flex items-center justify-center gap-4 py-6">
+                <span className={`text-sm font-semibold transition-colors ${!isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  Mensuel
+                </span>
+                <Switch
+                  checked={isAnnual}
+                  onCheckedChange={setIsAnnual}
+                  className="data-[state=checked]:bg-primary"
+                />
+                <span className={`text-sm font-semibold transition-colors ${isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  Annuel
+                </span>
+                <AnimatePresence>
+                  {isAnnual && (
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0.8, opacity: 0 }}
                     >
-                      {plan.popular && (
-                        <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary">
+                      <Badge variant="secondary" className="ml-2 shadow-sm">
+                        Économisez 20%
+                      </Badge>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Pricing Cards */}
+              <div className="grid md:grid-cols-3 gap-6">
+                {pricingPlans.map((plan, index) => (
+                  <motion.div
+                    key={plan.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                  >
+                    <Card 
+                      className={`relative h-full flex flex-col p-6 transition-all duration-300 hover:shadow-xl ${
+                        plan.popular 
+                          ? 'border-2 border-primary bg-gradient-to-br from-primary/5 to-background shadow-lg shadow-primary/20 scale-[1.02]' 
+                          : 'border-border/50 hover:border-primary/30'
+                      }`}
+                    >
+                      {plan.popular && plan.badge && (
+                        <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary shadow-md shadow-primary/50">
+                          <Star className="w-3 h-3 mr-1" />
                           {plan.badge}
                         </Badge>
                       )}
                       
-                      <div className="mb-4">
-                        <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-3xl font-bold">
+                      <div className="mb-6">
+                        <div className={`inline-flex p-3 rounded-xl mb-4 ${
+                          plan.popular ? 'bg-primary/10' : 'bg-accent'
+                        }`}>
+                          <plan.icon className={`w-6 h-6 ${
+                            plan.popular ? 'text-primary' : 'text-muted-foreground'
+                          }`} />
+                        </div>
+                        <h3 className="text-2xl font-bold mb-1">{plan.name}</h3>
+                        <p className="text-sm text-muted-foreground mb-4">{plan.description}</p>
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-4xl font-bold">
                             {(isAnnual ? plan.price.annual / 12 : plan.price.monthly).toLocaleString()}
                           </span>
-                          <span className="text-sm text-muted-foreground">FCFA/mois</span>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium text-muted-foreground">FCFA</span>
+                            <span className="text-xs text-muted-foreground">/mois</span>
+                          </div>
                         </div>
                         {isAnnual && plan.price.annual > 0 && (
-                          <p className="text-xs text-muted-foreground mt-1">
+                          <p className="text-xs text-muted-foreground mt-2">
                             Facturé {plan.price.annual.toLocaleString()} FCFA/an
                           </p>
                         )}
                       </div>
 
-                      <ul className="space-y-2 mb-6">
+                      <ul className="space-y-3 mb-6 flex-1">
                         {plan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2 text-sm">
-                            <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                            <span>{feature}</span>
+                          <li key={idx} className="flex items-start gap-3 text-sm">
+                            <div className="p-0.5 rounded-full bg-primary/10 mt-0.5">
+                              <Check className="w-3.5 h-3.5 text-primary" />
+                            </div>
+                            <span className="flex-1">{feature}</span>
                           </li>
                         ))}
                       </ul>
 
                       {plan.current ? (
                         <Button variant="outline" className="w-full" disabled>
+                          <Check className="w-4 h-4 mr-2" />
                           Plan actuel
                         </Button>
                       ) : (
-                        <Button className="w-full" variant={plan.popular ? 'default' : 'outline'}>
+                        <Button 
+                          className={`w-full shadow-lg transition-all duration-300 ${
+                            plan.popular 
+                              ? 'shadow-primary/30 hover:shadow-primary/50' 
+                              : ''
+                          }`}
+                          variant={plan.popular ? 'default' : 'outline'}
+                        >
                           Passer au plan {plan.name}
                         </Button>
                       )}
                     </Card>
-                  ))}
-                </div>
+                  </motion.div>
+                ))}
+              </div>
 
-                {/* Footer Info */}
-                <Card className="p-6 bg-accent/50">
-                  <div className="flex items-center gap-4 mb-4">
-                    <Users className="w-8 h-8 text-primary" />
-                    <div>
-                      <h4 className="font-semibold">Utilisé par 500+ entreprises</h4>
-                      <p className="text-sm text-muted-foreground">Rejoignez notre communauté grandissante</p>
+              {/* Footer Info Cards */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <Card className="p-6 bg-accent/30 border-border/50 hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-lg bg-primary/10">
+                      <Users className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold mb-1">Utilisé par 500+ entreprises</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Rejoignez notre communauté grandissante de commerçants
+                      </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <MessageCircle className="w-8 h-8 text-primary" />
-                    <div>
-                      <h4 className="font-semibold">Des questions ?</h4>
+                </Card>
+                
+                <Card className="p-6 bg-accent/30 border-border/50 hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-lg bg-primary/10">
+                      <MessageCircle className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold mb-1">Des questions ?</h4>
                       <p className="text-sm text-muted-foreground">
                         Rejoignez notre communauté WhatsApp pour obtenir de l'aide
                       </p>
                     </div>
                   </div>
                 </Card>
-              </motion.div>
-            )}
+              </div>
+            </motion.div>
+          </TabsContent>
 
-            {/* Privacy Tab */}
-            {activeTab === 'privacy' && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-6"
-              >
-                <div>
-                  <h1 className="text-3xl font-bold mb-2">Confidentialité & Données</h1>
-                  <p className="text-muted-foreground">Gérez vos données et la confidentialité de votre compte</p>
-                </div>
-
-                <Card className="p-6">
-                  <div className="flex items-start gap-4 mb-4">
-                    <Shield className="w-6 h-6 text-primary mt-1" />
-                    <div>
-                      <h3 className="text-lg font-semibold mb-2">Protection des données</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Vos données sont stockées de manière sécurisée et ne sont jamais partagées avec des tiers sans votre consentement explicite.
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        Conformément au RGPD, vous avez le droit d'accéder, de modifier et de supprimer vos données personnelles à tout moment.
-                      </p>
+          {/* Privacy Tab */}
+          <TabsContent value="privacy" className="space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="space-y-6"
+            >
+              {/* Data Protection Card */}
+              <Card className="overflow-hidden border-border/50">
+                <div className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 rounded-lg bg-primary/10">
+                      <Shield className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold mb-3">Protection des données</h3>
+                      <div className="space-y-3 text-sm text-muted-foreground">
+                        <p>
+                          Vos données sont stockées de manière <strong className="text-foreground">sécurisée</strong> et ne sont jamais partagées avec des tiers sans votre consentement explicite.
+                        </p>
+                        <p>
+                          Conformément au <strong className="text-foreground">RGPD</strong>, vous avez le droit d'accéder, de modifier et de supprimer vos données personnelles à tout moment.
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </Card>
+                </div>
+              </Card>
 
-                {/* Delete Account Section */}
-                <Card className="p-6 border-destructive/50 bg-destructive/5">
+              {/* Delete Account Section */}
+              <Card className="overflow-hidden border-destructive/30 bg-gradient-to-br from-destructive/5 to-background">
+                <div className="p-6">
                   <div className="flex items-start gap-4">
-                    <Trash2 className="w-6 h-6 text-destructive mt-1" />
+                    <div className="p-3 rounded-lg bg-destructive/10">
+                      <Trash2 className="w-6 h-6 text-destructive" />
+                    </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-destructive mb-2">Suppression du compte</h3>
-                      <div className="space-y-3 mb-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <h3 className="text-xl font-bold text-destructive">Suppression du compte</h3>
+                        <Badge variant="destructive" className="gap-1">
+                          <AlertTriangle className="w-3 h-3" />
+                          Irréversible
+                        </Badge>
+                      </div>
+                      <div className="space-y-4 mb-6">
                         <p className="text-sm text-muted-foreground">
-                          La suppression de votre compte est <strong>irréversible</strong>. Cette action entraînera :
+                          La suppression de votre compte est <strong className="text-foreground">irréversible</strong>. Cette action entraînera :
                         </p>
-                        <ul className="text-sm text-muted-foreground space-y-1 ml-4">
-                          <li>• La suppression définitive de tous vos produits</li>
-                          <li>• La suppression de votre historique de commandes</li>
-                          <li>• La fermeture de votre boutique en ligne</li>
-                          <li>• La perte de toutes vos données et statistiques</li>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                          {[
+                            'La suppression définitive de tous vos produits',
+                            'La suppression de votre historique de commandes',
+                            'La fermeture de votre boutique en ligne',
+                            'La perte de toutes vos données et statistiques'
+                          ].map((item, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                              <div className="p-1 rounded-full bg-destructive/10 mt-0.5">
+                                <AlertTriangle className="w-3 h-3 text-destructive" />
+                              </div>
+                              <span className="flex-1">{item}</span>
+                            </li>
+                          ))}
                         </ul>
-                        <p className="text-sm text-muted-foreground">
-                          Conformément au RGPD, toutes vos données personnelles seront définitivement supprimées de nos serveurs dans les 30 jours suivant votre demande.
-                        </p>
+                        <div className="p-4 rounded-lg bg-muted/50 border border-border/50">
+                          <p className="text-xs text-muted-foreground">
+                            <strong className="text-foreground">Conformément au RGPD</strong>, toutes vos données personnelles seront définitivement supprimées de nos serveurs dans les 30 jours suivant votre demande.
+                          </p>
+                        </div>
                       </div>
                       <Button 
                         variant="destructive"
                         onClick={() => setShowDeleteDialog(true)}
-                        className="gap-2"
+                        className="gap-2 shadow-lg shadow-destructive/20 hover:shadow-destructive/30"
                       >
                         <Trash2 className="w-4 h-4" />
                         Supprimer mon compte
                       </Button>
                     </div>
                   </div>
-                </Card>
-              </motion.div>
-            )}
-          </div>
-        </div>
+                </div>
+              </Card>
+            </motion.div>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Delete Account Confirmation Dialog */}
