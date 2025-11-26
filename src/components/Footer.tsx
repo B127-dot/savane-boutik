@@ -1,4 +1,4 @@
-import { Globe, ArrowRight, Heart } from "lucide-react";
+import { Globe, ArrowRight } from "lucide-react";
 
 const Footer = () => {
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -123,9 +123,7 @@ const Footer = () => {
             </nav>
             
             <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-              <span>© 2025 BurkE-Shop. Fait avec</span>
-              <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
-              <span>au Burkina Faso</span>
+              <span>Copyright 2025, propulsé par Openweb</span>
             </div>
           </div>
         </div>
