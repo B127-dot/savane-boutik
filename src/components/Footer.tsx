@@ -123,7 +123,16 @@ const Footer = () => {
             </nav>
             
             <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-              <span>Copyright 2025, propulsé par Openweb</span>
+              <span>Copyright 2025, propulsé par{" "}
+                <a 
+                  href="https://warm-digital-flow.vercel.app/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors underline"
+                >
+                  Openweb
+                </a>
+              </span>
             </div>
           </div>
         </div>
