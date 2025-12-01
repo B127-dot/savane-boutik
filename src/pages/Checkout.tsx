@@ -118,7 +118,7 @@ const Checkout = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Finaliser ma commande</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-8">Finaliser ma commande</h1>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Form */}
@@ -228,7 +228,7 @@ const Checkout = () => {
 
           {/* Order Summary */}
           <div>
-            <Card className="sticky top-4">
+            <Card className="lg:sticky lg:top-4">
               <CardHeader>
                 <CardTitle>Récapitulatif</CardTitle>
               </CardHeader>

@@ -284,19 +284,19 @@ const Orders = () => {
         </div>
       </div>
 
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+        <div className="flex items-center space-x-2 flex-1">
           <Search className="w-4 h-4 text-muted-foreground" />
           <Input
             placeholder="Rechercher par ID, nom, email ou téléphone..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-sm"
+            className="w-full"
           />
         </div>
         
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-48">
+          <SelectTrigger className="w-full sm:w-48">
             <SelectValue placeholder="Filtrer par statut" />
           </SelectTrigger>
           <SelectContent>
@@ -320,7 +320,8 @@ const Orders = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
+          <div className="overflow-x-auto">
+            <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>ID</TableHead>
@@ -383,6 +384,7 @@ const Orders = () => {
               ))}
             </TableBody>
           </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

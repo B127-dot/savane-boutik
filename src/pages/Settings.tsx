@@ -142,7 +142,7 @@ const Settings = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto px-8 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -155,9 +155,9 @@ const Settings = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="profile" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-3 max-w-2xl h-auto p-1 bg-muted/50">
+          <TabsList className="grid w-full grid-cols-3 max-w-full sm:max-w-2xl h-auto p-1 bg-muted/50">
             <TabsTrigger 
               value="profile" 
               className="gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-3"
@@ -347,7 +347,7 @@ const Settings = () => {
               </div>
 
               {/* Pricing Cards */}
-              <div className="grid md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {pricingPlans.map((plan, index) => (
                   <motion.div
                     key={plan.name}
