@@ -108,7 +108,7 @@ const TestimonialsSection = () => {
           {/* First Row - Scroll Left to Right */}
           <div className="flex gap-6 animate-scroll-left hover:pause">
             {testimonials.map((testimonial, index) => (
-              <div key={`row1-${index}`} className="flex-shrink-0 w-[380px] md:w-96">
+              <div key={`row1-${index}`} className="flex-shrink-0 w-[300px] sm:w-[340px] md:w-96">
                 <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:scale-[1.02] transition-all duration-300 h-full">
                   <CardContent className="p-6">
                     <div className="flex gap-1 mb-4">
@@ -138,7 +138,7 @@ const TestimonialsSection = () => {
             ))}
             {/* Duplicate for seamless loop */}
             {testimonials.map((testimonial, index) => (
-              <div key={`row1-dup-${index}`} className="flex-shrink-0 w-[380px] md:w-96">
+              <div key={`row1-dup-${index}`} className="flex-shrink-0 w-[300px] sm:w-[340px] md:w-96">
                 <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:scale-[1.02] transition-all duration-300 h-full">
                   <CardContent className="p-6">
                     <div className="flex gap-1 mb-4">
@@ -171,7 +171,7 @@ const TestimonialsSection = () => {
           {/* Second Row - Scroll Right to Left */}
           <div className="flex gap-6 animate-scroll-right hover:pause">
             {testimonials.map((testimonial, index) => (
-              <div key={`row2-${index}`} className="flex-shrink-0 w-[380px] md:w-96">
+              <div key={`row2-${index}`} className="flex-shrink-0 w-[300px] sm:w-[340px] md:w-96">
                 <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:scale-[1.02] transition-all duration-300 h-full">
                   <CardContent className="p-6">
                     <div className="flex gap-1 mb-4">
@@ -201,7 +201,7 @@ const TestimonialsSection = () => {
             ))}
             {/* Duplicate for seamless loop */}
             {testimonials.map((testimonial, index) => (
-              <div key={`row2-dup-${index}`} className="flex-shrink-0 w-[380px] md:w-96">
+              <div key={`row2-dup-${index}`} className="flex-shrink-0 w-[300px] sm:w-[340px] md:w-96">
                 <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:scale-[1.02] transition-all duration-300 h-full">
                   <CardContent className="p-6">
                     <div className="flex gap-1 mb-4">

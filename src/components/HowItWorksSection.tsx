@@ -111,16 +111,16 @@ const StepCard = ({
         <div className="absolute inset-0 rounded-3xl ring-1 ring-white/10 pointer-events-none" />
 
         {/* Content Grid */}
-        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="relative grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-8 items-center">
           {/* Giant Number - Left side */}
-          <div className="lg:col-span-2 flex items-center justify-center">
-            <span className="text-[140px] sm:text-[180px] leading-none font-semibold tracking-tight select-none bg-gradient-to-br from-primary to-primary-glow bg-clip-text text-transparent opacity-[0.15] dark:opacity-20">
+          <div className="md:col-span-2 lg:col-span-2 flex items-center justify-center">
+            <span className="text-[80px] sm:text-[140px] lg:text-[180px] leading-none font-semibold tracking-tight select-none bg-gradient-to-br from-primary to-primary-glow bg-clip-text text-transparent opacity-[0.15] dark:opacity-20">
               {step.number.replace('0', '')}
             </span>
           </div>
 
           {/* Text Content - Middle */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="md:col-span-4 lg:col-span-5 space-y-6">
             {/* Badge */}
             <Badge variant="outline" className="bg-gradient-to-r from-primary to-primary-glow text-white border-0 px-4 py-1.5 text-sm font-medium">
               {step.badge}
@@ -137,8 +137,8 @@ const StepCard = ({
             </p>
 
             {/* Feature Pills */}
-            <div className="flex flex-col gap-4 pt-2">
-              {features.map((feature, idx) => <div key={idx} className="inline-flex items-center gap-3 w-full max-w-full text-sm text-foreground/90 border border-border/50 rounded-2xl px-4 py-3 shadow-sm backdrop-blur-sm" style={{
+            <div className="flex flex-wrap gap-4 pt-2">
+              {features.map((feature, idx) => <div key={idx} className="inline-flex items-center gap-3 text-sm text-foreground/90 border border-border/50 rounded-2xl px-4 py-3 shadow-sm backdrop-blur-sm" style={{
               boxShadow: 'inset 0 -12px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)'
             }}>
                   <span className="inline-flex items-center justify-center shrink-0 w-10 h-10 rounded-xl ring-1 ring-border/50 bg-card/50">
@@ -150,7 +150,7 @@ const StepCard = ({
           </div>
 
           {/* Visual Container - Right side */}
-          <div className="lg:col-span-5 relative">
+          <div className="md:col-span-6 lg:col-span-5 relative">
             {/* Gradient blur effect behind */}
             <div className="absolute -inset-1 rounded-2xl opacity-60 blur-xl pointer-events-none bg-primary/10" />
 
