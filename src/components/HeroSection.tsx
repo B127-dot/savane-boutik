@@ -43,7 +43,7 @@ const HeroSection = () => {
                 en boutique digitale
               </h1>
               
-              <p className="text-xl text-muted-foreground max-w-2xl font-body">
+              <p className="text-xl text-muted-foreground max-w-2xl font-body text-center">
                 Créez votre boutique en 5 minutes. 
 Vendez sur WhatsApp et acceptez Orange Money..
               </p>
