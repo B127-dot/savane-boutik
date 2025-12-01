@@ -24,7 +24,7 @@ const FeaturesSection = () => {
                   </div>
 
                   {/* Illustration Container */}
-                  <div className="relative h-56 sm:h-64 rounded-2xl bg-gradient-to-b from-card/50 to-card ring-1 ring-inset ring-border/50 mb-8 backdrop-blur-sm overflow-hidden">
+                  <div className="relative h-48 sm:h-56 md:h-64 rounded-2xl bg-gradient-to-b from-card/50 to-card ring-1 ring-inset ring-border/50 mb-8 backdrop-blur-sm overflow-hidden">
                     {/* Main Dashboard Window */}
                     <div className="absolute right-3 sm:right-6 top-4 sm:top-6 w-[78%] h-[68%] rounded-2xl bg-card/90 backdrop-blur border border-border shadow-sm">
                       {/* Window Header */}

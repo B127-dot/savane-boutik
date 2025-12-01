@@ -87,7 +87,7 @@ const ThreePillarsSection = () => {
         </motion.div>
 
         {/* Cards Grid */}
-        <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Card 1: Commerce Simplifié */}
           <motion.div initial="hidden" animate={cardsVisible ? "visible" : "hidden"} variants={cardVariants} transition={{
           delay: 0,

@@ -85,7 +85,7 @@ const SecuritySection = () => {
                 : "opacity-0 translate-y-4"
             }`}
           >
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold text-foreground mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground mb-6 tracking-tight">
               BurkinaShop est{" "}
               <span className="bg-gradient-primary bg-clip-text text-transparent">
                 Digne de Confiance

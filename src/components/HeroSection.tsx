@@ -84,13 +84,13 @@ Vendez sur WhatsApp et acceptez Orange Money..
               <img src={heroImage} alt="Commerçants utilisant BurkE-Shop" className="rounded-2xl shadow-strong w-full" />
               {/* Floating Cards */}
               <AnimatedGroup preset="scale">
-                <div className="absolute -top-4 -left-4 bg-card p-4 rounded-xl shadow-medium border border-border backdrop-blur-sm">
+                <div className="hidden sm:block absolute -top-4 -left-4 bg-card p-4 rounded-xl shadow-medium border border-border backdrop-blur-sm">
                   <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-success animate-pulse"></div>
                     <span className="text-sm font-medium">En ligne</span>
                   </div>
                 </div>
-                <div className="absolute -bottom-4 -right-4 bg-card p-4 rounded-xl shadow-medium border border-border backdrop-blur-sm">
+                <div className="hidden sm:block absolute -bottom-4 -right-4 bg-card p-4 rounded-xl shadow-medium border border-border backdrop-blur-sm">
                   <div className="text-sm">
                     <div className="font-bold text-success">+247%</div>
                     <div className="text-muted-foreground">Ventes ce mois</div>
