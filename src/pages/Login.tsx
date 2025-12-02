@@ -221,7 +221,7 @@ const Login = () => {
                 {!isLoading && <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />}
               </Button>
 
-              <p className="text-xs text-center text-muted-foreground/70 pt-2">
+              <p className="text-xs text-center pt-2 text-secondary-foreground">
                 Utilisez n'importe quel email/mot de passe pour tester
               </p>
             </motion.form>
