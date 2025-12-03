@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useApp } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Store, Mail, Lock, ArrowRight, User, Sparkles, ShoppingBag, Rocket, Zap, CheckCircle2, Gift } from 'lucide-react';
+import { Loader2, Store, Mail, Lock, ArrowRight, User, ShoppingBag, Rocket } from 'lucide-react';
 import { motion } from 'framer-motion';
 const Signup = () => {
   const [name, setName] = useState('');
@@ -59,17 +59,7 @@ const Signup = () => {
       setIsLoading(false);
     }
   };
-  const benefits = [{
-    icon: Zap,
-    text: "Boutique en ligne en 5 minutes"
-  }, {
-    icon: Gift,
-    text: "Gratuit pour démarrer"
-  }, {
-    icon: CheckCircle2,
-    text: "Paiements mobiles intégrés"
-  }];
-  return <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary">
+  return <div className="h-screen w-full flex items-center justify-center relative overflow-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary">
       
       {/* Background Layer with Floating Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -85,7 +75,7 @@ const Signup = () => {
         repeat: Infinity,
         ease: "easeInOut"
       }}>
-          <Sparkles className="w-28 h-28 lg:w-40 lg:h-40 drop-shadow-lg" />
+          <Store className="w-28 h-28 lg:w-40 lg:h-40 drop-shadow-lg" />
         </motion.div>
 
         <motion.div className="absolute bottom-[15%] right-[8%] text-primary/5" animate={{
@@ -110,23 +100,11 @@ const Signup = () => {
       }}>
           <Rocket className="w-20 h-20 lg:w-28 lg:h-28" />
         </motion.div>
-
-        <motion.div className="absolute bottom-[25%] left-[5%] text-primary/5" animate={{
-        y: [0, -15, 0],
-        rotate: [-5, 5, -5]
-      }} transition={{
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: 1
-      }}>
-          <Store className="w-24 h-24 lg:w-32 lg:h-32" />
-        </motion.div>
       </div>
 
       {/* Main Container */}
-      <main className="relative z-10 w-full max-w-[1200px] mx-auto p-4 lg:p-6">
-        <motion.div className="w-full min-h-[700px] lg:min-h-[800px] rounded-[32px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 
+      <main className="relative z-10 w-full max-w-[1000px] mx-auto p-4">
+        <motion.div className="w-full lg:h-[560px] rounded-[24px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 
             bg-card/70 backdrop-blur-xl border border-border/30 
             shadow-[0_0_0_1px_rgba(0,0,0,0.2),0_20px_60px_-10px_rgba(0,0,0,0.6)]" initial={{
         opacity: 0,
@@ -140,7 +118,7 @@ const Signup = () => {
       }}>
           
           {/* Left Column: Signup Form */}
-          <div className="lg:col-span-6 flex flex-col justify-between p-6 sm:p-10 lg:p-12 relative bg-secondary/20">
+          <div className="lg:col-span-6 flex flex-col justify-between p-5 sm:p-6 lg:p-8 relative bg-secondary/20">
             
             {/* Header / Logo */}
             <motion.div initial={{
@@ -152,26 +130,25 @@ const Signup = () => {
           }} transition={{
             delay: 0.2
           }}>
-              <div className="flex items-center gap-2.5 mb-8">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20">
-                  <Store className="w-5 h-5 text-primary-foreground" />
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20">
+                  <Store className="w-4 h-4 text-primary-foreground" />
                 </div>
-                <span className="text-foreground font-semibold tracking-tight text-lg">
+                <span className="text-foreground font-semibold tracking-tight">
                   Burkina<span className="text-primary">Shop</span>
                 </span>
               </div>
 
-              <h1 className="text-2xl lg:text-3xl font-semibold text-foreground tracking-tight leading-tight mb-2">
-                Créez votre Boutique <br />
-                <span className="text-primary">Gratuitement</span>
+              <h1 className="text-xl lg:text-2xl font-semibold text-foreground tracking-tight leading-tight mb-1">
+                Créez votre Boutique <span className="text-primary">Gratuitement</span>
               </h1>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground text-xs">
                 Lancez votre commerce en ligne en quelques minutes.
               </p>
             </motion.div>
 
             {/* Form */}
-            <motion.form className="space-y-4 mt-6 mb-6" onSubmit={handleSubmit} initial={{
+            <motion.form className="space-y-3 mt-3" onSubmit={handleSubmit} initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -188,9 +165,9 @@ const Signup = () => {
                     Nom complet
                   </Label>
                   <div className="relative group">
-                    <Input id="name" type="text" placeholder="Votre nom" value={name} onChange={e => setName(e.target.value)} required className="h-11 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
-                        focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                        transition-all duration-300 pr-10" />
+                    <Input id="name" type="text" placeholder="Votre nom" value={name} onChange={e => setName(e.target.value)} required className="h-9 px-3 rounded-lg bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50 text-sm
+                        focus:bg-secondary/60 focus:border-primary/50 focus:ring-2 focus:ring-primary/10
+                        transition-all duration-300 pr-9" />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                       <User className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                     </div>
@@ -203,9 +180,9 @@ const Signup = () => {
                     Nom de la boutique
                   </Label>
                   <div className="relative group">
-                    <Input id="shopName" type="text" placeholder="Ma Belle Boutique" value={shopName} onChange={e => setShopName(e.target.value)} required className="h-11 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
-                        focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                        transition-all duration-300 pr-10" />
+                    <Input id="shopName" type="text" placeholder="Ma Belle Boutique" value={shopName} onChange={e => setShopName(e.target.value)} required className="h-9 px-3 rounded-lg bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50 text-sm
+                        focus:bg-secondary/60 focus:border-primary/50 focus:ring-2 focus:ring-primary/10
+                        transition-all duration-300 pr-9" />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                       <Store className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                     </div>
@@ -219,9 +196,9 @@ const Signup = () => {
                   Adresse Email
                 </Label>
                 <div className="relative group">
-                  <Input id="email" type="email" placeholder="votre@email.com" value={email} onChange={e => setEmail(e.target.value)} required className="h-11 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
-                      focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                      transition-all duration-300 pr-10" />
+                  <Input id="email" type="email" placeholder="votre@email.com" value={email} onChange={e => setEmail(e.target.value)} required className="h-9 px-3 rounded-lg bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50 text-sm
+                      focus:bg-secondary/60 focus:border-primary/50 focus:ring-2 focus:ring-primary/10
+                      transition-all duration-300 pr-9" />
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                     <Mail className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                   </div>
@@ -236,9 +213,9 @@ const Signup = () => {
                     Mot de passe
                   </Label>
                   <div className="relative group">
-                    <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="h-11 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
-                        focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                        transition-all duration-300 pr-10" />
+                    <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="h-9 px-3 rounded-lg bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50 text-sm
+                        focus:bg-secondary/60 focus:border-primary/50 focus:ring-2 focus:ring-primary/10
+                        transition-all duration-300 pr-9" />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                       <Lock className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                     </div>
@@ -251,9 +228,9 @@ const Signup = () => {
                     Confirmer
                   </Label>
                   <div className="relative group">
-                    <Input id="confirmPassword" type="password" placeholder="••••••••" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required className="h-11 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
-                        focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                        transition-all duration-300 pr-10" />
+                    <Input id="confirmPassword" type="password" placeholder="••••••••" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required className="h-9 px-3 rounded-lg bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50 text-sm
+                        focus:bg-secondary/60 focus:border-primary/50 focus:ring-2 focus:ring-primary/10
+                        transition-all duration-300 pr-9" />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                       <Lock className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                     </div>
@@ -262,15 +239,15 @@ const Signup = () => {
               </div>
 
               {/* Submit Button */}
-              <Button type="submit" disabled={isLoading} className="group w-full h-12 rounded-xl text-sm font-semibold bg-primary hover:bg-primary/90 text-primary-foreground
+              <Button type="submit" disabled={isLoading} className="group w-full h-9 rounded-lg text-sm font-semibold bg-primary hover:bg-primary/90 text-primary-foreground
                   transition-all duration-300 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.4)] 
-                  hover:shadow-[0_0_25px_-5px_hsl(var(--primary)/0.6)] hover:-translate-y-0.5 mt-2">
+                  hover:shadow-[0_0_25px_-5px_hsl(var(--primary)/0.6)] hover:-translate-y-0.5">
                 {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Créer ma Boutique
                 {!isLoading && <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />}
               </Button>
 
-              <p className="text-xs text-center pt-1 text-popover-foreground">
+              <p className="text-[10px] text-center text-muted-foreground">
                 En vous inscrivant, vous acceptez nos conditions d'utilisation
               </p>
             </motion.form>
@@ -285,19 +262,8 @@ const Signup = () => {
           }} transition={{
             delay: 0.4
           }}>
-              <div className="relative mb-4">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-border/50" />
-                </div>
-                <div className="relative flex justify-center text-[10px] uppercase tracking-wider">
-                  <span className="px-3 bg-primary-foreground text-accent">Déjà inscrit ?</span>
-                </div>
-              </div>
-
-              <p className="text-sm text-center text-muted-foreground">
-                <Link to="/login" className="text-primary hover:text-primary/80 font-medium transition-colors">
-                  Se connecter à mon compte
-                </Link>
+              <p className="text-xs text-center text-muted-foreground">
+                Déjà inscrit ? <Link to="/login" className="text-primary hover:text-primary/80 font-medium transition-colors">Se connecter</Link>
               </p>
             </motion.div>
           </div>
@@ -323,43 +289,9 @@ const Signup = () => {
             {/* Overlay Gradient Tone */}
             <div className="absolute inset-0 bg-primary/10 mix-blend-overlay z-10" />
 
-            {/* Floating Benefits Card */}
-            <motion.div className="absolute top-10 right-10 z-20" initial={{
-            opacity: 0,
-            y: -20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            delay: 0.6
-          }}>
-              <div className="bg-card/70 backdrop-blur-xl border border-border/30 p-5 rounded-2xl shadow-xl max-w-[280px]">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
-                    <Sparkles className="h-4 w-4 text-primary" />
-                  </div>
-                  <p className="text-sm font-semibold text-foreground">Avantages</p>
-                </div>
-                <div className="space-y-3">
-                  {benefits.map((benefit, index) => <motion.div key={index} className="flex items-center gap-3" initial={{
-                  opacity: 0,
-                  x: 20
-                }} animate={{
-                  opacity: 1,
-                  x: 0
-                }} transition={{
-                  delay: 0.7 + index * 0.1
-                }}>
-                      <benefit.icon className="h-4 w-4 text-primary flex-shrink-0" />
-                      <span className="text-xs text-muted-foreground">{benefit.text}</span>
-                    </motion.div>)}
-                </div>
-              </div>
-            </motion.div>
-
             {/* Bottom Content */}
-            <div className="absolute bottom-0 left-0 right-0 p-10 z-20 bg-gradient-to-t from-background via-background/80 to-transparent">
-              <motion.div className="max-w-md" initial={{
+            <div className="absolute bottom-0 left-0 right-0 p-6 z-20 bg-gradient-to-t from-background via-background/80 to-transparent">
+              <motion.div className="max-w-sm" initial={{
               opacity: 0,
               y: 20
             }} animate={{
@@ -368,21 +300,14 @@ const Signup = () => {
             }} transition={{
               delay: 0.7
             }}>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-12 w-12 rounded-2xl bg-primary/20 flex items-center justify-center border border-primary/30">
-                    <Rocket className="h-6 w-6 text-primary" />
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="h-8 w-8 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
+                    <Rocket className="h-4 w-4 text-primary" />
                   </div>
-                  <div>
-                    <p className="text-[10px] uppercase text-primary font-semibold tracking-wider">Prêt à vendre ?</p>
-                    <p className="text-lg font-bold text-foreground tracking-tight">500+ boutiques créées</p>
-                  </div>
+                  <p className="text-sm font-bold text-foreground">500+ boutiques créées</p>
                 </div>
-                <h2 className="text-xl font-semibold text-foreground tracking-tight mb-2">
-                  Lancez votre business en ligne aujourd'hui.
-                </h2>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  Rejoignez des centaines de vendeurs burkinabè qui utilisent BurkinaShop 
-                  pour développer leur commerce avec les paiements mobiles.
+                <p className="text-muted-foreground text-xs leading-relaxed">
+                  Rejoignez des vendeurs burkinabè qui développent leur commerce avec les paiements mobiles.
                 </p>
               </motion.div>
             </div>

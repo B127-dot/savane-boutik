@@ -56,7 +56,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-  return <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary">
+  return <div className="h-screen w-full flex items-center justify-center relative overflow-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary">
       
       {/* Background Layer with Floating Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -115,8 +115,8 @@ const Login = () => {
       </div>
 
       {/* Main Container */}
-      <main className="relative z-10 w-full max-w-[1200px] mx-auto p-4 lg:p-6">
-        <motion.div className="w-full min-h-[640px] lg:h-[750px] rounded-[32px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 
+      <main className="relative z-10 w-full max-w-[1000px] mx-auto p-4">
+        <motion.div className="w-full lg:h-[520px] rounded-[24px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 
             bg-card/70 backdrop-blur-xl border border-border/30 
             shadow-[0_0_0_1px_rgba(0,0,0,0.2),0_20px_60px_-10px_rgba(0,0,0,0.6)]" initial={{
         opacity: 0,
@@ -130,7 +130,7 @@ const Login = () => {
       }}>
           
           {/* Left Column: Login Form */}
-          <div className="lg:col-span-5 flex flex-col justify-between p-8 sm:p-12 lg:p-14 relative bg-secondary/20">
+          <div className="lg:col-span-5 flex flex-col justify-between p-6 sm:p-8 lg:p-10 relative bg-secondary/20">
             
             {/* Header / Logo */}
             <motion.div initial={{
@@ -142,25 +142,25 @@ const Login = () => {
           }} transition={{
             delay: 0.2
           }}>
-              <div className="flex items-center gap-2.5 mb-10">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20">
-                  <Store className="w-5 h-5 text-primary-foreground" />
+              <div className="flex items-center gap-2.5 mb-6">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20">
+                  <Store className="w-4 h-4 text-primary-foreground" />
                 </div>
-                <span className="text-foreground font-semibold tracking-tight text-lg">
+                <span className="text-foreground font-semibold tracking-tight">
                   Burkina<span className="text-primary">Shop</span>
                 </span>
               </div>
 
-              <h1 className="text-3xl lg:text-4xl font-semibold text-foreground tracking-tight leading-tight mb-3">
+              <h1 className="text-2xl lg:text-3xl font-semibold text-foreground tracking-tight leading-tight mb-2">
                 Connectez-vous à <br />votre Boutique
               </h1>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground text-xs">
                 Bienvenue ! Entrez vos identifiants pour accéder à votre tableau de bord.
               </p>
             </motion.div>
 
             {/* Form */}
-            <motion.form className="space-y-5 mt-8 mb-8" onSubmit={handleSubmit} initial={{
+            <motion.form className="space-y-3 mt-4" onSubmit={handleSubmit} initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -170,14 +170,14 @@ const Login = () => {
             delay: 0.3
           }}>
               {/* Email */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <Label htmlFor="email" className="text-xs font-medium text-muted-foreground ml-1">
                   Adresse Email
                 </Label>
                 <div className="relative group">
-                  <Input id="email" type="email" placeholder="votre@email.com" value={email} onChange={e => setEmail(e.target.value)} required className="h-12 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
+                  <Input id="email" type="email" placeholder="votre@email.com" value={email} onChange={e => setEmail(e.target.value)} required className="h-10 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
                       focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                      transition-all duration-300 pr-10" />
+                      transition-all duration-300 pr-10 text-sm" />
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                     <Mail className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                   </div>
@@ -185,14 +185,14 @@ const Login = () => {
               </div>
 
               {/* Password */}
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <Label htmlFor="password" className="text-xs font-medium text-muted-foreground ml-1">
                   Mot de passe
                 </Label>
                 <div className="relative group">
-                  <Input id="password" type="password" placeholder="••••••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="h-12 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
+                  <Input id="password" type="password" placeholder="••••••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="h-10 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
                       focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                      transition-all duration-300 pr-10" />
+                      transition-all duration-300 pr-10 text-sm" />
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                     <Lock className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                   </div>
@@ -213,15 +213,15 @@ const Login = () => {
               </div>
 
               {/* Submit Button */}
-              <Button type="submit" disabled={isLoading} className="group w-full h-12 rounded-xl text-sm font-semibold bg-primary hover:bg-primary/90 text-primary-foreground
+              <Button type="submit" disabled={isLoading} className="group w-full h-10 rounded-xl text-sm font-semibold bg-primary hover:bg-primary/90 text-primary-foreground
                   transition-all duration-300 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.4)] 
-                  hover:shadow-[0_0_25px_-5px_hsl(var(--primary)/0.6)] hover:-translate-y-0.5 mt-2">
+                  hover:shadow-[0_0_25px_-5px_hsl(var(--primary)/0.6)] hover:-translate-y-0.5">
                 {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Accéder au Dashboard
                 {!isLoading && <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />}
               </Button>
 
-              <p className="text-xs text-center pt-2 text-secondary-foreground">
+              <p className="text-[10px] text-center text-muted-foreground">
                 Utilisez n'importe quel email/mot de passe pour tester
               </p>
             </motion.form>
@@ -236,7 +236,7 @@ const Login = () => {
           }} transition={{
             delay: 0.4
           }}>
-              <div className="relative mb-6">
+              <div className="relative mb-4">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-border/50" />
                 </div>
@@ -245,7 +245,7 @@ const Login = () => {
                 </div>
               </div>
 
-              <p className="text-sm text-center text-muted-foreground">
+              <p className="text-xs text-center text-muted-foreground">
                 <Link to="/signup" className="text-primary hover:text-primary/80 font-medium transition-colors">
                   Créer une boutique gratuitement
                 </Link>
@@ -296,8 +296,8 @@ const Login = () => {
             </motion.div>
 
             {/* Bottom Content */}
-            <div className="absolute bottom-0 left-0 right-0 p-12 z-20 bg-gradient-to-t from-background via-background/80 to-transparent">
-              <motion.div className="max-w-lg" initial={{
+            <div className="absolute bottom-0 left-0 right-0 p-8 z-20 bg-gradient-to-t from-background via-background/80 to-transparent">
+              <motion.div className="max-w-md" initial={{
               opacity: 0,
               y: 20
             }} animate={{
@@ -317,12 +317,11 @@ const Login = () => {
                     <span className="text-xs text-muted-foreground font-medium">500+ vendeurs actifs</span>
                   </div>
                 </div>
-                <h2 className="text-2xl font-semibold text-foreground tracking-tight mb-2">
+                <h2 className="text-lg font-semibold text-foreground tracking-tight mb-1">
                   Gérez votre commerce en temps réel.
                 </h2>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  Profitez d'un dashboard performant pour suivre vos ventes, 
-                  gérer votre stock et communiquer avec vos clients via WhatsApp.
+                <p className="text-muted-foreground text-xs leading-relaxed">
+                  Dashboard performant pour suivre vos ventes et gérer votre stock.
                 </p>
               </motion.div>
             </div>
