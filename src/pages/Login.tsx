@@ -56,7 +56,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-  return <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary">
+  return <div className="h-screen w-full flex items-center justify-center relative overflow-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary">
       
       {/* Background Layer with Floating Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -115,8 +115,8 @@ const Login = () => {
       </div>
 
       {/* Main Container */}
-      <main className="relative z-10 w-full max-w-[1200px] mx-auto p-4 lg:p-6">
-        <motion.div className="w-full min-h-[640px] lg:h-[750px] rounded-[32px] overflow-hidden grid grid-cols-1 lg:grid-cols-12 
+      <main className="relative z-10 w-full max-w-[1100px] mx-auto p-4 lg:p-6 h-full flex items-center">
+        <motion.div className="w-full h-[calc(100vh-3rem)] max-h-[700px] rounded-[32px] overflow-hidden grid grid-cols-1 lg:grid-cols-12
             bg-card/70 backdrop-blur-xl border border-border/30 
             shadow-[0_0_0_1px_rgba(0,0,0,0.2),0_20px_60px_-10px_rgba(0,0,0,0.6)]" initial={{
         opacity: 0,
@@ -130,7 +130,7 @@ const Login = () => {
       }}>
           
           {/* Left Column: Login Form */}
-          <div className="lg:col-span-5 flex flex-col justify-between p-8 sm:p-12 lg:p-14 relative bg-secondary/20">
+          <div className="lg:col-span-5 flex flex-col justify-between p-6 sm:p-8 lg:p-10 relative bg-secondary/20">
             
             {/* Header / Logo */}
             <motion.div initial={{
@@ -142,7 +142,7 @@ const Login = () => {
           }} transition={{
             delay: 0.2
           }}>
-              <div className="flex items-center gap-2.5 mb-10">
+              <div className="flex items-center gap-2.5 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20">
                   <Store className="w-5 h-5 text-primary-foreground" />
                 </div>
@@ -160,7 +160,7 @@ const Login = () => {
             </motion.div>
 
             {/* Form */}
-            <motion.form className="space-y-5 mt-8 mb-8" onSubmit={handleSubmit} initial={{
+            <motion.form className="space-y-4 mt-6 mb-6" onSubmit={handleSubmit} initial={{
             opacity: 0,
             y: 20
           }} animate={{
