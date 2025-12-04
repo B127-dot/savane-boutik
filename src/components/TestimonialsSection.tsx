@@ -73,7 +73,7 @@ const TestimonialsSection = () => {
   };
 
   return (
-    <section id="testimonials" className="py-20 bg-gradient-to-b from-background to-accent/5">
+    <section id="testimonials" className="py-20 bg-gradient-to-b from-background to-accent/5" aria-labelledby="testimonials-title">
       <div className="container mx-auto px-4">
         {/* Header with Title and CTA */}
         <div 
@@ -83,7 +83,7 @@ const TestimonialsSection = () => {
             titleVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           )}
         >
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 text-foreground">
+          <h2 id="testimonials-title" className="text-3xl md:text-5xl font-display font-bold mb-6 text-foreground">
             Ils l'adorent,{" "}
             <span className="bg-gradient-primary bg-clip-text text-transparent">
               pourquoi pas vous ?

@@ -1,7 +1,7 @@
 import { Store, Smartphone, CreditCard, MessageCircle, BarChart3, Palette, Users, Shield, ArrowRight, TrendingUp, ShoppingBag, Package } from "lucide-react";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 const FeaturesSection = () => {
-  return <section id="features" className="py-16 sm:py-24 md:py-32 bg-background relative overflow-hidden">
+  return <section id="features" className="py-16 sm:py-24 md:py-32 bg-background relative overflow-hidden" aria-labelledby="features-title">
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl">
         <AnimatedGroup preset="fade" className="grid gap-12 lg:grid-cols-2 items-center">
           {/* Left Column - Animated Mockup */}
@@ -131,7 +131,7 @@ const FeaturesSection = () => {
 
                   {/* CTA */}
                   <div>
-                    <a href="#" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group">
+                    <a href="/signup" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group">
                       Explorer toutes les fonctionnalités
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </a>
@@ -151,7 +151,7 @@ const FeaturesSection = () => {
                 </span>
               </div>
 
-              <h2 className="text-4xl sm:text-5xl font-display font-bold text-foreground tracking-tight transition-colors duration-500 text-center lg:text-center max-w-3xl">
+              <h2 id="features-title" className="text-4xl sm:text-5xl font-display font-bold text-foreground tracking-tight transition-colors duration-500 text-center lg:text-center max-w-3xl">
                 Tout ce dont vous avez besoin pour{" "}
                 <span className="bg-gradient-primary bg-clip-text text-transparent">
                   vendre en ligne
@@ -275,7 +275,7 @@ const FeaturesSection = () => {
 
               {/* CTA Button */}
               <div className="border-t border-border pt-6">
-                <a href="#" className="inline-flex items-center justify-center gap-2 h-10 hover:bg-primary/90 transition text-sm font-normal text-primary-foreground bg-primary rounded-full px-6 shadow-glow">
+                <a href="/signup" className="inline-flex items-center justify-center gap-2 h-10 hover:bg-primary/90 transition text-sm font-normal text-primary-foreground bg-primary rounded-full px-6 shadow-glow">
                   Commencer gratuitement
                   <ArrowRight className="h-4 w-4" />
                 </a>
