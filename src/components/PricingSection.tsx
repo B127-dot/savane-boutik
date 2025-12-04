@@ -70,7 +70,6 @@ export default function PricingSection() {
       id="pricing"
       ref={sectionRef}
       className="relative py-24 overflow-hidden bg-gradient-to-b from-background via-background/95 to-background"
-      aria-labelledby="pricing-title"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}

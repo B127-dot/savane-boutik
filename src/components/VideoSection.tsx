@@ -56,10 +56,8 @@ const VideoSection = () => {
 
   return (
     <section 
-      id="video-demo"
       ref={sectionRef}
       className="relative w-full py-24 md:py-32 bg-background overflow-hidden"
-      aria-labelledby="video-demo-title"
       style={{
         perspective: '2000px',
         perspectiveOrigin: 'center top',
@@ -69,7 +67,7 @@ const VideoSection = () => {
         <div className="max-w-7xl mx-auto">
           {/* Section Title */}
           <div className="text-center mb-16 md:mb-20">
-            <h2 id="video-demo-title" className="text-3xl md:text-5xl font-display font-bold mb-4">
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
               Découvrez BurkinaShop en action
             </h2>
             <p className="text-lg font-body text-muted-foreground max-w-2xl mx-auto">

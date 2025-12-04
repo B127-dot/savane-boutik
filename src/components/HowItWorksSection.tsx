@@ -44,7 +44,7 @@ const steps = [{
 }];
 const HowItWorksSection = () => {
   const navigate = useNavigate();
-  return <section id="how-it-works" className="relative py-24 md:py-32 bg-background overflow-hidden" aria-labelledby="how-it-works-title">
+  return <section id="how-it-works" className="relative py-24 md:py-32 bg-background overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
@@ -57,7 +57,7 @@ const HowItWorksSection = () => {
           <Badge variant="secondary" className="mb-4 text-sm px-4 py-2">
             Simple et Rapide
           </Badge>
-          <h2 id="how-it-works-title" className="text-4xl md:text-5xl font-display font-bold mb-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
             Lancez votre boutique en 4 étapes simples
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground font-body">
