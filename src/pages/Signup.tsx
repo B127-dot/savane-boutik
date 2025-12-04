@@ -76,8 +76,8 @@ const Signup = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-black" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/10 blur-[120px] rounded-full mix-blend-screen" />
 
-        {/* Floating Elements */}
-        <motion.div className="absolute top-[8%] left-[8%] text-primary/10" animate={{
+        {/* Floating Elements - Hidden on very small screens */}
+        <motion.div className="hidden sm:block absolute top-[8%] left-[8%] text-primary/10" animate={{
         y: [0, -20, 0],
         rotate: [-12, -7, -12]
       }} transition={{
@@ -85,10 +85,10 @@ const Signup = () => {
         repeat: Infinity,
         ease: "easeInOut"
       }}>
-          <Sparkles className="w-28 h-28 lg:w-40 lg:h-40 drop-shadow-lg" />
+          <Sparkles className="w-20 h-20 md:w-28 md:h-28 lg:w-40 lg:h-40 drop-shadow-lg" />
         </motion.div>
 
-        <motion.div className="absolute bottom-[15%] right-[8%] text-primary/5" animate={{
+        <motion.div className="hidden sm:block absolute bottom-[15%] right-[8%] text-primary/5" animate={{
         y: [0, -15, 0],
         rotate: [12, 17, 12]
       }} transition={{
@@ -96,10 +96,10 @@ const Signup = () => {
         repeat: Infinity,
         ease: "easeInOut"
       }}>
-          <ShoppingBag className="w-36 h-36 lg:w-56 lg:h-56" />
+          <ShoppingBag className="w-28 h-28 md:w-36 md:h-36 lg:w-56 lg:h-56" />
         </motion.div>
 
-        <motion.div className="absolute top-[20%] right-[12%] text-primary/5" animate={{
+        <motion.div className="hidden md:block absolute top-[20%] right-[12%] text-primary/5" animate={{
         y: [0, -20, 0],
         rotate: [0, 10, 0]
       }} transition={{
@@ -111,7 +111,7 @@ const Signup = () => {
           <Rocket className="w-20 h-20 lg:w-28 lg:h-28" />
         </motion.div>
 
-        <motion.div className="absolute bottom-[25%] left-[5%] text-primary/5" animate={{
+        <motion.div className="hidden md:block absolute bottom-[25%] left-[5%] text-primary/5" animate={{
         y: [0, -15, 0],
         rotate: [-5, 5, -5]
       }} transition={{
@@ -125,8 +125,8 @@ const Signup = () => {
       </div>
 
       {/* Main Container */}
-      <main className="relative z-10 w-full max-w-[1100px] mx-auto p-4 lg:p-6 h-full flex items-center">
-        <motion.div className="w-full h-[calc(100vh-3rem)] max-h-[700px] rounded-[32px] overflow-hidden grid grid-cols-1 lg:grid-cols-12
+      <main className="relative z-10 w-full max-w-[1100px] mx-auto p-2 sm:p-4 lg:p-6 h-full flex items-center">
+        <motion.div className="w-full h-[calc(100vh-1rem)] sm:h-[calc(100vh-2rem)] lg:h-[calc(100vh-3rem)] max-h-[700px] rounded-2xl sm:rounded-[32px] overflow-hidden grid grid-cols-1 lg:grid-cols-12
             bg-card/70 backdrop-blur-xl border border-border/30 
             shadow-[0_0_0_1px_rgba(0,0,0,0.2),0_20px_60px_-10px_rgba(0,0,0,0.6)]" initial={{
         opacity: 0,
@@ -140,7 +140,7 @@ const Signup = () => {
       }}>
           
           {/* Left Column: Signup Form */}
-          <div className="lg:col-span-6 flex flex-col justify-between p-5 sm:p-6 lg:p-8 relative bg-secondary/20">
+          <div className="lg:col-span-6 flex flex-col justify-between p-4 sm:p-5 lg:p-8 relative bg-secondary/20">
             
             {/* Header / Logo */}
             <motion.div initial={{
@@ -152,26 +152,26 @@ const Signup = () => {
           }} transition={{
             delay: 0.2
           }}>
-              <div className="flex items-center gap-2.5 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20">
-                  <Store className="w-5 h-5 text-primary-foreground" />
+              <div className="flex items-center gap-2 sm:gap-2.5 mb-3 sm:mb-4">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/20">
+                  <Store className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
                 </div>
-                <span className="text-foreground font-semibold tracking-tight text-lg">
+                <span className="text-foreground font-semibold tracking-tight text-base sm:text-lg">
                   Burkina<span className="text-primary">Shop</span>
                 </span>
               </div>
 
-              <h1 className="text-2xl lg:text-3xl font-semibold text-foreground tracking-tight leading-tight mb-2">
-                Créez votre Boutique <br />
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-foreground tracking-tight leading-tight mb-1 sm:mb-2">
+                Créez votre Boutique <br className="hidden xs:block" />
                 <span className="text-primary">Gratuitement</span>
               </h1>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground text-xs sm:text-sm">
                 Lancez votre commerce en ligne en quelques minutes.
               </p>
             </motion.div>
 
             {/* Form */}
-            <motion.form className="space-y-3 mt-4 mb-4" onSubmit={handleSubmit} initial={{
+            <motion.form className="space-y-2 sm:space-y-3 mt-3 sm:mt-4 mb-3 sm:mb-4" onSubmit={handleSubmit} initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -181,96 +181,96 @@ const Signup = () => {
             delay: 0.3
           }}>
               {/* Name & Shop Name Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
                 {/* Name */}
-                <div className="space-y-1.5">
-                  <Label htmlFor="name" className="text-xs font-medium text-muted-foreground ml-1">
+                <div className="space-y-1 sm:space-y-1.5">
+                  <Label htmlFor="name" className="text-[10px] sm:text-xs font-medium text-muted-foreground ml-1">
                     Nom complet
                   </Label>
                   <div className="relative group">
-                    <Input id="name" type="text" placeholder="Votre nom" value={name} onChange={e => setName(e.target.value)} required className="h-11 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
+                    <Input id="name" type="text" placeholder="Votre nom" value={name} onChange={e => setName(e.target.value)} required className="h-9 sm:h-11 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50 text-sm
                         focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                        transition-all duration-300 pr-10" />
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                      <User className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
+                        transition-all duration-300 pr-9 sm:pr-10" />
+                    <div className="absolute inset-y-0 right-0 pr-2.5 sm:pr-3 flex items-center pointer-events-none">
+                      <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                     </div>
                   </div>
                 </div>
 
                 {/* Shop Name */}
-                <div className="space-y-1.5">
-                  <Label htmlFor="shopName" className="text-xs font-medium text-muted-foreground ml-1">
+                <div className="space-y-1 sm:space-y-1.5">
+                  <Label htmlFor="shopName" className="text-[10px] sm:text-xs font-medium text-muted-foreground ml-1">
                     Nom de la boutique
                   </Label>
                   <div className="relative group">
-                    <Input id="shopName" type="text" placeholder="Ma Belle Boutique" value={shopName} onChange={e => setShopName(e.target.value)} required className="h-11 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
+                    <Input id="shopName" type="text" placeholder="Ma Belle Boutique" value={shopName} onChange={e => setShopName(e.target.value)} required className="h-9 sm:h-11 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50 text-sm
                         focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                        transition-all duration-300 pr-10" />
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                      <Store className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
+                        transition-all duration-300 pr-9 sm:pr-10" />
+                    <div className="absolute inset-y-0 right-0 pr-2.5 sm:pr-3 flex items-center pointer-events-none">
+                      <Store className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Email */}
-              <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-xs font-medium text-muted-foreground ml-1">
+              <div className="space-y-1 sm:space-y-1.5">
+                <Label htmlFor="email" className="text-[10px] sm:text-xs font-medium text-muted-foreground ml-1">
                   Adresse Email
                 </Label>
                 <div className="relative group">
-                  <Input id="email" type="email" placeholder="votre@email.com" value={email} onChange={e => setEmail(e.target.value)} required className="h-11 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
+                  <Input id="email" type="email" placeholder="votre@email.com" value={email} onChange={e => setEmail(e.target.value)} required className="h-9 sm:h-11 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50 text-sm
                       focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                      transition-all duration-300 pr-10" />
-                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <Mail className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
+                      transition-all duration-300 pr-9 sm:pr-10" />
+                  <div className="absolute inset-y-0 right-0 pr-2.5 sm:pr-3 flex items-center pointer-events-none">
+                    <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                   </div>
                 </div>
               </div>
 
               {/* Password Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
                 {/* Password */}
-                <div className="space-y-1.5">
-                  <Label htmlFor="password" className="text-xs font-medium text-muted-foreground ml-1">
+                <div className="space-y-1 sm:space-y-1.5">
+                  <Label htmlFor="password" className="text-[10px] sm:text-xs font-medium text-muted-foreground ml-1">
                     Mot de passe
                   </Label>
                   <div className="relative group">
-                    <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="h-11 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
+                    <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="h-9 sm:h-11 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50 text-sm
                         focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                        transition-all duration-300 pr-10" />
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                      <Lock className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
+                        transition-all duration-300 pr-9 sm:pr-10" />
+                    <div className="absolute inset-y-0 right-0 pr-2.5 sm:pr-3 flex items-center pointer-events-none">
+                      <Lock className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                     </div>
                   </div>
                 </div>
 
                 {/* Confirm Password */}
-                <div className="space-y-1.5">
-                  <Label htmlFor="confirmPassword" className="text-xs font-medium text-muted-foreground ml-1">
+                <div className="space-y-1 sm:space-y-1.5">
+                  <Label htmlFor="confirmPassword" className="text-[10px] sm:text-xs font-medium text-muted-foreground ml-1">
                     Confirmer
                   </Label>
                   <div className="relative group">
-                    <Input id="confirmPassword" type="password" placeholder="••••••••" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required className="h-11 px-4 rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50
+                    <Input id="confirmPassword" type="password" placeholder="••••••••" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required className="h-9 sm:h-11 px-3 sm:px-4 rounded-lg sm:rounded-xl bg-secondary/40 border-border/30 text-foreground placeholder:text-muted-foreground/50 text-sm
                         focus:bg-secondary/60 focus:border-primary/50 focus:ring-4 focus:ring-primary/10
-                        transition-all duration-300 pr-10" />
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                      <Lock className="h-4 w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
+                        transition-all duration-300 pr-9 sm:pr-10" />
+                    <div className="absolute inset-y-0 right-0 pr-2.5 sm:pr-3 flex items-center pointer-events-none">
+                      <Lock className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground/50 group-focus-within:text-primary transition-colors" />
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Submit Button */}
-              <Button type="submit" disabled={isLoading} className="group w-full h-12 rounded-xl text-sm font-semibold bg-primary hover:bg-primary/90 text-primary-foreground
+              <Button type="submit" disabled={isLoading} className="group w-full h-10 sm:h-12 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold bg-primary hover:bg-primary/90 text-primary-foreground
                   transition-all duration-300 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.4)] 
-                  hover:shadow-[0_0_25px_-5px_hsl(var(--primary)/0.6)] hover:-translate-y-0.5 mt-2">
+                  hover:shadow-[0_0_25px_-5px_hsl(var(--primary)/0.6)] hover:-translate-y-0.5 mt-1 sm:mt-2">
                 {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Créer ma Boutique
                 {!isLoading && <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />}
               </Button>
 
-              <p className="text-xs text-center pt-1 text-popover-foreground">
+              <p className="text-[9px] sm:text-xs text-center pt-0.5 sm:pt-1 text-popover-foreground">
                 En vous inscrivant, vous acceptez nos conditions d'utilisation
               </p>
             </motion.form>
@@ -285,16 +285,16 @@ const Signup = () => {
           }} transition={{
             delay: 0.4
           }}>
-              <div className="relative mb-3">
+              <div className="relative mb-2 sm:mb-3">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-border/50" />
                 </div>
-                <div className="relative flex justify-center text-[10px] uppercase tracking-wider">
-                  <span className="px-3 bg-primary-foreground text-accent">Déjà inscrit ?</span>
+                <div className="relative flex justify-center text-[9px] sm:text-[10px] uppercase tracking-wider">
+                  <span className="px-2 sm:px-3 bg-primary-foreground text-accent">Déjà inscrit ?</span>
                 </div>
               </div>
 
-              <p className="text-sm text-center text-muted-foreground">
+              <p className="text-xs sm:text-sm text-center text-muted-foreground">
                 <Link to="/login" className="text-primary hover:text-primary/80 font-medium transition-colors">
                   Se connecter à mon compte
                 </Link>
