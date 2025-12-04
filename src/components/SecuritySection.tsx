@@ -53,7 +53,7 @@ const SecuritySection = () => {
   ];
 
   return (
-    <section id="security" className="py-24 px-4 sm:px-6 lg:px-8 bg-background relative overflow-hidden">
+    <section id="security" className="py-24 px-4 sm:px-6 lg:px-8 bg-background relative overflow-hidden" aria-labelledby="security-title">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/50 to-background pointer-events-none" />
       
@@ -85,7 +85,7 @@ const SecuritySection = () => {
                 : "opacity-0 translate-y-4"
             }`}
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground mb-6 tracking-tight">
+            <h2 id="security-title" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground mb-6 tracking-tight">
               BurkinaShop est{" "}
               <span className="bg-gradient-primary bg-clip-text text-transparent">
                 Digne de Confiance

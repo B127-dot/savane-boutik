@@ -55,7 +55,7 @@ const ThreePillarsSection = () => {
       x: 0
     }
   };
-  return <section ref={sectionRef} className="relative py-20 sm:py-24 md:py-28 max-w-7xl mx-auto px-4 sm:px-6">
+  return <section ref={sectionRef} className="relative py-20 sm:py-24 md:py-28 max-w-7xl mx-auto px-4 sm:px-6" aria-labelledby="pillars-title">
       {/* Ambient gradient with parallax */}
       <motion.div style={{
       y
@@ -78,7 +78,7 @@ const ThreePillarsSection = () => {
         duration: 0.6,
         ease: "easeOut"
       }} className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
+          <h2 id="pillars-title" className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
             Nos 3 Piliers
           </h2>
           <p className="text-lg font-body text-muted-foreground max-w-2xl mx-auto">
