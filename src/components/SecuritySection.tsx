@@ -158,12 +158,10 @@ const SecuritySection = () => {
               size="lg"
               className="group"
               onClick={() => {
-                // TODO: Link to FAQ or dedicated security page
-                const pricingSection = document.getElementById("pricing");
-                pricingSection?.scrollIntoView({ behavior: "smooth" });
+                window.location.href = "/signup";
               }}
             >
-              En savoir plus
+              Créer ma boutique sécurisée
               <Shield className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform duration-300" />
             </Button>
           </div>

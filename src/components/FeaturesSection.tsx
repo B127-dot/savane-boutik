@@ -131,8 +131,15 @@ const FeaturesSection = () => {
 
                   {/* CTA */}
                   <div>
-                    <a href="#" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group">
-                      Explorer toutes les fonctionnalités
+                    <a 
+                      href="#pricing" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group"
+                    >
+                      Voir les tarifs
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </a>
                   </div>
@@ -278,8 +285,8 @@ const FeaturesSection = () => {
 
               {/* CTA Button */}
               <div className="border-t border-border pt-6">
-                <a href="#" className="inline-flex items-center justify-center gap-2 h-10 hover:bg-primary/90 transition text-sm font-normal text-primary-foreground bg-primary rounded-full px-6 shadow-glow">
-                  Commencer gratuitement
+                <a href="/signup" className="inline-flex items-center justify-center gap-2 h-10 hover:bg-primary/90 transition text-sm font-normal text-primary-foreground bg-primary rounded-full px-6 shadow-glow">
+                  Essayer toutes ces fonctionnalités
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>
