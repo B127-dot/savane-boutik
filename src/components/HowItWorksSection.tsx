@@ -78,8 +78,8 @@ const HowItWorksSection = () => {
           <p className="text-xl md:text-2xl font-display font-semibold text-foreground mb-6">
             Prêt à lancer votre boutique en ligne ?
           </p>
-          <Button size="lg" variant="hero" onClick={() => navigate("/signup")} className="text-lg px-8 py-6 h-auto" aria-label="Commencer gratuitement - Créer votre boutique en ligne">
-            Commencer gratuitement
+          <Button size="lg" variant="hero" onClick={() => navigate("/signup")} className="text-lg px-8 py-6 h-auto" aria-label="Je me lance en 5 minutes - Créer votre boutique en ligne">
+            Je me lance en 5 minutes
           </Button>
         </div>
       </div>

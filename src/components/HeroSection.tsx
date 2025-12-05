@@ -52,11 +52,18 @@ Vendez sur WhatsApp et acceptez Orange Money..
             {/* CTA Buttons */}
             <AnimatedGroup className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start" preset="scale">
               <Button variant="hero" size="lg" className="group" onClick={() => navigate('/signup')}>
-                Créer ma boutique gratuitement
+                Lancer ma boutique maintenant
                 <ArrowRight className="group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="premium" size="lg">
-                Voir la démo
+              <Button 
+                variant="premium" 
+                size="lg"
+                onClick={() => {
+                  const videoSection = document.getElementById("video");
+                  videoSection?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                Découvrir en 2 minutes
               </Button>
             </AnimatedGroup>
 

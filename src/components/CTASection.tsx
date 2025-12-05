@@ -78,15 +78,15 @@ const CTASection = () => {
               size="lg"
               onClick={() => navigate('/signup')}
               className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
-              aria-label="Créer votre boutique en ligne gratuitement"
+              aria-label="Ouvrir ma boutique aujourd'hui"
             >
-              Commencer gratuitement
+              Ouvrir ma boutique aujourd'hui
               <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
             </Button>
             
             <p className="text-sm text-muted-foreground flex items-center gap-2 font-body">
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              Aucune carte bancaire requise · Configuration en 5 minutes
+              Rejoignez les 500+ vendeurs burkinabè · Annulez à tout moment
             </p>
           </motion.div>
 
