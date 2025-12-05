@@ -85,11 +85,8 @@ const SecuritySection = () => {
                 : "opacity-0 translate-y-4"
             }`}
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground mb-6 tracking-tight relative">
-              <span className="relative">
-                BurkinaShop est{" "}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent bg-[length:200%_100%] bg-clip-text animate-shimmer" />
-              </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground mb-6 tracking-tight">
+              BurkinaShop est{" "}
               <span className="bg-gradient-primary bg-clip-text text-transparent">
                 Digne de Confiance
               </span>
@@ -158,10 +155,12 @@ const SecuritySection = () => {
               size="lg"
               className="group"
               onClick={() => {
-                window.location.href = "/signup";
+                // TODO: Link to FAQ or dedicated security page
+                const pricingSection = document.getElementById("pricing");
+                pricingSection?.scrollIntoView({ behavior: "smooth" });
               }}
             >
-              Créer ma boutique sécurisée
+              En savoir plus
               <Shield className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform duration-300" />
             </Button>
           </div>

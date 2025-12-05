@@ -131,15 +131,8 @@ const FeaturesSection = () => {
 
                   {/* CTA */}
                   <div>
-                    <a 
-                      href="#pricing" 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
-                      }}
-                      className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group"
-                    >
-                      Voir les tarifs
+                    <a href="#" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group">
+                      Explorer toutes les fonctionnalités
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </a>
                   </div>
@@ -158,11 +151,8 @@ const FeaturesSection = () => {
                 </span>
               </div>
 
-              <h2 className="text-4xl sm:text-5xl font-display font-bold text-foreground tracking-tight transition-colors duration-500 text-center lg:text-center max-w-3xl relative">
-                <span className="relative">
-                  Tout ce dont vous avez besoin pour{" "}
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent bg-[length:200%_100%] bg-clip-text animate-shimmer" />
-                </span>
+              <h2 className="text-4xl sm:text-5xl font-display font-bold text-foreground tracking-tight transition-colors duration-500 text-center lg:text-center max-w-3xl">
+                Tout ce dont vous avez besoin pour{" "}
                 <span className="bg-gradient-primary bg-clip-text text-transparent">
                   vendre en ligne
                 </span>
@@ -285,8 +275,8 @@ const FeaturesSection = () => {
 
               {/* CTA Button */}
               <div className="border-t border-border pt-6">
-                <a href="/signup" className="inline-flex items-center justify-center gap-2 h-10 hover:bg-primary/90 transition text-sm font-normal text-primary-foreground bg-primary rounded-full px-6 shadow-glow">
-                  Essayer toutes ces fonctionnalités
+                <a href="#" className="inline-flex items-center justify-center gap-2 h-10 hover:bg-primary/90 transition text-sm font-normal text-primary-foreground bg-primary rounded-full px-6 shadow-glow">
+                  Commencer gratuitement
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>

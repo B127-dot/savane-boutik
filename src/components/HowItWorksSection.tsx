@@ -57,11 +57,8 @@ const HowItWorksSection = () => {
           <Badge variant="secondary" className="mb-4 text-sm px-4 py-2">
             Simple et Rapide
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent relative">
-            <span className="relative">
-              Lancez votre boutique en 4 étapes simples
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/40 to-transparent bg-[length:200%_100%] bg-clip-text animate-shimmer" />
-            </span>
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+            Lancez votre boutique en 4 étapes simples
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground font-body">
             Lancez votre boutique en ligne en quelques minutes, sans compétences techniques
@@ -78,8 +75,8 @@ const HowItWorksSection = () => {
           <p className="text-xl md:text-2xl font-display font-semibold text-foreground mb-6">
             Prêt à lancer votre boutique en ligne ?
           </p>
-          <Button size="lg" variant="hero" onClick={() => navigate("/signup")} className="text-lg px-8 py-6 h-auto" aria-label="Je me lance en 5 minutes - Créer votre boutique en ligne">
-            Je me lance en 5 minutes
+          <Button size="lg" variant="hero" onClick={() => navigate("/signup")} className="text-lg px-8 py-6 h-auto" aria-label="Commencer gratuitement - Créer votre boutique en ligne">
+            Commencer gratuitement
           </Button>
         </div>
       </div>

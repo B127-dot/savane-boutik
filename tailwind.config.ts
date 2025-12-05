@@ -146,13 +146,9 @@ export default {
 					'0%': { transform: 'rotate(0deg)' },
 					'100%': { transform: 'rotate(360deg)' }
 				},
-			'progressGrow': {
+				'progressGrow': {
 					'0%': { width: '0%' },
 					'100%': { width: '65%' }
-				},
-				'shimmer': {
-					'0%': { backgroundPosition: '200% 0' },
-					'100%': { backgroundPosition: '-200% 0' }
 				}
 			},
 			animation: {
@@ -165,7 +161,6 @@ export default {
 				'spin-slow': 'spin-slow 3s linear infinite',
 				'fade-in': 'fadeIn 0.5s ease-out',
 				'progressGrow': 'progressGrow 2s ease-out',
-				'shimmer': 'shimmer 3s linear infinite',
 			},
 			animationDelay: {
 				'100': '100ms',

@@ -83,11 +83,8 @@ const TestimonialsSection = () => {
             titleVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           )}
         >
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 text-foreground relative">
-            <span className="relative">
-              Ils l'adorent,{" "}
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent bg-[length:200%_100%] bg-clip-text animate-shimmer" />
-            </span>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 text-foreground">
+            Ils l'adorent,{" "}
             <span className="bg-gradient-primary bg-clip-text text-transparent">
               pourquoi pas vous ?
             </span>

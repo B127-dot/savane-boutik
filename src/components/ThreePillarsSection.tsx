@@ -78,11 +78,8 @@ const ThreePillarsSection = () => {
         duration: 0.6,
         ease: "easeOut"
       }} className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-4 relative">
-            <span className="relative">
-              Nos 3 Piliers
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/40 to-transparent bg-[length:200%_100%] bg-clip-text animate-shimmer" />
-            </span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
+            Nos 3 Piliers
           </h2>
           <p className="text-lg font-body text-muted-foreground max-w-2xl mx-auto">
             Une solution complète pour transformer votre commerce en Afrique
