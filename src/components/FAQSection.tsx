@@ -58,8 +58,12 @@ const FAQSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            Questions <span className="text-primary">Fréquentes</span>
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 relative">
+            <span className="relative">
+              Questions{" "}
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent bg-[length:200%_100%] bg-clip-text animate-shimmer" />
+            </span>
+            <span className="text-primary">Fréquentes</span>
           </h2>
           <p className="font-body text-muted-foreground text-lg max-w-2xl mx-auto">
             Tout ce que vous devez savoir sur BurkinaShop. Vous avez d'autres questions ? Contactez-nous sur WhatsApp.

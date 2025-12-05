@@ -57,8 +57,11 @@ const HowItWorksSection = () => {
           <Badge variant="secondary" className="mb-4 text-sm px-4 py-2">
             Simple et Rapide
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
-            Lancez votre boutique en 4 étapes simples
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent relative">
+            <span className="relative">
+              Lancez votre boutique en 4 étapes simples
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/40 to-transparent bg-[length:200%_100%] bg-clip-text animate-shimmer" />
+            </span>
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground font-body">
             Lancez votre boutique en ligne en quelques minutes, sans compétences techniques
