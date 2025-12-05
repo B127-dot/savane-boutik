@@ -57,8 +57,12 @@ const ValuePropositionSection = () => {
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16 md:mb-20">
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 leading-tight">
-              Et si on vous disait que vous pouviez<br />
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 leading-tight relative">
+              <span className="relative inline-block">
+                Et si on vous disait que vous pouviez
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/30 to-transparent bg-[length:200%_100%] bg-clip-text animate-shimmer" />
+              </span>
+              <br />
               <span className="text-primary">lancer votre boutique en ligne aujourd'hui ?</span>
             </h2>
           </div>
