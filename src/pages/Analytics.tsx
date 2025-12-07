@@ -73,29 +73,78 @@ const Analytics = () => {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5);
 
+  // Calculer les tendances dynamiques basées sur les données réelles
+  const now = new Date();
+  const periodStart = new Date(now.getTime() - period * 24 * 60 * 60 * 1000);
+  const previousPeriodStart = new Date(periodStart.getTime() - period * 24 * 60 * 60 * 1000);
+
+  // Filtrer les commandes par période
+  const currentPeriodOrders = orders.filter(order => {
+    const orderDate = new Date(order.createdAt);
+    return orderDate >= periodStart && orderDate <= now;
+  });
+
+  const previousPeriodOrders = orders.filter(order => {
+    const orderDate = new Date(order.createdAt);
+    return orderDate >= previousPeriodStart && orderDate < periodStart;
+  });
+
+  // Calculer les revenus par période
+  const currentRevenue = currentPeriodOrders
+    .filter(order => order.status !== 'cancelled')
+    .reduce((sum, order) => sum + order.total, 0);
+
+  const previousRevenue = previousPeriodOrders
+    .filter(order => order.status !== 'cancelled')
+    .reduce((sum, order) => sum + order.total, 0);
+
+  // Calculer les tendances
+  const calculateTrend = (current: number, previous: number): string => {
+    if (previous === 0) return current > 0 ? "+100%" : "0%";
+    const change = ((current - previous) / previous) * 100;
+    return `${change >= 0 ? '+' : ''}${change.toFixed(0)}%`;
+  };
+
+  const revenueTrend = calculateTrend(currentRevenue, previousRevenue);
+  const ordersTrend = calculateTrend(currentPeriodOrders.length, previousPeriodOrders.length);
+  
+  // Tendance des produits actifs (comparaison avec le nombre total de produits)
+  const productsTrend = products.length > 0 
+    ? `${((activeProducts / products.length) * 100).toFixed(0)}%` 
+    : "0%";
+
+  // Tendance du taux de conversion
+  const currentConversion = currentPeriodOrders.length > 0 
+    ? (currentPeriodOrders.filter(o => o.status === 'delivered').length / currentPeriodOrders.length) * 100 
+    : 0;
+  const previousConversion = previousPeriodOrders.length > 0 
+    ? (previousPeriodOrders.filter(o => o.status === 'delivered').length / previousPeriodOrders.length) * 100 
+    : 0;
+  const conversionTrend = calculateTrend(currentConversion, previousConversion);
+
   const stats = [
     {
       title: "Chiffre d'affaires total",
       value: `${totalRevenue.toLocaleString()} XOF`,
       description: "Revenus générés",
       icon: DollarSign,
-      trend: "+12%",
-      color: "text-success"
+      trend: revenueTrend,
+      color: revenueTrend.startsWith('+') ? "text-success" : revenueTrend === "0%" ? "text-muted-foreground" : "text-destructive"
     },
     {
       title: "Commandes totales",
       value: totalOrders.toString(),
       description: "Toutes les commandes",
       icon: ShoppingCart,
-      trend: "+5%",
-      color: "text-primary"
+      trend: ordersTrend,
+      color: ordersTrend.startsWith('+') ? "text-success" : ordersTrend === "0%" ? "text-muted-foreground" : "text-destructive"
     },
     {
       title: "Produits actifs",
       value: activeProducts.toString(),
       description: "Produits en vente",
       icon: Package,
-      trend: "+2%",
+      trend: productsTrend,
       color: "text-warning"
     },
     {
@@ -103,8 +152,8 @@ const Analytics = () => {
       value: `${totalOrders > 0 ? ((completedOrders / totalOrders) * 100).toFixed(1) : 0}%`,
       description: "Commandes livrées",
       icon: TrendingUp,
-      trend: "+8%",
-      color: "text-success"
+      trend: conversionTrend,
+      color: conversionTrend.startsWith('+') ? "text-success" : conversionTrend === "0%" ? "text-muted-foreground" : "text-destructive"
     }
   ];
 
