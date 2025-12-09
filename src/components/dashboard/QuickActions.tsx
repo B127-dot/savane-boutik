@@ -36,7 +36,7 @@ const QuickActions = () => {
   ];
 
   return (
-    <Card className="shadow-md border-2">
+    <Card className="shadow-md">
       <CardContent className="p-4 md:p-6">
         <h2 className="text-base md:text-lg font-bold mb-4 flex items-center gap-2">
           <span className="text-xl md:text-2xl">🎯</span>

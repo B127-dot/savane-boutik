@@ -41,7 +41,7 @@ const KPICard = ({
   showTrend = true
 }: KPICardProps) => {
   const shadowClass = level === 1 ? 'shadow-lg' : level === 2 ? 'shadow-md' : 'shadow-sm';
-  const borderClass = level === 1 ? 'border-2' : 'border';
+  const borderClass = level === 1 ? 'border-primary/20' : '';
   const iconSize = level === 1 ? 'h-8 w-8' : level === 2 ? 'h-6 w-6' : 'h-5 w-5';
 
   // Extract numeric value for count-up animation
