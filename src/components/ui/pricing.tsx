@@ -45,18 +45,17 @@ export function Pricing({
       const y = rect.top + rect.height / 2;
 
       confetti({
-        particleCount: 60,
+        particleCount: 50,
         spread: 60,
         origin: {
           x: x / window.innerWidth,
           y: y / window.innerHeight,
         },
         colors: [
-          "#10B981", // Primary green - BurkinaShop brand color
-          "#34D399", // Light green accent
-          "#059669", // Dark green
-          "#6EE7B7", // Emerald light
-          "#A7F3D0", // Mint green
+          "hsl(var(--primary))",
+          "hsl(var(--accent))",
+          "hsl(var(--secondary))",
+          "hsl(var(--muted))",
         ],
         ticks: 200,
         gravity: 1.2,
@@ -93,25 +92,19 @@ export function Pricing({
       </div>
 
       <div className="flex justify-center items-center gap-3 mb-10">
-        <span className="text-sm font-medium text-muted-foreground">
-          Facturation mensuelle
-        </span>
-        <label className="relative inline-flex items-center cursor-pointer">
-          <Label>
-            <Switch
-              ref={switchRef as any}
-              checked={!isMonthly}
-              onCheckedChange={handleToggle}
-              className="relative"
-            />
-          </Label>
-        </label>
+        <Label>
+          <Switch
+            ref={switchRef as any}
+            checked={!isMonthly}
+            onCheckedChange={handleToggle}
+          />
+        </Label>
         <span className="text-sm font-medium">
           Facturation annuelle <span className="text-primary">(Économisez 20%)</span>
         </span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {plans.map((plan, index) => (
           <motion.div
             key={index}
@@ -119,56 +112,51 @@ export function Pricing({
             whileInView={{
               y: 0,
               opacity: 1,
-              scale: isDesktop && plan.isPopular ? 1.05 : 1.0,
             }}
             viewport={{ once: true }}
             transition={{
-              duration: 0.6,
+              duration: 0.5,
               type: "spring",
               stiffness: 100,
-              damping: 20,
-              delay: index * 0.15,
+              damping: 30,
+              delay: index * 0.1,
             }}
+            whileHover={isDesktop ? { y: -8, transition: { duration: 0.2 } } : {}}
             className={cn(
-              "rounded-2xl border-[1px] p-4 sm:p-6 bg-background text-center lg:flex lg:flex-col lg:justify-center relative",
-              plan.isPopular 
-                ? "border-primary border-2 shadow-[0_0_60px_-15px_rgba(16,185,129,0.5)] z-10" 
+              "rounded-2xl border-[1px] p-6 bg-background text-center lg:flex lg:flex-col lg:justify-center relative",
+              plan.isPopular
+                ? "border-primary border-2 shadow-[0_0_40px_-10px] shadow-primary/40"
                 : "border-border hover:border-primary/50 transition-colors",
+              isDesktop && plan.isPopular && "scale-105 z-10",
               "flex flex-col"
             )}
           >
             {plan.isPopular && (
               <div className="absolute top-0 right-0 bg-primary py-0.5 px-2 rounded-bl-xl rounded-tr-xl flex items-center">
                 <Star className="text-primary-foreground h-4 w-4 fill-current" />
-                <span className="text-primary-foreground ml-1 font-sans font-semibold">
-                  Le plus populaire
+                <span className="text-primary-foreground ml-1 font-sans font-semibold text-sm">
+                  Popular
                 </span>
               </div>
             )}
             <div className="flex-1 flex flex-col">
-              <p className="text-base font-semibold text-muted-foreground uppercase">
+              <p className="text-base font-semibold text-muted-foreground">
                 {plan.name}
               </p>
               <div className="mt-6 flex items-center justify-center gap-x-2">
                 <span className="text-5xl font-bold tracking-tight text-foreground">
                   <NumberFlow
-                    value={
-                      isMonthly ? Number(plan.price) : Number(plan.yearlyPrice)
-                    }
-                    format={{
-                      style: "decimal",
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0,
-                    }}
+                    value={isMonthly ? Number(plan.price) : Number(plan.yearlyPrice)}
+                    format={{ minimumFractionDigits: 0, maximumFractionDigits: 0 }}
                     transformTiming={{
                       duration: 500,
                       easing: "ease-out",
                     }}
                     willChange
-                    className="tabular-nums"
+                    className="font-variant-numeric: tabular-nums"
                   />
                 </span>
-                {plan.period && (
+                {plan.period !== "Next 3 months" && (
                   <span className="text-sm font-semibold leading-6 tracking-wide text-muted-foreground">
                     {plan.period}
                   </span>

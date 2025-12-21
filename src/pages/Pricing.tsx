@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check, X, Gift, Star, ArrowRight, MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import confetti from "canvas-confetti";
+import { cn } from "@/lib/utils";
 
 const plans = [
   {
@@ -189,57 +190,69 @@ const Pricing = () => {
             {plans.map((plan, index) => (
               <motion.div
                 key={plan.name}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.5,
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 30,
+                  delay: index * 0.1,
+                }}
+                whileHover={{ y: -8, transition: { duration: 0.2 } }}
+                className={cn(
+                  "rounded-2xl border-[1px] p-6 bg-background text-center flex flex-col relative",
+                  plan.popular
+                    ? "border-primary border-2 shadow-[0_0_40px_-10px] shadow-primary/40 md:scale-105 z-10"
+                    : "border-border hover:border-primary/50 transition-colors"
+                )}
               >
-                <Card
-                  className={`relative p-6 h-full flex flex-col ${
-                    plan.popular
-                      ? "border-2 border-primary shadow-[0_0_40px_-10px_rgba(16,185,129,0.4)] scale-105"
-                      : "border-border hover:border-primary/50 transition-colors"
-                  }`}
-                >
-                  {plan.badge && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <Badge className="bg-primary text-primary-foreground shadow-lg">
-                        <Star className="w-3 h-3 mr-1 fill-current" />
-                        {plan.badge}
-                      </Badge>
-                    </div>
-                  )}
+                {plan.badge && (
+                  <div className="absolute top-0 right-0 bg-primary py-0.5 px-2 rounded-bl-xl rounded-tr-xl flex items-center">
+                    <Star className="text-primary-foreground h-4 w-4 fill-current" />
+                    <span className="text-primary-foreground ml-1 font-sans font-semibold text-sm">
+                      {plan.badge}
+                    </span>
+                  </div>
+                )}
 
-                  <div className="text-center mb-6">
-                    <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                    <div className="flex items-baseline justify-center gap-1 mb-2">
-                      <span className="text-4xl font-bold">
-                        {(isAnnual ? plan.price.annual : plan.price.monthly).toLocaleString()}
-                      </span>
-                      <span className="text-muted-foreground">FCFA/mois</span>
-                    </div>
-                    {isAnnual && (
-                      <p className="text-sm text-muted-foreground">
-                        Facturé {(plan.price.annual * 12).toLocaleString()} FCFA/an
-                      </p>
-                    )}
-                    <p className="text-sm text-muted-foreground mt-2">{plan.description}</p>
+                <div className="flex-1 flex flex-col">
+                  <p className="text-base font-semibold text-muted-foreground">
+                    {plan.name}
+                  </p>
+                  <div className="mt-6 flex items-center justify-center gap-x-2">
+                    <span className="text-5xl font-bold tracking-tight text-foreground">
+                      {(isAnnual ? plan.price.annual : plan.price.monthly).toLocaleString()}
+                    </span>
+                    <span className="text-sm font-semibold leading-6 tracking-wide text-muted-foreground">
+                      FCFA / mois
+                    </span>
                   </div>
 
-                  <Button
-                    className={`w-full mt-auto ${
+                  <p className="text-xs leading-5 text-muted-foreground mt-2">
+                    {!isAnnual ? "facturé mensuellement" : "facturé annuellement"}
+                  </p>
+
+                  <p className="text-sm text-muted-foreground mt-4">{plan.description}</p>
+
+                  <hr className="w-full my-4 border-border" />
+
+                  <Link
+                    to="/signup"
+                    className={cn(
+                      buttonVariants({ variant: "outline" }),
+                      "group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter",
+                      "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-1 hover:bg-primary hover:text-primary-foreground",
                       plan.popular
-                        ? "bg-primary hover:bg-primary/90 shadow-lg shadow-primary/30"
-                        : ""
-                    }`}
-                    variant={plan.popular ? "default" : "outline"}
-                    asChild
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-background text-foreground"
+                    )}
                   >
-                    <Link to="/signup">
-                      {plan.cta}
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Link>
-                  </Button>
-                </Card>
+                    {plan.cta}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </div>
               </motion.div>
             ))}
           </div>
