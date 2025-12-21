@@ -4,30 +4,12 @@ import { motion } from "framer-motion";
 
 const plans = [
   {
-    name: "Gratuit",
-    price: "0",
-    yearlyPrice: "0",
-    period: "FCFA / Mois",
-    features: [
-      "1 boutique en ligne",
-      "Jusqu'à 20 produits",
-      "Commandes WhatsApp basiques",
-      "Paiements Orange Money",
-      "1 thème de boutique",
-      "Support par email",
-    ],
-    description: "Parfait pour les micro-vendeurs qui testent",
-    buttonText: "Commencer gratuitement",
-    href: "/signup",
-    isPopular: false,
-  },
-  {
     name: "Starter",
     price: "5000",
     yearlyPrice: "4000",
     period: "FCFA / Mois",
     features: [
-      "Tout du plan Gratuit",
+      "1 boutique en ligne",
       "Jusqu'à 100 produits",
       "WhatsApp Business intégré",
       "Paiements Orange & Moov Money",

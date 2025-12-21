@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, Zap, Crown, Sparkles, X, Star } from 'lucide-react';
+import { Check, Crown, Sparkles, X, Star } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -21,25 +21,6 @@ const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
 
   const plans = [
     {
-      name: 'Gratuit',
-      icon: Zap,
-      price: 0,
-      originalPrice: null,
-      period: '/mois',
-      description: 'Pour les micro-vendeurs qui testent',
-      features: [
-        '1 boutique en ligne',
-        'Jusqu\'à 20 produits',
-        'Commandes WhatsApp basiques',
-        'Paiements Orange Money',
-        '1 thème de boutique',
-        'Support par email',
-      ],
-      buttonText: 'Plan actuel',
-      buttonVariant: 'outline' as const,
-      popular: false,
-    },
-    {
       name: 'Starter',
       icon: Star,
       price: isAnnual ? 4000 : 5000,
@@ -47,7 +28,7 @@ const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
       period: '/mois',
       description: 'Pour les petits vendeurs',
       features: [
-        'Tout du plan Gratuit',
+        '1 boutique en ligne',
         'Jusqu\'à 100 produits',
         'WhatsApp Business intégré',
         'Paiements Orange & Moov Money',
@@ -150,7 +131,7 @@ const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
         </DialogHeader>
 
         {/* Pricing cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 px-6 pb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 px-6 pb-12">
           {plans.map((plan, index) => {
             const Icon = plan.icon;
             return (
