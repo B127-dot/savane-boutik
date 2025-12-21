@@ -4,7 +4,7 @@ import { Switch } from "@/components/ui/switch";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { Check, Star } from "lucide-react";
+import { Check, Star, Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useRef } from "react";
 import confetti from "canvas-confetti";
@@ -69,6 +69,20 @@ export function Pricing({
 
   return (
     <div className="container py-20">
+      {/* Free Trial Banner */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex justify-center mb-8"
+      >
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary">
+          <Gift className="w-5 h-5" />
+          <span className="font-semibold">Essai gratuit de 30 jours</span>
+          <span className="text-primary/70">• Sans engagement</span>
+        </div>
+      </motion.div>
+
       <div className="text-center space-y-4 mb-12">
         <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
           {title}
@@ -101,41 +115,26 @@ export function Pricing({
         {plans.map((plan, index) => (
           <motion.div
             key={index}
-            initial={{ y: 50, opacity: 1 }}
-            whileInView={
-              isDesktop
-                ? {
-                    y: plan.isPopular ? -20 : 0,
-                    opacity: 1,
-                    x: index === 2 ? -20 : index === 0 ? 20 : 0,
-                    scale: index === 0 || index === 2 ? 0.96 : 1.0,
-                  }
-                : {
-                    y: 0,
-                    opacity: 1,
-                    x: 0,
-                    scale: 1.0,
-                  }
-            }
+            initial={{ y: 50, opacity: 0 }}
+            whileInView={{
+              y: 0,
+              opacity: 1,
+              scale: isDesktop && plan.isPopular ? 1.05 : 1.0,
+            }}
             viewport={{ once: true }}
             transition={{
-              duration: 1.6,
+              duration: 0.6,
               type: "spring",
               stiffness: 100,
-              damping: 30,
-              delay: 0.4,
-              opacity: { duration: 0.5 },
+              damping: 20,
+              delay: index * 0.15,
             }}
             className={cn(
               "rounded-2xl border-[1px] p-4 sm:p-6 bg-background text-center lg:flex lg:flex-col lg:justify-center relative",
-              plan.isPopular ? "border-primary border-2 shadow-[0_0_60px_-15px_rgba(16,185,129,0.5)]" : "border-border",
-              "flex flex-col",
-              !plan.isPopular && "mt-5",
-              index === 0 || index === 2
-                ? "z-0 transform translate-x-0 translate-y-0 -translate-z-[50px] rotate-y-[10deg]"
-                : "z-10",
-              index === 0 && "origin-right",
-              index === 2 && "origin-left"
+              plan.isPopular 
+                ? "border-primary border-2 shadow-[0_0_60px_-15px_rgba(16,185,129,0.5)] z-10" 
+                : "border-border hover:border-primary/50 transition-colors",
+              "flex flex-col"
             )}
           >
             {plan.isPopular && (
