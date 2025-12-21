@@ -33,7 +33,7 @@ const Navigation = () => {
   ] : [
     { label: "Accueil", href: "/" },
     { label: "Fonctionnalités", href: "#features" },
-    { label: "Tarifs", href: "#pricing" },
+    { label: "Tarifs", href: "/pricing" },
     { label: "Contact", href: "#faq" },
   ];
 
@@ -60,7 +60,7 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              user && item.href.startsWith('/') ? (
+              item.href.startsWith('/') || item.href.startsWith('#') === false ? (
                 <Link
                   key={item.label}
                   to={item.href}
@@ -140,7 +140,7 @@ const Navigation = () => {
           <div id="mobile-menu" className="md:hidden bg-background rounded-3xl border p-6 shadow-2xl shadow-zinc-300/20 dark:shadow-none mb-6" role="navigation" aria-label="Menu mobile">
             <div className="flex flex-col space-y-6">
               {navItems.map((item) => (
-                user && item.href.startsWith('/') ? (
+                item.href.startsWith('/') ? (
                   <Link
                     key={item.label}
                     to={item.href}
