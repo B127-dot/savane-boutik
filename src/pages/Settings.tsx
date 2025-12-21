@@ -19,7 +19,6 @@ import {
   Lock,
   AlertTriangle,
   Star,
-  Zap,
   Crown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -89,28 +88,12 @@ const Settings = () => {
 
   const pricingPlans = [
     {
-      name: 'Gratuit',
-      price: { monthly: 0, annual: 0 },
-      description: 'Pour les micro-vendeurs qui testent',
-      icon: Package,
-      features: [
-        '1 boutique en ligne',
-        'Jusqu\'à 20 produits',
-        'Commandes WhatsApp basiques',
-        'Paiements Orange Money',
-        '1 thème de boutique',
-        'Support par email'
-      ],
-      popular: false,
-      current: true
-    },
-    {
       name: 'Starter',
       price: { monthly: 5000, annual: 48000 },
       description: 'Pour les petits vendeurs',
       icon: Star,
       features: [
-        'Tout du plan Gratuit',
+        '1 boutique en ligne',
         'Jusqu\'à 100 produits',
         'WhatsApp Business intégré',
         'Paiements Orange & Moov Money',
@@ -119,7 +102,7 @@ const Settings = () => {
         'Notifications automatiques'
       ],
       popular: false,
-      current: false
+      current: true
     },
     {
       name: 'Pro',
@@ -144,7 +127,7 @@ const Settings = () => {
       name: 'Business',
       price: { monthly: 25000, annual: 240000 },
       description: 'Pour les PME e-commerce',
-      icon: Zap,
+      icon: Sparkles,
       features: [
         'Tout du plan Pro',
         'Boutiques multiples illimitées',
@@ -368,7 +351,7 @@ const Settings = () => {
               </div>
 
               {/* Pricing Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {pricingPlans.map((plan, index) => (
                   <motion.div
                     key={plan.name}
