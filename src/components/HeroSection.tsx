@@ -44,8 +44,7 @@ const HeroSection = () => {
               </h1>
               
               <p className="text-xl text-muted-foreground max-w-2xl font-body text-center">
-                Créez votre boutique en 5 minutes. 
-Vendez sur WhatsApp et acceptez Orange Money..
+                Créez votre boutique en 5 minutes. Vendez sur WhatsApp et acceptez Orange Money.
               </p>
             </AnimatedGroup>
 
@@ -55,7 +54,7 @@ Vendez sur WhatsApp et acceptez Orange Money..
                 Créer ma boutique gratuitement
                 <ArrowRight className="group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="premium" size="lg">
+              <Button variant="premium" size="lg" onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}>
                 Voir la démo
               </Button>
             </AnimatedGroup>

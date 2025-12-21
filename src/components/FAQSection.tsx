@@ -105,7 +105,7 @@ const FAQSection = () => {
             <MessageCircle className="w-5 h-5 text-primary" />
             <span className="text-sm font-medium">
               D'autres questions ? Contactez-nous sur{" "}
-              <a href="https://wa.me/22670000000" className="text-primary hover:underline font-semibold">
+              <a href="https://wa.me/22671234567" className="text-primary hover:underline font-semibold">
                 WhatsApp
               </a>
             </span>

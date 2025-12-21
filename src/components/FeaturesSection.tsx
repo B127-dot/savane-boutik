@@ -131,7 +131,7 @@ const FeaturesSection = () => {
 
                   {/* CTA */}
                   <div>
-                    <a href="#" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group">
+                    <a href="#pricing" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors group">
                       Explorer toutes les fonctionnalités
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </a>
@@ -275,7 +275,7 @@ const FeaturesSection = () => {
 
               {/* CTA Button */}
               <div className="border-t border-border pt-6">
-                <a href="#" className="inline-flex items-center justify-center gap-2 h-10 hover:bg-primary/90 transition text-sm font-normal text-primary-foreground bg-primary rounded-full px-6 shadow-glow">
+                <a href="/signup" className="inline-flex items-center justify-center gap-2 h-10 hover:bg-primary/90 transition text-sm font-normal text-primary-foreground bg-primary rounded-full px-6 shadow-glow">
                   Commencer gratuitement
                   <ArrowRight className="h-4 w-4" />
                 </a>
