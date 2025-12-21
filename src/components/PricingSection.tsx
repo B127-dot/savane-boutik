@@ -86,7 +86,7 @@ export default function PricingSection() {
         {/* Footer Note */}
         <div className="text-center mt-12 container">
           <p className="text-sm text-muted-foreground">
-            Tous les plans incluent un essai gratuit de 14 jours • Pas de carte bancaire requise
+            30 jours d'essai gratuit sur tous les plans • Pas de carte bancaire requise • Annulez à tout moment
           </p>
         </div>
       </motion.div>
