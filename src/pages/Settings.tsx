@@ -19,7 +19,8 @@ import {
   Lock,
   AlertTriangle,
   Star,
-  Zap
+  Zap,
+  Crown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -90,48 +91,68 @@ const Settings = () => {
     {
       name: 'Gratuit',
       price: { monthly: 0, annual: 0 },
-      description: 'Pour démarrer votre activité',
+      description: 'Pour les micro-vendeurs qui testent',
       icon: Package,
       features: [
-        'Jusqu\'à 50 produits',
-        'Paiements Orange & Moov Money',
-        'WhatsApp Business',
-        'Support par email',
-        '1 thème de boutique'
+        '1 boutique en ligne',
+        'Jusqu\'à 20 produits',
+        'Commandes WhatsApp basiques',
+        'Paiements Orange Money',
+        '1 thème de boutique',
+        'Support par email'
       ],
       popular: false,
       current: true
     },
     {
-      name: 'Pro',
-      price: { monthly: 9900, annual: 99000 },
-      description: 'Pour les commerçants actifs',
+      name: 'Starter',
+      price: { monthly: 5000, annual: 48000 },
+      description: 'Pour les petits vendeurs',
       icon: Star,
+      features: [
+        'Tout du plan Gratuit',
+        'Jusqu\'à 100 produits',
+        'WhatsApp Business intégré',
+        'Paiements Orange & Moov Money',
+        '2 thèmes de boutique',
+        'Support prioritaire',
+        'Notifications automatiques'
+      ],
+      popular: false,
+      current: false
+    },
+    {
+      name: 'Pro',
+      price: { monthly: 12500, annual: 120000 },
+      description: 'Pour les vendeurs établis',
+      icon: Crown,
       badge: '82% des vendeurs',
       features: [
+        'Tout du plan Starter',
         'Produits illimités',
-        'Tous les moyens de paiement',
+        '4 thèmes professionnels',
         'Analytics avancés',
-        'Support prioritaire 24/7',
-        'Tous les thèmes premium',
+        'Nom de domaine personnalisé',
         'Code promo & réductions',
-        'Export des données'
+        'Support WhatsApp prioritaire',
+        'Zéro commission sur ventes'
       ],
       popular: true,
       current: false
     },
     {
       name: 'Business',
-      price: { monthly: 24900, annual: 249000 },
-      description: 'Pour les entreprises établies',
+      price: { monthly: 25000, annual: 240000 },
+      description: 'Pour les PME e-commerce',
       icon: Zap,
       features: [
         'Tout du plan Pro',
-        'Multi-boutiques',
-        'API personnalisée',
-        'Manager dédié',
-        'Formation personnalisée',
-        'Intégrations avancées'
+        'Boutiques multiples illimitées',
+        'API développeur complète',
+        'Gestion d\'équipe avancée',
+        'Account manager dédié',
+        'Formation dédiée',
+        'SLA garanti 99.9%'
       ],
       popular: false,
       current: false
@@ -347,7 +368,7 @@ const Settings = () => {
               </div>
 
               {/* Pricing Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {pricingPlans.map((plan, index) => (
                   <motion.div
                     key={plan.name}
