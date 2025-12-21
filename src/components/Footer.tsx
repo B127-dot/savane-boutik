@@ -36,7 +36,7 @@ const Footer = () => {
         { label: "Centre d'aide", href: "/help" },
         { label: "Contact", href: "/contact" },
         { label: "Formation", href: "/training" },
-        { label: "WhatsApp", href: "https://wa.me/22670000000" },
+        { label: "WhatsApp", href: "https://wa.me/22671234567" },
       ]
     }
   ];
