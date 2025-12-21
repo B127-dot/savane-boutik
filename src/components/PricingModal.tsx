@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, Zap, Crown, Sparkles, X } from 'lucide-react';
+import { Check, Zap, Crown, Sparkles, X, Star } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -23,35 +23,58 @@ const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
     {
       name: 'Gratuit',
       icon: Zap,
-      price: isAnnual ? 0 : 0,
+      price: 0,
       originalPrice: null,
       period: '/mois',
-      description: 'Pour démarrer votre boutique',
+      description: 'Pour les micro-vendeurs qui testent',
       features: [
-        '10 produits maximum',
         '1 boutique en ligne',
-        'Commandes WhatsApp',
-        'Analytics basiques',
+        'Jusqu\'à 20 produits',
+        'Commandes WhatsApp basiques',
+        'Paiements Orange Money',
+        '1 thème de boutique',
+        'Support par email',
       ],
       buttonText: 'Plan actuel',
       buttonVariant: 'outline' as const,
       popular: false,
     },
     {
+      name: 'Starter',
+      icon: Star,
+      price: isAnnual ? 4000 : 5000,
+      originalPrice: isAnnual ? 5000 : null,
+      period: '/mois',
+      description: 'Pour les petits vendeurs',
+      features: [
+        'Tout du plan Gratuit',
+        'Jusqu\'à 100 produits',
+        'WhatsApp Business intégré',
+        'Paiements Orange & Moov Money',
+        '2 thèmes de boutique',
+        'Support prioritaire',
+        'Notifications automatiques',
+      ],
+      buttonText: 'Passer au Starter',
+      buttonVariant: 'outline' as const,
+      popular: false,
+    },
+    {
       name: 'Pro',
       icon: Crown,
-      price: isAnnual ? 24 : 30,
-      originalPrice: isAnnual ? 30 : null,
+      price: isAnnual ? 10000 : 12500,
+      originalPrice: isAnnual ? 12500 : null,
       period: '/mois',
-      description: 'Pour les vendeurs sérieux',
+      description: 'Pour les vendeurs établis',
       features: [
+        'Tout du plan Starter',
         'Produits illimités',
-        'Multi-boutiques',
-        'WhatsApp Business API',
-        'Analytics avancées',
-        'Support prioritaire',
-        'QR codes personnalisés',
-        'Thèmes premium',
+        '4 thèmes professionnels',
+        'Analytics avancés',
+        'Nom de domaine personnalisé',
+        'Code promo & réductions',
+        'Support WhatsApp prioritaire',
+        'Zéro commission sur ventes',
       ],
       buttonText: 'Passer au Pro',
       buttonVariant: 'default' as const,
@@ -61,19 +84,18 @@ const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
     {
       name: 'Business',
       icon: Sparkles,
-      price: isAnnual ? 79 : 99,
-      originalPrice: isAnnual ? 99 : null,
+      price: isAnnual ? 20000 : 25000,
+      originalPrice: isAnnual ? 25000 : null,
       period: '/mois',
-      description: 'Pour les entreprises',
+      description: 'Pour les PME e-commerce',
       features: [
         'Tout du plan Pro',
-        '5 boutiques',
-        'API complète',
-        'White-label',
-        'Support dédié 24/7',
-        'Formation personnalisée',
-        'Intégrations avancées',
-        'Rapports personnalisés',
+        'Boutiques multiples illimitées',
+        'API développeur complète',
+        'Gestion d\'équipe avancée',
+        'Account manager dédié',
+        'Formation dédiée',
+        'SLA garanti 99.9%',
       ],
       buttonText: 'Contactez-nous',
       buttonVariant: 'outline' as const,
@@ -128,7 +150,7 @@ const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
         </DialogHeader>
 
         {/* Pricing cards */}
-        <div className="grid md:grid-cols-3 gap-6 px-6 pb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 px-6 pb-12">
           {plans.map((plan, index) => {
             const Icon = plan.icon;
             return (
@@ -172,13 +194,14 @@ const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
                 <div className="mb-6">
                   <div className="flex items-baseline gap-2">
                     {plan.originalPrice && (
-                      <span className="text-2xl text-muted-foreground line-through">
-                        ${plan.originalPrice}
+                      <span className="text-lg text-muted-foreground line-through">
+                        {plan.originalPrice.toLocaleString()} FCFA
                       </span>
                     )}
-                    <span className="text-5xl font-bold">
-                      ${plan.price}
+                    <span className="text-3xl font-bold">
+                      {plan.price.toLocaleString()}
                     </span>
+                    <span className="text-sm text-muted-foreground">FCFA</span>
                     <span className="text-muted-foreground">{plan.period}</span>
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
