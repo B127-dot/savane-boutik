@@ -1,25 +1,29 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { 
-  ShoppingBag, 
-  TrendingUp, 
-  Trophy,
-  LayoutGrid 
+  Smartphone, 
+  Camera, 
+  MessageCircle, 
+  LayoutGrid,
+  Rocket,
+  CreditCard
 } from 'lucide-react';
 
-interface BlogCategoriesProps {
+interface AcademyCategoriesProps {
   activeCategory: string;
   onCategoryChange: (category: string) => void;
 }
 
 const categories = [
   { id: 'all', label: 'Tous', icon: LayoutGrid },
-  { id: 'ecommerce', label: 'E-commerce', icon: ShoppingBag },
-  { id: 'marketing', label: 'Marketing', icon: TrendingUp },
-  { id: 'success', label: 'Success Stories', icon: Trophy },
+  { id: 'debutant', label: 'Débutant', icon: Rocket },
+  { id: 'photo', label: 'Photo Produit', icon: Camera },
+  { id: 'mobile', label: 'Mobile', icon: Smartphone },
+  { id: 'whatsapp', label: 'WhatsApp', icon: MessageCircle },
+  { id: 'paiement', label: 'Paiement', icon: CreditCard },
 ];
 
-const BlogCategories = ({ activeCategory, onCategoryChange }: BlogCategoriesProps) => {
+const AcademyCategories = ({ activeCategory, onCategoryChange }: AcademyCategoriesProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -59,4 +63,4 @@ const BlogCategories = ({ activeCategory, onCategoryChange }: BlogCategoriesProp
   );
 };
 
-export default BlogCategories;
+export default AcademyCategories;
