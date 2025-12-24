@@ -77,50 +77,54 @@ const Signup = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/10 blur-[120px] rounded-full mix-blend-screen" />
 
         {/* Floating Elements - Hidden on very small screens */}
-        <motion.div className="hidden sm:block absolute top-[8%] left-[8%] text-primary/10" animate={{
+        <motion.div className="hidden sm:block absolute top-[8%] left-[8%] text-primary/20" animate={{
         y: [0, -20, 0],
-        rotate: [-12, -7, -12]
+        rotate: [-12, -7, -12],
+        opacity: [0.2, 0.35, 0.2]
       }} transition={{
         duration: 8,
         repeat: Infinity,
         ease: "easeInOut"
       }}>
-          <Sparkles className="w-20 h-20 md:w-28 md:h-28 lg:w-40 lg:h-40 drop-shadow-lg" />
+          <Sparkles className="w-20 h-20 md:w-28 md:h-28 lg:w-40 lg:h-40 drop-shadow-[0_0_15px_hsl(var(--primary)/0.3)]" />
         </motion.div>
 
-        <motion.div className="hidden sm:block absolute bottom-[15%] right-[8%] text-primary/5" animate={{
+        <motion.div className="hidden sm:block absolute bottom-[15%] right-[8%] text-primary/15" animate={{
         y: [0, -15, 0],
-        rotate: [12, 17, 12]
+        rotate: [12, 17, 12],
+        opacity: [0.15, 0.3, 0.15]
       }} transition={{
         duration: 6,
         repeat: Infinity,
         ease: "easeInOut"
       }}>
-          <ShoppingBag className="w-28 h-28 md:w-36 md:h-36 lg:w-56 lg:h-56" />
+          <ShoppingBag className="w-28 h-28 md:w-36 md:h-36 lg:w-56 lg:h-56 drop-shadow-[0_0_20px_hsl(var(--primary)/0.25)]" />
         </motion.div>
 
-        <motion.div className="hidden md:block absolute top-[20%] right-[12%] text-primary/5" animate={{
+        <motion.div className="hidden md:block absolute top-[20%] right-[12%] text-primary/15" animate={{
         y: [0, -20, 0],
-        rotate: [0, 10, 0]
+        rotate: [0, 10, 0],
+        opacity: [0.15, 0.3, 0.15]
       }} transition={{
         duration: 8,
         repeat: Infinity,
         ease: "easeInOut",
         delay: 2
       }}>
-          <Rocket className="w-20 h-20 lg:w-28 lg:h-28" />
+          <Rocket className="w-20 h-20 lg:w-28 lg:h-28 drop-shadow-[0_0_12px_hsl(var(--primary)/0.3)]" />
         </motion.div>
 
-        <motion.div className="hidden md:block absolute bottom-[25%] left-[5%] text-primary/5" animate={{
+        <motion.div className="hidden md:block absolute bottom-[25%] left-[5%] text-primary/15" animate={{
         y: [0, -15, 0],
-        rotate: [-5, 5, -5]
+        rotate: [-5, 5, -5],
+        opacity: [0.15, 0.28, 0.15]
       }} transition={{
         duration: 6,
         repeat: Infinity,
         ease: "easeInOut",
         delay: 1
       }}>
-          <Store className="w-24 h-24 lg:w-32 lg:h-32" />
+          <Store className="w-24 h-24 lg:w-32 lg:h-32 drop-shadow-[0_0_15px_hsl(var(--primary)/0.25)]" />
         </motion.div>
       </div>
 

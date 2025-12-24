@@ -67,50 +67,54 @@ const Login = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/10 blur-[120px] rounded-full mix-blend-screen" />
 
         {/* Floating Elements - Hidden on very small screens */}
-        <motion.div className="hidden sm:block absolute top-[10%] left-[5%] text-primary/10" animate={{
+        <motion.div className="hidden sm:block absolute top-[10%] left-[5%] text-primary/20" animate={{
         y: [0, -20, 0],
-        rotate: [-12, -7, -12]
+        rotate: [-12, -7, -12],
+        opacity: [0.2, 0.35, 0.2]
       }} transition={{
         duration: 8,
         repeat: Infinity,
         ease: "easeInOut"
       }}>
-          <ShoppingCart className="w-24 h-24 md:w-32 md:h-32 lg:w-48 lg:h-48 drop-shadow-lg" />
+          <ShoppingCart className="w-24 h-24 md:w-32 md:h-32 lg:w-48 lg:h-48 drop-shadow-[0_0_15px_hsl(var(--primary)/0.3)]" />
         </motion.div>
 
-        <motion.div className="hidden sm:block absolute bottom-[10%] right-[5%] text-primary/5" animate={{
+        <motion.div className="hidden sm:block absolute bottom-[10%] right-[5%] text-primary/15" animate={{
         y: [0, -15, 0],
-        rotate: [12, 17, 12]
+        rotate: [12, 17, 12],
+        opacity: [0.15, 0.3, 0.15]
       }} transition={{
         duration: 6,
         repeat: Infinity,
         ease: "easeInOut"
       }}>
-          <Package className="w-32 h-32 md:w-40 md:h-40 lg:w-64 lg:h-64" />
+          <Package className="w-32 h-32 md:w-40 md:h-40 lg:w-64 lg:h-64 drop-shadow-[0_0_20px_hsl(var(--primary)/0.25)]" />
         </motion.div>
 
-        <motion.div className="hidden md:block absolute top-[15%] right-[15%] text-primary/5" animate={{
+        <motion.div className="hidden md:block absolute top-[15%] right-[15%] text-primary/15" animate={{
         y: [0, -20, 0],
-        rotate: [45, 50, 45]
+        rotate: [45, 50, 45],
+        opacity: [0.15, 0.3, 0.15]
       }} transition={{
         duration: 8,
         repeat: Infinity,
         ease: "easeInOut",
         delay: 2
       }}>
-          <Coins className="w-24 h-24 lg:w-32 lg:h-32" />
+          <Coins className="w-24 h-24 lg:w-32 lg:h-32 drop-shadow-[0_0_12px_hsl(var(--primary)/0.3)]" />
         </motion.div>
 
-        <motion.div className="hidden md:block absolute bottom-[20%] left-[10%] text-primary/5" animate={{
+        <motion.div className="hidden md:block absolute bottom-[20%] left-[10%] text-primary/15" animate={{
         y: [0, -15, 0],
-        rotate: [-12, -7, -12]
+        rotate: [-12, -7, -12],
+        opacity: [0.15, 0.28, 0.15]
       }} transition={{
         duration: 6,
         repeat: Infinity,
         ease: "easeInOut",
         delay: 1
       }}>
-          <Tag className="w-20 h-20 lg:w-28 lg:h-28" />
+          <Tag className="w-20 h-20 lg:w-28 lg:h-28 drop-shadow-[0_0_15px_hsl(var(--primary)/0.25)]" />
         </motion.div>
       </div>
 
