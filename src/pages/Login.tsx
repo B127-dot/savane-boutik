@@ -56,7 +56,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-  return <div className="h-screen w-full flex items-center justify-center relative overflow-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary">
+  return <div className="min-h-screen w-full flex items-center justify-center relative overflow-x-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary py-4 sm:py-6">
       
       {/* Background Layer with Floating Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -115,8 +115,8 @@ const Login = () => {
       </div>
 
       {/* Main Container */}
-      <main className="relative z-10 w-full max-w-[1100px] mx-auto p-2 sm:p-4 lg:p-6 h-full flex items-center">
-        <motion.div className="w-full h-[calc(100vh-1rem)] sm:h-[calc(100vh-2rem)] lg:h-[calc(100vh-3rem)] max-h-[700px] rounded-2xl sm:rounded-[32px] overflow-hidden grid grid-cols-1 lg:grid-cols-12
+      <main className="relative z-10 w-full max-w-[1100px] mx-auto px-2 sm:px-4 lg:px-6 flex items-center">
+        <motion.div className="w-full min-h-[480px] lg:min-h-[540px] rounded-2xl sm:rounded-[32px] overflow-hidden grid grid-cols-1 lg:grid-cols-12
             bg-card/70 backdrop-blur-xl border border-border/30 
             shadow-[0_0_0_1px_rgba(0,0,0,0.2),0_20px_60px_-10px_rgba(0,0,0,0.6)]" initial={{
         opacity: 0,
@@ -130,7 +130,7 @@ const Login = () => {
       }}>
           
           {/* Left Column: Login Form */}
-          <div className="lg:col-span-5 flex flex-col justify-between p-4 sm:p-6 lg:p-10 relative bg-secondary/20">
+          <div className="lg:col-span-5 flex flex-col justify-between p-4 sm:p-5 lg:p-8 relative bg-secondary/20">
             
             {/* Header / Logo */}
             <motion.div initial={{
@@ -254,7 +254,7 @@ const Login = () => {
           </div>
 
           {/* Right Column: Visuals */}
-          <div className="hidden lg:block lg:col-span-7 relative bg-black/50 h-full overflow-hidden">
+          <div className="hidden lg:flex lg:col-span-7 relative bg-black/50 min-h-[540px] overflow-hidden">
             
             {/* Background Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 opacity-80" />
