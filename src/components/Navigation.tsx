@@ -34,6 +34,7 @@ const Navigation = () => {
     { label: "Accueil", href: "/" },
     { label: "Fonctionnalités", href: "#features" },
     { label: "Tarifs", href: "/pricing" },
+    { label: "Blog", href: "/blog" },
     { label: "Contact", href: "#faq" },
   ];
 
