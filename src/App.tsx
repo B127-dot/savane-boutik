@@ -27,6 +27,7 @@ import NotFound from "./pages/NotFound";
 import Pricing from "./pages/Pricing";
 import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
+import Academy from "./pages/Academy";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,8 @@ const App = () => (
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogArticle />} />
+            <Route path="/academy" element={<Academy />} />
+            <Route path="/academy/:slug" element={<BlogArticle />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/welcome" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
