@@ -7,7 +7,19 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useApp } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Store, Mail, Lock, ArrowRight, ShoppingCart, Package, Coins, Tag, TrendingUp, Users } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+
+const pageVariants = {
+  initial: { opacity: 0, x: 30, scale: 0.98 },
+  animate: { opacity: 1, x: 0, scale: 1 },
+  exit: { opacity: 0, x: -30, scale: 0.98 },
+};
+
+const pageTransition = {
+  type: "tween" as const,
+  ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+  duration: 0.4,
+};
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -56,7 +68,13 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-  return <div className="min-h-screen w-full flex items-center justify-center relative overflow-x-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary py-4 sm:py-6">
+  return <motion.div 
+    initial="initial"
+    animate="animate"
+    exit="exit"
+    variants={pageVariants}
+    transition={pageTransition}
+    className="min-h-screen w-full flex items-center justify-center relative overflow-x-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary py-4 sm:py-6">
       
       {/* Background Layer with Floating Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -334,6 +352,6 @@ const Login = () => {
 
         </motion.div>
       </main>
-    </div>;
+    </motion.div>;
 };
 export default Login;
