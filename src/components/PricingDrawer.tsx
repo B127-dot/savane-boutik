@@ -1,7 +1,8 @@
 import { Pricing } from "@/components/ui/pricing";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import { Star } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -100,22 +101,46 @@ const faqs = [
 
 const testimonials = [
   {
-    name: "Aminata Diallo",
-    role: "Créatrice de mode",
-    initials: "AD",
-    text: "J'ai créé ma boutique en moins de 30 minutes. Les ventes ont dépassé mes attentes dès le premier mois !",
-  },
-  {
-    name: "Ibrahim Koné",
-    role: "Vendeur électronique",
-    initials: "IK",
-    text: "Le système WhatsApp intégré a révolutionné ma façon de gérer les commandes.",
-  },
-  {
-    name: "Fatoumata Ouédraogo",
-    role: "Artisane bijoutière",
+    name: "Fatimata Ouédraogo",
+    role: "Fondatrice, Faso Wax",
     initials: "FO",
-    text: "Analytics super détaillées. J'ai augmenté mon CA de 40% en 2 mois !",
+    text: "J'ai créé ma boutique de pagnes en moins de 30 minutes. Mon chiffre d'affaires a doublé en 2 mois !",
+    rating: 5,
+  },
+  {
+    name: "Issoufou Sawadogo",
+    role: "Entrepreneur, Tech BF",
+    initials: "IS",
+    text: "Parfait pour vendre mes téléphones. Le support WhatsApp est rapide et efficace !",
+    rating: 5,
+  },
+  {
+    name: "Aminata Traoré",
+    role: "Créatrice, Bijoux Artisanaux",
+    initials: "AT",
+    text: "Je vends mes créations partout au Burkina grâce à BurkE-Shop.",
+    rating: 5,
+  },
+  {
+    name: "Moussa Kaboré",
+    role: "Gérant, Mode Africaine",
+    initials: "MK",
+    text: "Interface simple, paiements mobiles. J'ai triplé mes ventes en 3 mois !",
+    rating: 5,
+  },
+  {
+    name: "Salimata Compaoré",
+    role: "Commerçante",
+    initials: "SC",
+    text: "Solution complète adaptée au Burkina. Support 7j/7 en français, c'est top !",
+    rating: 5,
+  },
+  {
+    name: "Boureima Ouattara",
+    role: "Fondateur, Électronique Plus",
+    initials: "BO",
+    text: "Orange Money, Moov Money, WhatsApp... tout est là pour le Burkina !",
+    rating: 5,
   },
 ];
 
@@ -169,39 +194,75 @@ export default function PricingDrawer({ open, onOpenChange }: PricingDrawerProps
 
           <div className="border-t border-border" />
 
-          {/* Témoignages */}
-          <section className="px-4 py-8" aria-label="Témoignages">
-            <h3 className="text-lg font-bold text-center mb-1">Ils l'adorent</h3>
-            <p className="text-sm text-muted-foreground text-center mb-4">
-              Rejoignez 300+ entrepreneurs
+          {/* Témoignages - Carousel horizontal */}
+          <section className="py-8" aria-label="Témoignages">
+            <h3 className="text-lg font-bold text-center mb-1 px-4">
+              Ils l'adorent,{" "}
+              <span className="text-primary">pourquoi pas vous ?</span>
+            </h3>
+            <p className="text-sm text-muted-foreground text-center mb-6 px-4">
+              Rejoignez 300+ entrepreneurs burkinabè
             </p>
 
-            <div className="space-y-3">
-              {testimonials.map((t) => (
-                <Card key={t.name} className="p-4 bg-muted/20">
-                  <div className="flex gap-1 mb-2">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <span key={i} className="text-primary text-sm">
-                        ★
-                      </span>
-                    ))}
+            {/* Horizontal scrolling carousel */}
+            <div className="overflow-hidden">
+              <div className="flex gap-4 animate-scroll-left hover:pause">
+                {testimonials.map((t, index) => (
+                  <div key={`t1-${index}`} className="flex-shrink-0 w-[280px]">
+                    <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all duration-300 h-full">
+                      <CardContent className="p-4">
+                        <div className="flex gap-0.5 mb-3">
+                          {Array.from({ length: t.rating }).map((_, i) => (
+                            <Star key={i} className="w-3.5 h-3.5 fill-primary text-primary" />
+                          ))}
+                        </div>
+                        
+                        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                          "{t.text}"
+                        </p>
+                        
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-xs">
+                            {t.initials}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-foreground text-xs">{t.name}</p>
+                            <p className="text-[10px] text-muted-foreground">{t.role}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
-
-                  <p className="text-sm mb-4 leading-relaxed">“{t.text}”</p>
-
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-xs font-semibold text-primary">
-                        {t.initials}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-semibold text-sm">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
-                    </div>
+                ))}
+                {/* Duplicate for seamless loop */}
+                {testimonials.map((t, index) => (
+                  <div key={`t2-${index}`} className="flex-shrink-0 w-[280px]">
+                    <Card className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 transition-all duration-300 h-full">
+                      <CardContent className="p-4">
+                        <div className="flex gap-0.5 mb-3">
+                          {Array.from({ length: t.rating }).map((_, i) => (
+                            <Star key={i} className="w-3.5 h-3.5 fill-primary text-primary" />
+                          ))}
+                        </div>
+                        
+                        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                          "{t.text}"
+                        </p>
+                        
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-xs">
+                            {t.initials}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-foreground text-xs">{t.name}</p>
+                            <p className="text-[10px] text-muted-foreground">{t.role}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
-                </Card>
-              ))}
+                ))}
+              </div>
             </div>
           </section>
 
