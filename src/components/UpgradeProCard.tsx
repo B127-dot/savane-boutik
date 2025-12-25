@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import PricingModal from '@/components/PricingModal';
+import PricingDrawer from '@/components/PricingDrawer';
 
 interface UpgradeProCardProps {
   isCollapsed?: boolean;
@@ -35,8 +35,8 @@ const UpgradeProCard = ({ isCollapsed }: UpgradeProCardProps) => {
         </Button>
       </div>
 
-      {/* Pricing Modal */}
-      <PricingModal open={isPricingOpen} onOpenChange={setIsPricingOpen} />
+      {/* Pricing Drawer */}
+      <PricingDrawer open={isPricingOpen} onOpenChange={setIsPricingOpen} />
     </>
   );
 };
