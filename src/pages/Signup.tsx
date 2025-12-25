@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { useApp } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Store, Mail, Lock, ArrowRight, User, Sparkles, ShoppingBag, Rocket, Zap, CheckCircle2, Gift } from 'lucide-react';
+import signup3dIllustration from '@/assets/signup-3d-illustration.png';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const pageVariants = {
@@ -330,17 +331,15 @@ const Signup = () => {
             {/* Background Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 opacity-80" />
             
-            {/* Background Image */}
-            <motion.img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop" alt="E-commerce Success" className="absolute inset-0 w-full h-full object-cover opacity-50" initial={{
-            scale: 1.1
-          }} animate={{
-            scale: 1
-          }} transition={{
-            duration: 20,
-            ease: "linear",
-            repeat: Infinity,
-            repeatType: "reverse"
-          }} />
+            {/* 3D Illustration */}
+            <motion.img 
+              src={signup3dIllustration} 
+              alt="E-commerce 3D Illustration" 
+              className="absolute inset-0 w-full h-full object-contain p-8" 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            />
             
             {/* Overlay Gradient Tone */}
             <div className="absolute inset-0 bg-primary/10 mix-blend-overlay z-10" />
