@@ -335,10 +335,11 @@ const Signup = () => {
             <motion.img 
               src={signup3dIllustration} 
               alt="E-commerce 3D Illustration" 
-              className="absolute inset-0 w-full h-full object-cover" 
+              className="absolute inset-0 w-full h-full object-cover cursor-pointer" 
               initial={{ opacity: 0, scale: 1.05 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
             />
             
             {/* Overlay Gradient Tone */}
