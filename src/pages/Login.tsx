@@ -286,8 +286,8 @@ const Login = () => {
             <motion.img 
               src={login3dIllustration} 
               alt="E-commerce 3D Illustration" 
-              className="absolute inset-0 w-full h-full object-contain p-8" 
-              initial={{ opacity: 0, scale: 0.9 }}
+              className="absolute inset-0 w-full h-full object-cover" 
+              initial={{ opacity: 0, scale: 1.05 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             />
