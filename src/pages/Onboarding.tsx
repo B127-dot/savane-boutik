@@ -8,8 +8,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { Check, Store, Package, MessageCircle, Share2, ArrowRight, ArrowLeft } from "lucide-react";
+import { Check, Store, Package, MessageCircle, Share2, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
 import { isValidWhatsAppNumber, formatWhatsAppNumber } from "@/lib/whatsapp";
+import { motion } from "framer-motion";
+import onboarding3dIllustration from "@/assets/onboarding-3d-illustration.png";
 
 const Onboarding = () => {
   const { user, shopSettings, updateShopSettings, addProduct } = useApp();
@@ -84,7 +86,7 @@ const Onboarding = () => {
         price: parseFloat(productPrice),
         stock: parseInt(productStock),
         images: ['/placeholder.svg'],
-        categoryId: '1', // Default category
+        categoryId: '1',
         status: 'active',
       });
 
@@ -385,112 +387,167 @@ const Onboarding = () => {
 
   return (
     <div className="min-h-screen bg-gradient-hero flex items-center justify-center p-4">
-      <div className="max-w-3xl w-full space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
-            Bienvenue sur BurkE-Shop
-          </h1>
-          <p className="text-muted-foreground">
-            Configurons votre boutique en quelques minutes
-          </p>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm text-muted-foreground">
-            <span>Étape {currentStep} sur {totalSteps}</span>
-            <span>{Math.round(progressPercentage)}%</span>
+      <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
+        {/* Left Column - Onboarding Wizard */}
+        <motion.div 
+          className="space-y-6"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {/* Header */}
+          <div className="text-center lg:text-left space-y-2">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+              Bienvenue sur BurkE-Shop
+            </h1>
+            <p className="text-muted-foreground">
+              Configurons votre boutique en quelques minutes
+            </p>
           </div>
-          <Progress value={progressPercentage} className="h-2" />
-        </div>
 
-        {/* Steps Indicator */}
-        <div className="flex items-center justify-between">
-          {steps.map((step, index) => {
-            const StepIcon = step.icon;
-            const isCompleted = currentStep > step.number;
-            const isCurrent = currentStep === step.number;
+          {/* Progress Bar */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm text-muted-foreground">
+              <span>Étape {currentStep} sur {totalSteps}</span>
+              <span>{Math.round(progressPercentage)}%</span>
+            </div>
+            <Progress value={progressPercentage} className="h-2" />
+          </div>
 
-            return (
-              <div
-                key={step.number}
-                className="flex flex-col items-center gap-2 flex-1"
-              >
+          {/* Steps Indicator */}
+          <div className="flex items-center justify-between">
+            {steps.map((step) => {
+              const StepIcon = step.icon;
+              const isCompleted = currentStep > step.number;
+              const isCurrent = currentStep === step.number;
+
+              return (
                 <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all ${
-                    isCompleted
-                      ? 'bg-primary border-primary text-primary-foreground'
-                      : isCurrent
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-border bg-background text-muted-foreground'
-                  }`}
+                  key={step.number}
+                  className="flex flex-col items-center gap-2 flex-1"
                 >
-                  {isCompleted ? (
-                    <Check className="w-6 h-6" />
+                  <div
+                    className={`w-10 h-10 lg:w-12 lg:h-12 rounded-full flex items-center justify-center border-2 transition-all ${
+                      isCompleted
+                        ? 'bg-primary border-primary text-primary-foreground'
+                        : isCurrent
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-border bg-background text-muted-foreground'
+                    }`}
+                  >
+                    {isCompleted ? (
+                      <Check className="w-5 h-5 lg:w-6 lg:h-6" />
+                    ) : (
+                      <StepIcon className="w-5 h-5 lg:w-6 lg:h-6" />
+                    )}
+                  </div>
+                  <span
+                    className={`text-xs text-center hidden md:block ${
+                      isCurrent ? 'text-foreground font-medium' : 'text-muted-foreground'
+                    }`}
+                  >
+                    {step.title}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Step Content */}
+          <Card className="border-primary/20 shadow-glow">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-3 text-lg">
+                {React.createElement(currentStepData.icon, {
+                  className: "w-5 h-5 text-primary",
+                })}
+                {currentStepData.title}
+              </CardTitle>
+              <CardDescription>{currentStepData.description}</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {currentStepData.content}
+
+              {/* Navigation Buttons */}
+              <div className="flex items-center justify-between pt-4">
+                <Button
+                  variant="outline"
+                  onClick={handlePreviousStep}
+                  disabled={currentStep === 1}
+                  size="sm"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Précédent
+                </Button>
+
+                <div className="flex items-center gap-2">
+                  {currentStep < totalSteps && currentStep !== 1 && (
+                    <Button variant="ghost" onClick={handleSkipStep} size="sm">
+                      Passer
+                    </Button>
+                  )}
+
+                  {currentStep < totalSteps ? (
+                    <Button onClick={handleNextStep} size="sm">
+                      Suivant
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
                   ) : (
-                    <StepIcon className="w-6 h-6" />
+                    <Button onClick={handleFinish} variant="hero" size="sm">
+                      Accéder au tableau de bord
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
                   )}
                 </div>
-                <span
-                  className={`text-xs text-center hidden md:block ${
-                    isCurrent ? 'text-foreground font-medium' : 'text-muted-foreground'
-                  }`}
-                >
-                  {step.title}
-                </span>
               </div>
-            );
-          })}
-        </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        {/* Step Content */}
-        <Card className="border-primary/20 shadow-glow">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              {React.createElement(currentStepData.icon, {
-                className: "w-6 h-6 text-primary",
-              })}
-              {currentStepData.title}
-            </CardTitle>
-            <CardDescription>{currentStepData.description}</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {currentStepData.content}
-
-            {/* Navigation Buttons */}
-            <div className="flex items-center justify-between pt-4">
-              <Button
-                variant="outline"
-                onClick={handlePreviousStep}
-                disabled={currentStep === 1}
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Précédent
-              </Button>
-
-              <div className="flex items-center gap-2">
-                {currentStep < totalSteps && currentStep !== 1 && (
-                  <Button variant="ghost" onClick={handleSkipStep}>
-                    Passer
-                  </Button>
-                )}
-
-                {currentStep < totalSteps ? (
-                  <Button onClick={handleNextStep}>
-                    Suivant
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                ) : (
-                  <Button onClick={handleFinish} variant="hero">
-                    Accéder au tableau de bord
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                )}
+        {/* Right Column - Visual Panel (Hidden on mobile/tablet) */}
+        <motion.div 
+          className="hidden lg:block relative h-[650px] rounded-3xl overflow-hidden"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          {/* 3D Illustration */}
+          <motion.img 
+            src={onboarding3dIllustration} 
+            alt="Configuration de boutique 3D" 
+            className="absolute inset-0 w-full h-full object-cover cursor-pointer" 
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+          />
+          
+          {/* Overlay Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+          
+          {/* Floating Info Card */}
+          <motion.div 
+            className="absolute bottom-6 left-6 right-6 bg-card/80 backdrop-blur-xl rounded-2xl p-4 border border-border/30"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-foreground">4 étapes simples</p>
+                  <p className="text-xs text-muted-foreground">Pour lancer votre boutique</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-lg font-bold text-primary">{currentStep}/{totalSteps}</p>
+                <p className="text-xs text-muted-foreground">En cours</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );
