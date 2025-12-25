@@ -2,6 +2,12 @@ import { Pricing } from "@/components/ui/pricing";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface PricingDrawerProps {
   open: boolean;
@@ -143,18 +149,22 @@ export default function PricingDrawer({ open, onOpenChange }: PricingDrawerProps
             <h3 className="text-lg font-bold text-center mb-4">
               Questions fréquentes
             </h3>
-            <div className="space-y-3">
-              {faqs.map((faq) => (
-                <Card key={faq.question} className="p-4 bg-muted/20">
-                  <h4 className="font-semibold text-sm mb-1">
-                    {faq.question}
-                  </h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+            <Accordion type="single" collapsible className="w-full space-y-2">
+              {faqs.map((faq, index) => (
+                <AccordionItem
+                  key={faq.question}
+                  value={`item-${index}`}
+                  className="border border-border rounded-lg px-4 bg-card hover:border-primary/50 transition-colors"
+                >
+                  <AccordionTrigger className="text-left hover:no-underline py-4 text-sm">
+                    <span className="font-semibold text-foreground">{faq.question}</span>
+                  </AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground pb-4 leading-relaxed">
                     {faq.answer}
-                  </p>
-                </Card>
+                  </AccordionContent>
+                </AccordionItem>
               ))}
-            </div>
+            </Accordion>
           </section>
 
           <div className="border-t border-border" />
