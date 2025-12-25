@@ -109,6 +109,19 @@ const PricingModal = ({ open, onOpenChange }: PricingModalProps) => {
             Choisissez le plan qui correspond à vos ambitions
           </p>
 
+          {/* Zero Commission Badge - Key Trust Message */}
+          <div className="flex justify-center pt-2">
+            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border border-primary/30">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/20">
+                <Check className="w-4 h-4 text-primary" />
+              </div>
+              <div className="text-left">
+                <p className="font-bold text-foreground text-sm">Vos ventes vous appartiennent à 100%</p>
+                <p className="text-xs text-primary font-medium">BurkE-Shop ne prend aucune commission</p>
+              </div>
+            </div>
+          </div>
+
           {/* Annual toggle */}
           <div className="flex items-center justify-center gap-4 pt-4">
             <span className={`text-sm ${!isAnnual ? 'font-semibold' : 'text-muted-foreground'}`}>
