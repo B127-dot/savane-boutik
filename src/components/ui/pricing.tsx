@@ -26,12 +26,18 @@ interface PricingProps {
   plans: PricingPlan[];
   title?: string;
   description?: string;
+  /** Override the internal container spacing when embedding (e.g. inside a drawer). */
+  containerClassName?: string;
+  /** When provided, the CTA becomes a button instead of a Link. */
+  onPlanClick?: (plan: PricingPlan) => void;
 }
 
 export function Pricing({
   plans,
   title = "Simple, Transparent Pricing",
   description = "Choose the plan that works for you\nAll plans include access to our platform, lead generation tools, and dedicated support.",
+  containerClassName,
+  onPlanClick,
 }: PricingProps) {
   const [isMonthly, setIsMonthly] = useState(true);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -67,7 +73,7 @@ export function Pricing({
   };
 
   return (
-    <div className="container py-20">
+    <div className={cn("container py-20", containerClassName)}>
       {/* Free Trial Banner */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -196,21 +202,40 @@ export function Pricing({
 
               <hr className="w-full my-4 border-border" />
 
-              <Link
-                to={plan.href}
-                className={cn(
-                  buttonVariants({
-                    variant: "outline",
-                  }),
-                  "group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter",
-                  "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-1 hover:bg-primary hover:text-primary-foreground",
-                  plan.isPopular
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-background text-foreground"
-                )}
-              >
-                {plan.buttonText}
-              </Link>
+              {onPlanClick ? (
+                <button
+                  type="button"
+                  onClick={() => onPlanClick(plan)}
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline",
+                    }),
+                    "group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter",
+                    "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-1 hover:bg-primary hover:text-primary-foreground",
+                    plan.isPopular
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-background text-foreground"
+                  )}
+                >
+                  {plan.buttonText}
+                </button>
+              ) : (
+                <Link
+                  to={plan.href}
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline",
+                    }),
+                    "group relative w-full gap-2 overflow-hidden text-lg font-semibold tracking-tighter",
+                    "transform-gpu ring-offset-current transition-all duration-300 ease-out hover:ring-2 hover:ring-primary hover:ring-offset-1 hover:bg-primary hover:text-primary-foreground",
+                    plan.isPopular
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-background text-foreground"
+                  )}
+                >
+                  {plan.buttonText}
+                </Link>
+              )}
               <p className="mt-6 text-xs leading-5 text-muted-foreground">
                 {plan.description}
               </p>
