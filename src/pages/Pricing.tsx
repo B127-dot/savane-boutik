@@ -53,7 +53,7 @@ const featureCategories = [
       { name: "Paiements Orange Money", starter: true, pro: true, business: true },
       { name: "Paiements Moov Money", starter: true, pro: true, business: true },
       { name: "Codes promo & réductions", starter: false, pro: true, business: true },
-      { name: "Commission sur ventes", starter: "2%", pro: "0%", business: "0%" },
+      { name: "Commission sur ventes", starter: "0%", pro: "0%", business: "0%" },
       { name: "Gestion multi-devises", starter: false, pro: false, business: true },
     ],
   },
@@ -102,8 +102,8 @@ const faqs = [
     answer: "Nous acceptons Orange Money, Moov Money, et les virements bancaires pour les abonnements. Les paiements par carte arrivent bientôt.",
   },
   {
-    question: "Y a-t-il des frais cachés ?",
-    answer: "Non, le prix affiché est le prix final. Seul le plan Starter a une commission de 2% sur les ventes, les plans Pro et Business sont à 0% de commission.",
+    question: "Y a-t-il des frais cachés ou des commissions ?",
+    answer: "Non, le prix affiché est le prix final. Vos ventes vous appartiennent à 100% — BurkE-Shop ne prend aucune commission sur aucun de nos plans. Zéro pour cent, point final.",
   },
   {
     question: "Puis-je annuler mon abonnement ?",
@@ -150,11 +150,29 @@ const Pricing = () => {
             transition={{ duration: 0.5 }}
           >
             {/* Free Trial Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary mb-6">
               <Gift className="w-5 h-5" />
               <span className="font-semibold">Essai gratuit de 30 jours</span>
               <span className="text-primary/70">• Sans engagement</span>
             </div>
+
+            {/* Zero Commission Badge - Key Trust Message */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mb-8"
+            >
+              <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border border-primary/30 shadow-lg shadow-primary/10">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/20">
+                  <Check className="w-5 h-5 text-primary" />
+                </div>
+                <div className="text-left">
+                  <p className="font-bold text-foreground">Vos ventes vous appartiennent à 100%</p>
+                  <p className="text-sm text-primary font-medium">BurkE-Shop ne prend aucune commission</p>
+                </div>
+              </div>
+            </motion.div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               Tarification simple et{" "}

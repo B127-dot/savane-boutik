@@ -15,7 +15,7 @@ const plans = [
       "Paiements Orange & Moov Money",
       "2 thèmes de boutique",
       "Support prioritaire",
-      "Notifications automatiques",
+      "0% commission sur ventes",
     ],
     description: "Pour les petits vendeurs (1-5M FCFA/mois)",
     buttonText: "Commencer",

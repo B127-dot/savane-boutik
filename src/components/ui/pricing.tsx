@@ -73,12 +73,30 @@ export function Pricing({
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex justify-center mb-8"
+        className="flex justify-center mb-6"
       >
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary">
           <Gift className="w-5 h-5" />
           <span className="font-semibold">Essai gratuit de 30 jours</span>
           <span className="text-primary/70">• Sans engagement</span>
+        </div>
+      </motion.div>
+
+      {/* Zero Commission Badge - Key Trust Message */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="flex justify-center mb-8"
+      >
+        <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border border-primary/30 shadow-lg shadow-primary/10">
+          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/20">
+            <Check className="w-5 h-5 text-primary" />
+          </div>
+          <div className="text-left">
+            <p className="font-bold text-foreground">Vos ventes vous appartiennent à 100%</p>
+            <p className="text-sm text-primary font-medium">BurkE-Shop ne prend aucune commission</p>
+          </div>
         </div>
       </motion.div>
 
