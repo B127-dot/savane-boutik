@@ -7,7 +7,7 @@ import { useApp } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Store, Mail, Lock, ArrowRight, User, Sparkles, ShoppingBag, Rocket, Zap, CheckCircle2, Gift } from 'lucide-react';
 import signup3dIllustration from '@/assets/signup-3d-illustration.png';
-import mobileAuthIllustration from '@/assets/mobile-auth-illustration.jpg';
+import mobileSignupIllustration from '@/assets/mobile-signup-illustration.jpg';
 import { motion, AnimatePresence } from 'framer-motion';
 const pageVariants = {
   initial: {
@@ -178,7 +178,7 @@ const Signup = () => {
               transition={{ delay: 0.1, duration: 0.4 }}
             >
               <img 
-                src={mobileAuthIllustration} 
+                src={mobileSignupIllustration} 
                 alt="E-commerce illustration" 
                 className="w-full h-full object-cover"
               />
