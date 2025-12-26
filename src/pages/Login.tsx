@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import login3dIllustration from '@/assets/login-3d-illustration.png';
+import mobileAuthIllustration from '@/assets/mobile-auth-illustration.jpg';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useApp } from '@/contexts/AppContext';
@@ -154,6 +155,21 @@ const Login = () => {
           
           {/* Left Column: Login Form */}
           <div className="lg:col-span-5 flex flex-col justify-between p-4 sm:p-5 lg:p-8 relative bg-secondary/20">
+            
+            {/* Mobile 3D Illustration - Hidden on desktop */}
+            <motion.div 
+              className="lg:hidden relative h-28 sm:h-36 overflow-hidden rounded-xl -mx-2 sm:-mx-3 -mt-2 sm:-mt-3 mb-3 sm:mb-4"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.4 }}
+            >
+              <img 
+                src={mobileAuthIllustration} 
+                alt="E-commerce illustration" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-secondary/80" />
+            </motion.div>
             
             {/* Header / Logo */}
             <motion.div initial={{
