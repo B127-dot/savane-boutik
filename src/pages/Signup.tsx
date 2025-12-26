@@ -8,17 +8,27 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Store, Mail, Lock, ArrowRight, User, Sparkles, ShoppingBag, Rocket, Zap, CheckCircle2, Gift } from 'lucide-react';
 import signup3dIllustration from '@/assets/signup-3d-illustration.png';
 import { motion, AnimatePresence } from 'framer-motion';
-
 const pageVariants = {
-  initial: { opacity: 0, x: 30, scale: 0.98 },
-  animate: { opacity: 1, x: 0, scale: 1 },
-  exit: { opacity: 0, x: -30, scale: 0.98 },
+  initial: {
+    opacity: 0,
+    x: 30,
+    scale: 0.98
+  },
+  animate: {
+    opacity: 1,
+    x: 0,
+    scale: 1
+  },
+  exit: {
+    opacity: 0,
+    x: -30,
+    scale: 0.98
+  }
 };
-
 const pageTransition = {
   type: "tween" as const,
   ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
-  duration: 0.4,
+  duration: 0.4
 };
 const Signup = () => {
   const [name, setName] = useState('');
@@ -82,13 +92,7 @@ const Signup = () => {
     icon: CheckCircle2,
     text: "Paiements mobiles intégrés"
   }];
-  return <motion.div 
-    initial="initial"
-    animate="animate"
-    exit="exit"
-    variants={pageVariants}
-    transition={pageTransition}
-    className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary py-4 sm:py-6">
+  return <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition} className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary py-4 sm:py-6">
       
       {/* Background Layer with Floating Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -332,15 +336,18 @@ const Signup = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 opacity-80" />
             
             {/* 3D Illustration */}
-            <motion.img 
-              src={signup3dIllustration} 
-              alt="E-commerce 3D Illustration" 
-              className="absolute inset-0 w-full h-full object-cover cursor-pointer" 
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            />
+            <motion.img src={signup3dIllustration} alt="E-commerce 3D Illustration" className="absolute inset-0 w-full h-full object-cover cursor-pointer" initial={{
+            opacity: 0,
+            scale: 1.05
+          }} animate={{
+            opacity: 1,
+            scale: 1
+          }} whileHover={{
+            scale: 1.05
+          }} transition={{
+            duration: 0.4,
+            ease: "easeOut"
+          }} />
             
             {/* Overlay Gradient Tone */}
             <div className="absolute inset-0 bg-primary/10 mix-blend-overlay z-10" />
@@ -355,7 +362,7 @@ const Signup = () => {
           }} transition={{
             delay: 0.6
           }}>
-              <div className="bg-card/70 backdrop-blur-xl border border-border/30 p-5 rounded-2xl shadow-xl max-w-[280px]">
+              <div className="bg-card/70 backdrop-blur-xl border border-border/30 p-5 rounded-2xl shadow-xl max-w-[280px] opacity-80">
                 <div className="flex items-center gap-2 mb-4">
                   <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
                     <Sparkles className="h-4 w-4 text-primary" />
