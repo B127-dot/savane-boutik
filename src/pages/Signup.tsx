@@ -7,6 +7,7 @@ import { useApp } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Store, Mail, Lock, ArrowRight, User, Sparkles, ShoppingBag, Rocket, Zap, CheckCircle2, Gift } from 'lucide-react';
 import signup3dIllustration from '@/assets/signup-3d-illustration.png';
+import mobileAuthIllustration from '@/assets/mobile-auth-illustration.jpg';
 import { motion, AnimatePresence } from 'framer-motion';
 const pageVariants = {
   initial: {
@@ -168,6 +169,21 @@ const Signup = () => {
           
           {/* Left Column: Signup Form */}
           <div className="lg:col-span-6 flex flex-col justify-between p-4 sm:p-5 lg:p-6 xl:p-8 relative bg-secondary/20">
+            
+            {/* Mobile 3D Illustration - Hidden on desktop */}
+            <motion.div 
+              className="lg:hidden relative h-28 sm:h-36 overflow-hidden rounded-xl -mx-2 sm:-mx-3 -mt-2 sm:-mt-3 mb-3 sm:mb-4"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.4 }}
+            >
+              <img 
+                src={mobileAuthIllustration} 
+                alt="E-commerce illustration" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-secondary/80" />
+            </motion.div>
             
             {/* Header / Logo */}
             <motion.div initial={{
