@@ -10,8 +10,20 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Check, Store, Package, MessageCircle, Share2, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
 import { isValidWhatsAppNumber, formatWhatsAppNumber } from "@/lib/whatsapp";
-import { motion } from "framer-motion";
-import onboarding3dIllustration from "@/assets/onboarding-3d-illustration.png";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Step illustrations
+import step1Illustration from "@/assets/onboarding-step-1-shop.jpg";
+import step2Illustration from "@/assets/onboarding-step-2-product.jpg";
+import step3Illustration from "@/assets/onboarding-step-3-whatsapp.jpg";
+import step4Illustration from "@/assets/onboarding-step-4-share.jpg";
+
+const stepIllustrations = [
+  step1Illustration,
+  step2Illustration,
+  step3Illustration,
+  step4Illustration,
+];
 
 const Onboarding = () => {
   const { user, shopSettings, updateShopSettings, addProduct } = useApp();
@@ -510,16 +522,19 @@ const Onboarding = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          {/* 3D Illustration */}
-          <motion.img 
-            src={onboarding3dIllustration} 
-            alt="Configuration de boutique 3D" 
-            className="absolute inset-0 w-full h-full object-cover cursor-pointer" 
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          />
+          {/* Dynamic 3D Illustration with AnimatePresence */}
+          <AnimatePresence mode="wait">
+            <motion.img 
+              key={currentStep}
+              src={stepIllustrations[currentStep - 1]} 
+              alt={`Étape ${currentStep} - ${currentStepData.title}`} 
+              className="absolute inset-0 w-full h-full object-cover" 
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            />
+          </AnimatePresence>
           
           {/* Overlay Gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
