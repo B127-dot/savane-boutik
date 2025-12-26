@@ -10,17 +10,27 @@ import { useApp } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Store, Mail, Lock, ArrowRight, ShoppingCart, Package, Coins, Tag, TrendingUp, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
 const pageVariants = {
-  initial: { opacity: 0, x: 30, scale: 0.98 },
-  animate: { opacity: 1, x: 0, scale: 1 },
-  exit: { opacity: 0, x: -30, scale: 0.98 },
+  initial: {
+    opacity: 0,
+    x: 30,
+    scale: 0.98
+  },
+  animate: {
+    opacity: 1,
+    x: 0,
+    scale: 1
+  },
+  exit: {
+    opacity: 0,
+    x: -30,
+    scale: 0.98
+  }
 };
-
 const pageTransition = {
   type: "tween" as const,
   ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
-  duration: 0.4,
+  duration: 0.4
 };
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -70,13 +80,7 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-  return <motion.div 
-    initial="initial"
-    animate="animate"
-    exit="exit"
-    variants={pageVariants}
-    transition={pageTransition}
-    className="min-h-screen w-full flex items-center justify-center relative overflow-x-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary py-4 sm:py-6">
+  return <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition} className="min-h-screen w-full flex items-center justify-center relative overflow-x-hidden bg-background text-foreground selection:bg-primary/30 selection:text-primary py-4 sm:py-6">
       
       {/* Background Layer with Floating Elements */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -157,17 +161,17 @@ const Login = () => {
           <div className="lg:col-span-5 flex flex-col justify-between p-4 sm:p-5 lg:p-8 relative bg-secondary/20">
             
             {/* Mobile 3D Illustration - Hidden on desktop */}
-            <motion.div 
-              className="lg:hidden relative h-28 sm:h-36 overflow-hidden rounded-xl -mx-2 sm:-mx-3 -mt-2 sm:-mt-3 mb-3 sm:mb-4"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.4 }}
-            >
-              <img 
-                src={mobileAuthIllustration} 
-                alt="E-commerce illustration" 
-                className="w-full h-full object-cover"
-              />
+            <motion.div className="lg:hidden relative h-28 sm:h-36 overflow-hidden rounded-xl -mx-2 sm:-mx-3 -mt-2 sm:-mt-3 mb-3 sm:mb-4" initial={{
+            opacity: 0,
+            y: -20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            delay: 0.1,
+            duration: 0.4
+          }}>
+              <img src={mobileAuthIllustration} alt="E-commerce illustration" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-secondary/80" />
             </motion.div>
             
@@ -299,15 +303,18 @@ const Login = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 opacity-80" />
             
             {/* 3D Illustration */}
-            <motion.img 
-              src={login3dIllustration} 
-              alt="E-commerce 3D Illustration" 
-              className="absolute inset-0 w-full h-full object-cover cursor-pointer" 
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            />
+            <motion.img src={login3dIllustration} alt="E-commerce 3D Illustration" className="absolute inset-0 w-full h-full object-cover cursor-pointer" initial={{
+            opacity: 0,
+            scale: 1.05
+          }} animate={{
+            opacity: 1,
+            scale: 1
+          }} whileHover={{
+            scale: 1.05
+          }} transition={{
+            duration: 0.4,
+            ease: "easeOut"
+          }} />
             
             {/* Overlay Gradient Tone */}
             <div className="absolute inset-0 bg-primary/10 mix-blend-overlay z-10" />
@@ -322,7 +329,7 @@ const Login = () => {
           }} transition={{
             delay: 0.6
           }}>
-              <div className="bg-card/70 backdrop-blur-xl border border-border/30 p-4 rounded-2xl flex items-center gap-4 shadow-xl">
+              <div className="bg-card/70 backdrop-blur-xl border border-border/30 p-4 rounded-2xl flex items-center gap-4 shadow-xl opacity-90">
                 <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
                   <TrendingUp className="h-5 w-5 text-primary" />
                 </div>
