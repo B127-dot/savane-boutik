@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "@/contexts/AppContext";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Check, Store, Package, MessageCircle, Share2, ArrowRight, ArrowLeft, Sparkles } from "lucide-react";
 import { isValidWhatsAppNumber, formatWhatsAppNumber } from "@/lib/whatsapp";
 import { motion, AnimatePresence } from "framer-motion";
+import confetti from "canvas-confetti";
 
 // Step illustrations
 import step1Illustration from "@/assets/onboarding-step-1-shop.jpg";
@@ -150,12 +151,61 @@ const Onboarding = () => {
     }
   };
 
+  // Confetti celebration effect
+  const triggerConfetti = useCallback(() => {
+    const duration = 3000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+    const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+    const interval = setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        return;
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+        colors: ['#10B981', '#059669', '#34D399', '#6EE7B7', '#A7F3D0'],
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+        colors: ['#10B981', '#059669', '#34D399', '#6EE7B7', '#A7F3D0'],
+      });
+    }, 250);
+  }, []);
+
+  // Trigger confetti when reaching step 4
+  useEffect(() => {
+    if (currentStep === 4) {
+      triggerConfetti();
+    }
+  }, [currentStep, triggerConfetti]);
+
   const handleFinish = () => {
+    // One last burst of confetti on finish
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#10B981', '#059669', '#34D399', '#6EE7B7', '#A7F3D0'],
+      zIndex: 9999,
+    });
+
     toast({
       title: "Félicitations ! 🎉",
       description: "Votre boutique est prête à vendre",
     });
-    navigate('/dashboard');
+    
+    setTimeout(() => navigate('/dashboard'), 500);
   };
 
   const steps = [
