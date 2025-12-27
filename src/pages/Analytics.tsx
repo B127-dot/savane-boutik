@@ -240,32 +240,40 @@ const Analytics = () => {
         <TabsContent value="overview" className="space-y-6">
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {stats.map((stat, index) => (
-              <Card key={index} className="hover:shadow-medium transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground">
-                        {stat.title}
-                      </p>
-                      <p className="text-2xl font-bold">{stat.value}</p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {stat.description}
-                      </p>
+            {stats.map((stat, index) => {
+              const iconColors = ['#10B981', '#3B82F6', '#06B6D4', '#8B5CF6'];
+              return (
+                <Card key={index} className="hover:shadow-medium transition-shadow relative overflow-hidden group">
+                  {/* Watermark Icon Background */}
+                  <stat.icon 
+                    className="absolute -bottom-4 -right-4 h-32 w-32 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none"
+                    style={{ color: iconColors[index] }}
+                  />
+                  <CardContent className="p-6 relative z-10">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">
+                          {stat.title}
+                        </p>
+                        <p className="text-2xl font-bold">{stat.value}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {stat.description}
+                        </p>
+                      </div>
+                      <div className={`p-2 rounded-lg bg-accent/20`}>
+                        <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                      </div>
                     </div>
-                    <div className={`p-2 rounded-lg bg-accent/20`}>
-                      <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                    <div className="flex items-center mt-4 text-xs">
+                      <span className={`font-medium ${stat.color}`}>
+                        {stat.trend}
+                      </span>
+                      <span className="text-muted-foreground ml-1">vs mois dernier</span>
                     </div>
-                  </div>
-                  <div className="flex items-center mt-4 text-xs">
-                    <span className={`font-medium ${stat.color}`}>
-                      {stat.trend}
-                    </span>
-                    <span className="text-muted-foreground ml-1">vs mois dernier</span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
           {/* Graphiques */}
@@ -349,24 +357,33 @@ const Analytics = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-4 rounded-lg bg-success/10">
-                  <p className="text-2xl font-bold text-success">
-                    {products.filter(p => p.stock > 10).length}
-                  </p>
-                  <p className="text-sm text-muted-foreground">Stock élevé</p>
-                </div>
-                <div className="text-center p-4 rounded-lg bg-warning/10">
-                  <p className="text-2xl font-bold text-warning">
-                    {products.filter(p => p.stock <= 10 && p.stock > 0).length}
-                  </p>
-                  <p className="text-sm text-muted-foreground">Stock faible</p>
-                </div>
-                <div className="text-center p-4 rounded-lg bg-destructive/10">
-                  <p className="text-2xl font-bold text-destructive">
-                    {products.filter(p => p.stock === 0).length}
-                  </p>
-                  <p className="text-sm text-muted-foreground">Rupture de stock</p>
-                </div>
+                <Card className="relative overflow-hidden group border-0 shadow-none">
+                  <Package className="absolute -bottom-3 -right-3 h-24 w-24 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none" style={{ color: '#10B981' }} />
+                  <div className="text-center p-4 rounded-lg bg-success/10 relative z-10">
+                    <p className="text-2xl font-bold text-success">
+                      {products.filter(p => p.stock > 10).length}
+                    </p>
+                    <p className="text-sm text-muted-foreground">Stock élevé</p>
+                  </div>
+                </Card>
+                <Card className="relative overflow-hidden group border-0 shadow-none">
+                  <Package className="absolute -bottom-3 -right-3 h-24 w-24 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none" style={{ color: '#F59E0B' }} />
+                  <div className="text-center p-4 rounded-lg bg-warning/10 relative z-10">
+                    <p className="text-2xl font-bold text-warning">
+                      {products.filter(p => p.stock <= 10 && p.stock > 0).length}
+                    </p>
+                    <p className="text-sm text-muted-foreground">Stock faible</p>
+                  </div>
+                </Card>
+                <Card className="relative overflow-hidden group border-0 shadow-none">
+                  <Package className="absolute -bottom-3 -right-3 h-24 w-24 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none" style={{ color: '#EF4444' }} />
+                  <div className="text-center p-4 rounded-lg bg-destructive/10 relative z-10">
+                    <p className="text-2xl font-bold text-destructive">
+                      {products.filter(p => p.stock === 0).length}
+                    </p>
+                    <p className="text-sm text-muted-foreground">Rupture de stock</p>
+                  </div>
+                </Card>
               </div>
             </CardContent>
           </Card>
@@ -378,30 +395,34 @@ const Analytics = () => {
 
           {/* Order Status */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card>
-              <CardContent className="p-6 text-center">
+            <Card className="relative overflow-hidden group">
+              <ShoppingCart className="absolute -bottom-3 -right-3 h-24 w-24 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none" style={{ color: '#F59E0B' }} />
+              <CardContent className="p-6 text-center relative z-10">
                 <div className="text-2xl font-bold text-warning">{pendingOrders}</div>
                 <div className="text-sm text-muted-foreground">En attente</div>
               </CardContent>
             </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
+            <Card className="relative overflow-hidden group">
+              <ShoppingCart className="absolute -bottom-3 -right-3 h-24 w-24 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none" style={{ color: '#3B82F6' }} />
+              <CardContent className="p-6 text-center relative z-10">
                 <div className="text-2xl font-bold text-primary">
                   {orders.filter(o => o.status === 'confirmed').length}
                 </div>
                 <div className="text-sm text-muted-foreground">Confirmées</div>
               </CardContent>
             </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
+            <Card className="relative overflow-hidden group">
+              <ShoppingCart className="absolute -bottom-3 -right-3 h-24 w-24 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none" style={{ color: '#06B6D4' }} />
+              <CardContent className="p-6 text-center relative z-10">
                 <div className="text-2xl font-bold text-accent">
                   {orders.filter(o => o.status === 'shipped').length}
                 </div>
                 <div className="text-sm text-muted-foreground">Expédiées</div>
               </CardContent>
             </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
+            <Card className="relative overflow-hidden group">
+              <ShoppingCart className="absolute -bottom-3 -right-3 h-24 w-24 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none" style={{ color: '#10B981' }} />
+              <CardContent className="p-6 text-center relative z-10">
                 <div className="text-2xl font-bold text-success">{completedOrders}</div>
                 <div className="text-sm text-muted-foreground">Livrées</div>
               </CardContent>

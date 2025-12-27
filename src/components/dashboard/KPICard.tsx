@@ -11,6 +11,7 @@ interface KPICardProps {
   title: string;
   value: string | number;
   icon: React.ElementType;
+  iconColor?: string;
   trend?: {
     value: number;
     label: string;
@@ -33,6 +34,7 @@ const KPICard = ({
   title, 
   value, 
   icon: Icon, 
+  iconColor = 'hsl(var(--primary))',
   trend, 
   badge, 
   action,
@@ -77,8 +79,13 @@ const KPICard = ({
   };
 
   return (
-    <Card className={`${shadowClass} ${borderClass} hover:scale-[1.02] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group`}>
-      <CardContent className="p-6">
+    <Card className={`${shadowClass} ${borderClass} hover:scale-[1.02] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden`}>
+      {/* Watermark Icon Background */}
+      <Icon 
+        className="absolute -bottom-4 -right-4 h-32 w-32 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none"
+        style={{ color: iconColor }}
+      />
+      <CardContent className="p-6 relative z-10">
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <p className="text-sm font-display font-medium text-muted-foreground mb-1">{title}</p>
