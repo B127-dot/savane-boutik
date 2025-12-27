@@ -310,6 +310,7 @@ const Dashboard = () => {
               title="Revenus"
               value={`${totalRevenue.toLocaleString('fr-FR')} FCFA`}
               icon={TrendingUp}
+              iconColor="#10B981"
               trend={period !== 'all' ? {
                 value: Math.abs(revenueTrend),
                 label: 'vs période précédente',
@@ -325,6 +326,7 @@ const Dashboard = () => {
               title="Commandes en Attente"
               value={pendingOrders.length}
               icon={ShoppingCart}
+              iconColor="#3B82F6"
               badge={pendingOrders.length > 0 ? {
                 text: `${pendingOrders.length} à traiter`,
                 variant: 'destructive'
@@ -342,6 +344,7 @@ const Dashboard = () => {
               title="Stock à Réapprovisionner"
               value={lowStockProducts.length + outOfStockProducts.length}
               icon={Package}
+              iconColor="#F59E0B"
               badge={outOfStockProducts.length > 0 ? {
                 text: `${outOfStockProducts.length} rupture`,
                 variant: 'warning'
@@ -359,6 +362,7 @@ const Dashboard = () => {
               title="Taux de Conversion"
               value={`${conversionRate}%`}
               icon={Percent}
+              iconColor="#8B5CF6"
               trend={period !== 'all' ? {
                 value: Math.abs(conversionTrend),
                 label: 'vs période précédente',
