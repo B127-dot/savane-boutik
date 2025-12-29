@@ -30,6 +30,11 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
     /* Mode clair par défaut - Couleurs adaptées pour le Burkina Faso */
     --background: 0 0% 100%;
     --foreground: 222 84% 5%;
+    
+    /* Thème Haute Fashion */
+    --haute-primary: 24 100% 50%;
+    --haute-accent: 142 70% 45%;
+    --haute-bg: 0 0% 4%;
 
     --card: 0 0% 100%;
     --card-foreground: 222 84% 5%;
@@ -128,6 +133,11 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
     /* Mode sombre - Thème sombre moderne */
     --background: 222 84% 5%;
     --foreground: 210 40% 98%;
+    
+    /* Thème Haute Fashion - mêmes valeurs */
+    --haute-primary: 24 100% 50%;
+    --haute-accent: 142 70% 45%;
+    --haute-bg: 0 0% 4%;
 
     --card: 224 71% 4%;
     --card-foreground: 213 31% 91%;
@@ -272,6 +282,36 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
   /* Pause animation on hover */
   .hover\:pause-animation:hover {
     animation-play-state: paused !important;
+  }
+
+  /* =====================================
+   ✨ HAUTE FASHION THEME UTILITIES
+   ===================================== */
+  .haute-fashion-theme {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 100%;
+    --primary: 24 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 70%;
+    --border: 0 0% 15%;
+  }
+
+  .text-gradient-haute {
+    background: linear-gradient(135deg, hsl(24 100% 50%) 0%, hsl(24 100% 70%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .shadow-glow-haute {
+    box-shadow: 0 0 30px hsl(24 100% 50% / 0.5);
+  }
+
+  .shadow-glow-haute-sm {
+    box-shadow: 0 0 15px hsl(24 100% 50% / 0.4);
   }
 }
 

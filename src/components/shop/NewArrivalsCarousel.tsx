@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import ModernProductCard from './themes/modern/ModernProductCard';
 import ElegantProductCard from './themes/elegant/ElegantProductCard';
+import { HauteFashionProductCard } from './themes/haute-fashion';
 
 interface NewArrivalsCarouselProps {
   products: Product[];
@@ -25,7 +26,9 @@ const NewArrivalsCarousel = ({
 }: NewArrivalsCarouselProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { themeId } = useTheme();
-  const ProductCard = themeId === 'elegant' ? ElegantProductCard : ModernProductCard;
+  const ProductCard = themeId === 'elegant' ? ElegantProductCard : 
+                      themeId === 'haute-fashion' ? HauteFashionProductCard : 
+                      ModernProductCard;
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
