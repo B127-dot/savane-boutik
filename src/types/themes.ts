@@ -3,7 +3,7 @@ export interface Theme {
   name: string;
   description: string;
   preview: string;
-  category: 'modern' | 'elegant' | 'minimal' | 'creative';
+  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'haute-fashion';
   isAvailable: boolean;
   components: {
     hero: string;
@@ -63,6 +63,19 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       hero: 'creative',
       productCard: 'creative',
       footer: 'creative'
+    }
+  },
+  'haute-fashion': {
+    id: 'haute-fashion',
+    name: 'Haute Fashion',
+    description: 'Thème streetwear premium avec effets parallax, design sombre élégant et animations avancées. Parfait pour la mode urbaine.',
+    preview: '/theme-previews/haute-fashion.jpg',
+    category: 'haute-fashion',
+    isAvailable: true,
+    components: {
+      hero: 'haute-fashion',
+      productCard: 'haute-fashion',
+      footer: 'haute-fashion'
     }
   }
 };
