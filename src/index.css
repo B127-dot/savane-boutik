@@ -313,6 +313,88 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
   .shadow-glow-haute-sm {
     box-shadow: 0 0 15px hsl(24 100% 50% / 0.4);
   }
+
+  /* Haute Fashion Animations */
+  @keyframes haute-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes haute-scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes haute-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes haute-pulse-line {
+    0%, 100% {
+      transform: scaleY(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scaleY(1.5);
+      opacity: 1;
+    }
+  }
+
+  @keyframes haute-float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-haute-slide-up {
+    animation: haute-slide-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-haute-scale-in {
+    animation: haute-scale-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-haute-fade-in {
+    animation: haute-fade-in 0.5s ease-out forwards;
+  }
+
+  .animate-haute-pulse-line {
+    animation: haute-pulse-line 2s ease-in-out infinite;
+  }
+
+  .animate-haute-float {
+    animation: haute-float 3s ease-in-out infinite;
+  }
+
+  /* Haute Fashion delay utilities */
+  .haute-delay-100 { animation-delay: 0.1s; }
+  .haute-delay-200 { animation-delay: 0.2s; }
+  .haute-delay-300 { animation-delay: 0.3s; }
+  .haute-delay-400 { animation-delay: 0.4s; }
+  .haute-delay-500 { animation-delay: 0.5s; }
+  .haute-delay-600 { animation-delay: 0.6s; }
+  .haute-delay-700 { animation-delay: 0.7s; }
+  .haute-delay-800 { animation-delay: 0.8s; }
 }
 
 @layer base {
