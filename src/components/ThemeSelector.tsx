@@ -30,6 +30,16 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
       });
       return;
     }
+    
+    if (!shopSettings) {
+      toast({
+        title: "Paramètres en cours de chargement",
+        description: "Veuillez patienter quelques instants.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setPreviewTheme(theme);
     setIsPreviewOpen(true);
   };
@@ -176,7 +186,7 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
           onApply={() => handleApplyTheme(previewTheme)}
           themeId={previewTheme.id}
           themeName={previewTheme.name}
-          shopUrl={shopSettings.shopUrl}
+          shopUrl={shopSettings?.shopUrl ?? 'ma-boutique'}
         />
       )}
     </div>
