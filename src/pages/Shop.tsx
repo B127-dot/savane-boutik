@@ -33,7 +33,18 @@ import MinimalFooter from '@/components/shop/themes/minimal/MinimalFooter';
 import { CreativeHero } from '@/components/shop/themes/creative/CreativeHero';
 import { CreativeProductCard } from '@/components/shop/themes/creative/CreativeProductCard';
 import { CreativeFooter } from '@/components/shop/themes/creative/CreativeFooter';
-import { HauteFashionHero, HauteFashionProductCard, HauteFashionFooter } from '@/components/shop/themes/haute-fashion';
+import { 
+  HauteFashionHero, 
+  HauteFashionProductCard, 
+  HauteFashionFooter,
+  HauteFashionHeader,
+  HauteFashionTrustBar,
+  HauteFashionNewArrivals,
+  HauteFashionCategorySection,
+  HauteFashionTestimonials,
+  HauteFashionWhyBuy,
+  HauteFashionNewsletter
+} from '@/components/shop/themes/haute-fashion';
 
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
@@ -218,15 +229,28 @@ const Shop = () => {
     );
   }
 
+  // Check if using haute-fashion theme for conditional rendering
+  const isHauteFashion = currentTheme === 'haute-fashion';
+
   return (
     <ThemeProvider themeId={currentTheme}>
-      <div className="min-h-screen bg-background pb-20 md:pb-0">
-        <ShopHeader 
-          logo={shopSettings.logo}
-          shopName={shopSettings.shopName}
-          cartItemsCount={cartItemsCount}
-          onCartClick={() => setIsCartOpen(true)}
-        />
+      <div className={`min-h-screen pb-20 md:pb-0 ${isHauteFashion ? 'bg-[#0a0a0a]' : 'bg-background'}`}>
+        {/* Header - use theme-specific for haute-fashion */}
+        {isHauteFashion ? (
+          <HauteFashionHeader
+            logoUrl={shopSettings.logo}
+            shopName={shopSettings.shopName}
+            cartItemsCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+          />
+        ) : (
+          <ShopHeader 
+            logo={shopSettings.logo}
+            shopName={shopSettings.shopName}
+            cartItemsCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+          />
+        )}
 
         <Hero 
           heroImage={shopSettings.heroImage}
@@ -236,177 +260,241 @@ const Shop = () => {
           heroButtonLink={shopSettings.heroButtonLink}
         />
 
-      <TrustBar trustItems={shopSettings.trustBar} />
+        {/* Trust Bar - use theme-specific for haute-fashion */}
+        {isHauteFashion ? (
+          <HauteFashionTrustBar />
+        ) : (
+          <TrustBar trustItems={shopSettings.trustBar} />
+        )}
 
-      <NewArrivalsCarousel 
-        products={getNewArrivals()}
-        shopUrl={shopUrl!}
-        onAddToCart={handleAddToCart}
-        onQuickView={setQuickViewProduct}
-        onToggleWishlist={handleToggleWishlist}
-        wishlist={wishlist}
-      />
+        {/* New Arrivals / Products Section */}
+        {isHauteFashion ? (
+          <HauteFashionNewArrivals 
+            products={getNewArrivals()}
+            shopUrl={shopUrl!}
+            onAddToCart={handleAddToCart}
+            onQuickView={setQuickViewProduct}
+            onToggleWishlist={handleToggleWishlist}
+            wishlist={wishlist}
+          />
+        ) : (
+          <NewArrivalsCarousel 
+            products={getNewArrivals()}
+            shopUrl={shopUrl!}
+            onAddToCart={handleAddToCart}
+            onQuickView={setQuickViewProduct}
+            onToggleWishlist={handleToggleWishlist}
+            wishlist={wishlist}
+          />
+        )}
 
-      <div id="categories">
-        <CategoryShowcase 
-          categories={categories}
-          products={products}
-          onCategoryClick={(categoryName) => {
-            setSelectedCategory(categoryName);
-            scrollToProducts();
-          }}
-        />
-      </div>
-
-      <section id="products" className="py-12 md:py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
-              Tous Nos Produits
-            </h2>
-            <p className="text-lg font-body text-muted-foreground">
-              Parcourez notre collection complète
-            </p>
-          </div>
-
-          <div className="mb-8 space-y-4">
-            <div className="relative max-w-2xl mx-auto">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Rechercher un produit..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-14 text-lg border-2 focus:border-primary"
-              />
-            </div>
-
-            <div className="flex flex-wrap gap-2 justify-center">
-              <Button
-                variant={selectedCategory === 'all' ? 'default' : 'outline'}
-                onClick={() => setSelectedCategory('all')}
-                className="rounded-full"
-              >
-                Tous ({products.filter(p => p.status === 'active' && p.stock > 0).length})
-              </Button>
-              {categories.map((category) => {
-                const count = products.filter(
-                  p => p.categoryId === category.id && p.status === 'active' && p.stock > 0
-                ).length;
-                if (count === 0) return null;
-                
-                return (
-                  <Button
-                    key={category.id}
-                    variant={selectedCategory === category.name ? 'default' : 'outline'}
-                    onClick={() => setSelectedCategory(category.name)}
-                    className="rounded-full"
-                  >
-                    {category.name} ({count})
-                  </Button>
-                );
-              })}
-            </div>
-
-            <div className="flex flex-wrap gap-3 justify-center items-center">
-              <span className="text-sm text-muted-foreground">Trier par:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="px-4 py-2 rounded-lg border border-border bg-card text-foreground"
-              >
-                <option value="recent">Plus récent</option>
-                <option value="price-asc">Prix croissant</option>
-                <option value="price-desc">Prix décroissant</option>
-                <option value="name">Nom A-Z</option>
-              </select>
-            </div>
-          </div>
-
-          {isLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <SkeletonProductCard key={i} />
-              ))}
-            </div>
-          ) : filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {filteredProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                shopUrl={shopUrl!}
-                onAddToCart={handleAddToCart}
-                onQuickView={setQuickViewProduct}
-                onToggleWishlist={handleToggleWishlist}
-                isInWishlist={wishlist.includes(product.id)}
-              />
-              ))}
-            </div>
+        {/* Categories Section */}
+        <div id="categories">
+          {isHauteFashion ? (
+            <HauteFashionCategorySection 
+              categories={categories}
+              products={products}
+              onCategoryClick={(categoryName) => {
+                setSelectedCategory(categoryName);
+                scrollToProducts();
+              }}
+            />
           ) : (
-            <div className="text-center py-16">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-muted rounded-full mb-4">
-                <Search className="h-10 w-10 text-muted-foreground" />
-              </div>
-              <h3 className="text-xl font-display font-semibold text-foreground mb-2">
-                Aucun produit trouvé
-              </h3>
-              <p className="font-body text-muted-foreground mb-6">
-                Essayez de modifier vos critères de recherche
-              </p>
-              <Button onClick={() => {
-                setSearchQuery('');
-                setSelectedCategory('all');
-              }}>
-                Réinitialiser les filtres
-              </Button>
-            </div>
+            <CategoryShowcase 
+              categories={categories}
+              products={products}
+              onCategoryClick={(categoryName) => {
+                setSelectedCategory(categoryName);
+                scrollToProducts();
+              }}
+            />
           )}
         </div>
-      </section>
 
-      <SocialProofSection />
-      <WhyBuySection />
-      <NewsletterSection />
+        {/* All Products Section */}
+        <section id="products" className={`py-12 md:py-16 ${isHauteFashion ? 'bg-[#0a0a0a]' : 'bg-background'}`}>
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-10">
+              {isHauteFashion ? (
+                <>
+                  <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-primary mb-3">
+                    Collection complète
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-3">
+                    <span className="text-white">TOUS NOS </span>
+                    <span className="text-gradient">PRODUITS</span>
+                  </h2>
+                  <p className="text-muted-foreground">
+                    Parcourez notre collection complète
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-3">
+                    Tous Nos Produits
+                  </h2>
+                  <p className="text-lg font-body text-muted-foreground">
+                    Parcourez notre collection complète
+                  </p>
+                </>
+              )}
+            </div>
 
-      <Footer 
-        logo={shopSettings.logo}
-        shopName={shopSettings.shopName}
-        aboutText={shopSettings.aboutText}
-        phone={shopSettings.phone}
-        whatsapp={shopSettings.socialLinks.whatsapp}
-        facebook={shopSettings.socialLinks.facebook}
-        instagram={shopSettings.socialLinks.instagram}
-        tiktok={shopSettings.socialLinks.tiktok}
-      />
+            <div className="mb-8 space-y-4">
+              <div className="relative max-w-2xl mx-auto">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Rechercher un produit..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={`pl-12 h-14 text-lg ${isHauteFashion ? 'bg-white/5 border-white/20 text-white placeholder:text-white/50 focus:border-primary' : 'border-2 focus:border-primary'}`}
+                />
+              </div>
 
-      {shopSettings.socialLinks.whatsapp && (
-        <WhatsAppButton 
-          phoneNumber={shopSettings.socialLinks.whatsapp}
-          message="Bonjour, je visite votre boutique en ligne !"
+              <div className="flex flex-wrap gap-2 justify-center">
+                <Button
+                  variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                  onClick={() => setSelectedCategory('all')}
+                  className={`rounded-full ${isHauteFashion && selectedCategory !== 'all' ? 'border-white/20 text-white hover:bg-white/10' : ''}`}
+                >
+                  Tous ({products.filter(p => p.status === 'active' && p.stock > 0).length})
+                </Button>
+                {categories.map((category) => {
+                  const count = products.filter(
+                    p => p.categoryId === category.id && p.status === 'active' && p.stock > 0
+                  ).length;
+                  if (count === 0) return null;
+                  
+                  return (
+                    <Button
+                      key={category.id}
+                      variant={selectedCategory === category.name ? 'default' : 'outline'}
+                      onClick={() => setSelectedCategory(category.name)}
+                      className={`rounded-full ${isHauteFashion && selectedCategory !== category.name ? 'border-white/20 text-white hover:bg-white/10' : ''}`}
+                    >
+                      {category.name} ({count})
+                    </Button>
+                  );
+                })}
+              </div>
+
+              <div className="flex flex-wrap gap-3 justify-center items-center">
+                <span className={`text-sm ${isHauteFashion ? 'text-white/60' : 'text-muted-foreground'}`}>Trier par:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as any)}
+                  className={`px-4 py-2 rounded-lg border ${isHauteFashion ? 'border-white/20 bg-white/5 text-white' : 'border-border bg-card text-foreground'}`}
+                >
+                  <option value="recent">Plus récent</option>
+                  <option value="price-asc">Prix croissant</option>
+                  <option value="price-desc">Prix décroissant</option>
+                  <option value="name">Nom A-Z</option>
+                </select>
+              </div>
+            </div>
+
+            {isLoading ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                  <SkeletonProductCard key={i} />
+                ))}
+              </div>
+            ) : filteredProducts.length > 0 ? (
+              <div className={`grid gap-4 md:gap-6 ${isHauteFashion ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'}`}>
+                {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  shopUrl={shopUrl!}
+                  onAddToCart={handleAddToCart}
+                  onQuickView={setQuickViewProduct}
+                  onToggleWishlist={handleToggleWishlist}
+                  isInWishlist={wishlist.includes(product.id)}
+                />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 ${isHauteFashion ? 'bg-white/10' : 'bg-muted'}`}>
+                  <Search className={`h-10 w-10 ${isHauteFashion ? 'text-white/60' : 'text-muted-foreground'}`} />
+                </div>
+                <h3 className={`text-xl font-display font-semibold mb-2 ${isHauteFashion ? 'text-white' : 'text-foreground'}`}>
+                  Aucun produit trouvé
+                </h3>
+                <p className={`mb-6 ${isHauteFashion ? 'text-white/60' : 'font-body text-muted-foreground'}`}>
+                  Essayez de modifier vos critères de recherche
+                </p>
+                <Button onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('all');
+                }}>
+                  Réinitialiser les filtres
+                </Button>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Social Proof / Testimonials */}
+        {isHauteFashion ? (
+          <HauteFashionTestimonials />
+        ) : (
+          <SocialProofSection />
+        )}
+
+        {/* Why Buy Section */}
+        {isHauteFashion ? (
+          <HauteFashionWhyBuy />
+        ) : (
+          <WhyBuySection />
+        )}
+
+        {/* Newsletter */}
+        {isHauteFashion ? (
+          <HauteFashionNewsletter />
+        ) : (
+          <NewsletterSection />
+        )}
+
+        <Footer 
+          logo={shopSettings.logo}
+          shopName={shopSettings.shopName}
+          aboutText={shopSettings.aboutText}
+          phone={shopSettings.phone}
+          whatsapp={shopSettings.socialLinks.whatsapp}
+          facebook={shopSettings.socialLinks.facebook}
+          instagram={shopSettings.socialLinks.instagram}
+          tiktok={shopSettings.socialLinks.tiktok}
         />
-      )}
 
-      <BottomNavMobile 
-        cartItemsCount={cartItemsCount}
-        onCartClick={() => setIsCartOpen(true)}
-        onCategoriesClick={scrollToCategories}
-        onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      />
+        {shopSettings.socialLinks.whatsapp && (
+          <WhatsAppButton 
+            phoneNumber={shopSettings.socialLinks.whatsapp}
+            message="Bonjour, je visite votre boutique en ligne !"
+          />
+        )}
 
-      <CartSheet
-        open={isCartOpen}
-        onOpenChange={setIsCartOpen}
-        shopUrl={shopUrl || ''}
-        shopSettings={shopSettings}
-      />
+        <BottomNavMobile 
+          cartItemsCount={cartItemsCount}
+          onCartClick={() => setIsCartOpen(true)}
+          onCategoriesClick={scrollToCategories}
+          onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        />
 
-      <QuickViewModal
-        product={quickViewProduct}
-        isOpen={!!quickViewProduct}
-        onClose={() => setQuickViewProduct(null)}
-        onAddToCart={handleAddToCart}
-      />
+        <CartSheet
+          open={isCartOpen}
+          onOpenChange={setIsCartOpen}
+          shopUrl={shopUrl || ''}
+          shopSettings={shopSettings}
+        />
+
+        <QuickViewModal
+          product={quickViewProduct}
+          isOpen={!!quickViewProduct}
+          onClose={() => setQuickViewProduct(null)}
+          onAddToCart={handleAddToCart}
+        />
       </div>
     </ThemeProvider>
   );
