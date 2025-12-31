@@ -3,3 +3,8 @@ export { default as HauteFashionHeader } from './HauteFashionHeader';
 export { default as HauteFashionProductCard } from './HauteFashionProductCard';
 export { default as HauteFashionFooter } from './HauteFashionFooter';
 export { default as HauteFashionTrustBar } from './HauteFashionTrustBar';
+export { default as HauteFashionNewArrivals } from './HauteFashionNewArrivals';
+export { default as HauteFashionCategorySection } from './HauteFashionCategorySection';
+export { default as HauteFashionTestimonials } from './HauteFashionTestimonials';
+export { default as HauteFashionWhyBuy } from './HauteFashionWhyBuy';
+export { default as HauteFashionNewsletter } from './HauteFashionNewsletter';
