@@ -29,10 +29,10 @@ export const THEME_REGISTRY: Record<string, Theme> = {
   elegant: {
     id: 'elegant',
     name: 'Élégant',
-    description: 'Design sophistiqué avec typographie raffinée et espaces aérés. Idéal pour les produits haut de gamme.',
+    description: 'Bientôt disponible - Design sophistiqué avec typographie raffinée et espaces aérés.',
     preview: '/theme-previews/elegant.jpg',
     category: 'elegant',
-    isAvailable: true,
+    isAvailable: false,
     components: {
       hero: 'elegant',
       productCard: 'elegant',
@@ -42,10 +42,10 @@ export const THEME_REGISTRY: Record<string, Theme> = {
   minimal: {
     id: 'minimal',
     name: 'Minimaliste',
-    description: 'Design épuré avec espaces blancs généreux et typographie sans-serif moderne. Pour une esthétique pure et contemporaine.',
+    description: 'Bientôt disponible - Design épuré avec espaces blancs généreux et typographie moderne.',
     preview: '/theme-previews/minimal.jpg',
     category: 'minimal',
-    isAvailable: true,
+    isAvailable: false,
     components: {
       hero: 'minimal',
       productCard: 'minimal',
@@ -55,10 +55,10 @@ export const THEME_REGISTRY: Record<string, Theme> = {
   creative: {
     id: 'creative',
     name: 'Créatif',
-    description: 'Design audacieux avec couleurs vives, animations dynamiques et typographies expressives. Parfait pour les boutiques artistiques.',
+    description: 'Bientôt disponible - Design audacieux avec couleurs vives et animations dynamiques.',
     preview: '/theme-previews/creative.jpg',
     category: 'creative',
-    isAvailable: true,
+    isAvailable: false,
     components: {
       hero: 'creative',
       productCard: 'creative',
@@ -68,10 +68,10 @@ export const THEME_REGISTRY: Record<string, Theme> = {
   'haute-fashion': {
     id: 'haute-fashion',
     name: 'Haute Fashion',
-    description: 'Thème streetwear premium avec effets parallax, design sombre élégant et animations avancées. Parfait pour la mode urbaine.',
+    description: 'Bientôt disponible - Thème streetwear premium avec effets parallax et design sombre élégant.',
     preview: '/theme-previews/haute-fashion.jpg',
     category: 'haute-fashion',
-    isAvailable: true,
+    isAvailable: false,
     components: {
       hero: 'haute-fashion',
       productCard: 'haute-fashion',
