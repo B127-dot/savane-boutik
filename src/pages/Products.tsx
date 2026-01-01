@@ -87,7 +87,7 @@ const Products = () => {
     });
   };
 
-  const ProductForm = () => (
+  const renderProductForm = () => (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
@@ -95,15 +95,16 @@ const Products = () => {
           <Input
             id="name"
             value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
             required
+            autoComplete="off"
           />
         </div>
         <div className="space-y-2">
           <Label htmlFor="categoryId">Catégorie</Label>
           <Select
             value={formData.categoryId}
-            onValueChange={(value) => setFormData({ ...formData, categoryId: value })}
+            onValueChange={(value) => setFormData(prev => ({ ...prev, categoryId: value }))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Sélectionnez une catégorie" />
@@ -124,8 +125,9 @@ const Products = () => {
         <Textarea
           id="description"
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
           required
+          autoComplete="off"
         />
       </div>
       
@@ -136,7 +138,7 @@ const Products = () => {
             id="price"
             type="number"
             value={formData.price}
-            onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+            onChange={(e) => setFormData(prev => ({ ...prev, price: Number(e.target.value) }))}
             required
           />
         </div>
@@ -146,7 +148,7 @@ const Products = () => {
             id="stock"
             type="number"
             value={formData.stock}
-            onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
+            onChange={(e) => setFormData(prev => ({ ...prev, stock: Number(e.target.value) }))}
             required
           />
         </div>
@@ -154,7 +156,7 @@ const Products = () => {
           <Label htmlFor="status">Statut</Label>
           <Select
             value={formData.status}
-            onValueChange={(value: 'active' | 'inactive') => setFormData({ ...formData, status: value })}
+            onValueChange={(value: 'active' | 'inactive') => setFormData(prev => ({ ...prev, status: value }))}
           >
             <SelectTrigger>
               <SelectValue />
@@ -169,7 +171,7 @@ const Products = () => {
 
       <ImageUploader
         images={formData.images}
-        onChange={(images) => setFormData({ ...formData, images })}
+        onChange={(images) => setFormData(prev => ({ ...prev, images }))}
       />
       
       <DialogFooter>
@@ -204,7 +206,7 @@ const Products = () => {
                 Remplissez les informations du produit
               </DialogDescription>
             </DialogHeader>
-            <ProductForm />
+            {renderProductForm()}
           </DialogContent>
         </Dialog>
       </div>
@@ -292,7 +294,7 @@ const Products = () => {
                       Modifiez les informations du produit
                     </DialogDescription>
                   </DialogHeader>
-                  <ProductForm />
+                  {renderProductForm()}
                 </DialogContent>
               </Dialog>
               
