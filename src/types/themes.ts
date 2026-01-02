@@ -26,17 +26,17 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       footer: 'modern'
     }
   },
-  elegant: {
-    id: 'elegant',
-    name: 'Élégant',
-    description: 'Bientôt disponible - Design sophistiqué avec typographie raffinée et espaces aérés.',
-    preview: '/theme-previews/elegant.jpg',
+  'noir-luxe': {
+    id: 'noir-luxe',
+    name: 'Noir Luxe',
+    description: 'Thème luxueux dark avec accents dorés. Typographie élégante Cinzel et animations raffinées. Parfait pour le haut de gamme.',
+    preview: '/theme-previews/noir-luxe.jpg',
     category: 'elegant',
-    isAvailable: false,
+    isAvailable: true,
     components: {
-      hero: 'elegant',
-      productCard: 'elegant',
-      footer: 'elegant'
+      hero: 'noir-luxe',
+      productCard: 'noir-luxe',
+      footer: 'noir-luxe'
     }
   },
   minimal: {
