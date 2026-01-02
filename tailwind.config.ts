@@ -33,6 +33,8 @@ export default {
 				'fredoka': ['Fredoka', 'sans-serif'],
 				'righteous': ['Righteous', 'sans-serif'],
 				'bebas': ['Bebas Neue', 'sans-serif'],
+				// NOIR LUXE Theme - Police élégante pour titres
+				'cinzel': ['Cinzel', 'serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -99,7 +101,11 @@ export default {
 				'strong': 'var(--shadow-strong)',
 				'glow': 'var(--shadow-glow)',
 				'glow-primary': '0 0 30px hsl(var(--haute-primary) / 0.5)',
-				'glow-primary-sm': '0 0 15px hsl(var(--haute-primary) / 0.4)'
+				'glow-primary-sm': '0 0 15px hsl(var(--haute-primary) / 0.4)',
+				// NOIR LUXE Theme shadows
+				'gold': '0 4px 20px hsl(var(--noir-luxe-gold) / 0.3)',
+				'gold-lg': '0 8px 40px hsl(var(--noir-luxe-gold) / 0.4)',
+				'gold-glow': '0 0 30px hsl(var(--noir-luxe-gold) / 0.5)',
 			},
 			transitionTimingFunction: {
 				'smooth': 'var(--transition-smooth)',

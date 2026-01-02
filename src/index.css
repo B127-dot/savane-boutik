@@ -395,6 +395,260 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
   .haute-delay-600 { animation-delay: 0.6s; }
   .haute-delay-700 { animation-delay: 0.7s; }
   .haute-delay-800 { animation-delay: 0.8s; }
+
+  /* =====================================
+   ✨ NOIR LUXE THEME - DARK + GOLD LUXURY
+   ===================================== */
+  :root {
+    /* NOIR LUXE color tokens */
+    --noir-luxe-black: 0 0% 4%;
+    --noir-luxe-black-light: 0 0% 7%;
+    --noir-luxe-black-card: 0 0% 9%;
+    --noir-luxe-gold: 43 74% 49%;
+    --noir-luxe-gold-light: 43 74% 60%;
+    --noir-luxe-gold-dark: 43 74% 38%;
+    --noir-luxe-white: 0 0% 100%;
+    --noir-luxe-gray: 0 0% 70%;
+    --noir-luxe-gray-dark: 0 0% 40%;
+  }
+
+  .noir-luxe-theme {
+    --background: var(--noir-luxe-black);
+    --foreground: var(--noir-luxe-white);
+    --card: var(--noir-luxe-black-card);
+    --card-foreground: var(--noir-luxe-white);
+    --popover: var(--noir-luxe-black-light);
+    --popover-foreground: var(--noir-luxe-white);
+    --primary: var(--noir-luxe-gold);
+    --primary-foreground: var(--noir-luxe-black);
+    --primary-glow: var(--noir-luxe-gold-light);
+    --secondary: var(--noir-luxe-black-light);
+    --secondary-foreground: var(--noir-luxe-white);
+    --muted: 0 0% 12%;
+    --muted-foreground: var(--noir-luxe-gray);
+    --accent: var(--noir-luxe-gold);
+    --accent-foreground: var(--noir-luxe-black);
+    --border: 0 0% 15%;
+    --input: 0 0% 12%;
+    --ring: var(--noir-luxe-gold);
+    
+    /* Custom gradients for NOIR LUXE */
+    --gradient-gold: linear-gradient(135deg, hsl(43 74% 49%) 0%, hsl(43 74% 60%) 50%, hsl(43 74% 49%) 100%);
+    --gradient-gold-radial: radial-gradient(ellipse at center, hsl(43 74% 49% / 0.2) 0%, transparent 70%);
+    --gradient-noir: linear-gradient(180deg, hsl(0 0% 4%) 0%, hsl(0 0% 7%) 100%);
+    
+    /* Custom shadows */
+    --shadow-gold: 0 4px 20px hsl(43 74% 49% / 0.3);
+    --shadow-gold-lg: 0 8px 40px hsl(43 74% 49% / 0.4);
+    --shadow-gold-glow: 0 0 30px hsl(43 74% 49% / 0.5);
+  }
+
+  /* NOIR LUXE Text Utilities */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, hsl(43 74% 49%) 0%, hsl(43 74% 70%) 50%, hsl(43 74% 49%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gold {
+    color: hsl(43 74% 49%);
+  }
+
+  .text-gold-light {
+    color: hsl(43 74% 60%);
+  }
+
+  /* NOIR LUXE Background Utilities */
+  .bg-noir {
+    background-color: hsl(0 0% 4%);
+  }
+
+  .bg-noir-light {
+    background-color: hsl(0 0% 7%);
+  }
+
+  .bg-noir-card {
+    background-color: hsl(0 0% 9%);
+  }
+
+  .bg-gradient-gold {
+    background: var(--gradient-gold);
+  }
+
+  /* NOIR LUXE Border Utilities */
+  .border-gold {
+    border-color: hsl(43 74% 49%);
+  }
+
+  .border-gold-light {
+    border-color: hsl(43 74% 49% / 0.3);
+  }
+
+  /* NOIR LUXE Shadow Utilities */
+  .shadow-gold-sm {
+    box-shadow: 0 2px 10px hsl(43 74% 49% / 0.2);
+  }
+
+  .shadow-gold-md {
+    box-shadow: 0 4px 20px hsl(43 74% 49% / 0.3);
+  }
+
+  .shadow-gold-lg {
+    box-shadow: 0 8px 40px hsl(43 74% 49% / 0.4);
+  }
+
+  .shadow-gold-glow {
+    box-shadow: 0 0 30px hsl(43 74% 49% / 0.5);
+  }
+
+  /* NOIR LUXE Keyframe Animations */
+  @keyframes noir-reveal {
+    0% {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes noir-fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes noir-scale-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes gold-shimmer {
+    0% {
+      background-position: -200% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  @keyframes gold-pulse {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 20px hsl(43 74% 49% / 0.4);
+    }
+    50% {
+      opacity: 0.8;
+      box-shadow: 0 0 40px hsl(43 74% 49% / 0.6);
+    }
+  }
+
+  @keyframes gold-border-glow {
+    0%, 100% {
+      border-color: hsl(43 74% 49% / 0.5);
+    }
+    50% {
+      border-color: hsl(43 74% 60% / 0.8);
+    }
+  }
+
+  @keyframes noir-line-reveal {
+    0% {
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+    100% {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+
+  /* NOIR LUXE Animation Classes */
+  .animate-noir-reveal {
+    animation: noir-reveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .animate-noir-fade-in {
+    animation: noir-fade-in 0.6s ease-out forwards;
+  }
+
+  .animate-noir-scale-in {
+    animation: noir-scale-in 0.5s ease-out forwards;
+  }
+
+  .animate-gold-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(43 74% 49%) 0%,
+      hsl(43 74% 70%) 50%,
+      hsl(43 74% 49%) 100%
+    );
+    background-size: 200% auto;
+    animation: gold-shimmer 3s linear infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .animate-gold-pulse {
+    animation: gold-pulse 2s ease-in-out infinite;
+  }
+
+  .animate-gold-border {
+    animation: gold-border-glow 2s ease-in-out infinite;
+  }
+
+  .animate-noir-line {
+    animation: noir-line-reveal 0.8s ease-out forwards;
+  }
+
+  /* NOIR LUXE Animation Delays */
+  .noir-delay-100 { animation-delay: 0.1s; }
+  .noir-delay-200 { animation-delay: 0.2s; }
+  .noir-delay-300 { animation-delay: 0.3s; }
+  .noir-delay-400 { animation-delay: 0.4s; }
+  .noir-delay-500 { animation-delay: 0.5s; }
+  .noir-delay-600 { animation-delay: 0.6s; }
+  .noir-delay-700 { animation-delay: 0.7s; }
+  .noir-delay-800 { animation-delay: 0.8s; }
+  .noir-delay-1000 { animation-delay: 1s; }
+
+  /* NOIR LUXE Hover Effects */
+  .hover-gold-glow {
+    transition: all 0.3s ease;
+  }
+
+  .hover-gold-glow:hover {
+    box-shadow: 0 0 30px hsl(43 74% 49% / 0.5);
+  }
+
+  .hover-gold-border {
+    transition: border-color 0.3s ease;
+    border-color: transparent;
+  }
+
+  .hover-gold-border:hover {
+    border-color: hsl(43 74% 49%);
+  }
+
+  .hover-gold-text {
+    transition: color 0.3s ease;
+  }
+
+  .hover-gold-text:hover {
+    color: hsl(43 74% 49%);
+  }
 }
 
 @layer base {
