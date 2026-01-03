@@ -25,14 +25,16 @@ import ModernHero from '@/components/shop/themes/modern/ModernHero';
 import ModernProductCard from '@/components/shop/themes/modern/ModernProductCard';
 import ModernFooter from '@/components/shop/themes/modern/ModernFooter';
 
-// Theme components - NOIR LUXE
+// Theme components - ARTISAN
 import { 
-  NoirLuxeHeader, 
-  NoirLuxeHero, 
-  NoirLuxeTrustBar,
-  NoirLuxeProductCard,
-  NoirLuxeFooter 
-} from '@/components/shop/themes/noir-luxe';
+  ArtisanHeader, 
+  ArtisanHero, 
+  ArtisanCollections,
+  ArtisanWhyChoose,
+  ArtisanProductCard,
+  ArtisanPopularProducts,
+  ArtisanFooter 
+} from '@/components/shop/themes/artisan';
 
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
@@ -178,7 +180,7 @@ const Shop = () => {
 
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  // Currently only Modern theme is active - other themes coming soon
+  // Currently only Modern and Artisan themes are available
   const currentTheme = previewTheme || shopSettings?.selectedTheme || 'modern';
 
   if (!shopSettings) {
@@ -189,56 +191,112 @@ const Shop = () => {
     );
   }
 
-  // Determine if using NOIR LUXE theme
-  const isNoirLuxe = currentTheme === 'noir-luxe';
+  // Determine which theme to use
+  const isArtisan = currentTheme === 'artisan';
 
+  // ARTISAN THEME
+  if (isArtisan) {
+    return (
+      <ThemeProvider themeId={currentTheme}>
+        <div className="min-h-screen bg-artisan-cream pb-20 md:pb-0">
+          <ArtisanHeader 
+            logo={shopSettings.logo}
+            shopName={shopSettings.shopName}
+            cartItemsCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+          />
+
+          <ArtisanHero 
+            heroImage={shopSettings.heroImage}
+            heroTitle={shopSettings.heroTitle}
+            heroSubtitle={shopSettings.heroSubtitle}
+            heroButtonText={shopSettings.heroButtonText}
+            heroButtonLink={shopSettings.heroButtonLink}
+          />
+
+          <div id="categories">
+            <ArtisanCollections 
+              onCategoryClick={(categoryName) => {
+                setSelectedCategory(categoryName);
+                scrollToProducts();
+              }}
+            />
+          </div>
+
+          <ArtisanWhyChoose shopName={shopSettings.shopName} />
+
+          <ArtisanPopularProducts 
+            shopUrl={shopUrl!}
+            onAddToCart={handleAddToCart}
+            onQuickView={setQuickViewProduct}
+            onToggleWishlist={handleToggleWishlist}
+            wishlist={wishlist}
+          />
+
+          <ArtisanFooter 
+            logo={shopSettings.logo}
+            shopName={shopSettings.shopName}
+            aboutText={shopSettings.aboutText}
+            phone={shopSettings.phone}
+            whatsapp={shopSettings.socialLinks.whatsapp}
+            facebookUrl={shopSettings.socialLinks.facebook}
+            instagramUrl={shopSettings.socialLinks.instagram}
+            tiktokUrl={shopSettings.socialLinks.tiktok}
+          />
+
+          {shopSettings.socialLinks.whatsapp && (
+            <WhatsAppButton 
+              phoneNumber={shopSettings.socialLinks.whatsapp}
+              message="Bonjour, je visite votre boutique en ligne !"
+            />
+          )}
+
+          <BottomNavMobile 
+            cartItemsCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+            onCategoriesClick={scrollToCategories}
+            onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          />
+
+          <CartSheet
+            open={isCartOpen}
+            onOpenChange={setIsCartOpen}
+            shopUrl={shopUrl || ''}
+            shopSettings={shopSettings}
+          />
+
+          <QuickViewModal
+            product={quickViewProduct}
+            isOpen={!!quickViewProduct}
+            onClose={() => setQuickViewProduct(null)}
+            onAddToCart={handleAddToCart}
+          />
+        </div>
+      </ThemeProvider>
+    );
+  }
+
+  // MODERN THEME (default)
   return (
     <ThemeProvider themeId={currentTheme}>
-      <div className={`min-h-screen pb-20 md:pb-0 ${isNoirLuxe ? 'noir-luxe-theme bg-noir' : 'bg-background'}`}>
-        {/* Header - Theme Specific */}
-        {isNoirLuxe ? (
-          <NoirLuxeHeader 
-            logo={shopSettings.logo}
-            shopName={shopSettings.shopName}
-            cartItemsCount={cartItemsCount}
-            onCartClick={() => setIsCartOpen(true)}
-          />
-        ) : (
-          <ShopHeader 
-            logo={shopSettings.logo}
-            shopName={shopSettings.shopName}
-            cartItemsCount={cartItemsCount}
-            onCartClick={() => setIsCartOpen(true)}
-          />
-        )}
+      <div className="min-h-screen pb-20 md:pb-0 bg-background">
+        <ShopHeader 
+          logo={shopSettings.logo}
+          shopName={shopSettings.shopName}
+          cartItemsCount={cartItemsCount}
+          onCartClick={() => setIsCartOpen(true)}
+        />
 
-        {/* Hero - Theme Specific */}
-        {isNoirLuxe ? (
-          <NoirLuxeHero 
-            heroImage={shopSettings.heroImage}
-            heroTitle={shopSettings.heroTitle}
-            heroSubtitle={shopSettings.heroSubtitle}
-            heroButtonText={shopSettings.heroButtonText}
-            heroButtonLink={shopSettings.heroButtonLink}
-          />
-        ) : (
-          <ModernHero 
-            heroImage={shopSettings.heroImage}
-            heroTitle={shopSettings.heroTitle}
-            heroSubtitle={shopSettings.heroSubtitle}
-            heroButtonText={shopSettings.heroButtonText}
-            heroButtonLink={shopSettings.heroButtonLink}
-          />
-        )}
+        <ModernHero 
+          heroImage={shopSettings.heroImage}
+          heroTitle={shopSettings.heroTitle}
+          heroSubtitle={shopSettings.heroSubtitle}
+          heroButtonText={shopSettings.heroButtonText}
+          heroButtonLink={shopSettings.heroButtonLink}
+        />
 
-        {/* Trust Bar - Theme Specific */}
-        {isNoirLuxe ? (
-          <NoirLuxeTrustBar trustItems={shopSettings.trustBar} />
-        ) : (
-          <TrustBar trustItems={shopSettings.trustBar} />
-        )}
+        <TrustBar trustItems={shopSettings.trustBar} />
 
-        {/* New Arrivals */}
         <NewArrivalsCarousel 
           products={getNewArrivals()}
           shopUrl={shopUrl!}
@@ -248,7 +306,6 @@ const Shop = () => {
           wishlist={wishlist}
         />
 
-        {/* Categories Section */}
         <div id="categories">
           <CategoryShowcase 
             categories={categories}
@@ -260,27 +317,26 @@ const Shop = () => {
           />
         </div>
 
-        {/* All Products Section */}
-        <section id="products" className={`py-12 md:py-16 ${isNoirLuxe ? 'bg-noir' : 'bg-background'}`}>
+        <section id="products" className="py-12 md:py-16 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center mb-10">
-              <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${isNoirLuxe ? 'font-cinzel text-white' : 'font-display text-foreground'}`}>
-                {isNoirLuxe ? 'Notre Collection' : 'Tous Nos Produits'}
+              <h2 className="text-3xl md:text-4xl font-bold mb-3 font-display text-foreground">
+                Tous Nos Produits
               </h2>
-              <p className={`text-lg ${isNoirLuxe ? 'font-inter text-white/60' : 'font-body text-muted-foreground'}`}>
-                {isNoirLuxe ? 'Découvrez des pièces d\'exception' : 'Parcourez notre collection complète'}
+              <p className="text-lg font-body text-muted-foreground">
+                Parcourez notre collection complète
               </p>
             </div>
 
             <div className="mb-8 space-y-4">
               <div className="relative max-w-2xl mx-auto">
-                <Search className={`absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 ${isNoirLuxe ? 'text-gold/60' : 'text-muted-foreground'}`} />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                   type="text"
                   placeholder="Rechercher un produit..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className={`pl-12 h-14 text-lg border-2 ${isNoirLuxe ? 'bg-noir-card border-gold/30 text-white placeholder:text-white/40 focus:border-gold' : 'focus:border-primary'}`}
+                  className="pl-12 h-14 text-lg border-2 focus:border-primary"
                 />
               </div>
 
@@ -288,7 +344,7 @@ const Shop = () => {
                 <Button
                   variant={selectedCategory === 'all' ? 'default' : 'outline'}
                   onClick={() => setSelectedCategory('all')}
-                  className={`rounded-full ${isNoirLuxe && selectedCategory === 'all' ? 'bg-gold text-noir hover:bg-gold-light' : ''} ${isNoirLuxe && selectedCategory !== 'all' ? 'border-gold/40 text-white hover:border-gold hover:text-gold' : ''}`}
+                  className="rounded-full"
                 >
                   Tous ({products.filter(p => p.status === 'active' && p.stock > 0).length})
                 </Button>
@@ -303,7 +359,7 @@ const Shop = () => {
                       key={category.id}
                       variant={selectedCategory === category.name ? 'default' : 'outline'}
                       onClick={() => setSelectedCategory(category.name)}
-                      className={`rounded-full ${isNoirLuxe && selectedCategory === category.name ? 'bg-gold text-noir hover:bg-gold-light' : ''} ${isNoirLuxe && selectedCategory !== category.name ? 'border-gold/40 text-white hover:border-gold hover:text-gold' : ''}`}
+                      className="rounded-full"
                     >
                       {category.name} ({count})
                     </Button>
@@ -312,11 +368,11 @@ const Shop = () => {
               </div>
 
               <div className="flex flex-wrap gap-3 justify-center items-center">
-                <span className={`text-sm ${isNoirLuxe ? 'text-white/50' : 'text-muted-foreground'}`}>Trier par:</span>
+                <span className="text-sm text-muted-foreground">Trier par:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className={`px-4 py-2 rounded-lg border ${isNoirLuxe ? 'border-gold/30 bg-noir-card text-white' : 'border-border bg-card text-foreground'}`}
+                  className="px-4 py-2 rounded-lg border border-border bg-card text-foreground"
                 >
                   <option value="recent">Plus récent</option>
                   <option value="price-asc">Prix croissant</option>
@@ -335,38 +391,26 @@ const Shop = () => {
             ) : filteredProducts.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 {filteredProducts.map((product) => (
-                  isNoirLuxe ? (
-                    <NoirLuxeProductCard
-                      key={product.id}
-                      product={product}
-                      shopUrl={shopUrl!}
-                      onAddToCart={handleAddToCart}
-                      onQuickView={setQuickViewProduct}
-                      onToggleWishlist={handleToggleWishlist}
-                      isInWishlist={wishlist.includes(product.id)}
-                    />
-                  ) : (
-                    <ModernProductCard
-                      key={product.id}
-                      product={product}
-                      shopUrl={shopUrl!}
-                      onAddToCart={handleAddToCart}
-                      onQuickView={setQuickViewProduct}
-                      onToggleWishlist={handleToggleWishlist}
-                      isInWishlist={wishlist.includes(product.id)}
-                    />
-                  )
+                  <ModernProductCard
+                    key={product.id}
+                    product={product}
+                    shopUrl={shopUrl!}
+                    onAddToCart={handleAddToCart}
+                    onQuickView={setQuickViewProduct}
+                    onToggleWishlist={handleToggleWishlist}
+                    isInWishlist={wishlist.includes(product.id)}
+                  />
                 ))}
               </div>
             ) : (
               <div className="text-center py-16">
-                <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 ${isNoirLuxe ? 'bg-noir-card border border-gold/30' : 'bg-muted'}`}>
-                  <Search className={`h-10 w-10 ${isNoirLuxe ? 'text-gold/60' : 'text-muted-foreground'}`} />
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 bg-muted">
+                  <Search className="h-10 w-10 text-muted-foreground" />
                 </div>
-                <h3 className={`text-xl font-semibold mb-2 ${isNoirLuxe ? 'font-cinzel text-white' : 'font-display text-foreground'}`}>
+                <h3 className="text-xl font-semibold mb-2 font-display text-foreground">
                   Aucun produit trouvé
                 </h3>
-                <p className={`mb-6 ${isNoirLuxe ? 'font-inter text-white/60' : 'font-body text-muted-foreground'}`}>
+                <p className="mb-6 font-body text-muted-foreground">
                   Essayez de modifier vos critères de recherche
                 </p>
                 <Button 
@@ -374,7 +418,6 @@ const Shop = () => {
                     setSearchQuery('');
                     setSelectedCategory('all');
                   }}
-                  className={isNoirLuxe ? 'bg-gold text-noir hover:bg-gold-light' : ''}
                 >
                   Réinitialiser les filtres
                 </Button>
@@ -383,39 +426,20 @@ const Shop = () => {
           </div>
         </section>
 
-        {/* Social Proof */}
         <SocialProofSection />
-
-        {/* Why Buy Section */}
         <WhyBuySection />
-
-        {/* Newsletter */}
         <NewsletterSection />
 
-        {/* Footer - Theme Specific */}
-        {isNoirLuxe ? (
-          <NoirLuxeFooter 
-            logo={shopSettings.logo}
-            shopName={shopSettings.shopName}
-            aboutText={shopSettings.aboutText}
-            phone={shopSettings.phone}
-            whatsapp={shopSettings.socialLinks.whatsapp}
-            facebookUrl={shopSettings.socialLinks.facebook}
-            instagramUrl={shopSettings.socialLinks.instagram}
-            tiktokUrl={shopSettings.socialLinks.tiktok}
-          />
-        ) : (
-          <ModernFooter 
-            logo={shopSettings.logo}
-            shopName={shopSettings.shopName}
-            aboutText={shopSettings.aboutText}
-            phone={shopSettings.phone}
-            whatsapp={shopSettings.socialLinks.whatsapp}
-            facebook={shopSettings.socialLinks.facebook}
-            instagram={shopSettings.socialLinks.instagram}
-            tiktok={shopSettings.socialLinks.tiktok}
-          />
-        )}
+        <ModernFooter 
+          logo={shopSettings.logo}
+          shopName={shopSettings.shopName}
+          aboutText={shopSettings.aboutText}
+          phone={shopSettings.phone}
+          whatsapp={shopSettings.socialLinks.whatsapp}
+          facebook={shopSettings.socialLinks.facebook}
+          instagram={shopSettings.socialLinks.instagram}
+          tiktok={shopSettings.socialLinks.tiktok}
+        />
 
         {shopSettings.socialLinks.whatsapp && (
           <WhatsAppButton 

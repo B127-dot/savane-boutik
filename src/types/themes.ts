@@ -3,7 +3,7 @@ export interface Theme {
   name: string;
   description: string;
   preview: string;
-  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'haute-fashion';
+  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan';
   isAvailable: boolean;
   components: {
     hero: string;
@@ -26,17 +26,17 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       footer: 'modern'
     }
   },
-  'noir-luxe': {
-    id: 'noir-luxe',
-    name: 'Noir Luxe',
-    description: 'Thème luxueux dark avec accents dorés. Typographie élégante Cinzel et animations raffinées. Parfait pour le haut de gamme.',
-    preview: '/theme-previews/noir-luxe.jpg',
-    category: 'elegant',
+  artisan: {
+    id: 'artisan',
+    name: 'Artisan',
+    description: 'Design organique et naturel avec layouts asymétriques créatifs. Idéal pour les produits artisanaux et faits main.',
+    preview: '/theme-previews/artisan.jpg',
+    category: 'artisan',
     isAvailable: true,
     components: {
-      hero: 'noir-luxe',
-      productCard: 'noir-luxe',
-      footer: 'noir-luxe'
+      hero: 'artisan',
+      productCard: 'artisan',
+      footer: 'artisan'
     }
   },
   minimal: {
@@ -65,19 +65,6 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       footer: 'creative'
     }
   },
-  'haute-fashion': {
-    id: 'haute-fashion',
-    name: 'Haute Fashion',
-    description: 'Bientôt disponible - Thème streetwear premium avec effets parallax et design sombre élégant.',
-    preview: '/theme-previews/haute-fashion.jpg',
-    category: 'haute-fashion',
-    isAvailable: false,
-    components: {
-      hero: 'haute-fashion',
-      productCard: 'haute-fashion',
-      footer: 'haute-fashion'
-    }
-  }
 };
 
 export const getTheme = (themeId: string): Theme => {
