@@ -25,7 +25,7 @@ export default {
 				'display': ['Switzer', 'sans-serif'],
 				'body': ['Switzer', 'Inter', 'sans-serif'],
 				
-				// Polices de thèmes (conservées pour les boutiques)
+				// Polices de thèmes
 				'playfair': ['Playfair Display', 'serif'],
 				'cormorant': ['Cormorant Garamond', 'serif'],
 				'inter': ['Inter', 'sans-serif'],
@@ -33,8 +33,9 @@ export default {
 				'fredoka': ['Fredoka', 'sans-serif'],
 				'righteous': ['Righteous', 'sans-serif'],
 				'bebas': ['Bebas Neue', 'sans-serif'],
-				// NOIR LUXE Theme - Police élégante pour titres
-				'cinzel': ['Cinzel', 'serif'],
+				// ARTISAN Theme - Elegant serif font
+				'serif': ['Lora', 'Playfair Display', 'serif'],
+				'lora': ['Lora', 'serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -88,6 +89,17 @@ export default {
 					warning: 'hsl(var(--kpi-warning))',
 					danger: 'hsl(var(--kpi-danger))',
 					neutral: 'hsl(var(--kpi-neutral))'
+				},
+				// ARTISAN Theme colors
+				artisan: {
+					cream: 'hsl(40 33% 96%)',
+					sand: 'hsl(35 30% 90%)',
+					charcoal: 'hsl(30 10% 20%)',
+					olive: 'hsl(82 35% 35%)',
+					'olive-dark': 'hsl(82 35% 28%)',
+					sage: 'hsl(90 20% 70%)',
+					terracotta: 'hsl(18 70% 55%)',
+					'terracotta-dark': 'hsl(18 70% 45%)',
 				}
 			},
 			backgroundImage: {
@@ -102,10 +114,9 @@ export default {
 				'glow': 'var(--shadow-glow)',
 				'glow-primary': '0 0 30px hsl(var(--haute-primary) / 0.5)',
 				'glow-primary-sm': '0 0 15px hsl(var(--haute-primary) / 0.4)',
-				// NOIR LUXE Theme shadows
-				'gold': '0 4px 20px hsl(var(--noir-luxe-gold) / 0.3)',
-				'gold-lg': '0 8px 40px hsl(var(--noir-luxe-gold) / 0.4)',
-				'gold-glow': '0 0 30px hsl(var(--noir-luxe-gold) / 0.5)',
+				// ARTISAN Theme shadows
+				'artisan': '0 4px 20px hsl(30 10% 20% / 0.1)',
+				'artisan-lg': '0 8px 40px hsl(30 10% 20% / 0.15)',
 			},
 			transitionTimingFunction: {
 				'smooth': 'var(--transition-smooth)',
