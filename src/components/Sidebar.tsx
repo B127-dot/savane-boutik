@@ -21,7 +21,8 @@ import {
   Menu,
   X,
   Star,
-  Settings
+  Settings,
+  Paintbrush
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -96,7 +97,15 @@ const Sidebar = () => {
           href: '/reviews', 
           icon: Star
         },
-        { label: 'Ma boutique', href: '/shop-settings', icon: Palette },
+        { 
+          label: 'Ma boutique', 
+          href: '/shop-settings', 
+          icon: Palette,
+          subItems: [
+            { label: 'Paramètres', href: '/shop-settings', icon: Settings },
+            { label: 'Personnaliser', href: '/shop-editor', icon: Paintbrush },
+          ]
+        },
       ]
     },
     {

@@ -17,6 +17,18 @@ export interface Category {
   userId: string;
 }
 
+export interface TrustBarItem {
+  id: string;
+  icon: 'truck' | 'shield' | 'phone' | 'star' | 'heart' | 'clock' | 'check' | 'wallet' | 'headphones';
+  title: string;
+  subtitle?: string;
+}
+
+export interface FooterLink {
+  label: string;
+  url: string;
+}
+
 export interface ShopSettings {
   userId: string;
   shopName: string;
@@ -33,19 +45,37 @@ export interface ShopSettings {
     instagram?: string;
     tiktok?: string;
   };
-  // Hero Section
+  
+  // === GLOBAL DESIGN ===
+  fontFamily?: 'inter' | 'lora' | 'poppins' | 'switzer';
+  
+  // === HERO SECTION ===
   heroImage?: string;
   heroTitle?: string;
   heroSubtitle?: string;
   heroButtonText?: string;
   heroButtonLink?: string;
-  // Trust Bar
-  trustBar?: {
-    icon: string;
-    text: string;
-  }[];
-  // Footer
+  heroLayout?: 'left' | 'center' | 'right';
+  
+  // === TRUST BAR (3 points de réassurance) ===
+  trustBar?: TrustBarItem[];
+  
+  // === PRODUCTS SECTION ===
+  productsTitle?: string;
+  productsSubtitle?: string;
+  productsLayout?: 'grid' | 'list' | 'carousel';
+  productsPerRow?: 2 | 3 | 4;
+  
+  // === COLLECTIONS SECTION ===
+  showCollections?: boolean;
+  collectionsTitle?: string;
+  
+  // === FOOTER ===
   aboutText?: string;
+  footerLinks?: FooterLink[];
+  showNewsletter?: boolean;
+  newsletterTitle?: string;
+  newsletterSubtitle?: string;
 }
 
 export interface CartItem {
