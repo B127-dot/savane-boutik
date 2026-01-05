@@ -28,7 +28,8 @@ import ModernFooter from '@/components/shop/themes/modern/ModernFooter';
 // Theme components - ARTISAN
 import { 
   ArtisanHeader, 
-  ArtisanHero, 
+  ArtisanHero,
+  ArtisanTrustBar,
   ArtisanCollections,
   ArtisanWhyChoose,
   ArtisanProductCard,

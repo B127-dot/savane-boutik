@@ -1,10 +1,8 @@
-import { Smartphone, Truck, MessageCircle, Shield } from 'lucide-react';
+import { Smartphone, Truck, MessageCircle, Shield, Phone, Star, Heart, Clock, Check, Wallet, Headphones } from 'lucide-react';
+import { TrustBarItem } from '@/contexts/AppContext';
 
 interface TrustBarProps {
-  trustItems?: {
-    icon: string;
-    text: string;
-  }[];
+  trustItems?: TrustBarItem[];
 }
 
 const iconMap: { [key: string]: any } = {
@@ -12,12 +10,19 @@ const iconMap: { [key: string]: any } = {
   truck: Truck,
   message: MessageCircle,
   shield: Shield,
+  phone: Phone,
+  star: Star,
+  heart: Heart,
+  clock: Clock,
+  check: Check,
+  wallet: Wallet,
+  headphones: Headphones,
 };
 
-const defaultTrustItems = [
-  { icon: 'smartphone', text: 'Paiement Mobile Sécurisé' },
-  { icon: 'truck', text: 'Livraison Rapide' },
-  { icon: 'message', text: 'Support 7j/7' }
+const defaultTrustItems: TrustBarItem[] = [
+  { id: '1', icon: 'wallet', title: 'Paiement Mobile Sécurisé', subtitle: 'Orange Money • Moov Money' },
+  { id: '2', icon: 'truck', title: 'Livraison Rapide', subtitle: 'Livraison dans tout Ouaga' },
+  { id: '3', icon: 'headphones', title: 'Support 7j/7', subtitle: "Réponse en moins d'1h" }
 ];
 
 const TrustBar = ({ trustItems = defaultTrustItems }: TrustBarProps) => {
@@ -29,7 +34,7 @@ const TrustBar = ({ trustItems = defaultTrustItems }: TrustBarProps) => {
             const IconComponent = iconMap[item.icon] || Shield;
             return (
               <div 
-                key={index}
+                key={item.id}
                 className="group flex flex-col items-center text-center gap-4 p-6 rounded-xl hover:bg-muted/50 transition-all duration-300 hover:-translate-y-1 animate-fade-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
@@ -40,13 +45,13 @@ const TrustBar = ({ trustItems = defaultTrustItems }: TrustBarProps) => {
                 </div>
                 <div>
                   <p className="text-lg md:text-xl font-display font-bold text-foreground mb-1">
-                    {item.text}
+                    {item.title}
                   </p>
-                  <p className="text-sm font-body text-muted-foreground">
-                    {index === 0 && "Orange Money • Moov Money"}
-                    {index === 1 && "Livraison dans tout Ouaga"}
-                    {index === 2 && "Réponse en moins d'1h"}
-                  </p>
+                  {item.subtitle && (
+                    <p className="text-sm font-body text-muted-foreground">
+                      {item.subtitle}
+                    </p>
+                  )}
                 </div>
               </div>
             );
