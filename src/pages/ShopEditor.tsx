@@ -38,9 +38,120 @@ import {
   ExternalLink,
   Sparkles,
   Zap,
-  ArrowRight
+  ArrowRight,
+  Circle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+// Color Palettes - Inspired by Lovable's design tool
+const COLOR_PALETTES = [
+  { 
+    id: 'default', 
+    name: 'Défaut', 
+    colors: ['#111827', '#6366f1', '#22c55e', '#f59e0b'],
+    primary: '#6366f1',
+    secondary: '#22c55e',
+    accent: '#f59e0b',
+    background: '#111827'
+  },
+  { 
+    id: 'glacier', 
+    name: 'Glacier', 
+    colors: ['#0f172a', '#06b6d4', '#3b82f6', '#8b5cf6'],
+    primary: '#06b6d4',
+    secondary: '#3b82f6',
+    accent: '#8b5cf6',
+    background: '#0f172a'
+  },
+  { 
+    id: 'harvest', 
+    name: 'Harvest', 
+    colors: ['#1c1917', '#f59e0b', '#ea580c', '#dc2626'],
+    primary: '#f59e0b',
+    secondary: '#ea580c',
+    accent: '#dc2626',
+    background: '#1c1917'
+  },
+  { 
+    id: 'lavender', 
+    name: 'Lavender', 
+    colors: ['#1e1b4b', '#a855f7', '#ec4899', '#f43f5e'],
+    primary: '#a855f7',
+    secondary: '#ec4899',
+    accent: '#f43f5e',
+    background: '#1e1b4b'
+  },
+  { 
+    id: 'brutalist', 
+    name: 'Brutalist', 
+    colors: ['#000000', '#ffffff', '#ff0000', '#ffff00'],
+    primary: '#ffffff',
+    secondary: '#ff0000',
+    accent: '#ffff00',
+    background: '#000000'
+  },
+  { 
+    id: 'obsidian', 
+    name: 'Obsidian', 
+    colors: ['#09090b', '#71717a', '#a1a1aa', '#e4e4e7'],
+    primary: '#71717a',
+    secondary: '#a1a1aa',
+    accent: '#e4e4e7',
+    background: '#09090b'
+  },
+  { 
+    id: 'orchid', 
+    name: 'Orchid', 
+    colors: ['#14040d', '#db2777', '#f472b6', '#fce7f3'],
+    primary: '#db2777',
+    secondary: '#f472b6',
+    accent: '#fce7f3',
+    background: '#14040d'
+  },
+  { 
+    id: 'solar', 
+    name: 'Solar', 
+    colors: ['#1a1302', '#fbbf24', '#f59e0b', '#d97706'],
+    primary: '#fbbf24',
+    secondary: '#f59e0b',
+    accent: '#d97706',
+    background: '#1a1302'
+  },
+  { 
+    id: 'tide', 
+    name: 'Tide', 
+    colors: ['#042f2e', '#14b8a6', '#2dd4bf', '#5eead4'],
+    primary: '#14b8a6',
+    secondary: '#2dd4bf',
+    accent: '#5eead4',
+    background: '#042f2e'
+  },
+  { 
+    id: 'verdant', 
+    name: 'Verdant', 
+    colors: ['#052e16', '#22c55e', '#4ade80', '#86efac'],
+    primary: '#22c55e',
+    secondary: '#4ade80',
+    accent: '#86efac',
+    background: '#052e16'
+  },
+];
+
+// Font options
+const FONT_OPTIONS = [
+  { id: 'inter', name: 'Inter', preview: 'Aa', style: 'font-sans' },
+  { id: 'switzer', name: 'Switzer', preview: 'Aa', style: 'font-switzer' },
+  { id: 'lora', name: 'Lora', preview: 'Aa', style: 'font-serif' },
+  { id: 'poppins', name: 'Poppins', preview: 'Aa', style: 'font-poppins' },
+  { id: 'playfair', name: 'Playfair', preview: 'Aa', style: 'font-playfair' },
+];
+
+// Button styles
+const BUTTON_STYLES = [
+  { id: 'rounded', name: 'Arrondi', class: 'rounded-lg' },
+  { id: 'pill', name: 'Pilule', class: 'rounded-full' },
+  { id: 'square', name: 'Carré', class: 'rounded-none' },
+];
 
 // Icon options for trust bar
 const TRUST_BAR_ICONS = [
@@ -69,6 +180,10 @@ const ShopEditor = () => {
 
   // Form state
   const [formData, setFormData] = useState({
+    // Design
+    colorPalette: 'default',
+    fontFamily: 'inter' as 'inter' | 'lora' | 'poppins' | 'switzer' | 'playfair',
+    buttonStyle: 'rounded' as 'rounded' | 'pill' | 'square',
     // Hero
     heroImage: '',
     heroTitle: '',
@@ -97,6 +212,9 @@ const ShopEditor = () => {
   useEffect(() => {
     if (shopSettings) {
       setFormData({
+        colorPalette: shopSettings.colorPalette || 'default',
+        fontFamily: shopSettings.fontFamily || 'inter',
+        buttonStyle: shopSettings.buttonStyle || 'rounded',
         heroImage: shopSettings.heroImage || '',
         heroTitle: shopSettings.heroTitle || 'Bienvenue dans notre boutique',
         heroSubtitle: shopSettings.heroSubtitle || 'Découvrez notre collection unique',
@@ -146,6 +264,9 @@ const ShopEditor = () => {
 
   const handleSave = () => {
     updateShopSettings({
+      colorPalette: formData.colorPalette,
+      fontFamily: formData.fontFamily,
+      buttonStyle: formData.buttonStyle,
       heroImage: formData.heroImage,
       heroTitle: formData.heroTitle,
       heroSubtitle: formData.heroSubtitle,
@@ -171,6 +292,10 @@ const ShopEditor = () => {
       description: "Votre boutique a été mise à jour avec succès",
     });
   };
+
+  // Get current palette colors for preview
+  const currentPalette = COLOR_PALETTES.find(p => p.id === formData.colorPalette) || COLOR_PALETTES[0];
+  const currentButtonStyle = BUTTON_STYLES.find(s => s.id === formData.buttonStyle) || BUTTON_STYLES[0];
 
   const getIconComponent = (iconName: string) => {
     const iconOption = TRUST_BAR_ICONS.find(i => i.value === iconName);
@@ -233,7 +358,146 @@ const ShopEditor = () => {
           {/* Scrollable Editor Content */}
           <ScrollArea className="flex-1">
             <div className="p-5 space-y-4">
-              <Accordion type="multiple" defaultValue={['hero', 'trust', 'products']} className="space-y-3">
+              <Accordion type="multiple" defaultValue={['design', 'hero', 'trust', 'products']} className="space-y-3">
+                {/* Design Section - NEW */}
+                <AccordionItem value="design" className="border-0 rounded-2xl bg-gradient-to-br from-pink-500/5 to-pink-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-pink-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center shadow-lg shadow-pink-500/25">
+                        <Palette className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Design Global</span>
+                        <p className="text-xs text-muted-foreground">Couleurs, typographie, boutons</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-6">
+                    {/* Color Palettes */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold flex items-center gap-2">
+                        <Palette className="w-4 h-4 text-pink-500" />
+                        Palette de couleurs
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Choisissez un thème de couleurs pour votre boutique</p>
+                      
+                      {/* Current Theme Indicator */}
+                      <div className="flex items-center gap-3 p-3 rounded-xl bg-primary/5 border border-primary/20">
+                        <div className="flex gap-1">
+                          {currentPalette.colors.map((color, i) => (
+                            <div 
+                              key={i} 
+                              className="w-5 h-5 rounded-full border-2 border-background shadow-sm"
+                              style={{ backgroundColor: color }}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm font-medium">Thème actuel</span>
+                      </div>
+
+                      {/* Palette Grid */}
+                      <div className="space-y-2">
+                        <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Thèmes disponibles</p>
+                        <div className="grid gap-2">
+                          {COLOR_PALETTES.map((palette) => (
+                            <motion.button
+                              key={palette.id}
+                              type="button"
+                              onClick={() => updateField('colorPalette', palette.id)}
+                              className={`flex items-center gap-3 p-3 rounded-xl border transition-all text-left w-full ${
+                                formData.colorPalette === palette.id 
+                                  ? 'border-primary bg-primary/5 shadow-md' 
+                                  : 'border-border/50 hover:border-primary/30 hover:bg-muted/30'
+                              }`}
+                              whileHover={{ scale: 1.01 }}
+                              whileTap={{ scale: 0.99 }}
+                            >
+                              <div className="flex gap-0.5">
+                                {palette.colors.map((color, i) => (
+                                  <div 
+                                    key={i} 
+                                    className="w-4 h-4 rounded-full first:rounded-l-full last:rounded-r-full border border-white/20"
+                                    style={{ backgroundColor: color }}
+                                  />
+                                ))}
+                              </div>
+                              <span className="text-sm font-medium flex-1">{palette.name}</span>
+                              {formData.colorPalette === palette.id && (
+                                <Check className="w-4 h-4 text-primary" />
+                              )}
+                            </motion.button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Typography */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold flex items-center gap-2">
+                        <Type className="w-4 h-4 text-pink-500" />
+                        Typographie
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Police de caractères principale</p>
+                      
+                      <div className="grid grid-cols-2 gap-2">
+                        {FONT_OPTIONS.map((font) => (
+                          <motion.button
+                            key={font.id}
+                            type="button"
+                            onClick={() => updateField('fontFamily', font.id as typeof formData.fontFamily)}
+                            className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
+                              formData.fontFamily === font.id 
+                                ? 'border-primary bg-primary/5 shadow-md' 
+                                : 'border-border/50 hover:border-primary/30'
+                            }`}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <span className={`text-2xl font-bold ${font.style}`}>{font.preview}</span>
+                            <span className="text-xs font-medium">{font.name}</span>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Button Styles */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold flex items-center gap-2">
+                        <Circle className="w-4 h-4 text-pink-500" />
+                        Style des boutons
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Apparence des boutons d'action</p>
+                      
+                      <div className="grid grid-cols-3 gap-2">
+                        {BUTTON_STYLES.map((style) => (
+                          <motion.button
+                            key={style.id}
+                            type="button"
+                            onClick={() => updateField('buttonStyle', style.id as typeof formData.buttonStyle)}
+                            className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${
+                              formData.buttonStyle === style.id 
+                                ? 'border-primary bg-primary/5 shadow-md' 
+                                : 'border-border/50 hover:border-primary/30'
+                            }`}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <div 
+                              className={`w-full h-8 ${style.class}`}
+                              style={{ backgroundColor: currentPalette.primary }}
+                            />
+                            <span className="text-xs font-medium">{style.name}</span>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
                 {/* Hero Section Editor */}
                 <AccordionItem value="hero" className="border-0 rounded-2xl bg-gradient-to-br from-blue-500/5 to-blue-500/0 overflow-hidden">
                   <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-blue-500/5 transition-colors rounded-2xl">
@@ -669,10 +933,14 @@ const ShopEditor = () => {
           <div className="flex-1 flex items-start justify-center p-8 overflow-auto">
             <motion.div 
               layout
-              className={`bg-background rounded-2xl shadow-2xl shadow-black/10 overflow-hidden border border-border/50 transition-all duration-500 ${
+              className={`rounded-2xl shadow-2xl shadow-black/10 overflow-hidden border border-border/50 transition-all duration-500 ${
                 previewMode === 'mobile' ? 'w-[390px]' : 'w-full max-w-[1100px]'
               }`}
-              style={{ minHeight: previewMode === 'mobile' ? '700px' : '600px' }}
+              style={{ 
+                minHeight: previewMode === 'mobile' ? '700px' : '600px',
+                backgroundColor: currentPalette.background,
+                color: currentPalette.primary
+              }}
             >
               <div className="h-full overflow-auto">
                 {/* Live Preview */}
@@ -683,7 +951,7 @@ const ShopEditor = () => {
                     style={{ 
                       backgroundImage: formData.heroImage 
                         ? `url(${formData.heroImage})` 
-                        : 'linear-gradient(135deg, hsl(var(--muted)) 0%, hsl(var(--muted-foreground) / 0.1) 100%)'
+                        : `linear-gradient(135deg, ${currentPalette.background} 0%, ${currentPalette.primary}20 100%)`
                     }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/10" />
@@ -695,7 +963,8 @@ const ShopEditor = () => {
                         key={formData.heroTitle}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl font-serif font-bold mb-4 drop-shadow-lg"
+                        className="text-4xl font-bold mb-4 drop-shadow-lg"
+                        style={{ fontFamily: formData.fontFamily === 'playfair' ? 'Playfair Display, serif' : formData.fontFamily === 'lora' ? 'Lora, serif' : 'inherit' }}
                       >
                         {formData.heroTitle || 'Titre de votre boutique'}
                       </motion.h1>
@@ -708,14 +977,27 @@ const ShopEditor = () => {
                       >
                         {formData.heroSubtitle || 'Sous-titre accrocheur'}
                       </motion.p>
-                      <Button size="lg" className="bg-white text-foreground hover:bg-white/90 shadow-lg font-semibold">
+                      <Button 
+                        size="lg" 
+                        className={`shadow-lg font-semibold ${currentButtonStyle.class}`}
+                        style={{ 
+                          backgroundColor: currentPalette.primary,
+                          color: currentPalette.background
+                        }}
+                      >
                         {formData.heroButtonText || 'Voir la Collection'}
                       </Button>
                     </div>
                   </div>
 
                   {/* Preview Trust Bar */}
-                  <div className="bg-muted/50 py-5 px-6 border-y border-border/50">
+                  <div 
+                    className="py-5 px-6 border-y"
+                    style={{ 
+                      backgroundColor: `${currentPalette.primary}10`,
+                      borderColor: `${currentPalette.primary}20`
+                    }}
+                  >
                     <div className={`grid gap-6 ${
                       previewMode === 'mobile' ? 'grid-cols-1' : 
                       formData.trustBar.length === 1 ? 'grid-cols-1' :
@@ -725,14 +1007,17 @@ const ShopEditor = () => {
                       {formData.trustBar.map((item) => {
                         const IconComp = getIconComponent(item.icon);
                         return (
-                          <div key={item.id} className="flex items-center justify-center gap-3 text-foreground">
-                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                              <IconComp className="w-5 h-5 text-primary" />
+                          <div key={item.id} className="flex items-center justify-center gap-3" style={{ color: '#fff' }}>
+                            <div 
+                              className="w-10 h-10 rounded-xl flex items-center justify-center"
+                              style={{ backgroundColor: `${currentPalette.primary}20` }}
+                            >
+                              <IconComp className="w-5 h-5" style={{ color: currentPalette.primary }} />
                             </div>
                             <div>
                               <p className="font-semibold text-sm">{item.title}</p>
                               {item.subtitle && (
-                                <p className="text-xs text-muted-foreground">{item.subtitle}</p>
+                                <p className="text-xs opacity-70">{item.subtitle}</p>
                               )}
                             </div>
                           </div>
@@ -748,12 +1033,16 @@ const ShopEditor = () => {
                         key={formData.productsTitle}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="text-2xl font-serif font-bold text-foreground"
+                        className="text-2xl font-bold"
+                        style={{ 
+                          color: '#fff',
+                          fontFamily: formData.fontFamily === 'playfair' ? 'Playfair Display, serif' : formData.fontFamily === 'lora' ? 'Lora, serif' : 'inherit'
+                        }}
                       >
                         {formData.productsTitle || 'Nos Produits'}
                       </motion.h2>
                       {formData.productsSubtitle && (
-                        <p className="text-muted-foreground mt-2">{formData.productsSubtitle}</p>
+                        <p className="mt-2" style={{ color: `${currentPalette.primary}` }}>{formData.productsSubtitle}</p>
                       )}
                     </div>
 
@@ -766,15 +1055,31 @@ const ShopEditor = () => {
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ delay: i * 0.05 }}
-                          className="bg-card rounded-xl overflow-hidden border border-border/50 hover:shadow-lg transition-shadow group"
+                          className={`${currentButtonStyle.class} overflow-hidden border hover:shadow-lg transition-shadow group`}
+                          style={{ 
+                            backgroundColor: `${currentPalette.primary}08`,
+                            borderColor: `${currentPalette.primary}20`
+                          }}
                         >
-                          <div className="aspect-square bg-muted flex items-center justify-center relative overflow-hidden">
-                            <ShoppingBag className="w-12 h-12 text-muted-foreground/20" />
-                            <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div 
+                            className="aspect-square flex items-center justify-center relative overflow-hidden"
+                            style={{ backgroundColor: `${currentPalette.primary}10` }}
+                          >
+                            <ShoppingBag className="w-12 h-12" style={{ color: `${currentPalette.primary}30` }} />
                           </div>
                           <div className="p-4">
-                            <p className="font-medium text-sm truncate">Produit exemple {i}</p>
-                            <p className="text-primary font-bold mt-1">25 000 FCFA</p>
+                            <p className="font-medium text-sm truncate" style={{ color: '#fff' }}>Produit exemple {i}</p>
+                            <p className="font-bold mt-1" style={{ color: currentPalette.primary }}>25 000 FCFA</p>
+                            <Button 
+                              size="sm" 
+                              className={`w-full mt-3 ${currentButtonStyle.class}`}
+                              style={{ 
+                                backgroundColor: currentPalette.primary,
+                                color: currentPalette.background
+                              }}
+                            >
+                              Ajouter
+                            </Button>
                           </div>
                         </motion.div>
                       ))}
@@ -782,8 +1087,14 @@ const ShopEditor = () => {
                   </div>
 
                   {/* Preview Footer hint */}
-                  <div className="bg-muted/30 p-8 text-center border-t border-border/50">
-                    <p className="text-sm text-muted-foreground">
+                  <div 
+                    className="p-8 text-center border-t"
+                    style={{ 
+                      backgroundColor: `${currentPalette.primary}05`,
+                      borderColor: `${currentPalette.primary}20`
+                    }}
+                  >
+                    <p className="text-sm" style={{ color: `${currentPalette.primary}80` }}>
                       Pied de page • Vos informations de contact
                     </p>
                   </div>
