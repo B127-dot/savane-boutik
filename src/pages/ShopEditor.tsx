@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { ImageUploader } from '@/components/ImageUploader';
 import Sidebar from '@/components/Sidebar';
@@ -24,7 +24,6 @@ import {
   Layout, 
   Shield, 
   ShoppingBag, 
-  FootprintsIcon,
   Truck,
   Phone,
   Star,
@@ -37,7 +36,9 @@ import {
   Trash2,
   GripVertical,
   ExternalLink,
-  Sparkles
+  Sparkles,
+  Zap,
+  ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -177,422 +178,466 @@ const ShopEditor = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background w-full">
       <Sidebar />
       
-      <main className="flex-1 flex">
-        {/* Editor Sidebar */}
-        <div className="w-[420px] border-r border-border bg-card overflow-y-auto">
-          <div className="sticky top-0 z-10 bg-card border-b border-border p-4">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
-                  <Palette className="w-5 h-5 text-primary-foreground" />
+      <main className="flex-1 flex min-h-screen">
+        {/* Editor Sidebar - Premium Design */}
+        <div className="w-[400px] border-r border-border bg-gradient-to-b from-card to-card/95 flex flex-col">
+          {/* Header with gradient accent */}
+          <div className="sticky top-0 z-20 bg-card/95 backdrop-blur-xl border-b border-border">
+            <div className="p-5">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/25">
+                  <Palette className="w-6 h-6 text-primary-foreground" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold">Éditeur de Boutique</h1>
-                  <p className="text-xs text-muted-foreground">Personnalisez chaque section</p>
+                  <h1 className="text-xl font-bold tracking-tight">Éditeur Visuel</h1>
+                  <p className="text-sm text-muted-foreground">Personnalisez votre boutique</p>
                 </div>
               </div>
-            </div>
-            
-            {/* Save Button */}
-            <Button 
-              onClick={handleSave} 
-              className="w-full mt-3 gap-2"
-              disabled={!hasChanges}
-            >
-              <Save className="w-4 h-4" />
-              {hasChanges ? 'Publier les modifications' : 'Tout est à jour'}
-              {hasChanges && <Badge variant="secondary" className="ml-2 bg-primary-foreground/20">Non publié</Badge>}
-            </Button>
-          </div>
-
-          <div className="p-4">
-            <Accordion type="multiple" defaultValue={['hero', 'trust', 'products']} className="space-y-3">
-              {/* Hero Section Editor */}
-              <AccordionItem value="hero" className="border rounded-xl px-4 bg-background/50">
-                <AccordionTrigger className="hover:no-underline py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                      <Image className="w-4 h-4 text-blue-500" />
-                    </div>
-                    <div className="text-left">
-                      <span className="font-semibold">Section Hero</span>
-                      <p className="text-xs text-muted-foreground">Image, titre, bouton d'action</p>
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="space-y-4 pb-4">
-                  {/* Hero Image */}
-                  <div>
-                    <Label className="text-sm font-medium mb-2 block">Image de fond</Label>
-                    <ImageUploader
-                      images={formData.heroImage ? [formData.heroImage] : []}
-                      onChange={(images) => updateField('heroImage', images[0] || '')}
-                      maxImages={1}
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">Format recommandé : 1920x1080px</p>
-                  </div>
-
-                  {/* Hero Title */}
-                  <div>
-                    <Label htmlFor="heroTitle" className="text-sm font-medium">Titre principal</Label>
-                    <Input
-                      id="heroTitle"
-                      value={formData.heroTitle}
-                      onChange={(e) => updateField('heroTitle', e.target.value)}
-                      placeholder="Bienvenue dans notre boutique"
-                      className="mt-1"
-                    />
-                  </div>
-
-                  {/* Hero Subtitle */}
-                  <div>
-                    <Label htmlFor="heroSubtitle" className="text-sm font-medium">Sous-titre</Label>
-                    <Textarea
-                      id="heroSubtitle"
-                      value={formData.heroSubtitle}
-                      onChange={(e) => updateField('heroSubtitle', e.target.value)}
-                      placeholder="Découvrez notre collection unique"
-                      className="mt-1"
-                      rows={2}
-                    />
-                  </div>
-
-                  {/* Hero Button */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <Label htmlFor="heroButtonText" className="text-sm font-medium">Texte du bouton</Label>
-                      <Input
-                        id="heroButtonText"
-                        value={formData.heroButtonText}
-                        onChange={(e) => updateField('heroButtonText', e.target.value)}
-                        placeholder="Voir la Collection"
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="heroButtonLink" className="text-sm font-medium">Lien du bouton</Label>
-                      <Input
-                        id="heroButtonLink"
-                        value={formData.heroButtonLink}
-                        onChange={(e) => updateField('heroButtonLink', e.target.value)}
-                        placeholder="#products"
-                        className="mt-1"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Hero Layout */}
-                  <div>
-                    <Label className="text-sm font-medium">Alignement du contenu</Label>
-                    <div className="grid grid-cols-3 gap-2 mt-2">
-                      {(['left', 'center', 'right'] as const).map((layout) => (
-                        <Button
-                          key={layout}
-                          type="button"
-                          variant={formData.heroLayout === layout ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => updateField('heroLayout', layout)}
-                          className="capitalize"
-                        >
-                          {layout === 'left' ? 'Gauche' : layout === 'center' ? 'Centre' : 'Droite'}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Trust Bar Editor */}
-              <AccordionItem value="trust" className="border rounded-xl px-4 bg-background/50">
-                <AccordionTrigger className="hover:no-underline py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
-                      <Shield className="w-4 h-4 text-green-500" />
-                    </div>
-                    <div className="text-left">
-                      <span className="font-semibold">Barre de Réassurance</span>
-                      <p className="text-xs text-muted-foreground">Points de confiance (max 4)</p>
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="space-y-4 pb-4">
-                  <AnimatePresence>
-                    {formData.trustBar.map((item, index) => (
-                      <motion.div
-                        key={item.id}
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="border rounded-lg p-3 bg-card space-y-3"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab" />
-                            <span className="text-sm font-medium">Point {index + 1}</span>
-                          </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removeTrustBarItem(item.id)}
-                            className="h-8 w-8 text-destructive hover:text-destructive"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-
-                        {/* Icon Selection */}
-                        <div>
-                          <Label className="text-xs">Icône</Label>
-                          <div className="flex flex-wrap gap-2 mt-1">
-                            {TRUST_BAR_ICONS.map((iconOption) => {
-                              const IconComp = iconOption.icon;
-                              return (
-                                <Button
-                                  key={iconOption.value}
-                                  type="button"
-                                  variant={item.icon === iconOption.value ? 'default' : 'outline'}
-                                  size="icon"
-                                  className="h-9 w-9"
-                                  onClick={() => updateTrustBarItem(item.id, { icon: iconOption.value as TrustBarItem['icon'] })}
-                                >
-                                  <IconComp className="w-4 h-4" />
-                                </Button>
-                              );
-                            })}
-                          </div>
-                        </div>
-
-                        {/* Title & Subtitle */}
-                        <div className="grid grid-cols-2 gap-2">
-                          <div>
-                            <Label className="text-xs">Titre</Label>
-                            <Input
-                              value={item.title}
-                              onChange={(e) => updateTrustBarItem(item.id, { title: e.target.value })}
-                              placeholder="Livraison Rapide"
-                              className="mt-1 h-9"
-                            />
-                          </div>
-                          <div>
-                            <Label className="text-xs">Sous-titre (optionnel)</Label>
-                            <Input
-                              value={item.subtitle || ''}
-                              onChange={(e) => updateTrustBarItem(item.id, { subtitle: e.target.value })}
-                              placeholder="Partout au Burkina"
-                              className="mt-1 h-9"
-                            />
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-
-                  {formData.trustBar.length < 4 && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full gap-2"
-                      onClick={addTrustBarItem}
-                    >
-                      <Plus className="w-4 h-4" />
-                      Ajouter un point de confiance
-                    </Button>
-                  )}
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Products Section Editor */}
-              <AccordionItem value="products" className="border rounded-xl px-4 bg-background/50">
-                <AccordionTrigger className="hover:no-underline py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
-                      <ShoppingBag className="w-4 h-4 text-purple-500" />
-                    </div>
-                    <div className="text-left">
-                      <span className="font-semibold">Section Produits</span>
-                      <p className="text-xs text-muted-foreground">Titre, disposition, nombre par ligne</p>
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="space-y-4 pb-4">
-                  {/* Title & Subtitle */}
-                  <div>
-                    <Label htmlFor="productsTitle" className="text-sm font-medium">Titre de la section</Label>
-                    <Input
-                      id="productsTitle"
-                      value={formData.productsTitle}
-                      onChange={(e) => updateField('productsTitle', e.target.value)}
-                      placeholder="Nos Produits"
-                      className="mt-1"
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="productsSubtitle" className="text-sm font-medium">Sous-titre</Label>
-                    <Input
-                      id="productsSubtitle"
-                      value={formData.productsSubtitle}
-                      onChange={(e) => updateField('productsSubtitle', e.target.value)}
-                      placeholder="Une sélection choisie avec soin"
-                      className="mt-1"
-                    />
-                  </div>
-
-                  {/* Layout */}
-                  <div>
-                    <Label className="text-sm font-medium">Disposition</Label>
-                    <Select
-                      value={formData.productsLayout}
-                      onValueChange={(value: 'grid' | 'list' | 'carousel') => updateField('productsLayout', value)}
-                    >
-                      <SelectTrigger className="mt-1">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="grid">Grille</SelectItem>
-                        <SelectItem value="list">Liste</SelectItem>
-                        <SelectItem value="carousel">Carrousel</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Products per row */}
-                  <div>
-                    <Label className="text-sm font-medium">Produits par ligne (desktop)</Label>
-                    <div className="grid grid-cols-3 gap-2 mt-2">
-                      {([2, 3, 4] as const).map((num) => (
-                        <Button
-                          key={num}
-                          type="button"
-                          variant={formData.productsPerRow === num ? 'default' : 'outline'}
-                          size="sm"
-                          onClick={() => updateField('productsPerRow', num)}
-                        >
-                          {num} colonnes
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Collections Section */}
-              <AccordionItem value="collections" className="border rounded-xl px-4 bg-background/50">
-                <AccordionTrigger className="hover:no-underline py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
-                      <Layout className="w-4 h-4 text-orange-500" />
-                    </div>
-                    <div className="text-left">
-                      <span className="font-semibold">Collections</span>
-                      <p className="text-xs text-muted-foreground">Afficher les catégories</p>
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="space-y-4 pb-4">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-sm font-medium">Afficher les collections</Label>
-                    <Switch
-                      checked={formData.showCollections}
-                      onCheckedChange={(checked) => updateField('showCollections', checked)}
-                    />
-                  </div>
-
-                  {formData.showCollections && (
-                    <div>
-                      <Label htmlFor="collectionsTitle" className="text-sm font-medium">Titre</Label>
-                      <Input
-                        id="collectionsTitle"
-                        value={formData.collectionsTitle}
-                        onChange={(e) => updateField('collectionsTitle', e.target.value)}
-                        placeholder="Collections"
-                        className="mt-1"
-                      />
-                    </div>
-                  )}
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Footer Section */}
-              <AccordionItem value="footer" className="border rounded-xl px-4 bg-background/50">
-                <AccordionTrigger className="hover:no-underline py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-slate-500/10 flex items-center justify-center">
-                      <Type className="w-4 h-4 text-slate-500" />
-                    </div>
-                    <div className="text-left">
-                      <span className="font-semibold">Pied de page</span>
-                      <p className="text-xs text-muted-foreground">À propos, newsletter</p>
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="space-y-4 pb-4">
-                  <div>
-                    <Label htmlFor="aboutText" className="text-sm font-medium">Texte "À propos"</Label>
-                    <Textarea
-                      id="aboutText"
-                      value={formData.aboutText}
-                      onChange={(e) => updateField('aboutText', e.target.value)}
-                      placeholder="Décrivez votre boutique en quelques mots..."
-                      className="mt-1"
-                      rows={3}
-                    />
-                  </div>
-
-                  <Separator />
-
-                  <div className="flex items-center justify-between">
-                    <Label className="text-sm font-medium">Afficher la newsletter</Label>
-                    <Switch
-                      checked={formData.showNewsletter}
-                      onCheckedChange={(checked) => updateField('showNewsletter', checked)}
-                    />
-                  </div>
-
-                  {formData.showNewsletter && (
+              
+              {/* Save Button - Premium style */}
+              <motion.div
+                animate={hasChanges ? { scale: [1, 1.02, 1] } : {}}
+                transition={{ repeat: hasChanges ? Infinity : 0, duration: 2 }}
+              >
+                <Button 
+                  onClick={handleSave} 
+                  className={`w-full h-12 text-base font-semibold gap-2 transition-all duration-300 ${
+                    hasChanges 
+                      ? 'bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40' 
+                      : 'bg-muted text-muted-foreground'
+                  }`}
+                  disabled={!hasChanges}
+                >
+                  {hasChanges ? (
                     <>
-                      <div>
-                        <Label htmlFor="newsletterTitle" className="text-sm font-medium">Titre newsletter</Label>
-                        <Input
-                          id="newsletterTitle"
-                          value={formData.newsletterTitle}
-                          onChange={(e) => updateField('newsletterTitle', e.target.value)}
-                          placeholder="Restez informé"
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="newsletterSubtitle" className="text-sm font-medium">Sous-titre newsletter</Label>
-                        <Input
-                          id="newsletterSubtitle"
-                          value={formData.newsletterSubtitle}
-                          onChange={(e) => updateField('newsletterSubtitle', e.target.value)}
-                          placeholder="Recevez nos offres exclusives"
-                          className="mt-1"
-                        />
-                      </div>
+                      <Sparkles className="w-5 h-5" />
+                      Publier les modifications
+                      <Badge variant="secondary" className="ml-2 bg-primary-foreground/20 text-primary-foreground text-xs">
+                        Non publié
+                      </Badge>
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-5 h-5" />
+                      Tout est à jour
                     </>
                   )}
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                </Button>
+              </motion.div>
+            </div>
           </div>
+
+          {/* Scrollable Editor Content */}
+          <ScrollArea className="flex-1">
+            <div className="p-5 space-y-4">
+              <Accordion type="multiple" defaultValue={['hero', 'trust', 'products']} className="space-y-3">
+                {/* Hero Section Editor */}
+                <AccordionItem value="hero" className="border-0 rounded-2xl bg-gradient-to-br from-blue-500/5 to-blue-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-blue-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
+                        <Image className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Section Hero</span>
+                        <p className="text-xs text-muted-foreground">Image, titre, bouton d'action</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-5">
+                    {/* Hero Image */}
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold flex items-center gap-2">
+                        <Image className="w-4 h-4 text-blue-500" />
+                        Image de fond
+                      </Label>
+                      <ImageUploader
+                        images={formData.heroImage ? [formData.heroImage] : []}
+                        onChange={(images) => updateField('heroImage', images[0] || '')}
+                        maxImages={1}
+                      />
+                      <p className="text-xs text-muted-foreground">Recommandé : 1920×1080px, JPG/PNG</p>
+                    </div>
+
+                    {/* Hero Title */}
+                    <div className="space-y-2">
+                      <Label htmlFor="heroTitle" className="text-sm font-semibold">Titre principal</Label>
+                      <Input
+                        id="heroTitle"
+                        value={formData.heroTitle}
+                        onChange={(e) => updateField('heroTitle', e.target.value)}
+                        placeholder="Bienvenue dans notre boutique"
+                        className="h-11 bg-background/50 border-border/50 focus:border-blue-500/50"
+                      />
+                    </div>
+
+                    {/* Hero Subtitle */}
+                    <div className="space-y-2">
+                      <Label htmlFor="heroSubtitle" className="text-sm font-semibold">Sous-titre</Label>
+                      <Textarea
+                        id="heroSubtitle"
+                        value={formData.heroSubtitle}
+                        onChange={(e) => updateField('heroSubtitle', e.target.value)}
+                        placeholder="Découvrez notre collection unique"
+                        className="bg-background/50 border-border/50 focus:border-blue-500/50 resize-none"
+                        rows={2}
+                      />
+                    </div>
+
+                    {/* Hero Button */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="heroButtonText" className="text-sm font-semibold">Texte du bouton</Label>
+                        <Input
+                          id="heroButtonText"
+                          value={formData.heroButtonText}
+                          onChange={(e) => updateField('heroButtonText', e.target.value)}
+                          placeholder="Voir la Collection"
+                          className="h-10 bg-background/50 border-border/50"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="heroButtonLink" className="text-sm font-semibold">Lien</Label>
+                        <Input
+                          id="heroButtonLink"
+                          value={formData.heroButtonLink}
+                          onChange={(e) => updateField('heroButtonLink', e.target.value)}
+                          placeholder="#products"
+                          className="h-10 bg-background/50 border-border/50"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Hero Layout */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold">Alignement du contenu</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {(['left', 'center', 'right'] as const).map((layout) => (
+                          <Button
+                            key={layout}
+                            type="button"
+                            variant={formData.heroLayout === layout ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => updateField('heroLayout', layout)}
+                            className={`h-10 ${formData.heroLayout === layout ? 'shadow-md' : ''}`}
+                          >
+                            {layout === 'left' ? 'Gauche' : layout === 'center' ? 'Centre' : 'Droite'}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* Trust Bar Editor */}
+                <AccordionItem value="trust" className="border-0 rounded-2xl bg-gradient-to-br from-green-500/5 to-green-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-green-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-lg shadow-green-500/25">
+                        <Shield className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Barre de Réassurance</span>
+                        <p className="text-xs text-muted-foreground">Points de confiance ({formData.trustBar.length}/4)</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-4">
+                    <AnimatePresence>
+                      {formData.trustBar.map((item, index) => (
+                        <motion.div
+                          key={item.id}
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="border border-border/50 rounded-xl p-4 bg-background/50 space-y-4"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <div className="w-6 h-6 rounded-md bg-green-500/10 flex items-center justify-center">
+                                <span className="text-xs font-bold text-green-600">{index + 1}</span>
+                              </div>
+                              <span className="text-sm font-medium">Point de confiance</span>
+                            </div>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeTrustBarItem(item.id)}
+                              className="h-8 w-8 text-destructive/70 hover:text-destructive hover:bg-destructive/10"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+
+                          {/* Icon Selection - Compact grid */}
+                          <div className="space-y-2">
+                            <Label className="text-xs font-medium text-muted-foreground">Icône</Label>
+                            <div className="flex flex-wrap gap-1.5">
+                              {TRUST_BAR_ICONS.map((iconOption) => {
+                                const IconComp = iconOption.icon;
+                                return (
+                                  <Button
+                                    key={iconOption.value}
+                                    type="button"
+                                    variant={item.icon === iconOption.value ? 'default' : 'outline'}
+                                    size="icon"
+                                    className={`h-9 w-9 ${item.icon === iconOption.value ? 'shadow-md bg-green-500 hover:bg-green-600' : 'hover:border-green-500/50'}`}
+                                    onClick={() => updateTrustBarItem(item.id, { icon: iconOption.value as TrustBarItem['icon'] })}
+                                  >
+                                    <IconComp className="w-4 h-4" />
+                                  </Button>
+                                );
+                              })}
+                            </div>
+                          </div>
+
+                          {/* Title & Subtitle */}
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-1">
+                              <Label className="text-xs font-medium text-muted-foreground">Titre</Label>
+                              <Input
+                                value={item.title}
+                                onChange={(e) => updateTrustBarItem(item.id, { title: e.target.value })}
+                                placeholder="Livraison Rapide"
+                                className="h-9 text-sm bg-background border-border/50"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <Label className="text-xs font-medium text-muted-foreground">Sous-titre</Label>
+                              <Input
+                                value={item.subtitle || ''}
+                                onChange={(e) => updateTrustBarItem(item.id, { subtitle: e.target.value })}
+                                placeholder="Partout au Burkina"
+                                className="h-9 text-sm bg-background border-border/50"
+                              />
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+
+                    {formData.trustBar.length < 4 && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full h-11 gap-2 border-dashed border-green-500/30 text-green-600 hover:bg-green-500/5 hover:border-green-500/50"
+                        onClick={addTrustBarItem}
+                      >
+                        <Plus className="w-4 h-4" />
+                        Ajouter un point de confiance
+                      </Button>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* Products Section Editor */}
+                <AccordionItem value="products" className="border-0 rounded-2xl bg-gradient-to-br from-purple-500/5 to-purple-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-purple-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/25">
+                        <ShoppingBag className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Section Produits</span>
+                        <p className="text-xs text-muted-foreground">Titre, disposition, colonnes</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-5">
+                    {/* Title & Subtitle */}
+                    <div className="space-y-2">
+                      <Label htmlFor="productsTitle" className="text-sm font-semibold">Titre de la section</Label>
+                      <Input
+                        id="productsTitle"
+                        value={formData.productsTitle}
+                        onChange={(e) => updateField('productsTitle', e.target.value)}
+                        placeholder="Nos Produits"
+                        className="h-11 bg-background/50 border-border/50"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="productsSubtitle" className="text-sm font-semibold">Sous-titre</Label>
+                      <Input
+                        id="productsSubtitle"
+                        value={formData.productsSubtitle}
+                        onChange={(e) => updateField('productsSubtitle', e.target.value)}
+                        placeholder="Une sélection choisie avec soin"
+                        className="h-11 bg-background/50 border-border/50"
+                      />
+                    </div>
+
+                    {/* Layout */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold">Disposition</Label>
+                      <Select
+                        value={formData.productsLayout}
+                        onValueChange={(value: 'grid' | 'list' | 'carousel') => updateField('productsLayout', value)}
+                      >
+                        <SelectTrigger className="h-11 bg-background/50 border-border/50">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-popover border-border">
+                          <SelectItem value="grid">Grille</SelectItem>
+                          <SelectItem value="list">Liste</SelectItem>
+                          <SelectItem value="carousel">Carrousel</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Products per row */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold">Produits par ligne (desktop)</Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {([2, 3, 4] as const).map((num) => (
+                          <Button
+                            key={num}
+                            type="button"
+                            variant={formData.productsPerRow === num ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => updateField('productsPerRow', num)}
+                            className={`h-10 ${formData.productsPerRow === num ? 'bg-purple-500 hover:bg-purple-600 shadow-md' : ''}`}
+                          >
+                            {num} colonnes
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* Collections Section */}
+                <AccordionItem value="collections" className="border-0 rounded-2xl bg-gradient-to-br from-orange-500/5 to-orange-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-orange-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/25">
+                        <Layout className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Collections</span>
+                        <p className="text-xs text-muted-foreground">Afficher les catégories</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-4">
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-background/50 border border-border/50">
+                      <div className="flex items-center gap-3">
+                        <Layout className="w-5 h-5 text-orange-500" />
+                        <Label className="text-sm font-medium cursor-pointer">Afficher les collections</Label>
+                      </div>
+                      <Switch
+                        checked={formData.showCollections}
+                        onCheckedChange={(checked) => updateField('showCollections', checked)}
+                      />
+                    </div>
+
+                    {formData.showCollections && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="space-y-2"
+                      >
+                        <Label htmlFor="collectionsTitle" className="text-sm font-semibold">Titre</Label>
+                        <Input
+                          id="collectionsTitle"
+                          value={formData.collectionsTitle}
+                          onChange={(e) => updateField('collectionsTitle', e.target.value)}
+                          placeholder="Collections"
+                          className="h-11 bg-background/50 border-border/50"
+                        />
+                      </motion.div>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* Footer Section */}
+                <AccordionItem value="footer" className="border-0 rounded-2xl bg-gradient-to-br from-slate-500/5 to-slate-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-slate-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center shadow-lg shadow-slate-500/25">
+                        <Type className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Pied de page</span>
+                        <p className="text-xs text-muted-foreground">À propos, newsletter</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-5">
+                    <div className="space-y-2">
+                      <Label htmlFor="aboutText" className="text-sm font-semibold">Texte "À propos"</Label>
+                      <Textarea
+                        id="aboutText"
+                        value={formData.aboutText}
+                        onChange={(e) => updateField('aboutText', e.target.value)}
+                        placeholder="Décrivez votre boutique en quelques mots..."
+                        className="bg-background/50 border-border/50 resize-none"
+                        rows={3}
+                      />
+                    </div>
+
+                    <Separator className="my-4" />
+
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-background/50 border border-border/50">
+                      <div className="flex items-center gap-3">
+                        <Zap className="w-5 h-5 text-slate-500" />
+                        <Label className="text-sm font-medium cursor-pointer">Afficher la newsletter</Label>
+                      </div>
+                      <Switch
+                        checked={formData.showNewsletter}
+                        onCheckedChange={(checked) => updateField('showNewsletter', checked)}
+                      />
+                    </div>
+
+                    {formData.showNewsletter && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="space-y-4"
+                      >
+                        <div className="space-y-2">
+                          <Label htmlFor="newsletterTitle" className="text-sm font-semibold">Titre newsletter</Label>
+                          <Input
+                            id="newsletterTitle"
+                            value={formData.newsletterTitle}
+                            onChange={(e) => updateField('newsletterTitle', e.target.value)}
+                            placeholder="Restez informé"
+                            className="h-11 bg-background/50 border-border/50"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="newsletterSubtitle" className="text-sm font-semibold">Sous-titre</Label>
+                          <Input
+                            id="newsletterSubtitle"
+                            value={formData.newsletterSubtitle}
+                            onChange={(e) => updateField('newsletterSubtitle', e.target.value)}
+                            placeholder="Recevez nos offres exclusives"
+                            className="h-11 bg-background/50 border-border/50"
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          </ScrollArea>
         </div>
 
-        {/* Preview Area */}
-        <div className="flex-1 bg-muted/30 flex flex-col">
+        {/* Preview Area - Enhanced */}
+        <div className="flex-1 bg-muted/20 flex flex-col">
           {/* Preview Toolbar */}
-          <div className="bg-card border-b border-border p-3 flex items-center justify-between">
-            <div className="flex items-center gap-2">
+          <div className="bg-card/80 backdrop-blur-sm border-b border-border px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-1 p-1 bg-muted/50 rounded-xl">
               <Button
                 variant={previewMode === 'desktop' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setPreviewMode('desktop')}
-                className="gap-2"
+                className={`gap-2 rounded-lg ${previewMode === 'desktop' ? 'shadow-md' : ''}`}
               >
                 <Monitor className="w-4 h-4" />
                 Desktop
@@ -601,7 +646,7 @@ const ShopEditor = () => {
                 variant={previewMode === 'mobile' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setPreviewMode('mobile')}
-                className="gap-2"
+                className={`gap-2 rounded-lg ${previewMode === 'mobile' ? 'shadow-md' : ''}`}
               >
                 <Smartphone className="w-4 h-4" />
                 Mobile
@@ -611,64 +656,83 @@ const ShopEditor = () => {
             <Button
               variant="outline"
               size="sm"
-              className="gap-2"
+              className="gap-2 hover:bg-primary/5 hover:border-primary/30"
               onClick={() => window.open(`/shop/${shopSettings?.shopUrl || 'ma-boutique'}`, '_blank')}
             >
               <ExternalLink className="w-4 h-4" />
               Ouvrir la boutique
+              <ArrowRight className="w-3 h-3" />
             </Button>
           </div>
 
           {/* Preview Frame */}
-          <div className="flex-1 flex items-center justify-center p-6 overflow-auto">
-            <div 
-              className={`bg-background rounded-lg shadow-2xl overflow-hidden transition-all duration-300 ${
-                previewMode === 'mobile' ? 'w-[375px] h-[667px]' : 'w-full max-w-[1200px] h-full'
+          <div className="flex-1 flex items-start justify-center p-8 overflow-auto">
+            <motion.div 
+              layout
+              className={`bg-background rounded-2xl shadow-2xl shadow-black/10 overflow-hidden border border-border/50 transition-all duration-500 ${
+                previewMode === 'mobile' ? 'w-[390px]' : 'w-full max-w-[1100px]'
               }`}
+              style={{ minHeight: previewMode === 'mobile' ? '700px' : '600px' }}
             >
               <div className="h-full overflow-auto">
                 {/* Live Preview */}
                 <div className="min-h-full">
                   {/* Preview Hero */}
                   <div 
-                    className="relative h-[400px] bg-cover bg-center flex items-center justify-center"
+                    className="relative h-[380px] bg-cover bg-center flex items-center justify-center"
                     style={{ 
                       backgroundImage: formData.heroImage 
                         ? `url(${formData.heroImage})` 
-                        : 'linear-gradient(to br, hsl(var(--artisan-charcoal)), hsl(var(--artisan-olive)))'
+                        : 'linear-gradient(135deg, hsl(var(--muted)) 0%, hsl(var(--muted-foreground) / 0.1) 100%)'
                     }}
                   >
-                    <div className="absolute inset-0 bg-black/40" />
-                    <div className={`relative z-10 text-white p-8 ${
-                      formData.heroLayout === 'left' ? 'text-left' : 
-                      formData.heroLayout === 'right' ? 'text-right' : 'text-center'
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/10" />
+                    <div className={`relative z-10 text-white px-8 py-12 ${
+                      formData.heroLayout === 'left' ? 'text-left self-start' : 
+                      formData.heroLayout === 'right' ? 'text-right self-end' : 'text-center'
                     }`}>
-                      <h1 className="text-4xl font-serif font-bold mb-4">
+                      <motion.h1 
+                        key={formData.heroTitle}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-4xl font-serif font-bold mb-4 drop-shadow-lg"
+                      >
                         {formData.heroTitle || 'Titre de votre boutique'}
-                      </h1>
-                      <p className="text-lg opacity-90 mb-6 max-w-xl mx-auto">
+                      </motion.h1>
+                      <motion.p 
+                        key={formData.heroSubtitle}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-lg opacity-95 mb-6 max-w-xl mx-auto drop-shadow"
+                      >
                         {formData.heroSubtitle || 'Sous-titre accrocheur'}
-                      </p>
-                      <Button size="lg" className="bg-white text-black hover:bg-white/90">
+                      </motion.p>
+                      <Button size="lg" className="bg-white text-foreground hover:bg-white/90 shadow-lg font-semibold">
                         {formData.heroButtonText || 'Voir la Collection'}
                       </Button>
                     </div>
                   </div>
 
                   {/* Preview Trust Bar */}
-                  <div className="bg-artisan-sand py-6 px-4">
-                    <div className={`grid gap-4 ${
-                      previewMode === 'mobile' ? 'grid-cols-1' : `grid-cols-${Math.min(formData.trustBar.length, 3)}`
+                  <div className="bg-muted/50 py-5 px-6 border-y border-border/50">
+                    <div className={`grid gap-6 ${
+                      previewMode === 'mobile' ? 'grid-cols-1' : 
+                      formData.trustBar.length === 1 ? 'grid-cols-1' :
+                      formData.trustBar.length === 2 ? 'grid-cols-2' :
+                      formData.trustBar.length === 3 ? 'grid-cols-3' : 'grid-cols-4'
                     }`}>
                       {formData.trustBar.map((item) => {
                         const IconComp = getIconComponent(item.icon);
                         return (
-                          <div key={item.id} className="flex items-center justify-center gap-3 text-artisan-charcoal">
-                            <IconComp className="w-6 h-6 text-artisan-olive" />
+                          <div key={item.id} className="flex items-center justify-center gap-3 text-foreground">
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                              <IconComp className="w-5 h-5 text-primary" />
+                            </div>
                             <div>
-                              <p className="font-medium text-sm">{item.title}</p>
+                              <p className="font-semibold text-sm">{item.title}</p>
                               {item.subtitle && (
-                                <p className="text-xs opacity-70">{item.subtitle}</p>
+                                <p className="text-xs text-muted-foreground">{item.subtitle}</p>
                               )}
                             </div>
                           </div>
@@ -680,9 +744,14 @@ const ShopEditor = () => {
                   {/* Preview Products Section */}
                   <div className="p-8">
                     <div className="text-center mb-8">
-                      <h2 className="text-2xl font-serif font-bold text-foreground">
+                      <motion.h2 
+                        key={formData.productsTitle}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-2xl font-serif font-bold text-foreground"
+                      >
                         {formData.productsTitle || 'Nos Produits'}
-                      </h2>
+                      </motion.h2>
                       {formData.productsSubtitle && (
                         <p className="text-muted-foreground mt-2">{formData.productsSubtitle}</p>
                       )}
@@ -692,26 +761,35 @@ const ShopEditor = () => {
                       previewMode === 'mobile' ? 'grid-cols-2' : `grid-cols-${formData.productsPerRow}`
                     }`}>
                       {[1, 2, 3, 4, 5, 6].slice(0, formData.productsPerRow * 2).map((i) => (
-                        <div key={i} className="bg-muted/30 rounded-lg overflow-hidden">
-                          <div className="aspect-square bg-muted flex items-center justify-center">
-                            <ShoppingBag className="w-12 h-12 text-muted-foreground/30" />
+                        <motion.div 
+                          key={i} 
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: i * 0.05 }}
+                          className="bg-card rounded-xl overflow-hidden border border-border/50 hover:shadow-lg transition-shadow group"
+                        >
+                          <div className="aspect-square bg-muted flex items-center justify-center relative overflow-hidden">
+                            <ShoppingBag className="w-12 h-12 text-muted-foreground/20" />
+                            <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
-                          <div className="p-3">
-                            <p className="font-medium text-sm">Produit exemple {i}</p>
-                            <p className="text-primary font-bold">25 000 FCFA</p>
+                          <div className="p-4">
+                            <p className="font-medium text-sm truncate">Produit exemple {i}</p>
+                            <p className="text-primary font-bold mt-1">25 000 FCFA</p>
                           </div>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
 
                   {/* Preview Footer hint */}
-                  <div className="bg-muted p-8 text-center text-muted-foreground">
-                    <p className="text-sm">Pied de page avec vos informations</p>
+                  <div className="bg-muted/30 p-8 text-center border-t border-border/50">
+                    <p className="text-sm text-muted-foreground">
+                      Pied de page • Vos informations de contact
+                    </p>
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </main>
