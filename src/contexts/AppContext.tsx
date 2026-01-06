@@ -47,7 +47,9 @@ export interface ShopSettings {
   };
   
   // === GLOBAL DESIGN ===
-  fontFamily?: 'inter' | 'lora' | 'poppins' | 'switzer';
+  fontFamily?: 'inter' | 'lora' | 'poppins' | 'switzer' | 'playfair';
+  colorPalette?: string; // ID of the color palette
+  buttonStyle?: 'rounded' | 'pill' | 'square';
   
   // === HERO SECTION ===
   heroImage?: string;
