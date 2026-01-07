@@ -4,7 +4,11 @@ import { Input } from '@/components/ui/input';
 import { Mail, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-const NewsletterSection = () => {
+interface NewsletterSectionProps {
+  buttonStyle?: 'rounded' | 'pill' | 'square';
+}
+
+const NewsletterSection = ({ buttonStyle = 'rounded' }: NewsletterSectionProps) => {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
@@ -35,8 +39,22 @@ const NewsletterSection = () => {
     }, 3000);
   };
 
+  // Get button radius class based on style
+  const getButtonRadius = () => {
+    switch(buttonStyle) {
+      case 'pill': return 'rounded-full';
+      case 'square': return 'rounded-none';
+      default: return 'rounded-lg';
+    }
+  };
+
   return (
-    <section className="py-16 md:py-20 bg-gradient-to-br from-primary via-primary/90 to-primary-glow relative overflow-hidden">
+    <section 
+      className="py-16 md:py-20 relative overflow-hidden"
+      style={{
+        background: `linear-gradient(135deg, var(--shop-primary, hsl(var(--primary))), color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 90%, transparent), var(--shop-secondary, hsl(var(--primary))))`
+      }}
+    >
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0" style={{
@@ -68,12 +86,12 @@ const NewsletterSection = () => {
                 placeholder="Votre adresse email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 h-14 bg-white text-foreground border-0 text-lg"
+                className={`flex-1 h-14 bg-white text-foreground border-0 text-lg ${getButtonRadius()}`}
               />
               <Button 
                 type="submit"
                 size="lg"
-                className="h-14 px-8 bg-foreground text-primary-foreground hover:bg-foreground/90 font-semibold text-lg whitespace-nowrap"
+                className={`h-14 px-8 bg-foreground text-primary-foreground hover:bg-foreground/90 font-semibold text-lg whitespace-nowrap ${getButtonRadius()}`}
               >
                 S'abonner
                 <Mail className="ml-2 h-5 w-5" />

@@ -12,6 +12,7 @@ interface ModernProductCardProps {
   onQuickView: (product: Product) => void;
   onToggleWishlist?: (productId: string) => void;
   isInWishlist?: boolean;
+  buttonStyle?: 'rounded' | 'pill' | 'square';
 }
 
 const ModernProductCard = ({
@@ -20,7 +21,8 @@ const ModernProductCard = ({
   onAddToCart,
   onQuickView,
   onToggleWishlist,
-  isInWishlist = false
+  isInWishlist = false,
+  buttonStyle = 'rounded'
 }: ModernProductCardProps) => {
   const navigate = useNavigate();
 
@@ -32,6 +34,15 @@ const ModernProductCard = ({
   const discountPercent = hasDiscount 
     ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
     : 0;
+
+  // Get button radius class based on style
+  const getButtonRadius = () => {
+    switch(buttonStyle) {
+      case 'pill': return 'rounded-full';
+      case 'square': return 'rounded-none';
+      default: return 'rounded-lg';
+    }
+  };
 
   return (
     <div 
@@ -121,8 +132,11 @@ const ModernProductCard = ({
             e.stopPropagation();
             onAddToCart(product);
           }}
-          className="w-full group/btn"
+          className={`w-full group/btn shop-btn-primary ${getButtonRadius()}`}
           size="lg"
+          style={{ 
+            backgroundColor: 'var(--shop-primary, hsl(var(--primary)))',
+          }}
         >
           <ShoppingCart className="h-4 w-4 mr-2 transition-transform group-hover/btn:scale-110" />
           Ajouter au panier

@@ -19,6 +19,8 @@ import NewsletterSection from '@/components/shop/NewsletterSection';
 import WhyBuySection from '@/components/shop/WhyBuySection';
 import QuickViewModal from '@/components/shop/QuickViewModal';
 import BottomNavMobile from '@/components/shop/BottomNavMobile';
+import DynamicThemeStyles from '@/components/shop/DynamicThemeStyles';
+import { getFontClass, getButtonClass } from '@/lib/shopTheme';
 
 // Theme components - Modern
 import ModernHero from '@/components/shop/themes/modern/ModernHero';
@@ -277,10 +279,19 @@ const Shop = () => {
     );
   }
 
+  // Get dynamic styling props
+  const fontClass = getFontClass(shopSettings?.fontFamily);
+  const buttonClass = getButtonClass(shopSettings?.buttonStyle);
+
   // MODERN THEME (default)
   return (
     <ThemeProvider themeId={currentTheme}>
-      <div className="min-h-screen pb-20 md:pb-0 bg-background">
+      <DynamicThemeStyles 
+        colorPalette={shopSettings.colorPalette}
+        buttonStyle={shopSettings.buttonStyle}
+        fontFamily={shopSettings.fontFamily}
+      />
+      <div className={`min-h-screen pb-20 md:pb-0 bg-background ${fontClass}`}>
         <ShopHeader 
           logo={shopSettings.logo}
           shopName={shopSettings.shopName}
@@ -294,6 +305,7 @@ const Shop = () => {
           heroSubtitle={shopSettings.heroSubtitle}
           heroButtonText={shopSettings.heroButtonText}
           heroButtonLink={shopSettings.heroButtonLink}
+          buttonStyle={shopSettings.buttonStyle}
         />
 
         <TrustBar trustItems={shopSettings.trustBar} />
@@ -305,6 +317,7 @@ const Shop = () => {
           onQuickView={setQuickViewProduct}
           onToggleWishlist={handleToggleWishlist}
           wishlist={wishlist}
+          buttonStyle={shopSettings.buttonStyle}
         />
 
         <div id="categories">
@@ -400,6 +413,7 @@ const Shop = () => {
                     onQuickView={setQuickViewProduct}
                     onToggleWishlist={handleToggleWishlist}
                     isInWishlist={wishlist.includes(product.id)}
+                    buttonStyle={shopSettings.buttonStyle}
                   />
                 ))}
               </div>
@@ -429,7 +443,7 @@ const Shop = () => {
 
         <SocialProofSection />
         <WhyBuySection />
-        <NewsletterSection />
+        <NewsletterSection buttonStyle={shopSettings.buttonStyle} />
 
         <ModernFooter 
           logo={shopSettings.logo}

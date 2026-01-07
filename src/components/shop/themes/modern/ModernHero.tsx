@@ -6,6 +6,7 @@ interface ModernHeroProps {
   heroSubtitle?: string;
   heroButtonText?: string;
   heroButtonLink?: string;
+  buttonStyle?: 'rounded' | 'pill' | 'square';
 }
 
 const ModernHero = ({ 
@@ -13,7 +14,8 @@ const ModernHero = ({
   heroTitle = "Bienvenue dans notre boutique",
   heroSubtitle = "Découvrez nos produits de qualité",
   heroButtonText = "Voir la Collection",
-  heroButtonLink = "#products"
+  heroButtonLink = "#products",
+  buttonStyle = 'rounded'
 }: ModernHeroProps) => {
   const handleButtonClick = () => {
     if (heroButtonLink?.startsWith('#')) {
@@ -24,6 +26,14 @@ const ModernHero = ({
     }
   };
 
+  // Get button radius class based on style
+  const getButtonRadius = () => {
+    switch(buttonStyle) {
+      case 'pill': return 'rounded-full';
+      case 'square': return 'rounded-none';
+      default: return 'rounded-lg';
+    }
+  };
   return (
     <section className="relative w-full min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -32,7 +42,7 @@ const ModernHero = ({
         style={{
           backgroundImage: heroImage 
             ? `url(${heroImage})` 
-            : 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(142 76% 30%) 100%)'
+            : 'linear-gradient(135deg, var(--shop-primary, hsl(var(--primary))) 0%, var(--shop-secondary, hsl(142 76% 30%)) 100%)'
         }}
       />
       
@@ -51,7 +61,13 @@ const ModernHero = ({
         <div className="max-w-4xl mx-auto">
           {/* Badge */}
           <div className="flex justify-center mb-6 animate-fade-in">
-            <div className="inline-flex items-center gap-2 bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-full px-6 py-2">
+            <div 
+              className="inline-flex items-center gap-2 backdrop-blur-sm border rounded-full px-6 py-2"
+              style={{ 
+                backgroundColor: 'color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 20%, transparent)',
+                borderColor: 'color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 30%, transparent)'
+              }}
+            >
               <span className="text-2xl">🔥</span>
               <span className="text-white font-display font-semibold">Nouvelle Collection 2025</span>
             </div>
@@ -72,19 +88,28 @@ const ModernHero = ({
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-white/80 text-sm md:text-base font-body">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                <div 
+                  className="w-5 h-5 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--shop-primary, hsl(var(--primary)))' }}
+                >
                   <span className="text-white text-xs">✓</span>
                 </div>
                 <span>Livraison 24h</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                <div 
+                  className="w-5 h-5 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--shop-primary, hsl(var(--primary)))' }}
+                >
                   <span className="text-white text-xs">✓</span>
                 </div>
                 <span>Retour gratuit</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                <div 
+                  className="w-5 h-5 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--shop-primary, hsl(var(--primary)))' }}
+                >
                   <span className="text-white text-xs">✓</span>
                 </div>
                 <span>Paiement sécurisé</span>
@@ -97,7 +122,11 @@ const ModernHero = ({
             <Button 
               size="lg"
               onClick={handleButtonClick}
-              className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              className={`text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all hover:scale-105 ${getButtonRadius()}`}
+              style={{ 
+                backgroundColor: 'var(--shop-primary, hsl(var(--primary)))',
+                color: 'white'
+              }}
             >
               {heroButtonText}
             </Button>
@@ -108,7 +137,7 @@ const ModernHero = ({
                 const element = document.getElementById('categories');
                 element?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="text-lg px-8 py-6 bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm"
+              className={`text-lg px-8 py-6 bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm ${getButtonRadius()}`}
             >
               Nos Catégories
             </Button>

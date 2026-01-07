@@ -11,6 +11,7 @@ interface NewArrivalsCarouselProps {
   onQuickView: (product: Product) => void;
   onToggleWishlist: (productId: string) => void;
   wishlist: string[];
+  buttonStyle?: 'rounded' | 'pill' | 'square';
 }
 
 const NewArrivalsCarousel = ({ 
@@ -19,7 +20,8 @@ const NewArrivalsCarousel = ({
   onAddToCart, 
   onQuickView,
   onToggleWishlist,
-  wishlist 
+  wishlist,
+  buttonStyle = 'rounded'
 }: NewArrivalsCarouselProps) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -91,6 +93,7 @@ const NewArrivalsCarousel = ({
                 onQuickView={onQuickView}
                 onToggleWishlist={onToggleWishlist}
                 isInWishlist={wishlist.includes(product.id)}
+                buttonStyle={buttonStyle}
               />
             </div>
           ))}
