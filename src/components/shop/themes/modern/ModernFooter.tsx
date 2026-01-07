@@ -23,7 +23,10 @@ const ModernFooter = ({
   tiktok
 }: ModernFooterProps) => {
   return (
-    <footer className="w-full bg-[#111827] text-white py-12 md:py-16">
+    <footer 
+      className="w-full text-white py-12 md:py-16"
+      style={{ backgroundColor: 'var(--shop-background, #111827)' }}
+    >
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
           {/* Column 1: Logo + About */}
@@ -36,7 +39,10 @@ const ModernFooter = ({
                   className="h-12 w-12 object-contain rounded-lg"
                 />
               ) : (
-                <div className="h-12 w-12 rounded-lg bg-[#10B981] flex items-center justify-center">
+                <div 
+                  className="h-12 w-12 rounded-lg flex items-center justify-center"
+                  style={{ backgroundColor: 'var(--shop-primary, #10B981)' }}
+                >
                   <span className="text-white font-bold text-xl">
                     {shopName.charAt(0)}
                   </span>
@@ -54,22 +60,43 @@ const ModernFooter = ({
             <h3 className="text-lg font-display font-semibold">Navigation</h3>
             <ul className="space-y-3 font-body">
               <li>
-                <Link to="#products" className="text-white/70 hover:text-[#10B981] transition-colors">
+                <Link 
+                  to="#products" 
+                  className="text-white/70 hover:text-white transition-colors"
+                  style={{ '--hover-color': 'var(--shop-primary, #10B981)' } as React.CSSProperties}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary, #10B981)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
+                >
                   Produits
                 </Link>
               </li>
               <li>
-                <Link to="#contact" className="text-white/70 hover:text-[#10B981] transition-colors">
+                <Link 
+                  to="#contact" 
+                  className="text-white/70 hover:text-white transition-colors"
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary, #10B981)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
+                >
                   Contact
                 </Link>
               </li>
               <li>
-                <Link to="#faq" className="text-white/70 hover:text-[#10B981] transition-colors">
+                <Link 
+                  to="#faq" 
+                  className="text-white/70 hover:text-white transition-colors"
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary, #10B981)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
+                >
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link to="#conditions" className="text-white/70 hover:text-[#10B981] transition-colors">
+                <Link 
+                  to="#conditions" 
+                  className="text-white/70 hover:text-white transition-colors"
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary, #10B981)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = ''}
+                >
                   Conditions de Vente
                 </Link>
               </li>
@@ -82,10 +109,12 @@ const ModernFooter = ({
             <div className="space-y-3 font-body">
               {phone && (
                 <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-[#10B981]" />
+                  <Phone className="h-5 w-5" style={{ color: 'var(--shop-primary, #10B981)' }} />
                   <a 
                     href={`tel:${phone}`}
-                    className="text-white/70 hover:text-[#10B981] transition-colors"
+                    className="text-white/70 transition-colors"
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary, #10B981)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = ''}
                   >
                     {phone}
                   </a>
@@ -93,12 +122,14 @@ const ModernFooter = ({
               )}
               {whatsapp && (
                 <div className="flex items-center gap-3">
-                  <MessageCircle className="h-5 w-5 text-[#10B981]" />
+                  <MessageCircle className="h-5 w-5" style={{ color: 'var(--shop-primary, #10B981)' }} />
                   <a 
                     href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white/70 hover:text-[#10B981] transition-colors"
+                    className="text-white/70 transition-colors"
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary, #10B981)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = ''}
                   >
                     WhatsApp
                   </a>
@@ -113,7 +144,9 @@ const ModernFooter = ({
                   href={facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="h-10 w-10 rounded-full bg-white/10 hover:bg-[#10B981] flex items-center justify-center transition-colors"
+                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center transition-colors"
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--shop-primary, #10B981)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
                 >
                   <Facebook className="h-5 w-5" />
                 </a>
@@ -123,7 +156,9 @@ const ModernFooter = ({
                   href={instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="h-10 w-10 rounded-full bg-white/10 hover:bg-[#10B981] flex items-center justify-center transition-colors"
+                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center transition-colors"
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--shop-primary, #10B981)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
                 >
                   <Instagram className="h-5 w-5" />
                 </a>
@@ -133,7 +168,9 @@ const ModernFooter = ({
                   href={tiktok}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="h-10 w-10 rounded-full bg-white/10 hover:bg-[#10B981] flex items-center justify-center transition-colors"
+                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center transition-colors"
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--shop-primary, #10B981)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
                 >
                   <span className="text-sm font-bold">TT</span>
                 </a>

@@ -44,7 +44,11 @@ const ShopHeader = ({ logo, shopName, cartItemsCount, onCartClick }: ShopHeaderP
             <ShoppingCart className="h-5 w-5" />
             {cartItemsCount > 0 && (
               <Badge 
-                className="absolute -top-2 -right-2 h-6 w-6 flex items-center justify-center p-0 bg-primary text-primary-foreground"
+                className="absolute -top-2 -right-2 h-6 w-6 flex items-center justify-center p-0"
+                style={{ 
+                  backgroundColor: 'var(--shop-primary, hsl(var(--primary)))',
+                  color: 'white'
+                }}
               >
                 {cartItemsCount}
               </Badge>

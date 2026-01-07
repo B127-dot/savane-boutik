@@ -39,8 +39,16 @@ const TrustBar = ({ trustItems = defaultTrustItems }: TrustBarProps) => {
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="flex-shrink-0">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                    <IconComponent className="h-8 w-8 text-primary" />
+                  <div 
+                    className="w-16 h-16 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg shop-icon-container"
+                    style={{
+                      background: `linear-gradient(135deg, color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 20%, transparent), color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 10%, transparent))`
+                    }}
+                  >
+                    <IconComponent 
+                      className="h-8 w-8" 
+                      style={{ color: 'var(--shop-primary, hsl(var(--primary)))' }}
+                    />
                   </div>
                 </div>
                 <div>
