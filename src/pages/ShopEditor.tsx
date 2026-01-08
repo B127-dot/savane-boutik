@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { ImageUploader } from '@/components/ImageUploader';
-import Sidebar from '@/components/Sidebar';
+
 import { 
   Save, 
   Eye, 
@@ -303,9 +303,7 @@ const ShopEditor = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-background w-full">
-      <Sidebar />
-      
+    <div className="flex min-h-screen bg-background w-full -m-6">
       <main className="flex-1 flex min-h-screen">
         {/* Editor Sidebar - Premium Design */}
         <div className="w-[400px] border-r border-border bg-gradient-to-b from-card to-card/95 flex flex-col">
