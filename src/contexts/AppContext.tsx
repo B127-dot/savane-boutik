@@ -50,6 +50,7 @@ export interface ShopSettings {
   fontFamily?: 'inter' | 'lora' | 'poppins' | 'switzer' | 'playfair';
   colorPalette?: string; // ID of the color palette
   buttonStyle?: 'rounded' | 'pill' | 'square';
+  headerStyle?: 'classic' | 'gradient' | 'minimal' | 'glass';
   
   // === HERO SECTION ===
   heroImage?: string;

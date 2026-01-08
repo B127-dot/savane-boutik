@@ -184,6 +184,7 @@ const ShopEditor = () => {
     colorPalette: 'default',
     fontFamily: 'inter' as 'inter' | 'lora' | 'poppins' | 'switzer' | 'playfair',
     buttonStyle: 'rounded' as 'rounded' | 'pill' | 'square',
+    headerStyle: 'classic' as 'classic' | 'gradient' | 'minimal' | 'glass',
     // Hero
     heroImage: '',
     heroTitle: '',
@@ -215,6 +216,7 @@ const ShopEditor = () => {
         colorPalette: shopSettings.colorPalette || 'default',
         fontFamily: shopSettings.fontFamily || 'inter',
         buttonStyle: shopSettings.buttonStyle || 'rounded',
+        headerStyle: shopSettings.headerStyle || 'classic',
         heroImage: shopSettings.heroImage || '',
         heroTitle: shopSettings.heroTitle || 'Bienvenue dans notre boutique',
         heroSubtitle: shopSettings.heroSubtitle || 'Découvrez notre collection unique',
@@ -267,6 +269,7 @@ const ShopEditor = () => {
       colorPalette: formData.colorPalette,
       fontFamily: formData.fontFamily,
       buttonStyle: formData.buttonStyle,
+      headerStyle: formData.headerStyle,
       heroImage: formData.heroImage,
       heroTitle: formData.heroTitle,
       heroSubtitle: formData.heroSubtitle,
@@ -489,6 +492,73 @@ const ShopEditor = () => {
                               style={{ backgroundColor: currentPalette.primary }}
                             />
                             <span className="text-xs font-medium">{style.name}</span>
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Header Styles */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold flex items-center gap-2">
+                        <Layout className="w-4 h-4 text-pink-500" />
+                        Style du Header
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Apparence de la barre de navigation</p>
+                      
+                      <div className="grid grid-cols-2 gap-3">
+                        {[
+                          { id: 'classic', name: 'Classique', description: 'Simple et efficace', preview: 'header-classic' },
+                          { id: 'gradient', name: 'Gradient Glow', description: 'Moderne avec effets', preview: 'header-gradient' },
+                          { id: 'minimal', name: 'Minimal Clean', description: 'Épuré et élégant', preview: 'header-minimal' },
+                          { id: 'glass', name: 'Glass Premium', description: 'Glassmorphism chic', preview: 'header-glass' },
+                        ].map((style) => (
+                          <motion.button
+                            key={style.id}
+                            type="button"
+                            onClick={() => updateField('headerStyle', style.id as typeof formData.headerStyle)}
+                            className={`flex flex-col items-start gap-2 p-4 rounded-xl border transition-all text-left ${
+                              formData.headerStyle === style.id 
+                                ? 'border-primary bg-primary/5 shadow-md ring-2 ring-primary/20' 
+                                : 'border-border/50 hover:border-primary/30'
+                            }`}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            {/* Mini header preview */}
+                            <div 
+                              className={`w-full h-8 rounded-md flex items-center px-2 gap-2 ${
+                                style.id === 'classic' ? 'bg-background border border-border' :
+                                style.id === 'gradient' ? 'bg-gradient-to-r from-primary/20 to-primary/5 border border-primary/20' :
+                                style.id === 'minimal' ? 'bg-muted/50 border border-border' :
+                                'bg-background/60 backdrop-blur-sm border border-border/50 ring-1 ring-border/20 rounded-lg'
+                              }`}
+                            >
+                              <div 
+                                className={`w-4 h-4 rounded-full ${
+                                  style.id === 'glass' ? 'rounded-md' : 'rounded-full'
+                                }`}
+                                style={{ backgroundColor: currentPalette.primary }}
+                              />
+                              <div className="flex-1 h-1 bg-muted-foreground/20 rounded-full" />
+                              <div 
+                                className={`h-3 w-8 ${
+                                  style.id === 'minimal' ? 'rounded-full' : 
+                                  style.id === 'glass' ? 'rounded-lg' : 'rounded'
+                                }`}
+                                style={{ backgroundColor: currentPalette.primary }}
+                              />
+                            </div>
+                            <div>
+                              <span className="text-sm font-semibold block">{style.name}</span>
+                              <span className="text-xs text-muted-foreground">{style.description}</span>
+                            </div>
+                            {formData.headerStyle === style.id && (
+                              <div className="absolute top-2 right-2">
+                                <Check className="w-4 h-4 text-primary" />
+                              </div>
+                            )}
                           </motion.button>
                         ))}
                       </div>
