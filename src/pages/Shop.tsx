@@ -10,6 +10,7 @@ import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { useAbandonedCartTracker } from '@/hooks/useAbandonedCartTracker';
 import ShopHeader from '@/components/shop/ShopHeader';
+import { GradientHeader, MinimalHeader, GlassHeader } from '@/components/shop/headers';
 import TrustBar from '@/components/shop/TrustBar';
 import SkeletonProductCard from '@/components/shop/SkeletonProductCard';
 import NewArrivalsCarousel from '@/components/shop/NewArrivalsCarousel';
@@ -292,12 +293,26 @@ const Shop = () => {
         fontFamily={shopSettings.fontFamily}
       />
       <div className={`min-h-screen pb-20 md:pb-0 bg-background ${fontClass}`}>
-        <ShopHeader 
-          logo={shopSettings.logo}
-          shopName={shopSettings.shopName}
-          cartItemsCount={cartItemsCount}
-          onCartClick={() => setIsCartOpen(true)}
-        />
+        {/* Dynamic Header based on headerStyle setting */}
+        {(() => {
+          const headerProps = {
+            logo: shopSettings.logo,
+            shopName: shopSettings.shopName,
+            cartItemsCount,
+            onCartClick: () => setIsCartOpen(true),
+          };
+
+          switch (shopSettings.headerStyle) {
+            case 'gradient':
+              return <GradientHeader {...headerProps} />;
+            case 'minimal':
+              return <MinimalHeader {...headerProps} />;
+            case 'glass':
+              return <GlassHeader {...headerProps} />;
+            default:
+              return <ShopHeader {...headerProps} />;
+          }
+        })()}
 
         <ModernHero 
           heroImage={shopSettings.heroImage}
