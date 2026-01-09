@@ -1106,9 +1106,154 @@ const ShopEditor = () => {
               <div className="h-full overflow-auto">
                 {/* Live Preview */}
                 <div className="min-h-full">
+                  {/* Preview Header - Dynamic based on headerStyle */}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={formData.headerStyle}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {formData.headerStyle === 'gradient' && (
+                        <header className="relative z-10 px-4 py-4" style={{ backgroundColor: currentPalette.background }}>
+                          <div className="flex items-center justify-between">
+                            <div 
+                              className="w-8 h-8 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.4)]"
+                              style={{ background: `linear-gradient(135deg, #0ea5e9, #3b82f6)` }}
+                            >
+                              <span className="text-white text-xs font-bold">
+                                {shopSettings?.shopName?.charAt(0) || 'B'}
+                              </span>
+                            </div>
+                            <div className="hidden md:flex items-center gap-1 px-2 py-1 rounded-full bg-white/10 backdrop-blur-md shadow-lg">
+                              {['Accueil', 'Produits', 'Contact'].map((item, i) => (
+                                <span 
+                                  key={item} 
+                                  className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all ${
+                                    i === 0 ? 'bg-white/10 text-white shadow-sm' : 'text-zinc-400 hover:text-white'
+                                  }`}
+                                >
+                                  {item}
+                                </span>
+                              ))}
+                            </div>
+                            <button 
+                              className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-white shadow-[0px_0px_0px_1px_rgba(59,130,246,1),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all"
+                              style={{ background: 'linear-gradient(180deg, #3b82f6, #2563eb)' }}
+                            >
+                              <ShoppingBag className="w-3.5 h-3.5" />
+                              <span>Panier</span>
+                            </button>
+                          </div>
+                        </header>
+                      )}
+
+                      {formData.headerStyle === 'minimal' && (
+                        <header className="relative z-10 px-6 py-5" style={{ backgroundColor: currentPalette.background }}>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-zinc-900 font-semibold text-xs">
+                                {shopSettings?.shopName?.charAt(0) || 'B'}
+                              </span>
+                              <span className="text-sm font-medium text-white/90">
+                                {shopSettings?.shopName || 'Ma Boutique'}
+                              </span>
+                            </div>
+                            <nav className="hidden md:flex items-center gap-1 px-2 py-1 rounded-full bg-white/5 ring-1 ring-white/10 backdrop-blur">
+                              {['Accueil', 'Produits', 'Contact'].map((item, i) => (
+                                <span 
+                                  key={item} 
+                                  className={`px-3 py-1.5 text-xs font-medium ${
+                                    i === 0 ? 'text-white/90' : 'text-white/60 hover:text-white'
+                                  }`}
+                                >
+                                  {item}
+                                </span>
+                              ))}
+                              <span className="ml-1 px-3 py-1.5 rounded-full bg-white text-xs font-medium text-zinc-900 flex items-center gap-1.5">
+                                Panier
+                                <ArrowRight className="w-3 h-3" />
+                              </span>
+                            </nav>
+                            <button className="md:hidden w-8 h-8 rounded-full bg-white/10 ring-1 ring-white/15 flex items-center justify-center">
+                              <div className="w-4 h-0.5 bg-white/80" />
+                            </button>
+                          </div>
+                        </header>
+                      )}
+
+                      {formData.headerStyle === 'glass' && (
+                        <header className="relative z-10 px-4 py-4" style={{ backgroundColor: currentPalette.background }}>
+                          <div className="max-w-4xl mx-auto px-4 py-3 rounded-2xl bg-white/10 ring-1 ring-white/10 backdrop-blur-lg shadow-lg">
+                            <div className="flex items-center justify-between">
+                              <div className="px-2.5 py-1.5 rounded-xl bg-white/15 border border-white/30 backdrop-blur-md">
+                                <span className="text-sm font-semibold text-white">
+                                  {shopSettings?.shopName?.substring(0, 2).toUpperCase() || 'MB'}
+                                </span>
+                              </div>
+                              <nav className="hidden md:flex items-center gap-6">
+                                {['Accueil', 'Produits', 'À propos', 'Contact'].map((item) => (
+                                  <span 
+                                    key={item} 
+                                    className="text-xs font-medium text-gray-300 hover:text-white transition-colors"
+                                  >
+                                    {item}
+                                  </span>
+                                ))}
+                              </nav>
+                              <button className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 text-xs font-semibold text-zinc-900 hover:bg-white transition-all shadow-lg">
+                                <ShoppingBag className="w-3.5 h-3.5" />
+                                Panier
+                              </button>
+                            </div>
+                          </div>
+                        </header>
+                      )}
+
+                      {formData.headerStyle === 'classic' && (
+                        <header 
+                          className="relative z-10 border-b"
+                          style={{ 
+                            backgroundColor: currentPalette.background,
+                            borderColor: `${currentPalette.primary}20`
+                          }}
+                        >
+                          <div className="px-4 py-3 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <div 
+                                className="h-10 w-10 rounded-lg flex items-center justify-center"
+                                style={{ backgroundColor: `${currentPalette.primary}20` }}
+                              >
+                                <span style={{ color: currentPalette.primary }} className="font-bold text-sm">
+                                  {shopSettings?.shopName?.charAt(0) || 'B'}
+                                </span>
+                              </div>
+                              <span className="text-base font-bold text-white hidden sm:block">
+                                {shopSettings?.shopName || 'Ma Boutique'}
+                              </span>
+                            </div>
+                            <button 
+                              className="relative h-10 w-10 rounded-lg flex items-center justify-center border"
+                              style={{ borderColor: `${currentPalette.primary}30` }}
+                            >
+                              <ShoppingBag className="h-4 w-4" style={{ color: currentPalette.primary }} />
+                              <span 
+                                className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
+                                style={{ backgroundColor: currentPalette.primary }}
+                              >
+                                0
+                              </span>
+                            </button>
+                          </div>
+                        </header>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+
                   {/* Preview Hero */}
                   <div 
-                    className="relative h-[380px] bg-cover bg-center flex items-center justify-center"
+                    className="relative h-[340px] bg-cover bg-center flex items-center justify-center"
                     style={{ 
                       backgroundImage: formData.heroImage 
                         ? `url(${formData.heroImage})` 
