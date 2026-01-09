@@ -505,20 +505,20 @@ const ShopEditor = () => {
                         <Layout className="w-4 h-4 text-pink-500" />
                         Style du Header
                       </Label>
-                      <p className="text-xs text-muted-foreground">Apparence de la barre de navigation</p>
+                      <p className="text-xs text-muted-foreground">Survolez pour prévisualiser l'animation</p>
                       
                       <div className="grid grid-cols-2 gap-3">
                         {[
-                          { id: 'classic', name: 'Classique', description: 'Simple et efficace', preview: 'header-classic' },
-                          { id: 'gradient', name: 'Gradient Glow', description: 'Moderne avec effets', preview: 'header-gradient' },
-                          { id: 'minimal', name: 'Minimal Clean', description: 'Épuré et élégant', preview: 'header-minimal' },
-                          { id: 'glass', name: 'Glass Premium', description: 'Glassmorphism chic', preview: 'header-glass' },
+                          { id: 'classic', name: 'Classique', description: 'Simple et efficace' },
+                          { id: 'gradient', name: 'Gradient Glow', description: 'Moderne avec effets' },
+                          { id: 'minimal', name: 'Minimal Clean', description: 'Épuré et élégant' },
+                          { id: 'glass', name: 'Glass Premium', description: 'Glassmorphism chic' },
                         ].map((style) => (
                           <motion.button
                             key={style.id}
                             type="button"
                             onClick={() => updateField('headerStyle', style.id as typeof formData.headerStyle)}
-                            className={`flex flex-col items-start gap-2 p-4 rounded-xl border transition-all text-left ${
+                            className={`group relative flex flex-col items-start gap-2 p-4 rounded-xl border transition-all text-left overflow-hidden ${
                               formData.headerStyle === style.id 
                                 ? 'border-primary bg-primary/5 shadow-md ring-2 ring-primary/20' 
                                 : 'border-border/50 hover:border-primary/30'
@@ -526,38 +526,131 @@ const ShopEditor = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                           >
-                            {/* Mini header preview */}
+                            {/* Animated Header Preview */}
                             <div 
-                              className={`w-full h-8 rounded-md flex items-center px-2 gap-2 ${
-                                style.id === 'classic' ? 'bg-background border border-border' :
-                                style.id === 'gradient' ? 'bg-gradient-to-r from-primary/20 to-primary/5 border border-primary/20' :
-                                style.id === 'minimal' ? 'bg-muted/50 border border-border' :
-                                'bg-background/60 backdrop-blur-sm border border-border/50 ring-1 ring-border/20 rounded-lg'
+                              className={`w-full h-12 rounded-lg flex items-center px-2 gap-1.5 relative overflow-hidden transition-all duration-300 ${
+                                style.id === 'classic' ? 'bg-zinc-900 border border-zinc-700' :
+                                style.id === 'gradient' ? 'bg-zinc-900' :
+                                style.id === 'minimal' ? 'bg-zinc-900' :
+                                'bg-zinc-800/80 backdrop-blur-sm border border-zinc-600/50 ring-1 ring-zinc-500/20'
                               }`}
                             >
-                              <div 
-                                className={`w-4 h-4 rounded-full ${
-                                  style.id === 'glass' ? 'rounded-md' : 'rounded-full'
+                              {/* Logo animation */}
+                              <motion.div 
+                                className={`w-5 h-5 flex-shrink-0 ${
+                                  style.id === 'gradient' ? 'rounded-full shadow-[0_0_8px_rgba(59,130,246,0.5)]' :
+                                  style.id === 'glass' ? 'rounded-md border border-white/20' : 
+                                  style.id === 'minimal' ? 'rounded-full border-2 border-white' :
+                                  'rounded-md'
                                 }`}
-                                style={{ backgroundColor: currentPalette.primary }}
+                                style={{ 
+                                  backgroundColor: style.id === 'gradient' 
+                                    ? `linear-gradient(135deg, ${currentPalette.primary}, #3b82f6)` 
+                                    : style.id === 'minimal' ? 'transparent' : currentPalette.primary,
+                                  background: style.id === 'gradient' 
+                                    ? `linear-gradient(135deg, #0ea5e9, #3b82f6)` 
+                                    : style.id === 'minimal' ? 'white' : currentPalette.primary
+                                }}
+                                initial={false}
+                                whileHover={{ scale: 1.1 }}
+                                transition={{ duration: 0.2 }}
                               />
-                              <div className="flex-1 h-1 bg-muted-foreground/20 rounded-full" />
-                              <div 
-                                className={`h-3 w-8 ${
-                                  style.id === 'minimal' ? 'rounded-full' : 
-                                  style.id === 'glass' ? 'rounded-lg' : 'rounded'
+                              
+                              {/* Nav links animation - centered pill for gradient/minimal */}
+                              {(style.id === 'gradient' || style.id === 'minimal') && (
+                                <motion.div 
+                                  className={`flex-1 flex items-center justify-center gap-1 mx-1 py-0.5 px-1.5 rounded-full ${
+                                    style.id === 'gradient' ? 'bg-white/10 backdrop-blur-sm' : 'bg-zinc-800 ring-1 ring-zinc-700'
+                                  }`}
+                                  initial={{ opacity: 0.6 }}
+                                  whileHover={{ opacity: 1 }}
+                                >
+                                  {[...Array(3)].map((_, i) => (
+                                    <motion.div 
+                                      key={i}
+                                      className="h-1 rounded-full bg-zinc-400 group-hover:bg-white transition-colors"
+                                      style={{ width: `${12 + i * 4}px` }}
+                                      initial={{ scaleX: 0.8 }}
+                                      whileHover={{ scaleX: 1, backgroundColor: '#fff' }}
+                                      transition={{ delay: i * 0.05 }}
+                                    />
+                                  ))}
+                                </motion.div>
+                              )}
+                              
+                              {/* Nav links for classic/glass - spread */}
+                              {(style.id === 'classic' || style.id === 'glass') && (
+                                <div className="flex-1 flex items-center gap-2 justify-center">
+                                  {[...Array(3)].map((_, i) => (
+                                    <motion.div 
+                                      key={i}
+                                      className="h-1 rounded-full bg-zinc-500 group-hover:bg-zinc-300 transition-colors duration-300"
+                                      style={{ width: `${10 + i * 3}px` }}
+                                      initial={{ opacity: 0.5 }}
+                                      whileHover={{ opacity: 1 }}
+                                      transition={{ delay: i * 0.1 }}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                              
+                              {/* CTA Button animation */}
+                              <motion.div 
+                                className={`h-4 w-10 flex-shrink-0 ${
+                                  style.id === 'gradient' ? 'rounded-full shadow-[0_0_10px_rgba(59,130,246,0.4)]' :
+                                  style.id === 'minimal' ? 'rounded-full' :
+                                  style.id === 'glass' ? 'rounded-lg' :
+                                  'rounded-md'
                                 }`}
-                                style={{ backgroundColor: currentPalette.primary }}
+                                style={{ 
+                                  backgroundColor: style.id === 'minimal' ? '#fff' : currentPalette.primary,
+                                  background: style.id === 'gradient' 
+                                    ? 'linear-gradient(180deg, #3b82f6, #2563eb)' 
+                                    : style.id === 'minimal' ? '#fff' : currentPalette.primary
+                                }}
+                                whileHover={{ 
+                                  scale: 1.1,
+                                  boxShadow: style.id === 'gradient' 
+                                    ? '0 0 20px rgba(59,130,246,0.6)' 
+                                    : style.id === 'glass' 
+                                    ? '0 4px 12px rgba(0,0,0,0.3)' 
+                                    : 'none'
+                                }}
+                                transition={{ duration: 0.2 }}
                               />
+                              
+                              {/* Gradient glow effect on hover */}
+                              {style.id === 'gradient' && (
+                                <motion.div 
+                                  className="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 pointer-events-none"
+                                  initial={{ x: '-100%', opacity: 0 }}
+                                  whileHover={{ x: '100%', opacity: 1 }}
+                                  transition={{ duration: 0.8, repeat: Infinity, repeatDelay: 1 }}
+                                />
+                              )}
+                              
+                              {/* Glass reflection effect */}
+                              {style.id === 'glass' && (
+                                <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-lg" />
+                              )}
                             </div>
-                            <div>
+                            
+                            <div className="mt-1">
                               <span className="text-sm font-semibold block">{style.name}</span>
                               <span className="text-xs text-muted-foreground">{style.description}</span>
                             </div>
+                            
                             {formData.headerStyle === style.id && (
-                              <div className="absolute top-2 right-2">
-                                <Check className="w-4 h-4 text-primary" />
-                              </div>
+                              <motion.div 
+                                className="absolute top-2 right-2"
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ type: 'spring', stiffness: 500 }}
+                              >
+                                <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+                                  <Check className="w-3 h-3 text-primary-foreground" />
+                                </div>
+                              </motion.div>
                             )}
                           </motion.button>
                         ))}
