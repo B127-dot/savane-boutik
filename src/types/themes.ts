@@ -3,7 +3,7 @@ export interface Theme {
   name: string;
   description: string;
   preview: string;
-  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan';
+  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique';
   isAvailable: boolean;
   components: {
     hero: string;
@@ -37,6 +37,19 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       hero: 'artisan',
       productCard: 'artisan',
       footer: 'artisan'
+    }
+  },
+  aesthetique: {
+    id: 'aesthetique',
+    name: 'Esthétique',
+    description: 'Design sombre et luxueux avec typographie serif élégante. Parfait pour les boutiques premium et design d\'intérieur.',
+    preview: '/theme-previews/aesthetique.jpg',
+    category: 'aesthetique',
+    isAvailable: true,
+    components: {
+      hero: 'aesthetique',
+      productCard: 'aesthetique',
+      footer: 'aesthetique'
     }
   },
   minimal: {
