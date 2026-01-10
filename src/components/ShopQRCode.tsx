@@ -63,7 +63,7 @@ const ShopQRCode = ({ shopUrl, shopName }: ShopQRCodeProps) => {
               level="H"
               includeMargin={true}
               imageSettings={{
-                src: "/favicon.ico",
+                src: "/favicon.jpg",
                 height: 30,
                 width: 30,
                 excavate: true,
