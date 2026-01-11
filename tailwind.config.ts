@@ -38,6 +38,7 @@ export default {
 				'lora': ['Lora', 'serif'],
 				// AESTHETIQUE Theme - Instrument Serif
 				'instrument-serif': ['Instrument Serif', 'serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
