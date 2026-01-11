@@ -33,6 +33,7 @@ export interface ShopSettings {
   userId: string;
   shopName: string;
   logo?: string;
+  favicon?: string;
   primaryColor: string;
   shopUrl: string;
   description: string;
@@ -45,6 +46,11 @@ export interface ShopSettings {
     instagram?: string;
     tiktok?: string;
   };
+  
+  // === SEO ===
+  seoTitle?: string;
+  seoDescription?: string;
+  socialImage?: string;
   
   // === GLOBAL DESIGN ===
   fontFamily?: 'inter' | 'lora' | 'poppins' | 'switzer' | 'playfair';
@@ -79,6 +85,11 @@ export interface ShopSettings {
   showNewsletter?: boolean;
   newsletterTitle?: string;
   newsletterSubtitle?: string;
+  
+  // === SECTIONS VISIBILITY ===
+  showHero?: boolean;
+  showTrustBar?: boolean;
+  showProducts?: boolean;
 }
 
 export interface CartItem {
