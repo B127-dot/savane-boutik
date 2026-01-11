@@ -40,6 +40,17 @@ import {
   ArtisanFooter 
 } from '@/components/shop/themes/artisan';
 
+// Theme components - AESTHETIQUE
+import {
+  AesthetiqueHeader,
+  AesthetiqueHero,
+  AesthetiqueMarquee,
+  AesthetiqueProducts,
+  AesthetiqueAtelier,
+  AesthetiqueBestSellers,
+  AesthetiqueFooter
+} from '@/components/shop/themes/aesthetique';
+
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
   const [searchParams] = useSearchParams();
@@ -197,6 +208,92 @@ const Shop = () => {
 
   // Determine which theme to use
   const isArtisan = currentTheme === 'artisan';
+  const isAesthetique = currentTheme === 'aesthetique';
+
+  // AESTHETIQUE THEME
+  if (isAesthetique) {
+    return (
+      <ThemeProvider themeId={currentTheme}>
+        <div className="min-h-screen bg-[#0a0a0a] text-white pb-20 md:pb-0 font-instrument-serif">
+          <AesthetiqueHeader 
+            logo={shopSettings.logo}
+            shopName={shopSettings.shopName}
+            cartItemsCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+          />
+
+          <AesthetiqueHero 
+            heroImage={shopSettings.heroImage}
+            heroTitle={shopSettings.heroTitle}
+            heroSubtitle={shopSettings.heroSubtitle}
+            heroButtonText={shopSettings.heroButtonText}
+            heroButtonLink={shopSettings.heroButtonLink}
+          />
+
+          <AesthetiqueMarquee />
+
+          <div id="products">
+            <AesthetiqueProducts 
+              products={filteredProducts}
+              categories={categories}
+              shopUrl={shopUrl!}
+              onAddToCart={handleAddToCart}
+              onQuickView={setQuickViewProduct}
+              onToggleWishlist={handleToggleWishlist}
+              wishlist={wishlist}
+            />
+          </div>
+
+          <AesthetiqueAtelier />
+
+          <AesthetiqueBestSellers 
+            products={products.filter(p => p.status === 'active' && p.stock > 0)}
+            shopUrl={shopUrl!}
+            onAddToCart={handleAddToCart}
+          />
+
+          <AesthetiqueFooter 
+            logo={shopSettings.logo}
+            shopName={shopSettings.shopName}
+            aboutText={shopSettings.aboutText}
+            phone={shopSettings.phone}
+            whatsapp={shopSettings.socialLinks.whatsapp}
+            facebookUrl={shopSettings.socialLinks.facebook}
+            instagramUrl={shopSettings.socialLinks.instagram}
+            tiktokUrl={shopSettings.socialLinks.tiktok}
+          />
+
+          {shopSettings.socialLinks.whatsapp && (
+            <WhatsAppButton 
+              phoneNumber={shopSettings.socialLinks.whatsapp}
+              message="Bonjour, je visite votre boutique en ligne !"
+            />
+          )}
+
+          <BottomNavMobile 
+            cartItemsCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+            onCategoriesClick={scrollToCategories}
+            onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          />
+
+          <CartSheet
+            open={isCartOpen}
+            onOpenChange={setIsCartOpen}
+            shopUrl={shopUrl || ''}
+            shopSettings={shopSettings}
+          />
+
+          <QuickViewModal
+            product={quickViewProduct}
+            isOpen={!!quickViewProduct}
+            onClose={() => setQuickViewProduct(null)}
+            onAddToCart={handleAddToCart}
+          />
+        </div>
+      </ThemeProvider>
+    );
+  }
 
   // ARTISAN THEME
   if (isArtisan) {
