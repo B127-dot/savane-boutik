@@ -39,7 +39,15 @@ import {
   Sparkles,
   Zap,
   ArrowRight,
-  Circle
+  Circle,
+  Globe,
+  Search,
+  Share2,
+  MessageCircle,
+  Copy,
+  CheckCircle2,
+  Store,
+  MapPin
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -180,6 +188,23 @@ const ShopEditor = () => {
 
   // Form state
   const [formData, setFormData] = useState({
+    // Identité
+    shopName: '',
+    logo: '',
+    favicon: '',
+    description: '',
+    shopUrl: '',
+    // Contact & Réseaux
+    phone: '',
+    address: '',
+    whatsapp: '',
+    facebook: '',
+    instagram: '',
+    tiktok: '',
+    // SEO
+    seoTitle: '',
+    seoDescription: '',
+    socialImage: '',
     // Design
     colorPalette: 'default',
     fontFamily: 'inter' as 'inter' | 'lora' | 'poppins' | 'switzer' | 'playfair',
@@ -213,23 +238,46 @@ const ShopEditor = () => {
   useEffect(() => {
     if (shopSettings) {
       setFormData({
+        // Identité
+        shopName: shopSettings.shopName || '',
+        logo: shopSettings.logo || '',
+        favicon: shopSettings.favicon || '',
+        description: shopSettings.description || '',
+        shopUrl: shopSettings.shopUrl || '',
+        // Contact & Réseaux
+        phone: shopSettings.phone || '',
+        address: shopSettings.address || '',
+        whatsapp: shopSettings.socialLinks?.whatsapp || '',
+        facebook: shopSettings.socialLinks?.facebook || '',
+        instagram: shopSettings.socialLinks?.instagram || '',
+        tiktok: shopSettings.socialLinks?.tiktok || '',
+        // SEO
+        seoTitle: shopSettings.seoTitle || '',
+        seoDescription: shopSettings.seoDescription || '',
+        socialImage: shopSettings.socialImage || '',
+        // Design
         colorPalette: shopSettings.colorPalette || 'default',
         fontFamily: shopSettings.fontFamily || 'inter',
         buttonStyle: shopSettings.buttonStyle || 'rounded',
         headerStyle: shopSettings.headerStyle || 'classic',
+        // Hero
         heroImage: shopSettings.heroImage || '',
         heroTitle: shopSettings.heroTitle || 'Bienvenue dans notre boutique',
         heroSubtitle: shopSettings.heroSubtitle || 'Découvrez notre collection unique',
         heroButtonText: shopSettings.heroButtonText || 'Voir la Collection',
         heroButtonLink: shopSettings.heroButtonLink || '#products',
         heroLayout: shopSettings.heroLayout || 'center',
+        // Trust Bar
         trustBar: shopSettings.trustBar || DEFAULT_TRUST_BAR,
+        // Products
         productsTitle: shopSettings.productsTitle || 'Nos Produits',
         productsSubtitle: shopSettings.productsSubtitle || 'Une sélection choisie avec soin',
         productsLayout: shopSettings.productsLayout || 'grid',
         productsPerRow: shopSettings.productsPerRow || 3,
+        // Collections
         showCollections: shopSettings.showCollections ?? true,
         collectionsTitle: shopSettings.collectionsTitle || 'Collections',
+        // Footer
         aboutText: shopSettings.aboutText || '',
         showNewsletter: shopSettings.showNewsletter ?? true,
         newsletterTitle: shopSettings.newsletterTitle || 'Restez informé',
@@ -266,23 +314,48 @@ const ShopEditor = () => {
 
   const handleSave = () => {
     updateShopSettings({
+      // Identité
+      shopName: formData.shopName,
+      logo: formData.logo,
+      favicon: formData.favicon,
+      description: formData.description,
+      shopUrl: formData.shopUrl,
+      // Contact & Réseaux
+      phone: formData.phone,
+      address: formData.address,
+      socialLinks: {
+        whatsapp: formData.whatsapp,
+        facebook: formData.facebook,
+        instagram: formData.instagram,
+        tiktok: formData.tiktok,
+      },
+      // SEO
+      seoTitle: formData.seoTitle,
+      seoDescription: formData.seoDescription,
+      socialImage: formData.socialImage,
+      // Design
       colorPalette: formData.colorPalette,
       fontFamily: formData.fontFamily,
       buttonStyle: formData.buttonStyle,
       headerStyle: formData.headerStyle,
+      // Hero
       heroImage: formData.heroImage,
       heroTitle: formData.heroTitle,
       heroSubtitle: formData.heroSubtitle,
       heroButtonText: formData.heroButtonText,
       heroButtonLink: formData.heroButtonLink,
       heroLayout: formData.heroLayout,
+      // Trust Bar
       trustBar: formData.trustBar,
+      // Products
       productsTitle: formData.productsTitle,
       productsSubtitle: formData.productsSubtitle,
       productsLayout: formData.productsLayout,
       productsPerRow: formData.productsPerRow,
+      // Collections
       showCollections: formData.showCollections,
       collectionsTitle: formData.collectionsTitle,
+      // Footer
       aboutText: formData.aboutText,
       showNewsletter: formData.showNewsletter,
       newsletterTitle: formData.newsletterTitle,
@@ -359,8 +432,292 @@ const ShopEditor = () => {
           {/* Scrollable Editor Content */}
           <ScrollArea className="flex-1">
             <div className="p-5 space-y-4">
-              <Accordion type="multiple" defaultValue={['design', 'hero', 'trust', 'products']} className="space-y-3">
-                {/* Design Section - NEW */}
+              <Accordion type="multiple" defaultValue={['identity', 'design', 'hero', 'trust', 'products']} className="space-y-3">
+                
+                {/* IDENTITÉ Section - NEW */}
+                <AccordionItem value="identity" className="border-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 to-emerald-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-emerald-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/25">
+                        <Store className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Identité</span>
+                        <p className="text-xs text-muted-foreground">Nom, logo, favicon, URL</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-5">
+                    {/* Shop Name */}
+                    <div className="space-y-2">
+                      <Label htmlFor="shopName" className="text-sm font-semibold flex items-center gap-2">
+                        <Store className="w-4 h-4 text-emerald-500" />
+                        Nom de la boutique
+                      </Label>
+                      <Input
+                        id="shopName"
+                        value={formData.shopName}
+                        onChange={(e) => updateField('shopName', e.target.value)}
+                        placeholder="Ma Boutique"
+                        className="h-11 bg-background/50 border-border/50 focus:border-emerald-500/50"
+                      />
+                    </div>
+
+                    {/* Shop URL */}
+                    <div className="space-y-2">
+                      <Label htmlFor="shopUrl" className="text-sm font-semibold flex items-center gap-2">
+                        <Globe className="w-4 h-4 text-emerald-500" />
+                        URL de la boutique
+                      </Label>
+                      <div className="flex">
+                        <span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-border/50 bg-muted/50 text-muted-foreground text-sm">
+                          burkeshop.bf/
+                        </span>
+                        <Input
+                          id="shopUrl"
+                          value={formData.shopUrl}
+                          onChange={(e) => updateField('shopUrl', e.target.value.toLowerCase().replace(/\s+/g, '-'))}
+                          className="h-11 rounded-l-none bg-background/50 border-border/50"
+                          placeholder="ma-boutique"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <div className="space-y-2">
+                      <Label htmlFor="description" className="text-sm font-semibold">Description</Label>
+                      <Textarea
+                        id="description"
+                        value={formData.description}
+                        onChange={(e) => updateField('description', e.target.value)}
+                        placeholder="Décrivez votre boutique en quelques mots..."
+                        className="bg-background/50 border-border/50 resize-none"
+                        rows={2}
+                      />
+                    </div>
+
+                    <Separator />
+
+                    {/* Logo Upload */}
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold flex items-center gap-2">
+                        <Image className="w-4 h-4 text-emerald-500" />
+                        Logo de la boutique
+                      </Label>
+                      <ImageUploader
+                        images={formData.logo ? [formData.logo] : []}
+                        onChange={(images) => updateField('logo', images[0] || '')}
+                        maxImages={1}
+                      />
+                      <p className="text-xs text-muted-foreground">Recommandé : 200×200px, PNG avec fond transparent</p>
+                    </div>
+
+                    {/* Favicon Upload */}
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold flex items-center gap-2">
+                        <Globe className="w-4 h-4 text-emerald-500" />
+                        Favicon (icône navigateur)
+                      </Label>
+                      <ImageUploader
+                        images={formData.favicon ? [formData.favicon] : []}
+                        onChange={(images) => updateField('favicon', images[0] || '')}
+                        maxImages={1}
+                      />
+                      <p className="text-xs text-muted-foreground">Recommandé : 32×32px ou 64×64px, PNG/ICO</p>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* CONTACT & RÉSEAUX Section - NEW */}
+                <AccordionItem value="contact" className="border-0 rounded-2xl bg-gradient-to-br from-cyan-500/5 to-cyan-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-cyan-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center shadow-lg shadow-cyan-500/25">
+                        <MessageCircle className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Contact & Réseaux</span>
+                        <p className="text-xs text-muted-foreground">Téléphone, WhatsApp, réseaux sociaux</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-5">
+                    {/* Phone */}
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-sm font-semibold flex items-center gap-2">
+                        <Phone className="w-4 h-4 text-cyan-500" />
+                        Téléphone
+                      </Label>
+                      <Input
+                        id="phone"
+                        value={formData.phone}
+                        onChange={(e) => updateField('phone', e.target.value)}
+                        placeholder="+226 70 12 34 56"
+                        className="h-11 bg-background/50 border-border/50"
+                      />
+                    </div>
+
+                    {/* WhatsApp */}
+                    <div className="space-y-2">
+                      <Label htmlFor="whatsapp" className="text-sm font-semibold flex items-center gap-2">
+                        <MessageCircle className="w-4 h-4 text-[#25D366]" />
+                        WhatsApp Business
+                      </Label>
+                      <Input
+                        id="whatsapp"
+                        value={formData.whatsapp}
+                        onChange={(e) => updateField('whatsapp', e.target.value)}
+                        placeholder="+226 70 12 34 56"
+                        className="h-11 bg-background/50 border-border/50"
+                      />
+                      <p className="text-xs text-muted-foreground">Format international : +226 70 12 34 56</p>
+                    </div>
+
+                    {/* Address */}
+                    <div className="space-y-2">
+                      <Label htmlFor="address" className="text-sm font-semibold flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-cyan-500" />
+                        Adresse
+                      </Label>
+                      <Textarea
+                        id="address"
+                        value={formData.address}
+                        onChange={(e) => updateField('address', e.target.value)}
+                        placeholder="Secteur 15, Ouagadougou, Burkina Faso"
+                        className="bg-background/50 border-border/50 resize-none"
+                        rows={2}
+                      />
+                    </div>
+
+                    <Separator />
+
+                    {/* Social Links */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold">Réseaux sociaux</Label>
+                      
+                      <div className="space-y-3">
+                        <div className="space-y-1">
+                          <Label htmlFor="facebook" className="text-xs text-muted-foreground">Facebook</Label>
+                          <Input
+                            id="facebook"
+                            value={formData.facebook}
+                            onChange={(e) => updateField('facebook', e.target.value)}
+                            placeholder="https://facebook.com/maboutique"
+                            className="h-10 bg-background/50 border-border/50"
+                          />
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <Label htmlFor="instagram" className="text-xs text-muted-foreground">Instagram</Label>
+                          <Input
+                            id="instagram"
+                            value={formData.instagram}
+                            onChange={(e) => updateField('instagram', e.target.value)}
+                            placeholder="https://instagram.com/maboutique"
+                            className="h-10 bg-background/50 border-border/50"
+                          />
+                        </div>
+                        
+                        <div className="space-y-1">
+                          <Label htmlFor="tiktok" className="text-xs text-muted-foreground">TikTok</Label>
+                          <Input
+                            id="tiktok"
+                            value={formData.tiktok}
+                            onChange={(e) => updateField('tiktok', e.target.value)}
+                            placeholder="https://tiktok.com/@maboutique"
+                            className="h-10 bg-background/50 border-border/50"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* SEO Section - NEW */}
+                <AccordionItem value="seo" className="border-0 rounded-2xl bg-gradient-to-br from-amber-500/5 to-amber-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-amber-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/25">
+                        <Search className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">SEO & Partage</span>
+                        <p className="text-xs text-muted-foreground">Référencement Google, aperçu social</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-5">
+                    {/* SEO Title */}
+                    <div className="space-y-2">
+                      <Label htmlFor="seoTitle" className="text-sm font-semibold flex items-center gap-2">
+                        <Search className="w-4 h-4 text-amber-500" />
+                        Titre SEO
+                      </Label>
+                      <Input
+                        id="seoTitle"
+                        value={formData.seoTitle}
+                        onChange={(e) => updateField('seoTitle', e.target.value)}
+                        placeholder="Ma Boutique - Mode Tendance à Ouagadougou"
+                        className="h-11 bg-background/50 border-border/50"
+                        maxLength={60}
+                      />
+                      <p className="text-xs text-muted-foreground flex justify-between">
+                        <span>Titre affiché sur Google</span>
+                        <span className={formData.seoTitle.length > 55 ? 'text-amber-500' : ''}>{formData.seoTitle.length}/60</span>
+                      </p>
+                    </div>
+
+                    {/* SEO Description */}
+                    <div className="space-y-2">
+                      <Label htmlFor="seoDescription" className="text-sm font-semibold">Description SEO</Label>
+                      <Textarea
+                        id="seoDescription"
+                        value={formData.seoDescription}
+                        onChange={(e) => updateField('seoDescription', e.target.value)}
+                        placeholder="Découvrez notre boutique en ligne. Livraison rapide à Ouagadougou, paiement Orange Money..."
+                        className="bg-background/50 border-border/50 resize-none"
+                        rows={3}
+                        maxLength={160}
+                      />
+                      <p className="text-xs text-muted-foreground flex justify-between">
+                        <span>Description affichée sur Google</span>
+                        <span className={formData.seoDescription.length > 150 ? 'text-amber-500' : ''}>{formData.seoDescription.length}/160</span>
+                      </p>
+                    </div>
+
+                    <Separator />
+
+                    {/* Social Image */}
+                    <div className="space-y-2">
+                      <Label className="text-sm font-semibold flex items-center gap-2">
+                        <Share2 className="w-4 h-4 text-amber-500" />
+                        Image de partage social
+                      </Label>
+                      <ImageUploader
+                        images={formData.socialImage ? [formData.socialImage] : []}
+                        onChange={(images) => updateField('socialImage', images[0] || '')}
+                        maxImages={1}
+                      />
+                      <p className="text-xs text-muted-foreground">Image affichée lors du partage sur Facebook, WhatsApp, etc. Recommandé : 1200×630px</p>
+                    </div>
+
+                    {/* SEO Preview */}
+                    <div className="p-4 rounded-xl bg-background/50 border border-border/50 space-y-2">
+                      <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Aperçu Google</p>
+                      <div className="space-y-1">
+                        <p className="text-blue-500 text-base font-medium truncate">
+                          {formData.seoTitle || formData.shopName || 'Titre de votre boutique'}
+                        </p>
+                        <p className="text-xs text-emerald-600">burkeshop.bf/shop/{formData.shopUrl || 'ma-boutique'}</p>
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {formData.seoDescription || formData.description || 'Description de votre boutique...'}
+                        </p>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* Design Section */}
                 <AccordionItem value="design" className="border-0 rounded-2xl bg-gradient-to-br from-pink-500/5 to-pink-500/0 overflow-hidden">
                   <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-pink-500/5 transition-colors rounded-2xl">
                     <div className="flex items-center gap-3">

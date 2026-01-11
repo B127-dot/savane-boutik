@@ -99,12 +99,8 @@ const Sidebar = () => {
         },
         { 
           label: 'Ma boutique', 
-          href: '/shop-settings', 
-          icon: Palette,
-          subItems: [
-            { label: 'Paramètres', href: '/shop-settings', icon: Settings },
-            { label: 'Personnaliser', href: '/shop-editor', icon: Paintbrush },
-          ]
+          href: '/shop-editor', 
+          icon: Paintbrush
         },
       ]
     },
