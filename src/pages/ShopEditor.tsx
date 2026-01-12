@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useApp, TrustBarItem } from '@/contexts/AppContext';
+import { useApp, TrustBarItem, PromoBanner } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,8 +10,10 @@ import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
 import { ImageUploader } from '@/components/ImageUploader';
+import SectionOrderManager, { SectionConfig } from '@/components/shop/SectionOrderManager';
 
 import { 
   Save, 
@@ -47,7 +49,14 @@ import {
   Copy,
   CheckCircle2,
   Store,
-  MapPin
+  MapPin,
+  Layers,
+  Settings2,
+  Megaphone,
+  Tag,
+  Sparkle,
+  LayoutGrid,
+  SlidersHorizontal
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -210,6 +219,10 @@ const ShopEditor = () => {
     fontFamily: 'inter' as 'inter' | 'lora' | 'poppins' | 'switzer' | 'playfair',
     buttonStyle: 'rounded' as 'rounded' | 'pill' | 'square',
     headerStyle: 'classic' as 'classic' | 'gradient' | 'minimal' | 'glass',
+    // Phase 3: Personnalisation Fine
+    sectionSpacing: 'normal' as 'compact' | 'normal' | 'airy',
+    cardBorderRadius: 'medium' as 'none' | 'light' | 'medium' | 'strong',
+    animationsEnabled: true,
     // Hero
     heroImage: '',
     heroTitle: '',
@@ -232,6 +245,23 @@ const ShopEditor = () => {
     showNewsletter: true,
     newsletterTitle: '',
     newsletterSubtitle: '',
+    // Phase 2: Section Visibility
+    showHero: true,
+    showTrustBar: true,
+    showProducts: true,
+    showMarquee: true,
+    showNewArrivals: true,
+    // Phase 2: Section Order
+    sectionOrder: ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'newsletter'] as string[],
+    // Phase 2: Promo Banner
+    promoBanner: {
+      enabled: false,
+      text: '',
+      backgroundColor: '#10B981',
+      textColor: '#FFFFFF',
+      link: '',
+      position: 'top' as 'top' | 'below-hero',
+    } as PromoBanner,
   });
 
   // Load settings
@@ -260,6 +290,10 @@ const ShopEditor = () => {
         fontFamily: shopSettings.fontFamily || 'inter',
         buttonStyle: shopSettings.buttonStyle || 'rounded',
         headerStyle: shopSettings.headerStyle || 'classic',
+        // Phase 3: Personnalisation Fine
+        sectionSpacing: shopSettings.sectionSpacing || 'normal',
+        cardBorderRadius: shopSettings.cardBorderRadius || 'medium',
+        animationsEnabled: shopSettings.animationsEnabled ?? true,
         // Hero
         heroImage: shopSettings.heroImage || '',
         heroTitle: shopSettings.heroTitle || 'Bienvenue dans notre boutique',
@@ -282,6 +316,23 @@ const ShopEditor = () => {
         showNewsletter: shopSettings.showNewsletter ?? true,
         newsletterTitle: shopSettings.newsletterTitle || 'Restez informé',
         newsletterSubtitle: shopSettings.newsletterSubtitle || 'Recevez nos offres exclusives',
+        // Phase 2: Section Visibility
+        showHero: shopSettings.showHero ?? true,
+        showTrustBar: shopSettings.showTrustBar ?? true,
+        showProducts: shopSettings.showProducts ?? true,
+        showMarquee: shopSettings.showMarquee ?? true,
+        showNewArrivals: shopSettings.showNewArrivals ?? true,
+        // Phase 2: Section Order
+        sectionOrder: shopSettings.sectionOrder || ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'newsletter'],
+        // Phase 2: Promo Banner
+        promoBanner: shopSettings.promoBanner || {
+          enabled: false,
+          text: '',
+          backgroundColor: '#10B981',
+          textColor: '#FFFFFF',
+          link: '',
+          position: 'top',
+        },
       });
     }
   }, [shopSettings]);
@@ -312,6 +363,75 @@ const ShopEditor = () => {
     updateField('trustBar', formData.trustBar.filter(item => item.id !== id));
   };
 
+  // Section order management
+  const handleMoveSection = (sectionId: string, direction: 'up' | 'down') => {
+    const currentOrder = [...formData.sectionOrder];
+    const index = currentOrder.indexOf(sectionId);
+    if (index === -1) return;
+    
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= currentOrder.length) return;
+    
+    [currentOrder[index], currentOrder[newIndex]] = [currentOrder[newIndex], currentOrder[index]];
+    updateField('sectionOrder', currentOrder);
+  };
+
+  const handleToggleSectionVisibility = (sectionId: string, visible: boolean) => {
+    switch (sectionId) {
+      case 'hero':
+        updateField('showHero', visible);
+        break;
+      case 'trustBar':
+        updateField('showTrustBar', visible);
+        break;
+      case 'newArrivals':
+        updateField('showNewArrivals', visible);
+        break;
+      case 'categories':
+        updateField('showCollections', visible);
+        break;
+      case 'products':
+        updateField('showProducts', visible);
+        break;
+      case 'newsletter':
+        updateField('showNewsletter', visible);
+        break;
+      case 'marquee':
+        updateField('showMarquee', visible);
+        break;
+    }
+  };
+
+  const getSectionVisibility = (sectionId: string): boolean => {
+    switch (sectionId) {
+      case 'hero': return formData.showHero;
+      case 'trustBar': return formData.showTrustBar;
+      case 'newArrivals': return formData.showNewArrivals;
+      case 'categories': return formData.showCollections;
+      case 'products': return formData.showProducts;
+      case 'newsletter': return formData.showNewsletter;
+      case 'marquee': return formData.showMarquee;
+      default: return true;
+    }
+  };
+
+  const sectionConfigs: SectionConfig[] = formData.sectionOrder.map(id => {
+    const configs: Record<string, { name: string; icon: React.ReactNode; description?: string }> = {
+      hero: { name: 'Hero', icon: <Image className="w-4 h-4" />, description: 'Bannière principale' },
+      trustBar: { name: 'Barre de Réassurance', icon: <Shield className="w-4 h-4" />, description: 'Points de confiance' },
+      newArrivals: { name: 'Nouveautés', icon: <Sparkle className="w-4 h-4" />, description: 'Carrousel produits récents' },
+      categories: { name: 'Collections', icon: <LayoutGrid className="w-4 h-4" />, description: 'Catégories de produits' },
+      products: { name: 'Tous les Produits', icon: <ShoppingBag className="w-4 h-4" />, description: 'Grille de produits' },
+      newsletter: { name: 'Newsletter', icon: <MessageCircle className="w-4 h-4" />, description: 'Inscription email' },
+      marquee: { name: 'Marquee', icon: <Zap className="w-4 h-4" />, description: 'Défilement texte (Aesthetique)' },
+    };
+    return {
+      id,
+      ...configs[id],
+      visible: getSectionVisibility(id),
+    };
+  });
+
   const handleSave = () => {
     updateShopSettings({
       // Identité
@@ -338,6 +458,10 @@ const ShopEditor = () => {
       fontFamily: formData.fontFamily,
       buttonStyle: formData.buttonStyle,
       headerStyle: formData.headerStyle,
+      // Phase 3: Personnalisation Fine
+      sectionSpacing: formData.sectionSpacing,
+      cardBorderRadius: formData.cardBorderRadius,
+      animationsEnabled: formData.animationsEnabled,
       // Hero
       heroImage: formData.heroImage,
       heroTitle: formData.heroTitle,
@@ -360,6 +484,16 @@ const ShopEditor = () => {
       showNewsletter: formData.showNewsletter,
       newsletterTitle: formData.newsletterTitle,
       newsletterSubtitle: formData.newsletterSubtitle,
+      // Phase 2: Section Visibility
+      showHero: formData.showHero,
+      showTrustBar: formData.showTrustBar,
+      showProducts: formData.showProducts,
+      showMarquee: formData.showMarquee,
+      showNewArrivals: formData.showNewArrivals,
+      // Phase 2: Section Order
+      sectionOrder: formData.sectionOrder,
+      // Phase 2: Promo Banner
+      promoBanner: formData.promoBanner,
     });
 
     setHasChanges(false);
@@ -1336,7 +1470,259 @@ const ShopEditor = () => {
                   </AccordionContent>
                 </AccordionItem>
 
-                {/* Footer Section */}
+                {/* PHASE 2: Contrôle des Sections */}
+                <AccordionItem value="sections" className="border-0 rounded-2xl bg-gradient-to-br from-violet-500/5 to-violet-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-violet-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center shadow-lg shadow-violet-500/25">
+                        <Layers className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Sections</span>
+                        <p className="text-xs text-muted-foreground">Ordre et visibilité des sections</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-5">
+                    <p className="text-sm text-muted-foreground">
+                      Réorganisez les sections de votre boutique et choisissez celles à afficher.
+                    </p>
+                    
+                    <SectionOrderManager
+                      sections={sectionConfigs}
+                      onToggleVisibility={handleToggleSectionVisibility}
+                      onMoveUp={(id) => handleMoveSection(id, 'up')}
+                      onMoveDown={(id) => handleMoveSection(id, 'down')}
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* PHASE 2: Bannière Promotionnelle */}
+                <AccordionItem value="promo" className="border-0 rounded-2xl bg-gradient-to-br from-orange-500/5 to-orange-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-orange-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/25">
+                        <Megaphone className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Bannière Promo</span>
+                        <p className="text-xs text-muted-foreground">Annonces et promotions</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-5">
+                    {/* Enable Toggle */}
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-background/50 border border-border/50">
+                      <div className="flex items-center gap-3">
+                        <Tag className="w-5 h-5 text-orange-500" />
+                        <Label className="text-sm font-medium cursor-pointer">Activer la bannière</Label>
+                      </div>
+                      <Switch
+                        checked={formData.promoBanner.enabled}
+                        onCheckedChange={(checked) => updateField('promoBanner', { ...formData.promoBanner, enabled: checked })}
+                      />
+                    </div>
+
+                    {formData.promoBanner.enabled && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="space-y-4"
+                      >
+                        {/* Promo Text */}
+                        <div className="space-y-2">
+                          <Label htmlFor="promoText" className="text-sm font-semibold">Texte de la bannière</Label>
+                          <Input
+                            id="promoText"
+                            value={formData.promoBanner.text}
+                            onChange={(e) => updateField('promoBanner', { ...formData.promoBanner, text: e.target.value })}
+                            placeholder="🎉 -20% sur tout le site avec le code PROMO20"
+                            className="h-11 bg-background/50 border-border/50"
+                          />
+                        </div>
+
+                        {/* Colors */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-2">
+                            <Label className="text-sm font-semibold">Couleur de fond</Label>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="color"
+                                value={formData.promoBanner.backgroundColor}
+                                onChange={(e) => updateField('promoBanner', { ...formData.promoBanner, backgroundColor: e.target.value })}
+                                className="w-10 h-10 rounded-lg border border-border cursor-pointer"
+                              />
+                              <Input
+                                value={formData.promoBanner.backgroundColor}
+                                onChange={(e) => updateField('promoBanner', { ...formData.promoBanner, backgroundColor: e.target.value })}
+                                className="h-10 bg-background/50 border-border/50 font-mono text-sm"
+                              />
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-semibold">Couleur du texte</Label>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="color"
+                                value={formData.promoBanner.textColor}
+                                onChange={(e) => updateField('promoBanner', { ...formData.promoBanner, textColor: e.target.value })}
+                                className="w-10 h-10 rounded-lg border border-border cursor-pointer"
+                              />
+                              <Input
+                                value={formData.promoBanner.textColor}
+                                onChange={(e) => updateField('promoBanner', { ...formData.promoBanner, textColor: e.target.value })}
+                                className="h-10 bg-background/50 border-border/50 font-mono text-sm"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Link */}
+                        <div className="space-y-2">
+                          <Label htmlFor="promoLink" className="text-sm font-semibold">Lien (optionnel)</Label>
+                          <Input
+                            id="promoLink"
+                            value={formData.promoBanner.link || ''}
+                            onChange={(e) => updateField('promoBanner', { ...formData.promoBanner, link: e.target.value })}
+                            placeholder="https://..."
+                            className="h-11 bg-background/50 border-border/50"
+                          />
+                        </div>
+
+                        {/* Position */}
+                        <div className="space-y-3">
+                          <Label className="text-sm font-semibold">Position</Label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {(['top', 'below-hero'] as const).map((pos) => (
+                              <Button
+                                key={pos}
+                                type="button"
+                                variant={formData.promoBanner.position === pos ? 'default' : 'outline'}
+                                size="sm"
+                                onClick={() => updateField('promoBanner', { ...formData.promoBanner, position: pos })}
+                                className={`h-10 ${formData.promoBanner.position === pos ? 'shadow-md' : ''}`}
+                              >
+                                {pos === 'top' ? 'Haut de page' : 'Sous le Hero'}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Preview */}
+                        <div className="p-4 rounded-xl bg-background/50 border border-border/50 space-y-2">
+                          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">Aperçu</p>
+                          <div 
+                            className="py-2.5 px-4 text-center text-sm font-medium rounded-lg"
+                            style={{ 
+                              backgroundColor: formData.promoBanner.backgroundColor, 
+                              color: formData.promoBanner.textColor 
+                            }}
+                          >
+                            {formData.promoBanner.text || 'Votre message promo...'}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+
+                {/* PHASE 3: Personnalisation Fine */}
+                <AccordionItem value="advanced" className="border-0 rounded-2xl bg-gradient-to-br from-indigo-500/5 to-indigo-500/0 overflow-hidden">
+                  <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-indigo-500/5 transition-colors rounded-2xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                        <SlidersHorizontal className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="text-left">
+                        <span className="font-semibold text-base">Personnalisation Fine</span>
+                        <p className="text-xs text-muted-foreground">Espacement, bordures, animations</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4 space-y-5">
+                    {/* Section Spacing */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold flex items-center gap-2">
+                        <Layout className="w-4 h-4 text-indigo-500" />
+                        Espacement des sections
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Contrôle l'espace entre les sections</p>
+                      <div className="grid grid-cols-3 gap-2">
+                        {([
+                          { id: 'compact', label: 'Compact', icon: '⊟' },
+                          { id: 'normal', label: 'Normal', icon: '⊞' },
+                          { id: 'airy', label: 'Aéré', icon: '⬜' },
+                        ] as const).map((option) => (
+                          <Button
+                            key={option.id}
+                            type="button"
+                            variant={formData.sectionSpacing === option.id ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => updateField('sectionSpacing', option.id)}
+                            className={`h-12 flex-col gap-1 ${formData.sectionSpacing === option.id ? 'shadow-md' : ''}`}
+                          >
+                            <span className="text-lg">{option.icon}</span>
+                            <span className="text-xs">{option.label}</span>
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Card Border Radius */}
+                    <div className="space-y-3">
+                      <Label className="text-sm font-semibold flex items-center gap-2">
+                        <Circle className="w-4 h-4 text-indigo-500" />
+                        Rayon des bordures (cartes)
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Arrondi des coins des cartes produits</p>
+                      <div className="grid grid-cols-4 gap-2">
+                        {([
+                          { id: 'none', label: 'Aucun', radius: '0' },
+                          { id: 'light', label: 'Léger', radius: '4px' },
+                          { id: 'medium', label: 'Moyen', radius: '8px' },
+                          { id: 'strong', label: 'Fort', radius: '16px' },
+                        ] as const).map((option) => (
+                          <Button
+                            key={option.id}
+                            type="button"
+                            variant={formData.cardBorderRadius === option.id ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => updateField('cardBorderRadius', option.id)}
+                            className={`h-14 flex-col gap-1 ${formData.cardBorderRadius === option.id ? 'shadow-md' : ''}`}
+                          >
+                            <div 
+                              className="w-6 h-6 border-2 border-current"
+                              style={{ borderRadius: option.radius }}
+                            />
+                            <span className="text-xs">{option.label}</span>
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    {/* Animations Toggle */}
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-background/50 border border-border/50">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3">
+                          <Sparkles className="w-5 h-5 text-indigo-500" />
+                          <Label className="text-sm font-medium cursor-pointer">Animations</Label>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1 ml-8">
+                          Désactiver pour améliorer l'accessibilité (respecte prefers-reduced-motion)
+                        </p>
+                      </div>
+                      <Switch
+                        checked={formData.animationsEnabled}
+                        onCheckedChange={(checked) => updateField('animationsEnabled', checked)}
+                      />
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="footer" className="border-0 rounded-2xl bg-gradient-to-br from-slate-500/5 to-slate-500/0 overflow-hidden">
                   <AccordionTrigger className="hover:no-underline px-4 py-4 hover:bg-slate-500/5 transition-colors rounded-2xl">
                     <div className="flex items-center gap-3">
