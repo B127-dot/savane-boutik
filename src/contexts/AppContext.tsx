@@ -29,6 +29,15 @@ export interface FooterLink {
   url: string;
 }
 
+export interface PromoBanner {
+  enabled: boolean;
+  text: string;
+  backgroundColor: string;
+  textColor: string;
+  link?: string;
+  position: 'top' | 'below-hero';
+}
+
 export interface ShopSettings {
   userId: string;
   shopName: string;
@@ -54,9 +63,14 @@ export interface ShopSettings {
   
   // === GLOBAL DESIGN ===
   fontFamily?: 'inter' | 'lora' | 'poppins' | 'switzer' | 'playfair';
-  colorPalette?: string; // ID of the color palette
+  colorPalette?: string;
   buttonStyle?: 'rounded' | 'pill' | 'square';
   headerStyle?: 'classic' | 'gradient' | 'minimal' | 'glass';
+  
+  // === PHASE 3: PERSONNALISATION FINE ===
+  sectionSpacing?: 'compact' | 'normal' | 'airy';
+  cardBorderRadius?: 'none' | 'light' | 'medium' | 'strong';
+  animationsEnabled?: boolean;
   
   // === HERO SECTION ===
   heroImage?: string;
@@ -86,10 +100,18 @@ export interface ShopSettings {
   newsletterTitle?: string;
   newsletterSubtitle?: string;
   
-  // === SECTIONS VISIBILITY ===
+  // === PHASE 2: SECTIONS VISIBILITY ===
   showHero?: boolean;
   showTrustBar?: boolean;
   showProducts?: boolean;
+  showMarquee?: boolean;
+  showNewArrivals?: boolean;
+  
+  // === PHASE 2: SECTIONS ORDER ===
+  sectionOrder?: string[];
+  
+  // === PHASE 2: PROMO BANNER ===
+  promoBanner?: PromoBanner;
 }
 
 export interface CartItem {

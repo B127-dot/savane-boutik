@@ -21,6 +21,7 @@ import WhyBuySection from '@/components/shop/WhyBuySection';
 import QuickViewModal from '@/components/shop/QuickViewModal';
 import BottomNavMobile from '@/components/shop/BottomNavMobile';
 import DynamicThemeStyles from '@/components/shop/DynamicThemeStyles';
+import PromoBanner from '@/components/shop/PromoBanner';
 import { getFontClass, getButtonClass } from '@/lib/shopTheme';
 
 // Theme components - Modern
@@ -390,6 +391,17 @@ const Shop = () => {
         fontFamily={shopSettings.fontFamily}
       />
       <div className={`min-h-screen pb-20 md:pb-0 bg-background ${fontClass}`}>
+        {/* Promo Banner - Top Position */}
+        {shopSettings.promoBanner?.enabled && shopSettings.promoBanner.position === 'top' && (
+          <PromoBanner
+            text={shopSettings.promoBanner.text}
+            backgroundColor={shopSettings.promoBanner.backgroundColor}
+            textColor={shopSettings.promoBanner.textColor}
+            link={shopSettings.promoBanner.link}
+            animationsEnabled={shopSettings.animationsEnabled}
+          />
+        )}
+
         {/* Dynamic Header based on headerStyle setting */}
         {(() => {
           const headerProps = {
@@ -411,26 +423,43 @@ const Shop = () => {
           }
         })()}
 
-        <ModernHero 
-          heroImage={shopSettings.heroImage}
-          heroTitle={shopSettings.heroTitle}
-          heroSubtitle={shopSettings.heroSubtitle}
-          heroButtonText={shopSettings.heroButtonText}
-          heroButtonLink={shopSettings.heroButtonLink}
-          buttonStyle={shopSettings.buttonStyle}
-        />
+        {(shopSettings.showHero ?? true) && (
+          <ModernHero 
+            heroImage={shopSettings.heroImage}
+            heroTitle={shopSettings.heroTitle}
+            heroSubtitle={shopSettings.heroSubtitle}
+            heroButtonText={shopSettings.heroButtonText}
+            heroButtonLink={shopSettings.heroButtonLink}
+            buttonStyle={shopSettings.buttonStyle}
+          />
+        )}
 
-        <TrustBar trustItems={shopSettings.trustBar} />
+        {/* Promo Banner - Below Hero Position */}
+        {shopSettings.promoBanner?.enabled && shopSettings.promoBanner.position === 'below-hero' && (
+          <PromoBanner
+            text={shopSettings.promoBanner.text}
+            backgroundColor={shopSettings.promoBanner.backgroundColor}
+            textColor={shopSettings.promoBanner.textColor}
+            link={shopSettings.promoBanner.link}
+            animationsEnabled={shopSettings.animationsEnabled}
+          />
+        )}
 
-        <NewArrivalsCarousel 
-          products={getNewArrivals()}
-          shopUrl={shopUrl!}
-          onAddToCart={handleAddToCart}
-          onQuickView={setQuickViewProduct}
-          onToggleWishlist={handleToggleWishlist}
-          wishlist={wishlist}
-          buttonStyle={shopSettings.buttonStyle}
-        />
+        {(shopSettings.showTrustBar ?? true) && (
+          <TrustBar trustItems={shopSettings.trustBar} />
+        )}
+
+        {(shopSettings.showNewArrivals ?? true) && (
+          <NewArrivalsCarousel 
+            products={getNewArrivals()}
+            shopUrl={shopUrl!}
+            onAddToCart={handleAddToCart}
+            onQuickView={setQuickViewProduct}
+            onToggleWishlist={handleToggleWishlist}
+            wishlist={wishlist}
+            buttonStyle={shopSettings.buttonStyle}
+          />
+        )}
 
         <div id="categories">
           <CategoryShowcase 
