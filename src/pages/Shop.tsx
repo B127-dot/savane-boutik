@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useApp, Product, ShopSettings } from '@/contexts/AppContext';
+import { useApp, Product, ShopSettings, CustomBlock } from '@/contexts/AppContext';
 import { CartSheet } from '@/components/CartSheet';
 import { useToast } from '@/hooks/use-toast';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
@@ -23,6 +23,15 @@ import BottomNavMobile from '@/components/shop/BottomNavMobile';
 import DynamicThemeStyles from '@/components/shop/DynamicThemeStyles';
 import PromoBanner from '@/components/shop/PromoBanner';
 import { getFontClass, getButtonClass } from '@/lib/shopTheme';
+
+// Custom Blocks
+import {
+  TestimonialsBlock,
+  InstagramGalleryBlock,
+  FAQBlock,
+  YouTubeBlock,
+  TextImageBlock,
+} from '@/components/shop/blocks';
 
 // Theme components - Modern
 import ModernHero from '@/components/shop/themes/modern/ModernHero';
@@ -423,168 +432,278 @@ const Shop = () => {
           }
         })()}
 
-        {(shopSettings.showHero ?? true) && (
-          <ModernHero 
-            heroImage={shopSettings.heroImage}
-            heroTitle={shopSettings.heroTitle}
-            heroSubtitle={shopSettings.heroSubtitle}
-            heroButtonText={shopSettings.heroButtonText}
-            heroButtonLink={shopSettings.heroButtonLink}
-            buttonStyle={shopSettings.buttonStyle}
-          />
-        )}
+        {/* Dynamic Sections based on sectionOrder */}
+        {(() => {
+          const sectionOrder = shopSettings.sectionOrder || ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'newsletter'];
+          const customBlocks = shopSettings.customBlocks || [];
+          const animationsEnabled = shopSettings.animationsEnabled ?? true;
 
-        {/* Promo Banner - Below Hero Position */}
-        {shopSettings.promoBanner?.enabled && shopSettings.promoBanner.position === 'below-hero' && (
-          <PromoBanner
-            text={shopSettings.promoBanner.text}
-            backgroundColor={shopSettings.promoBanner.backgroundColor}
-            textColor={shopSettings.promoBanner.textColor}
-            link={shopSettings.promoBanner.link}
-            animationsEnabled={shopSettings.animationsEnabled}
-          />
-        )}
+          // Helper function to render custom blocks
+          const renderCustomBlock = (block: CustomBlock) => {
+            switch (block.type) {
+              case 'testimonials':
+                return (
+                  <TestimonialsBlock
+                    key={block.id}
+                    title={block.config.title}
+                    testimonials={block.config.testimonials}
+                    animationsEnabled={animationsEnabled}
+                  />
+                );
+              case 'instagram':
+                return (
+                  <InstagramGalleryBlock
+                    key={block.id}
+                    title={block.config.title}
+                    instagramHandle={block.config.instagramHandle}
+                    posts={block.config.posts}
+                    animationsEnabled={animationsEnabled}
+                  />
+                );
+              case 'faq':
+                return (
+                  <FAQBlock
+                    key={block.id}
+                    title={block.config.title}
+                    subtitle={block.config.subtitle}
+                    faqs={block.config.faqs}
+                    animationsEnabled={animationsEnabled}
+                  />
+                );
+              case 'youtube':
+                return (
+                  <YouTubeBlock
+                    key={block.id}
+                    title={block.config.title}
+                    subtitle={block.config.subtitle}
+                    videoUrl={block.config.videoUrl}
+                    thumbnailUrl={block.config.thumbnailUrl}
+                    animationsEnabled={animationsEnabled}
+                  />
+                );
+              case 'text-image':
+                return (
+                  <TextImageBlock
+                    key={block.id}
+                    title={block.config.title}
+                    text={block.config.text}
+                    imageUrl={block.config.imageUrl}
+                    imagePosition={block.config.imagePosition}
+                    buttonText={block.config.buttonText}
+                    buttonLink={block.config.buttonLink}
+                    animationsEnabled={animationsEnabled}
+                  />
+                );
+              default:
+                return null;
+            }
+          };
 
-        {(shopSettings.showTrustBar ?? true) && (
-          <TrustBar trustItems={shopSettings.trustBar} />
-        )}
+          // Helper function to check if a section is visible
+          const isSectionVisible = (sectionId: string): boolean => {
+            switch (sectionId) {
+              case 'hero': return shopSettings.showHero ?? true;
+              case 'trustBar': return shopSettings.showTrustBar ?? true;
+              case 'newArrivals': return shopSettings.showNewArrivals ?? true;
+              case 'categories': return shopSettings.showCollections ?? true;
+              case 'products': return shopSettings.showProducts ?? true;
+              case 'newsletter': return shopSettings.showNewsletter ?? true;
+              case 'marquee': return shopSettings.showMarquee ?? true;
+              default: return true; // Custom blocks are always visible if in order
+            }
+          };
 
-        {(shopSettings.showNewArrivals ?? true) && (
-          <NewArrivalsCarousel 
-            products={getNewArrivals()}
-            shopUrl={shopUrl!}
-            onAddToCart={handleAddToCart}
-            onQuickView={setQuickViewProduct}
-            onToggleWishlist={handleToggleWishlist}
-            wishlist={wishlist}
-            buttonStyle={shopSettings.buttonStyle}
-          />
-        )}
+          return sectionOrder.map((sectionId) => {
+            // Check if it's a custom block
+            if (sectionId.startsWith('custom_')) {
+              const block = customBlocks.find(b => b.id === sectionId);
+              return block ? renderCustomBlock(block) : null;
+            }
 
-        <div id="categories">
-          <CategoryShowcase 
-            categories={categories}
-            products={products}
-            onCategoryClick={(categoryName) => {
-              setSelectedCategory(categoryName);
-              scrollToProducts();
-            }}
-          />
-        </div>
+            // Skip hidden sections
+            if (!isSectionVisible(sectionId)) return null;
 
-        <section id="products" className="py-12 md:py-16 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold mb-3 font-display text-foreground">
-                Tous Nos Produits
-              </h2>
-              <p className="text-lg font-body text-muted-foreground">
-                Parcourez notre collection complète
-              </p>
-            </div>
+            // Render built-in sections
+            switch (sectionId) {
+              case 'hero':
+                return (
+                  <div key="hero">
+                    <ModernHero 
+                      heroImage={shopSettings.heroImage}
+                      heroTitle={shopSettings.heroTitle}
+                      heroSubtitle={shopSettings.heroSubtitle}
+                      heroButtonText={shopSettings.heroButtonText}
+                      heroButtonLink={shopSettings.heroButtonLink}
+                      buttonStyle={shopSettings.buttonStyle}
+                    />
+                    {/* Promo Banner - Below Hero Position */}
+                    {shopSettings.promoBanner?.enabled && shopSettings.promoBanner.position === 'below-hero' && (
+                      <PromoBanner
+                        text={shopSettings.promoBanner.text}
+                        backgroundColor={shopSettings.promoBanner.backgroundColor}
+                        textColor={shopSettings.promoBanner.textColor}
+                        link={shopSettings.promoBanner.link}
+                        animationsEnabled={animationsEnabled}
+                      />
+                    )}
+                  </div>
+                );
 
-            <div className="mb-8 space-y-4">
-              <div className="relative max-w-2xl mx-auto">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Rechercher un produit..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 h-14 text-lg border-2 focus:border-primary"
-                />
-              </div>
+              case 'trustBar':
+                return <TrustBar key="trustBar" trustItems={shopSettings.trustBar} />;
 
-              <div className="flex flex-wrap gap-2 justify-center">
-                <Button
-                  variant={selectedCategory === 'all' ? 'default' : 'outline'}
-                  onClick={() => setSelectedCategory('all')}
-                  className="rounded-full"
-                >
-                  Tous ({products.filter(p => p.status === 'active' && p.stock > 0).length})
-                </Button>
-                {categories.map((category) => {
-                  const count = products.filter(
-                    p => p.categoryId === category.id && p.status === 'active' && p.stock > 0
-                  ).length;
-                  if (count === 0) return null;
-                  
-                  return (
-                    <Button
-                      key={category.id}
-                      variant={selectedCategory === category.name ? 'default' : 'outline'}
-                      onClick={() => setSelectedCategory(category.name)}
-                      className="rounded-full"
-                    >
-                      {category.name} ({count})
-                    </Button>
-                  );
-                })}
-              </div>
-
-              <div className="flex flex-wrap gap-3 justify-center items-center">
-                <span className="text-sm text-muted-foreground">Trier par:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as any)}
-                  className="px-4 py-2 rounded-lg border border-border bg-card text-foreground"
-                >
-                  <option value="recent">Plus récent</option>
-                  <option value="price-asc">Prix croissant</option>
-                  <option value="price-desc">Prix décroissant</option>
-                  <option value="name">Nom A-Z</option>
-                </select>
-              </div>
-            </div>
-
-            {isLoading ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                  <SkeletonProductCard key={i} />
-                ))}
-              </div>
-            ) : filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                {filteredProducts.map((product) => (
-                  <ModernProductCard
-                    key={product.id}
-                    product={product}
+              case 'newArrivals':
+                return (
+                  <NewArrivalsCarousel
+                    key="newArrivals"
+                    products={getNewArrivals()}
                     shopUrl={shopUrl!}
                     onAddToCart={handleAddToCart}
                     onQuickView={setQuickViewProduct}
                     onToggleWishlist={handleToggleWishlist}
-                    isInWishlist={wishlist.includes(product.id)}
+                    wishlist={wishlist}
                     buttonStyle={shopSettings.buttonStyle}
                   />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 bg-muted">
-                  <Search className="h-10 w-10 text-muted-foreground" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2 font-display text-foreground">
-                  Aucun produit trouvé
-                </h3>
-                <p className="mb-6 font-body text-muted-foreground">
-                  Essayez de modifier vos critères de recherche
-                </p>
-                <Button 
-                  onClick={() => {
-                    setSearchQuery('');
-                    setSelectedCategory('all');
-                  }}
-                >
-                  Réinitialiser les filtres
-                </Button>
-              </div>
-            )}
-          </div>
-        </section>
+                );
+
+              case 'categories':
+                return (
+                  <div key="categories" id="categories">
+                    <CategoryShowcase 
+                      categories={categories}
+                      products={products}
+                      onCategoryClick={(categoryName) => {
+                        setSelectedCategory(categoryName);
+                        scrollToProducts();
+                      }}
+                    />
+                  </div>
+                );
+
+              case 'products':
+                return (
+                  <section key="products" id="products" className="py-12 md:py-16 bg-background">
+                    <div className="container mx-auto px-4">
+                      <div className="text-center mb-10">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-3 font-display text-foreground">
+                          Tous Nos Produits
+                        </h2>
+                        <p className="text-lg font-body text-muted-foreground">
+                          Parcourez notre collection complète
+                        </p>
+                      </div>
+
+                      <div className="mb-8 space-y-4">
+                        <div className="relative max-w-2xl mx-auto">
+                          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                          <Input
+                            type="text"
+                            placeholder="Rechercher un produit..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-12 h-14 text-lg border-2 focus:border-primary"
+                          />
+                        </div>
+
+                        <div className="flex flex-wrap gap-2 justify-center">
+                          <Button
+                            variant={selectedCategory === 'all' ? 'default' : 'outline'}
+                            onClick={() => setSelectedCategory('all')}
+                            className="rounded-full"
+                          >
+                            Tous ({products.filter(p => p.status === 'active' && p.stock > 0).length})
+                          </Button>
+                          {categories.map((category) => {
+                            const count = products.filter(
+                              p => p.categoryId === category.id && p.status === 'active' && p.stock > 0
+                            ).length;
+                            if (count === 0) return null;
+                            
+                            return (
+                              <Button
+                                key={category.id}
+                                variant={selectedCategory === category.name ? 'default' : 'outline'}
+                                onClick={() => setSelectedCategory(category.name)}
+                                className="rounded-full"
+                              >
+                                {category.name} ({count})
+                              </Button>
+                            );
+                          })}
+                        </div>
+
+                        <div className="flex flex-wrap gap-3 justify-center items-center">
+                          <span className="text-sm text-muted-foreground">Trier par:</span>
+                          <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value as any)}
+                            className="px-4 py-2 rounded-lg border border-border bg-card text-foreground"
+                          >
+                            <option value="recent">Plus récent</option>
+                            <option value="price-asc">Prix croissant</option>
+                            <option value="price-desc">Prix décroissant</option>
+                            <option value="name">Nom A-Z</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {isLoading ? (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                            <SkeletonProductCard key={i} />
+                          ))}
+                        </div>
+                      ) : filteredProducts.length > 0 ? (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                          {filteredProducts.map((product) => (
+                            <ModernProductCard
+                              key={product.id}
+                              product={product}
+                              shopUrl={shopUrl!}
+                              onAddToCart={handleAddToCart}
+                              onQuickView={setQuickViewProduct}
+                              onToggleWishlist={handleToggleWishlist}
+                              isInWishlist={wishlist.includes(product.id)}
+                              buttonStyle={shopSettings.buttonStyle}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-16">
+                          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 bg-muted">
+                            <Search className="h-10 w-10 text-muted-foreground" />
+                          </div>
+                          <h3 className="text-xl font-semibold mb-2 font-display text-foreground">
+                            Aucun produit trouvé
+                          </h3>
+                          <p className="mb-6 font-body text-muted-foreground">
+                            Essayez de modifier vos critères de recherche
+                          </p>
+                          <Button 
+                            onClick={() => {
+                              setSearchQuery('');
+                              setSelectedCategory('all');
+                            }}
+                          >
+                            Réinitialiser les filtres
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </section>
+                );
+
+              case 'newsletter':
+                return <NewsletterSection key="newsletter" buttonStyle={shopSettings.buttonStyle} />;
+
+              default:
+                return null;
+            }
+          });
+        })()}
 
         <SocialProofSection />
         <WhyBuySection />
-        <NewsletterSection buttonStyle={shopSettings.buttonStyle} />
 
         <ModernFooter 
           logo={shopSettings.logo}
