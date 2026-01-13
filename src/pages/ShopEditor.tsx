@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useApp, TrustBarItem, PromoBanner } from '@/contexts/AppContext';
+import { useApp, TrustBarItem, PromoBanner, CustomBlock } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,7 +13,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
 import { ImageUploader } from '@/components/ImageUploader';
-import SectionOrderManager, { SectionConfig } from '@/components/shop/SectionOrderManager';
+import DraggableSectionManager, { SectionConfig } from '@/components/shop/DraggableSectionManager';
+import BlockLibraryModal from '@/components/shop/BlockLibraryModal';
 
 import { 
   Save, 
@@ -1485,14 +1486,13 @@ const ShopEditor = () => {
                   </AccordionTrigger>
                   <AccordionContent className="px-4 pb-4 space-y-5">
                     <p className="text-sm text-muted-foreground">
-                      Réorganisez les sections de votre boutique et choisissez celles à afficher.
+                      Glissez-déposez les sections pour les réorganiser. Ajoutez des blocs personnalisés.
                     </p>
                     
-                    <SectionOrderManager
+                    <DraggableSectionManager
                       sections={sectionConfigs}
+                      onReorder={(newOrder) => updateField('sectionOrder', newOrder)}
                       onToggleVisibility={handleToggleSectionVisibility}
-                      onMoveUp={(id) => handleMoveSection(id, 'up')}
-                      onMoveDown={(id) => handleMoveSection(id, 'down')}
                     />
                   </AccordionContent>
                 </AccordionItem>
