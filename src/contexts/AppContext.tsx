@@ -38,6 +38,13 @@ export interface PromoBanner {
   position: 'top' | 'below-hero';
 }
 
+export interface CustomBlock {
+  id: string;
+  type: 'testimonials' | 'instagram' | 'faq' | 'youtube' | 'text-image';
+  title: string;
+  config: Record<string, any>;
+}
+
 export interface ShopSettings {
   userId: string;
   shopName: string;
@@ -112,6 +119,9 @@ export interface ShopSettings {
   
   // === PHASE 2: PROMO BANNER ===
   promoBanner?: PromoBanner;
+  
+  // === PHASE 4: CUSTOM BLOCKS ===
+  customBlocks?: CustomBlock[];
 }
 
 export interface CartItem {
