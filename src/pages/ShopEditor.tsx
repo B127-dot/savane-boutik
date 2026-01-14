@@ -195,6 +195,11 @@ const ShopEditor = () => {
   const { toast } = useToast();
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [hasChanges, setHasChanges] = useState(false);
+  
+  // Phase 4: Custom blocks state
+  const [customBlocks, setCustomBlocks] = useState<CustomBlock[]>([]);
+  const [blockLibraryOpen, setBlockLibraryOpen] = useState(false);
+  const [editingBlock, setEditingBlock] = useState<CustomBlock | undefined>(undefined);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -335,6 +340,8 @@ const ShopEditor = () => {
           position: 'top',
         },
       });
+      // Load custom blocks
+      setCustomBlocks(shopSettings.customBlocks || []);
     }
   }, [shopSettings]);
 
@@ -416,7 +423,34 @@ const ShopEditor = () => {
     }
   };
 
+  // Block type icons mapping
+  const getBlockIcon = (blockType: string): React.ReactNode => {
+    const icons: Record<string, React.ReactNode> = {
+      testimonials: <Star className="w-4 h-4" />,
+      instagram: <Image className="w-4 h-4" />,
+      faq: <MessageCircle className="w-4 h-4" />,
+      youtube: <Zap className="w-4 h-4" />,
+      textImage: <Layout className="w-4 h-4" />,
+    };
+    return icons[blockType] || <Layers className="w-4 h-4" />;
+  };
+
   const sectionConfigs: SectionConfig[] = formData.sectionOrder.map(id => {
+    // Check if it's a custom block
+    const customBlock = customBlocks.find(b => b.id === id);
+    if (customBlock) {
+      return {
+        id: customBlock.id,
+        name: customBlock.title,
+        icon: getBlockIcon(customBlock.type),
+        visible: true,
+        description: `Bloc ${customBlock.type}`,
+        isCustomBlock: true,
+        blockType: customBlock.type,
+      };
+    }
+
+    // Built-in section configs
     const configs: Record<string, { name: string; icon: React.ReactNode; description?: string }> = {
       hero: { name: 'Hero', icon: <Image className="w-4 h-4" />, description: 'Bannière principale' },
       trustBar: { name: 'Barre de Réassurance', icon: <Shield className="w-4 h-4" />, description: 'Points de confiance' },
@@ -432,6 +466,55 @@ const ShopEditor = () => {
       visible: getSectionVisibility(id),
     };
   });
+
+  // Custom block management
+  const handleAddBlock = (block: CustomBlock) => {
+    setCustomBlocks(prev => [...prev, block]);
+    updateField('sectionOrder', [...formData.sectionOrder, block.id]);
+    setBlockLibraryOpen(false);
+    setEditingBlock(undefined);
+    toast({
+      title: "✅ Bloc ajouté",
+      description: `Le bloc "${block.title}" a été ajouté à votre page`,
+    });
+  };
+
+  const handleUpdateBlock = (updatedBlock: CustomBlock) => {
+    setCustomBlocks(prev => prev.map(b => b.id === updatedBlock.id ? updatedBlock : b));
+    setBlockLibraryOpen(false);
+    setEditingBlock(undefined);
+    setHasChanges(true);
+    toast({
+      title: "✅ Bloc mis à jour",
+      description: `Le bloc "${updatedBlock.title}" a été modifié`,
+    });
+  };
+
+  const handleRemoveBlock = (blockId: string) => {
+    const block = customBlocks.find(b => b.id === blockId);
+    setCustomBlocks(prev => prev.filter(b => b.id !== blockId));
+    updateField('sectionOrder', formData.sectionOrder.filter(id => id !== blockId));
+    toast({
+      title: "🗑️ Bloc supprimé",
+      description: block ? `Le bloc "${block.title}" a été supprimé` : "Bloc supprimé",
+    });
+  };
+
+  const handleEditBlock = (blockId: string) => {
+    const block = customBlocks.find(b => b.id === blockId);
+    if (block) {
+      setEditingBlock(block);
+      setBlockLibraryOpen(true);
+    }
+  };
+
+  const handleBlockModalSave = (block: CustomBlock) => {
+    if (editingBlock) {
+      handleUpdateBlock(block);
+    } else {
+      handleAddBlock(block);
+    }
+  };
 
   const handleSave = () => {
     updateShopSettings({
@@ -495,6 +578,8 @@ const ShopEditor = () => {
       sectionOrder: formData.sectionOrder,
       // Phase 2: Promo Banner
       promoBanner: formData.promoBanner,
+      // Phase 4: Custom Blocks
+      customBlocks: customBlocks,
     });
 
     setHasChanges(false);
@@ -1493,6 +1578,12 @@ const ShopEditor = () => {
                       sections={sectionConfigs}
                       onReorder={(newOrder) => updateField('sectionOrder', newOrder)}
                       onToggleVisibility={handleToggleSectionVisibility}
+                      onAddBlock={() => {
+                        setEditingBlock(undefined);
+                        setBlockLibraryOpen(true);
+                      }}
+                      onRemoveBlock={handleRemoveBlock}
+                      onEditBlock={handleEditBlock}
                     />
                   </AccordionContent>
                 </AccordionItem>
@@ -2153,6 +2244,17 @@ const ShopEditor = () => {
           </div>
         </div>
       </main>
+
+      {/* Block Library Modal */}
+      <BlockLibraryModal
+        isOpen={blockLibraryOpen}
+        onClose={() => {
+          setBlockLibraryOpen(false);
+          setEditingBlock(undefined);
+        }}
+        onAddBlock={handleBlockModalSave}
+        editingBlock={editingBlock}
+      />
     </div>
   );
 };
