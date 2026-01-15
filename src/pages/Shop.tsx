@@ -68,11 +68,15 @@ const Shop = () => {
   const { toast } = useToast();
   const [shopSettings, setShopSettings] = useState<ShopSettings | null>(null);
   
+  // Preview overrides from editor (via postMessage)
+  const [previewOverrides, setPreviewOverrides] = useState<Partial<ShopSettings> | null>(null);
+  
   // Track abandoned carts automatically
   useAbandonedCartTracker(cart, products, user?.id || 'guest');
   
   // Support preview theme from URL parameter
   const previewTheme = searchParams.get('previewTheme');
+  const isEditorPreview = searchParams.get('previewMode') === 'editor';
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -81,6 +85,43 @@ const Shop = () => {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'recent' | 'price-asc' | 'price-desc' | 'name'>('recent');
+
+  // Listen for preview updates from ShopEditor via postMessage
+  useEffect(() => {
+    if (!isEditorPreview) return;
+    
+    const handleMessage = (event: MessageEvent) => {
+      // Validate origin for security
+      if (event.origin !== window.location.origin) return;
+      
+      if (event.data?.type === 'SHOP_PREVIEW_UPDATE') {
+        setPreviewOverrides(event.data.settings);
+      }
+    };
+    
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [isEditorPreview]);
+
+  // Merge shop settings with preview overrides
+  const effectiveSettings = useMemo(() => {
+    if (!shopSettings) return null;
+    if (!previewOverrides) return shopSettings;
+    
+    return {
+      ...shopSettings,
+      ...previewOverrides,
+      // Deep merge for nested objects
+      socialLinks: {
+        ...shopSettings.socialLinks,
+        ...(previewOverrides.socialLinks || {}),
+      },
+      promoBanner: {
+        ...shopSettings.promoBanner,
+        ...(previewOverrides.promoBanner || {}),
+      },
+    } as ShopSettings;
+  }, [shopSettings, previewOverrides]);
 
   useEffect(() => {
     // Load shop settings from localStorage
@@ -206,9 +247,9 @@ const Shop = () => {
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   // Currently only Modern and Artisan themes are available
-  const currentTheme = previewTheme || shopSettings?.selectedTheme || 'modern';
+  const currentTheme = previewTheme || effectiveSettings?.selectedTheme || 'modern';
 
-  if (!shopSettings) {
+  if (!effectiveSettings) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <p className="text-muted-foreground">Boutique non trouvée</p>
@@ -226,18 +267,18 @@ const Shop = () => {
       <ThemeProvider themeId={currentTheme}>
         <div className="min-h-screen bg-[#0a0a0a] text-white pb-20 md:pb-0 font-instrument-serif">
           <AesthetiqueHeader 
-            logo={shopSettings.logo}
-            shopName={shopSettings.shopName}
+            logo={effectiveSettings.logo}
+            shopName={effectiveSettings.shopName}
             cartItemsCount={cartItemsCount}
             onCartClick={() => setIsCartOpen(true)}
           />
 
           <AesthetiqueHero 
-            heroImage={shopSettings.heroImage}
-            heroTitle={shopSettings.heroTitle}
-            heroSubtitle={shopSettings.heroSubtitle}
-            heroButtonText={shopSettings.heroButtonText}
-            heroButtonLink={shopSettings.heroButtonLink}
+            heroImage={effectiveSettings.heroImage}
+            heroTitle={effectiveSettings.heroTitle}
+            heroSubtitle={effectiveSettings.heroSubtitle}
+            heroButtonText={effectiveSettings.heroButtonText}
+            heroButtonLink={effectiveSettings.heroButtonLink}
           />
 
           <AesthetiqueMarquee />
@@ -263,19 +304,19 @@ const Shop = () => {
           />
 
           <AesthetiqueFooter 
-            logo={shopSettings.logo}
-            shopName={shopSettings.shopName}
-            aboutText={shopSettings.aboutText}
-            phone={shopSettings.phone}
-            whatsapp={shopSettings.socialLinks.whatsapp}
-            facebookUrl={shopSettings.socialLinks.facebook}
-            instagramUrl={shopSettings.socialLinks.instagram}
-            tiktokUrl={shopSettings.socialLinks.tiktok}
+            logo={effectiveSettings.logo}
+            shopName={effectiveSettings.shopName}
+            aboutText={effectiveSettings.aboutText}
+            phone={effectiveSettings.phone}
+            whatsapp={effectiveSettings.socialLinks.whatsapp}
+            facebookUrl={effectiveSettings.socialLinks.facebook}
+            instagramUrl={effectiveSettings.socialLinks.instagram}
+            tiktokUrl={effectiveSettings.socialLinks.tiktok}
           />
 
-          {shopSettings.socialLinks.whatsapp && (
+          {effectiveSettings.socialLinks.whatsapp && (
             <WhatsAppButton 
-              phoneNumber={shopSettings.socialLinks.whatsapp}
+              phoneNumber={effectiveSettings.socialLinks.whatsapp}
               message="Bonjour, je visite votre boutique en ligne !"
             />
           )}
@@ -291,7 +332,7 @@ const Shop = () => {
             open={isCartOpen}
             onOpenChange={setIsCartOpen}
             shopUrl={shopUrl || ''}
-            shopSettings={shopSettings}
+            shopSettings={effectiveSettings}
           />
 
           <QuickViewModal
@@ -311,18 +352,18 @@ const Shop = () => {
       <ThemeProvider themeId={currentTheme}>
         <div className="min-h-screen bg-artisan-cream pb-20 md:pb-0">
           <ArtisanHeader 
-            logo={shopSettings.logo}
-            shopName={shopSettings.shopName}
+            logo={effectiveSettings.logo}
+            shopName={effectiveSettings.shopName}
             cartItemsCount={cartItemsCount}
             onCartClick={() => setIsCartOpen(true)}
           />
 
           <ArtisanHero 
-            heroImage={shopSettings.heroImage}
-            heroTitle={shopSettings.heroTitle}
-            heroSubtitle={shopSettings.heroSubtitle}
-            heroButtonText={shopSettings.heroButtonText}
-            heroButtonLink={shopSettings.heroButtonLink}
+            heroImage={effectiveSettings.heroImage}
+            heroTitle={effectiveSettings.heroTitle}
+            heroSubtitle={effectiveSettings.heroSubtitle}
+            heroButtonText={effectiveSettings.heroButtonText}
+            heroButtonLink={effectiveSettings.heroButtonLink}
           />
 
           <div id="categories">
@@ -334,7 +375,7 @@ const Shop = () => {
             />
           </div>
 
-          <ArtisanWhyChoose shopName={shopSettings.shopName} />
+          <ArtisanWhyChoose shopName={effectiveSettings.shopName} />
 
           <ArtisanPopularProducts 
             shopUrl={shopUrl!}
@@ -345,19 +386,19 @@ const Shop = () => {
           />
 
           <ArtisanFooter 
-            logo={shopSettings.logo}
-            shopName={shopSettings.shopName}
-            aboutText={shopSettings.aboutText}
-            phone={shopSettings.phone}
-            whatsapp={shopSettings.socialLinks.whatsapp}
-            facebookUrl={shopSettings.socialLinks.facebook}
-            instagramUrl={shopSettings.socialLinks.instagram}
-            tiktokUrl={shopSettings.socialLinks.tiktok}
+            logo={effectiveSettings.logo}
+            shopName={effectiveSettings.shopName}
+            aboutText={effectiveSettings.aboutText}
+            phone={effectiveSettings.phone}
+            whatsapp={effectiveSettings.socialLinks.whatsapp}
+            facebookUrl={effectiveSettings.socialLinks.facebook}
+            instagramUrl={effectiveSettings.socialLinks.instagram}
+            tiktokUrl={effectiveSettings.socialLinks.tiktok}
           />
 
-          {shopSettings.socialLinks.whatsapp && (
+          {effectiveSettings.socialLinks.whatsapp && (
             <WhatsAppButton 
-              phoneNumber={shopSettings.socialLinks.whatsapp}
+              phoneNumber={effectiveSettings.socialLinks.whatsapp}
               message="Bonjour, je visite votre boutique en ligne !"
             />
           )}
@@ -373,7 +414,7 @@ const Shop = () => {
             open={isCartOpen}
             onOpenChange={setIsCartOpen}
             shopUrl={shopUrl || ''}
-            shopSettings={shopSettings}
+            shopSettings={effectiveSettings}
           />
 
           <QuickViewModal
@@ -388,39 +429,39 @@ const Shop = () => {
   }
 
   // Get dynamic styling props
-  const fontClass = getFontClass(shopSettings?.fontFamily);
-  const buttonClass = getButtonClass(shopSettings?.buttonStyle);
+  const fontClass = getFontClass(effectiveSettings?.fontFamily);
+  const buttonClass = getButtonClass(effectiveSettings?.buttonStyle);
 
   // MODERN THEME (default)
   return (
     <ThemeProvider themeId={currentTheme}>
       <DynamicThemeStyles 
-        colorPalette={shopSettings.colorPalette}
-        buttonStyle={shopSettings.buttonStyle}
-        fontFamily={shopSettings.fontFamily}
+        colorPalette={effectiveSettings.colorPalette}
+        buttonStyle={effectiveSettings.buttonStyle}
+        fontFamily={effectiveSettings.fontFamily}
       />
       <div className={`min-h-screen pb-20 md:pb-0 bg-background ${fontClass}`}>
         {/* Promo Banner - Top Position */}
-        {shopSettings.promoBanner?.enabled && shopSettings.promoBanner.position === 'top' && (
+        {effectiveSettings.promoBanner?.enabled && effectiveSettings.promoBanner.position === 'top' && (
           <PromoBanner
-            text={shopSettings.promoBanner.text}
-            backgroundColor={shopSettings.promoBanner.backgroundColor}
-            textColor={shopSettings.promoBanner.textColor}
-            link={shopSettings.promoBanner.link}
-            animationsEnabled={shopSettings.animationsEnabled}
+            text={effectiveSettings.promoBanner.text}
+            backgroundColor={effectiveSettings.promoBanner.backgroundColor}
+            textColor={effectiveSettings.promoBanner.textColor}
+            link={effectiveSettings.promoBanner.link}
+            animationsEnabled={effectiveSettings.animationsEnabled}
           />
         )}
 
         {/* Dynamic Header based on headerStyle setting */}
         {(() => {
           const headerProps = {
-            logo: shopSettings.logo,
-            shopName: shopSettings.shopName,
+            logo: effectiveSettings.logo,
+            shopName: effectiveSettings.shopName,
             cartItemsCount,
             onCartClick: () => setIsCartOpen(true),
           };
 
-          switch (shopSettings.headerStyle) {
+          switch (effectiveSettings.headerStyle) {
             case 'gradient':
               return <GradientHeader {...headerProps} />;
             case 'minimal':
@@ -434,9 +475,9 @@ const Shop = () => {
 
         {/* Dynamic Sections based on sectionOrder */}
         {(() => {
-          const sectionOrder = shopSettings.sectionOrder || ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'newsletter'];
-          const customBlocks = shopSettings.customBlocks || [];
-          const animationsEnabled = shopSettings.animationsEnabled ?? true;
+          const sectionOrder = effectiveSettings.sectionOrder || ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'newsletter'];
+          const customBlocks = effectiveSettings.customBlocks || [];
+          const animationsEnabled = effectiveSettings.animationsEnabled ?? true;
 
           // Helper function to render custom blocks
           const renderCustomBlock = (block: CustomBlock) => {
@@ -502,13 +543,13 @@ const Shop = () => {
           // Helper function to check if a section is visible
           const isSectionVisible = (sectionId: string): boolean => {
             switch (sectionId) {
-              case 'hero': return shopSettings.showHero ?? true;
-              case 'trustBar': return shopSettings.showTrustBar ?? true;
-              case 'newArrivals': return shopSettings.showNewArrivals ?? true;
-              case 'categories': return shopSettings.showCollections ?? true;
-              case 'products': return shopSettings.showProducts ?? true;
-              case 'newsletter': return shopSettings.showNewsletter ?? true;
-              case 'marquee': return shopSettings.showMarquee ?? true;
+              case 'hero': return effectiveSettings.showHero ?? true;
+              case 'trustBar': return effectiveSettings.showTrustBar ?? true;
+              case 'newArrivals': return effectiveSettings.showNewArrivals ?? true;
+              case 'categories': return effectiveSettings.showCollections ?? true;
+              case 'products': return effectiveSettings.showProducts ?? true;
+              case 'newsletter': return effectiveSettings.showNewsletter ?? true;
+              case 'marquee': return effectiveSettings.showMarquee ?? true;
               default: return true; // Custom blocks are always visible if in order
             }
           };
@@ -529,20 +570,20 @@ const Shop = () => {
                 return (
                   <div key="hero">
                     <ModernHero 
-                      heroImage={shopSettings.heroImage}
-                      heroTitle={shopSettings.heroTitle}
-                      heroSubtitle={shopSettings.heroSubtitle}
-                      heroButtonText={shopSettings.heroButtonText}
-                      heroButtonLink={shopSettings.heroButtonLink}
-                      buttonStyle={shopSettings.buttonStyle}
+                      heroImage={effectiveSettings.heroImage}
+                      heroTitle={effectiveSettings.heroTitle}
+                      heroSubtitle={effectiveSettings.heroSubtitle}
+                      heroButtonText={effectiveSettings.heroButtonText}
+                      heroButtonLink={effectiveSettings.heroButtonLink}
+                      buttonStyle={effectiveSettings.buttonStyle}
                     />
                     {/* Promo Banner - Below Hero Position */}
-                    {shopSettings.promoBanner?.enabled && shopSettings.promoBanner.position === 'below-hero' && (
+                    {effectiveSettings.promoBanner?.enabled && effectiveSettings.promoBanner.position === 'below-hero' && (
                       <PromoBanner
-                        text={shopSettings.promoBanner.text}
-                        backgroundColor={shopSettings.promoBanner.backgroundColor}
-                        textColor={shopSettings.promoBanner.textColor}
-                        link={shopSettings.promoBanner.link}
+                        text={effectiveSettings.promoBanner.text}
+                        backgroundColor={effectiveSettings.promoBanner.backgroundColor}
+                        textColor={effectiveSettings.promoBanner.textColor}
+                        link={effectiveSettings.promoBanner.link}
                         animationsEnabled={animationsEnabled}
                       />
                     )}
@@ -550,7 +591,7 @@ const Shop = () => {
                 );
 
               case 'trustBar':
-                return <TrustBar key="trustBar" trustItems={shopSettings.trustBar} />;
+                return <TrustBar key="trustBar" trustItems={effectiveSettings.trustBar} />;
 
               case 'newArrivals':
                 return (
@@ -562,7 +603,7 @@ const Shop = () => {
                     onQuickView={setQuickViewProduct}
                     onToggleWishlist={handleToggleWishlist}
                     wishlist={wishlist}
-                    buttonStyle={shopSettings.buttonStyle}
+                    buttonStyle={effectiveSettings.buttonStyle}
                   />
                 );
 
@@ -664,7 +705,7 @@ const Shop = () => {
                               onQuickView={setQuickViewProduct}
                               onToggleWishlist={handleToggleWishlist}
                               isInWishlist={wishlist.includes(product.id)}
-                              buttonStyle={shopSettings.buttonStyle}
+                              buttonStyle={effectiveSettings.buttonStyle}
                             />
                           ))}
                         </div>
@@ -694,7 +735,7 @@ const Shop = () => {
                 );
 
               case 'newsletter':
-                return <NewsletterSection key="newsletter" buttonStyle={shopSettings.buttonStyle} />;
+                return <NewsletterSection key="newsletter" buttonStyle={effectiveSettings.buttonStyle} />;
 
               default:
                 return null;
@@ -706,19 +747,19 @@ const Shop = () => {
         <WhyBuySection />
 
         <ModernFooter 
-          logo={shopSettings.logo}
-          shopName={shopSettings.shopName}
-          aboutText={shopSettings.aboutText}
-          phone={shopSettings.phone}
-          whatsapp={shopSettings.socialLinks.whatsapp}
-          facebook={shopSettings.socialLinks.facebook}
-          instagram={shopSettings.socialLinks.instagram}
-          tiktok={shopSettings.socialLinks.tiktok}
+          logo={effectiveSettings.logo}
+          shopName={effectiveSettings.shopName}
+          aboutText={effectiveSettings.aboutText}
+          phone={effectiveSettings.phone}
+          whatsapp={effectiveSettings.socialLinks.whatsapp}
+          facebook={effectiveSettings.socialLinks.facebook}
+          instagram={effectiveSettings.socialLinks.instagram}
+          tiktok={effectiveSettings.socialLinks.tiktok}
         />
 
-        {shopSettings.socialLinks.whatsapp && (
+        {effectiveSettings.socialLinks.whatsapp && (
           <WhatsAppButton 
-            phoneNumber={shopSettings.socialLinks.whatsapp}
+            phoneNumber={effectiveSettings.socialLinks.whatsapp}
             message="Bonjour, je visite votre boutique en ligne !"
           />
         )}
@@ -734,7 +775,7 @@ const Shop = () => {
           open={isCartOpen}
           onOpenChange={setIsCartOpen}
           shopUrl={shopUrl || ''}
-          shopSettings={shopSettings}
+          shopSettings={effectiveSettings}
         />
 
         <QuickViewModal

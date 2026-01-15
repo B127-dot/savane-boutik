@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useApp, TrustBarItem, PromoBanner, CustomBlock } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -199,6 +199,7 @@ const ShopEditor = () => {
   const [hasChanges, setHasChanges] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(true);
   const [previewKey, setPreviewKey] = useState(0);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   
   // Phase 4: Custom blocks state
   const [customBlocks, setCustomBlocks] = useState<CustomBlock[]>([]);
@@ -372,6 +373,72 @@ const ShopEditor = () => {
     setIsPreviewLoading(true);
     setPreviewKey(prev => prev + 1);
   }, [formData.selectedTheme]);
+
+  // Send live preview updates to iframe via postMessage
+  const sendPreviewUpdate = useCallback(() => {
+    if (!iframeRef.current?.contentWindow) return;
+    
+    const previewSettings = {
+      // Identité
+      shopName: formData.shopName,
+      logo: formData.logo,
+      description: formData.description,
+      // Design
+      colorPalette: formData.colorPalette,
+      fontFamily: formData.fontFamily,
+      buttonStyle: formData.buttonStyle,
+      headerStyle: formData.headerStyle,
+      // Hero
+      heroImage: formData.heroImage,
+      heroTitle: formData.heroTitle,
+      heroSubtitle: formData.heroSubtitle,
+      heroButtonText: formData.heroButtonText,
+      heroButtonLink: formData.heroButtonLink,
+      heroLayout: formData.heroLayout,
+      // Trust Bar
+      trustBar: formData.trustBar,
+      // Products
+      productsTitle: formData.productsTitle,
+      productsSubtitle: formData.productsSubtitle,
+      productsPerRow: formData.productsPerRow,
+      // Section visibility
+      showHero: formData.showHero,
+      showTrustBar: formData.showTrustBar,
+      showNewArrivals: formData.showNewArrivals,
+      showCollections: formData.showCollections,
+      showProducts: formData.showProducts,
+      showNewsletter: formData.showNewsletter,
+      sectionOrder: formData.sectionOrder,
+      // Promo Banner
+      promoBanner: formData.promoBanner,
+      // Social links
+      socialLinks: {
+        whatsapp: formData.whatsapp,
+        facebook: formData.facebook,
+        instagram: formData.instagram,
+        tiktok: formData.tiktok,
+      },
+      // Footer
+      aboutText: formData.aboutText,
+      phone: formData.phone,
+      // Advanced
+      animationsEnabled: formData.animationsEnabled,
+    };
+    
+    iframeRef.current.contentWindow.postMessage({
+      type: 'SHOP_PREVIEW_UPDATE',
+      settings: previewSettings,
+    }, window.location.origin);
+  }, [formData]);
+
+  // Send updates when formData changes (debounced slightly by React batching)
+  useEffect(() => {
+    // Small delay to let iframe load first
+    const timer = setTimeout(() => {
+      sendPreviewUpdate();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [sendPreviewUpdate]);
 
   // Trust bar management
   const addTrustBarItem = () => {
@@ -2004,11 +2071,16 @@ const ShopEditor = () => {
 
               {/* Live Shop Preview iframe */}
               <iframe
+                ref={iframeRef}
                 key={previewKey}
                 src={previewUrl}
                 className="w-full h-full border-0"
                 title="Aperçu de la boutique"
-                onLoad={() => setIsPreviewLoading(false)}
+                onLoad={() => {
+                  setIsPreviewLoading(false);
+                  // Send initial preview data after iframe loads
+                  sendPreviewUpdate();
+                }}
               />
             </motion.div>
           </div>
