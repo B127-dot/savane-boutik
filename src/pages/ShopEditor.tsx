@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useApp, TrustBarItem, PromoBanner, CustomBlock } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -58,7 +58,8 @@ import {
   Tag,
   Sparkle,
   LayoutGrid,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -196,6 +197,8 @@ const ShopEditor = () => {
   const { toast } = useToast();
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [hasChanges, setHasChanges] = useState(false);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(true);
+  const [previewKey, setPreviewKey] = useState(0);
   
   // Phase 4: Custom blocks state
   const [customBlocks, setCustomBlocks] = useState<CustomBlock[]>([]);
@@ -354,6 +357,21 @@ const ShopEditor = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setHasChanges(true);
   };
+
+  // Preview URL for live iframe
+  const previewUrl = useMemo(() => {
+    const baseUrl = `/shop/${shopSettings?.shopUrl || 'ma-boutique'}`;
+    const params = new URLSearchParams();
+    params.set('previewTheme', formData.selectedTheme);
+    params.set('previewMode', 'editor');
+    return `${baseUrl}?${params.toString()}`;
+  }, [shopSettings?.shopUrl, formData.selectedTheme]);
+
+  // Reload preview when theme changes
+  useEffect(() => {
+    setIsPreviewLoading(true);
+    setPreviewKey(prev => prev + 1);
+  }, [formData.selectedTheme]);
 
   // Trust bar management
   const addTrustBarItem = () => {
@@ -1957,322 +1975,41 @@ const ShopEditor = () => {
             </Button>
           </div>
 
-          {/* Preview Frame */}
+          {/* Preview Frame - Live iframe */}
           <div className="flex-1 flex items-start justify-center p-8 overflow-auto">
             <motion.div 
               layout
-              className={`rounded-2xl shadow-2xl shadow-black/10 overflow-hidden border border-border/50 transition-all duration-500 ${
+              className={`rounded-2xl shadow-2xl shadow-black/10 overflow-hidden border border-border/50 transition-all duration-500 relative ${
                 previewMode === 'mobile' ? 'w-[390px]' : 'w-full max-w-[1100px]'
               }`}
               style={{ 
-                minHeight: previewMode === 'mobile' ? '700px' : '600px',
-                backgroundColor: currentPalette.background,
-                color: currentPalette.primary
+                height: previewMode === 'mobile' ? '750px' : '650px',
               }}
             >
-              <div className="h-full overflow-auto">
-                {/* Live Preview */}
-                <div className="min-h-full">
-                  {/* Preview Header - Dynamic based on headerStyle */}
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={formData.headerStyle}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {formData.headerStyle === 'gradient' && (
-                        <header className="relative z-10 px-4 py-4" style={{ backgroundColor: currentPalette.background }}>
-                          <div className="flex items-center justify-between">
-                            <div 
-                              className="w-8 h-8 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.4)]"
-                              style={{ background: `linear-gradient(135deg, #0ea5e9, #3b82f6)` }}
-                            >
-                              <span className="text-white text-xs font-bold">
-                                {shopSettings?.shopName?.charAt(0) || 'B'}
-                              </span>
-                            </div>
-                            <div className="hidden md:flex items-center gap-1 px-2 py-1 rounded-full bg-white/10 backdrop-blur-md shadow-lg">
-                              {['Accueil', 'Produits', 'Contact'].map((item, i) => (
-                                <span 
-                                  key={item} 
-                                  className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all ${
-                                    i === 0 ? 'bg-white/10 text-white shadow-sm' : 'text-zinc-400 hover:text-white'
-                                  }`}
-                                >
-                                  {item}
-                                </span>
-                              ))}
-                            </div>
-                            <button 
-                              className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-white shadow-[0px_0px_0px_1px_rgba(59,130,246,1),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] transition-all"
-                              style={{ background: 'linear-gradient(180deg, #3b82f6, #2563eb)' }}
-                            >
-                              <ShoppingBag className="w-3.5 h-3.5" />
-                              <span>Panier</span>
-                            </button>
-                          </div>
-                        </header>
-                      )}
-
-                      {formData.headerStyle === 'minimal' && (
-                        <header className="relative z-10 px-6 py-5" style={{ backgroundColor: currentPalette.background }}>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-zinc-900 font-semibold text-xs">
-                                {shopSettings?.shopName?.charAt(0) || 'B'}
-                              </span>
-                              <span className="text-sm font-medium text-white/90">
-                                {shopSettings?.shopName || 'Ma Boutique'}
-                              </span>
-                            </div>
-                            <nav className="hidden md:flex items-center gap-1 px-2 py-1 rounded-full bg-white/5 ring-1 ring-white/10 backdrop-blur">
-                              {['Accueil', 'Produits', 'Contact'].map((item, i) => (
-                                <span 
-                                  key={item} 
-                                  className={`px-3 py-1.5 text-xs font-medium ${
-                                    i === 0 ? 'text-white/90' : 'text-white/60 hover:text-white'
-                                  }`}
-                                >
-                                  {item}
-                                </span>
-                              ))}
-                              <span className="ml-1 px-3 py-1.5 rounded-full bg-white text-xs font-medium text-zinc-900 flex items-center gap-1.5">
-                                Panier
-                                <ArrowRight className="w-3 h-3" />
-                              </span>
-                            </nav>
-                            <button className="md:hidden w-8 h-8 rounded-full bg-white/10 ring-1 ring-white/15 flex items-center justify-center">
-                              <div className="w-4 h-0.5 bg-white/80" />
-                            </button>
-                          </div>
-                        </header>
-                      )}
-
-                      {formData.headerStyle === 'glass' && (
-                        <header className="relative z-10 px-4 py-4" style={{ backgroundColor: currentPalette.background }}>
-                          <div className="max-w-4xl mx-auto px-4 py-3 rounded-2xl bg-white/10 ring-1 ring-white/10 backdrop-blur-lg shadow-lg">
-                            <div className="flex items-center justify-between">
-                              <div className="px-2.5 py-1.5 rounded-xl bg-white/15 border border-white/30 backdrop-blur-md">
-                                <span className="text-sm font-semibold text-white">
-                                  {shopSettings?.shopName?.substring(0, 2).toUpperCase() || 'MB'}
-                                </span>
-                              </div>
-                              <nav className="hidden md:flex items-center gap-6">
-                                {['Accueil', 'Produits', 'À propos', 'Contact'].map((item) => (
-                                  <span 
-                                    key={item} 
-                                    className="text-xs font-medium text-gray-300 hover:text-white transition-colors"
-                                  >
-                                    {item}
-                                  </span>
-                                ))}
-                              </nav>
-                              <button className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 text-xs font-semibold text-zinc-900 hover:bg-white transition-all shadow-lg">
-                                <ShoppingBag className="w-3.5 h-3.5" />
-                                Panier
-                              </button>
-                            </div>
-                          </div>
-                        </header>
-                      )}
-
-                      {formData.headerStyle === 'classic' && (
-                        <header 
-                          className="relative z-10 border-b"
-                          style={{ 
-                            backgroundColor: currentPalette.background,
-                            borderColor: `${currentPalette.primary}20`
-                          }}
-                        >
-                          <div className="px-4 py-3 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <div 
-                                className="h-10 w-10 rounded-lg flex items-center justify-center"
-                                style={{ backgroundColor: `${currentPalette.primary}20` }}
-                              >
-                                <span style={{ color: currentPalette.primary }} className="font-bold text-sm">
-                                  {shopSettings?.shopName?.charAt(0) || 'B'}
-                                </span>
-                              </div>
-                              <span className="text-base font-bold text-white hidden sm:block">
-                                {shopSettings?.shopName || 'Ma Boutique'}
-                              </span>
-                            </div>
-                            <button 
-                              className="relative h-10 w-10 rounded-lg flex items-center justify-center border"
-                              style={{ borderColor: `${currentPalette.primary}30` }}
-                            >
-                              <ShoppingBag className="h-4 w-4" style={{ color: currentPalette.primary }} />
-                              <span 
-                                className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
-                                style={{ backgroundColor: currentPalette.primary }}
-                              >
-                                0
-                              </span>
-                            </button>
-                          </div>
-                        </header>
-                      )}
-                    </motion.div>
-                  </AnimatePresence>
-
-                  {/* Preview Hero */}
-                  <div 
-                    className="relative h-[340px] bg-cover bg-center flex items-center justify-center"
-                    style={{ 
-                      backgroundImage: formData.heroImage 
-                        ? `url(${formData.heroImage})` 
-                        : `linear-gradient(135deg, ${currentPalette.background} 0%, ${currentPalette.primary}20 100%)`
-                    }}
+              {/* Loading Overlay */}
+              <AnimatePresence>
+                {isPreviewLoading && (
+                  <motion.div
+                    initial={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 z-10 flex items-center justify-center bg-background"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/10" />
-                    <div className={`relative z-10 text-white px-8 py-12 ${
-                      formData.heroLayout === 'left' ? 'text-left self-start' : 
-                      formData.heroLayout === 'right' ? 'text-right self-end' : 'text-center'
-                    }`}>
-                      <motion.h1 
-                        key={formData.heroTitle}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl font-bold mb-4 drop-shadow-lg"
-                        style={{ fontFamily: formData.fontFamily === 'playfair' ? 'Playfair Display, serif' : formData.fontFamily === 'lora' ? 'Lora, serif' : 'inherit' }}
-                      >
-                        {formData.heroTitle || 'Titre de votre boutique'}
-                      </motion.h1>
-                      <motion.p 
-                        key={formData.heroSubtitle}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-lg opacity-95 mb-6 max-w-xl mx-auto drop-shadow"
-                      >
-                        {formData.heroSubtitle || 'Sous-titre accrocheur'}
-                      </motion.p>
-                      <Button 
-                        size="lg" 
-                        className={`shadow-lg font-semibold ${currentButtonStyle.class}`}
-                        style={{ 
-                          backgroundColor: currentPalette.primary,
-                          color: currentPalette.background
-                        }}
-                      >
-                        {formData.heroButtonText || 'Voir la Collection'}
-                      </Button>
+                    <div className="flex flex-col items-center gap-4">
+                      <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                      <p className="text-sm text-muted-foreground">Chargement de l'aperçu...</p>
                     </div>
-                  </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-                  {/* Preview Trust Bar */}
-                  <div 
-                    className="py-5 px-6 border-y"
-                    style={{ 
-                      backgroundColor: `${currentPalette.primary}10`,
-                      borderColor: `${currentPalette.primary}20`
-                    }}
-                  >
-                    <div className={`grid gap-6 ${
-                      previewMode === 'mobile' ? 'grid-cols-1' : 
-                      formData.trustBar.length === 1 ? 'grid-cols-1' :
-                      formData.trustBar.length === 2 ? 'grid-cols-2' :
-                      formData.trustBar.length === 3 ? 'grid-cols-3' : 'grid-cols-4'
-                    }`}>
-                      {formData.trustBar.map((item) => {
-                        const IconComp = getIconComponent(item.icon);
-                        return (
-                          <div key={item.id} className="flex items-center justify-center gap-3" style={{ color: '#fff' }}>
-                            <div 
-                              className="w-10 h-10 rounded-xl flex items-center justify-center"
-                              style={{ backgroundColor: `${currentPalette.primary}20` }}
-                            >
-                              <IconComp className="w-5 h-5" style={{ color: currentPalette.primary }} />
-                            </div>
-                            <div>
-                              <p className="font-semibold text-sm">{item.title}</p>
-                              {item.subtitle && (
-                                <p className="text-xs opacity-70">{item.subtitle}</p>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Preview Products Section */}
-                  <div className="p-8">
-                    <div className="text-center mb-8">
-                      <motion.h2 
-                        key={formData.productsTitle}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="text-2xl font-bold"
-                        style={{ 
-                          color: '#fff',
-                          fontFamily: formData.fontFamily === 'playfair' ? 'Playfair Display, serif' : formData.fontFamily === 'lora' ? 'Lora, serif' : 'inherit'
-                        }}
-                      >
-                        {formData.productsTitle || 'Nos Produits'}
-                      </motion.h2>
-                      {formData.productsSubtitle && (
-                        <p className="mt-2" style={{ color: `${currentPalette.primary}` }}>{formData.productsSubtitle}</p>
-                      )}
-                    </div>
-
-                    <div className={`grid gap-4 ${
-                      previewMode === 'mobile' ? 'grid-cols-2' : `grid-cols-${formData.productsPerRow}`
-                    }`}>
-                      {[1, 2, 3, 4, 5, 6].slice(0, formData.productsPerRow * 2).map((i) => (
-                        <motion.div 
-                          key={i} 
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: i * 0.05 }}
-                          className={`${currentButtonStyle.class} overflow-hidden border hover:shadow-lg transition-shadow group`}
-                          style={{ 
-                            backgroundColor: `${currentPalette.primary}08`,
-                            borderColor: `${currentPalette.primary}20`
-                          }}
-                        >
-                          <div 
-                            className="aspect-square flex items-center justify-center relative overflow-hidden"
-                            style={{ backgroundColor: `${currentPalette.primary}10` }}
-                          >
-                            <ShoppingBag className="w-12 h-12" style={{ color: `${currentPalette.primary}30` }} />
-                          </div>
-                          <div className="p-4">
-                            <p className="font-medium text-sm truncate" style={{ color: '#fff' }}>Produit exemple {i}</p>
-                            <p className="font-bold mt-1" style={{ color: currentPalette.primary }}>25 000 FCFA</p>
-                            <Button 
-                              size="sm" 
-                              className={`w-full mt-3 ${currentButtonStyle.class}`}
-                              style={{ 
-                                backgroundColor: currentPalette.primary,
-                                color: currentPalette.background
-                              }}
-                            >
-                              Ajouter
-                            </Button>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Preview Footer hint */}
-                  <div 
-                    className="p-8 text-center border-t"
-                    style={{ 
-                      backgroundColor: `${currentPalette.primary}05`,
-                      borderColor: `${currentPalette.primary}20`
-                    }}
-                  >
-                    <p className="text-sm" style={{ color: `${currentPalette.primary}80` }}>
-                      Pied de page • Vos informations de contact
-                    </p>
-                  </div>
-                </div>
-              </div>
+              {/* Live Shop Preview iframe */}
+              <iframe
+                key={previewKey}
+                src={previewUrl}
+                className="w-full h-full border-0"
+                title="Aperçu de la boutique"
+                onLoad={() => setIsPreviewLoading(false)}
+              />
             </motion.div>
           </div>
         </div>
