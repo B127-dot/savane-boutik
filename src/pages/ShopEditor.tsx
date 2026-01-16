@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useApp, TrustBarItem, PromoBanner, CustomBlock } from '@/contexts/AppContext';
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,6 +18,16 @@ import { ImageUploader } from '@/components/ImageUploader';
 import DraggableSectionManager, { SectionConfig } from '@/components/shop/DraggableSectionManager';
 import BlockLibraryModal from '@/components/shop/BlockLibraryModal';
 import ThemeSelector from '@/components/ThemeSelector';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import { 
   Save, 
@@ -59,9 +71,72 @@ import {
   Sparkle,
   LayoutGrid,
   SlidersHorizontal,
-  Loader2
+  Loader2,
+  AlertTriangle,
+  CloudOff,
+  Cloud
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+// ============= ZOD VALIDATION SCHEMA =============
+const trustBarItemSchema = z.object({
+  id: z.string(),
+  icon: z.string(),
+  title: z.string().min(1, "Le titre est requis").max(50, "Max 50 caractères"),
+  subtitle: z.string().max(100, "Max 100 caractères").optional(),
+});
+
+const promoBannerSchema = z.object({
+  enabled: z.boolean(),
+  text: z.string().max(200, "Max 200 caractères"),
+  backgroundColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Format couleur invalide"),
+  textColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Format couleur invalide"),
+  link: z.string().url("URL invalide").or(z.literal('')),
+  position: z.enum(['top', 'below-hero']),
+});
+
+const shopEditorSchema = z.object({
+  // Identité
+  shopName: z.string().min(1, "Le nom de la boutique est requis").max(100, "Max 100 caractères"),
+  shopUrl: z.string().min(1, "L'URL est requise").max(50, "Max 50 caractères")
+    .regex(/^[a-z0-9-]+$/, "Uniquement lettres minuscules, chiffres et tirets"),
+  description: z.string().max(500, "Max 500 caractères"),
+  logo: z.string(),
+  favicon: z.string(),
+  // Contact
+  phone: z.string().max(20, "Max 20 caractères"),
+  address: z.string().max(200, "Max 200 caractères"),
+  whatsapp: z.string().max(20, "Max 20 caractères"),
+  facebook: z.string().url("URL Facebook invalide").or(z.literal('')),
+  instagram: z.string().url("URL Instagram invalide").or(z.literal('')),
+  tiktok: z.string().url("URL TikTok invalide").or(z.literal('')),
+  // SEO
+  seoTitle: z.string().max(60, "Max 60 caractères pour le SEO"),
+  seoDescription: z.string().max(160, "Max 160 caractères pour le SEO"),
+  socialImage: z.string(),
+  // Hero
+  heroTitle: z.string().max(100, "Max 100 caractères"),
+  heroSubtitle: z.string().max(200, "Max 200 caractères"),
+  heroButtonText: z.string().max(30, "Max 30 caractères"),
+  heroButtonLink: z.string(),
+  // Products
+  productsTitle: z.string().max(100, "Max 100 caractères"),
+  productsSubtitle: z.string().max(200, "Max 200 caractères"),
+  collectionsTitle: z.string().max(100, "Max 100 caractères"),
+  // Footer
+  aboutText: z.string().max(500, "Max 500 caractères"),
+  newsletterTitle: z.string().max(100, "Max 100 caractères"),
+  newsletterSubtitle: z.string().max(200, "Max 200 caractères"),
+  // Trust Bar
+  trustBar: z.array(trustBarItemSchema).max(5, "Maximum 5 éléments"),
+  // Promo Banner
+  promoBanner: promoBannerSchema,
+});
+
+type ValidationErrors = Partial<Record<keyof z.infer<typeof shopEditorSchema>, string>>;
+
+const DRAFT_STORAGE_KEY = 'shopEditor_draft';
+const DRAFT_TIMESTAMP_KEY = 'shopEditor_draft_timestamp';
 
 // Color Palettes - Inspired by Lovable's design tool
 const COLOR_PALETTES = [
@@ -195,11 +270,21 @@ const DEFAULT_TRUST_BAR: TrustBarItem[] = [
 const ShopEditor = () => {
   const { shopSettings, updateShopSettings, products } = useApp();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [hasChanges, setHasChanges] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(true);
   const [previewKey, setPreviewKey] = useState(0);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  
+  // Phase 2: Validation & Draft states
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+  const [hasDraft, setHasDraft] = useState(false);
+  const [showDraftDialog, setShowDraftDialog] = useState(false);
+  const [showExitDialog, setShowExitDialog] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+  const [isDraftSaving, setIsDraftSaving] = useState(false);
   
   // Phase 4: Custom blocks state
   const [customBlocks, setCustomBlocks] = useState<CustomBlock[]>([]);
@@ -354,9 +439,156 @@ const ShopEditor = () => {
     }
   }, [shopSettings]);
 
-  const updateField = <K extends keyof typeof formData>(field: K, value: typeof formData[K]) => {
+  // ============= PHASE 2: DRAFT MANAGEMENT =============
+  
+  // Check for existing draft on mount
+  useEffect(() => {
+    const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+    const savedTimestamp = localStorage.getItem(DRAFT_TIMESTAMP_KEY);
+    
+    if (savedDraft && savedTimestamp) {
+      const draftTime = new Date(savedTimestamp);
+      const now = new Date();
+      const hoursDiff = (now.getTime() - draftTime.getTime()) / (1000 * 60 * 60);
+      
+      // Only show draft dialog if draft is less than 24 hours old
+      if (hoursDiff < 24) {
+        setHasDraft(true);
+        setShowDraftDialog(true);
+      } else {
+        // Clear old drafts
+        localStorage.removeItem(DRAFT_STORAGE_KEY);
+        localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+      }
+    }
+  }, []);
+
+  // Restore draft
+  const restoreDraft = useCallback(() => {
+    const savedDraft = localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (savedDraft) {
+      try {
+        const parsed = JSON.parse(savedDraft);
+        setFormData(prev => ({ ...prev, ...parsed.formData }));
+        if (parsed.customBlocks) {
+          setCustomBlocks(parsed.customBlocks);
+        }
+        setHasChanges(true);
+        toast({
+          title: "📝 Brouillon restauré",
+          description: "Vos modifications précédentes ont été récupérées",
+        });
+      } catch (e) {
+        console.error('Error restoring draft:', e);
+      }
+    }
+    setShowDraftDialog(false);
+    setHasDraft(false);
+  }, [toast]);
+
+  // Discard draft
+  const discardDraft = useCallback(() => {
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+    localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+    setShowDraftDialog(false);
+    setHasDraft(false);
+  }, []);
+
+  // Auto-save draft every 30 seconds
+  useEffect(() => {
+    if (!hasChanges) return;
+
+    const saveDraft = () => {
+      setIsDraftSaving(true);
+      const draftData = {
+        formData,
+        customBlocks,
+        savedAt: new Date().toISOString(),
+      };
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draftData));
+      localStorage.setItem(DRAFT_TIMESTAMP_KEY, new Date().toISOString());
+      setLastSavedAt(new Date());
+      setTimeout(() => setIsDraftSaving(false), 500);
+    };
+
+    const timer = setInterval(saveDraft, 30000); // 30 seconds
+    
+    return () => clearInterval(timer);
+  }, [hasChanges, formData, customBlocks]);
+
+  // ============= PHASE 2: VALIDATION =============
+  
+  const validateForm = useCallback((): boolean => {
+    const result = shopEditorSchema.safeParse(formData);
+    
+    if (!result.success) {
+      const errors: ValidationErrors = {};
+      result.error.errors.forEach((err) => {
+        const path = err.path[0] as keyof ValidationErrors;
+        if (path && !errors[path]) {
+          errors[path] = err.message;
+        }
+      });
+      setValidationErrors(errors);
+      return false;
+    }
+    
+    setValidationErrors({});
+    return true;
+  }, [formData]);
+
+  // Clear specific error when field is updated
+  const updateFieldWithValidation = <K extends keyof typeof formData>(field: K, value: typeof formData[K]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     setHasChanges(true);
+    // Clear error for this field
+    if (validationErrors[field as keyof ValidationErrors]) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field as keyof ValidationErrors];
+        return newErrors;
+      });
+    }
+  };
+
+  // ============= PHASE 2: UNSAVED CHANGES WARNING =============
+  
+  // Browser beforeunload event
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasChanges) {
+        e.preventDefault();
+        e.returnValue = 'Vous avez des modifications non sauvegardées. Êtes-vous sûr de vouloir quitter ?';
+        return e.returnValue;
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasChanges]);
+
+  // Handle internal navigation with confirmation
+  const handleNavigateAway = useCallback((path: string) => {
+    if (hasChanges) {
+      setPendingNavigation(path);
+      setShowExitDialog(true);
+    } else {
+      navigate(path);
+    }
+  }, [hasChanges, navigate]);
+
+  const confirmNavigation = useCallback(() => {
+    // Clear draft when navigating away without saving
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+    localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+    setShowExitDialog(false);
+    if (pendingNavigation) {
+      navigate(pendingNavigation);
+    }
+  }, [navigate, pendingNavigation]);
+
+  const updateField = <K extends keyof typeof formData>(field: K, value: typeof formData[K]) => {
+    updateFieldWithValidation(field, value);
   };
 
   // Preview URL for live iframe
@@ -619,6 +851,16 @@ const ShopEditor = () => {
   };
 
   const handleSave = () => {
+    // Validate form before saving
+    if (!validateForm()) {
+      toast({
+        title: "⚠️ Erreurs de validation",
+        description: "Veuillez corriger les erreurs avant de sauvegarder",
+        variant: "destructive",
+      });
+      return;
+    }
+
     updateShopSettings({
       // Thème de boutique
       selectedTheme: formData.selectedTheme,
@@ -686,7 +928,12 @@ const ShopEditor = () => {
       customBlocks: customBlocks,
     });
 
+    // Clear draft after successful save
+    localStorage.removeItem(DRAFT_STORAGE_KEY);
+    localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+    
     setHasChanges(false);
+    setValidationErrors({});
     toast({
       title: "✨ Modifications enregistrées",
       description: "Votre boutique a été mise à jour avec succès",
@@ -720,6 +967,48 @@ const ShopEditor = () => {
                 </div>
               </div>
               
+              {/* Draft/Autosave Status Indicator */}
+              {hasChanges && (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-3 px-1">
+                  {isDraftSaving ? (
+                    <>
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <span>Sauvegarde du brouillon...</span>
+                    </>
+                  ) : lastSavedAt ? (
+                    <>
+                      <Cloud className="w-3 h-3 text-emerald-500" />
+                      <span>
+                        Brouillon sauvegardé à {lastSavedAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <CloudOff className="w-3 h-3 text-amber-500" />
+                      <span>Modifications non sauvegardées</span>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* Validation Errors Summary */}
+              {Object.keys(validationErrors).length > 0 && (
+                <div className="mb-3 p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+                  <div className="flex items-center gap-2 text-sm font-medium text-destructive mb-1">
+                    <AlertTriangle className="w-4 h-4" />
+                    {Object.keys(validationErrors).length} erreur(s) de validation
+                  </div>
+                  <ul className="text-xs text-destructive/80 space-y-0.5 ml-6 list-disc">
+                    {Object.entries(validationErrors).slice(0, 3).map(([field, error]) => (
+                      <li key={field}>{error}</li>
+                    ))}
+                    {Object.keys(validationErrors).length > 3 && (
+                      <li>...et {Object.keys(validationErrors).length - 3} autre(s)</li>
+                    )}
+                  </ul>
+                </div>
+              )}
+              
               {/* Save Button - Premium style */}
               <motion.div
                 animate={hasChanges ? { scale: [1, 1.02, 1] } : {}}
@@ -729,19 +1018,28 @@ const ShopEditor = () => {
                   onClick={handleSave} 
                   className={`w-full h-12 text-base font-semibold gap-2 transition-all duration-300 ${
                     hasChanges 
-                      ? 'bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40' 
+                      ? Object.keys(validationErrors).length > 0
+                        ? 'bg-gradient-to-r from-amber-500 to-amber-600 shadow-lg shadow-amber-500/30'
+                        : 'bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40' 
                       : 'bg-muted text-muted-foreground'
                   }`}
                   disabled={!hasChanges}
                 >
                   {hasChanges ? (
-                    <>
-                      <Sparkles className="w-5 h-5" />
-                      Publier les modifications
-                      <Badge variant="secondary" className="ml-2 bg-primary-foreground/20 text-primary-foreground text-xs">
-                        Non publié
-                      </Badge>
-                    </>
+                    Object.keys(validationErrors).length > 0 ? (
+                      <>
+                        <AlertTriangle className="w-5 h-5" />
+                        Corriger les erreurs
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-5 h-5" />
+                        Publier les modifications
+                        <Badge variant="secondary" className="ml-2 bg-primary-foreground/20 text-primary-foreground text-xs">
+                          Non publié
+                        </Badge>
+                      </>
+                    )
                   ) : (
                     <>
                       <Check className="w-5 h-5" />
@@ -2109,6 +2407,57 @@ const ShopEditor = () => {
         onAddBlock={handleBlockModalSave}
         editingBlock={editingBlock}
       />
+
+      {/* Draft Restore Dialog */}
+      <AlertDialog open={showDraftDialog} onOpenChange={setShowDraftDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <CloudOff className="w-5 h-5 text-amber-500" />
+              Brouillon détecté
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Vous avez des modifications non sauvegardées de votre dernière session.
+              Voulez-vous les restaurer ou les ignorer ?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={discardDraft}>
+              Ignorer
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={restoreDraft}>
+              Restaurer le brouillon
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Exit Confirmation Dialog */}
+      <AlertDialog open={showExitDialog} onOpenChange={setShowExitDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-500" />
+              Modifications non sauvegardées
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Vous avez des modifications qui n'ont pas été sauvegardées.
+              Si vous quittez maintenant, vos changements seront perdus.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowExitDialog(false)}>
+              Annuler
+            </AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={confirmNavigation}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Quitter sans sauvegarder
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
