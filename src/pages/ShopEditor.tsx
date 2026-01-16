@@ -383,11 +383,15 @@ const ShopEditor = () => {
       shopName: formData.shopName,
       logo: formData.logo,
       description: formData.description,
+      favicon: formData.favicon,
       // Design
       colorPalette: formData.colorPalette,
       fontFamily: formData.fontFamily,
       buttonStyle: formData.buttonStyle,
       headerStyle: formData.headerStyle,
+      // Phase 3: Personnalisation Fine
+      sectionSpacing: formData.sectionSpacing,
+      cardBorderRadius: formData.cardBorderRadius,
       // Hero
       heroImage: formData.heroImage,
       heroTitle: formData.heroTitle,
@@ -401,13 +405,17 @@ const ShopEditor = () => {
       productsTitle: formData.productsTitle,
       productsSubtitle: formData.productsSubtitle,
       productsPerRow: formData.productsPerRow,
+      productsLayout: formData.productsLayout,
+      // Collections
+      showCollections: formData.showCollections,
+      collectionsTitle: formData.collectionsTitle,
       // Section visibility
       showHero: formData.showHero,
       showTrustBar: formData.showTrustBar,
       showNewArrivals: formData.showNewArrivals,
-      showCollections: formData.showCollections,
       showProducts: formData.showProducts,
       showNewsletter: formData.showNewsletter,
+      showMarquee: formData.showMarquee,
       sectionOrder: formData.sectionOrder,
       // Promo Banner
       promoBanner: formData.promoBanner,
@@ -421,15 +429,19 @@ const ShopEditor = () => {
       // Footer
       aboutText: formData.aboutText,
       phone: formData.phone,
+      newsletterTitle: formData.newsletterTitle,
+      newsletterSubtitle: formData.newsletterSubtitle,
       // Advanced
       animationsEnabled: formData.animationsEnabled,
+      // Phase 4: Custom Blocks
+      customBlocks: customBlocks,
     };
     
     iframeRef.current.contentWindow.postMessage({
       type: 'SHOP_PREVIEW_UPDATE',
       settings: previewSettings,
     }, window.location.origin);
-  }, [formData]);
+  }, [formData, customBlocks]);
 
   // Send updates when formData changes (debounced slightly by React batching)
   useEffect(() => {
