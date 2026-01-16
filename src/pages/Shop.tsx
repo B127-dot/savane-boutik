@@ -261,11 +261,94 @@ const Shop = () => {
   const isArtisan = currentTheme === 'artisan';
   const isAesthetique = currentTheme === 'aesthetique';
 
+  // Helper function to render custom blocks (shared across themes)
+  const renderCustomBlock = (block: CustomBlock, animationsEnabled: boolean = true) => {
+    switch (block.type) {
+      case 'testimonials':
+        return (
+          <TestimonialsBlock
+            key={block.id}
+            title={block.config.title}
+            testimonials={block.config.testimonials}
+            animationsEnabled={animationsEnabled}
+          />
+        );
+      case 'instagram':
+        return (
+          <InstagramGalleryBlock
+            key={block.id}
+            title={block.config.title}
+            instagramHandle={block.config.instagramHandle}
+            posts={block.config.posts}
+            animationsEnabled={animationsEnabled}
+          />
+        );
+      case 'faq':
+        return (
+          <FAQBlock
+            key={block.id}
+            title={block.config.title}
+            subtitle={block.config.subtitle}
+            faqs={block.config.faqs}
+            animationsEnabled={animationsEnabled}
+          />
+        );
+      case 'youtube':
+        return (
+          <YouTubeBlock
+            key={block.id}
+            title={block.config.title}
+            subtitle={block.config.subtitle}
+            videoUrl={block.config.videoUrl}
+            thumbnailUrl={block.config.thumbnailUrl}
+            animationsEnabled={animationsEnabled}
+          />
+        );
+      case 'text-image':
+        return (
+          <TextImageBlock
+            key={block.id}
+            title={block.config.title}
+            text={block.config.text}
+            imageUrl={block.config.imageUrl}
+            imagePosition={block.config.imagePosition}
+            buttonText={block.config.buttonText}
+            buttonLink={block.config.buttonLink}
+            animationsEnabled={animationsEnabled}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  // Get font class for theming
+  const fontClass = getFontClass(effectiveSettings?.fontFamily);
+
   // AESTHETIQUE THEME
   if (isAesthetique) {
+    const customBlocks = effectiveSettings.customBlocks || [];
+    const animationsEnabled = effectiveSettings.animationsEnabled ?? true;
+    
     return (
       <ThemeProvider themeId={currentTheme}>
-        <div className="min-h-screen bg-[#0a0a0a] text-white pb-20 md:pb-0 font-instrument-serif">
+        <DynamicThemeStyles 
+          colorPalette={effectiveSettings.colorPalette}
+          buttonStyle={effectiveSettings.buttonStyle}
+          fontFamily={effectiveSettings.fontFamily}
+        />
+        <div className={`min-h-screen bg-[#0a0a0a] text-white pb-20 md:pb-0 ${fontClass}`}>
+          {/* Promo Banner */}
+          {effectiveSettings.promoBanner?.enabled && effectiveSettings.promoBanner.position === 'top' && (
+            <PromoBanner
+              text={effectiveSettings.promoBanner.text}
+              backgroundColor={effectiveSettings.promoBanner.backgroundColor}
+              textColor={effectiveSettings.promoBanner.textColor}
+              link={effectiveSettings.promoBanner.link}
+              animationsEnabled={animationsEnabled}
+            />
+          )}
+
           <AesthetiqueHeader 
             logo={effectiveSettings.logo}
             shopName={effectiveSettings.shopName}
@@ -273,15 +356,17 @@ const Shop = () => {
             onCartClick={() => setIsCartOpen(true)}
           />
 
-          <AesthetiqueHero 
-            heroImage={effectiveSettings.heroImage}
-            heroTitle={effectiveSettings.heroTitle}
-            heroSubtitle={effectiveSettings.heroSubtitle}
-            heroButtonText={effectiveSettings.heroButtonText}
-            heroButtonLink={effectiveSettings.heroButtonLink}
-          />
+          {effectiveSettings.showHero !== false && (
+            <AesthetiqueHero 
+              heroImage={effectiveSettings.heroImage}
+              heroTitle={effectiveSettings.heroTitle}
+              heroSubtitle={effectiveSettings.heroSubtitle}
+              heroButtonText={effectiveSettings.heroButtonText}
+              heroButtonLink={effectiveSettings.heroButtonLink}
+            />
+          )}
 
-          <AesthetiqueMarquee />
+          {effectiveSettings.showMarquee !== false && <AesthetiqueMarquee />}
 
           <div id="products">
             <AesthetiqueProducts 
@@ -302,6 +387,9 @@ const Shop = () => {
             shopUrl={shopUrl!}
             onAddToCart={handleAddToCart}
           />
+
+          {/* Custom Blocks for Aesthetique */}
+          {customBlocks.map(block => renderCustomBlock(block, animationsEnabled))}
 
           <AesthetiqueFooter 
             logo={effectiveSettings.logo}
@@ -348,9 +436,28 @@ const Shop = () => {
 
   // ARTISAN THEME
   if (isArtisan) {
+    const customBlocks = effectiveSettings.customBlocks || [];
+    const animationsEnabled = effectiveSettings.animationsEnabled ?? true;
+    
     return (
       <ThemeProvider themeId={currentTheme}>
-        <div className="min-h-screen bg-artisan-cream pb-20 md:pb-0">
+        <DynamicThemeStyles 
+          colorPalette={effectiveSettings.colorPalette}
+          buttonStyle={effectiveSettings.buttonStyle}
+          fontFamily={effectiveSettings.fontFamily}
+        />
+        <div className={`min-h-screen bg-artisan-cream pb-20 md:pb-0 ${fontClass}`}>
+          {/* Promo Banner */}
+          {effectiveSettings.promoBanner?.enabled && effectiveSettings.promoBanner.position === 'top' && (
+            <PromoBanner
+              text={effectiveSettings.promoBanner.text}
+              backgroundColor={effectiveSettings.promoBanner.backgroundColor}
+              textColor={effectiveSettings.promoBanner.textColor}
+              link={effectiveSettings.promoBanner.link}
+              animationsEnabled={animationsEnabled}
+            />
+          )}
+
           <ArtisanHeader 
             logo={effectiveSettings.logo}
             shopName={effectiveSettings.shopName}
@@ -358,22 +465,30 @@ const Shop = () => {
             onCartClick={() => setIsCartOpen(true)}
           />
 
-          <ArtisanHero 
-            heroImage={effectiveSettings.heroImage}
-            heroTitle={effectiveSettings.heroTitle}
-            heroSubtitle={effectiveSettings.heroSubtitle}
-            heroButtonText={effectiveSettings.heroButtonText}
-            heroButtonLink={effectiveSettings.heroButtonLink}
-          />
-
-          <div id="categories">
-            <ArtisanCollections 
-              onCategoryClick={(categoryName) => {
-                setSelectedCategory(categoryName);
-                scrollToProducts();
-              }}
+          {effectiveSettings.showHero !== false && (
+            <ArtisanHero 
+              heroImage={effectiveSettings.heroImage}
+              heroTitle={effectiveSettings.heroTitle}
+              heroSubtitle={effectiveSettings.heroSubtitle}
+              heroButtonText={effectiveSettings.heroButtonText}
+              heroButtonLink={effectiveSettings.heroButtonLink}
             />
-          </div>
+          )}
+
+          {effectiveSettings.showTrustBar !== false && (
+            <ArtisanTrustBar items={effectiveSettings.trustBar} />
+          )}
+
+          {effectiveSettings.showCollections !== false && (
+            <div id="categories">
+              <ArtisanCollections 
+                onCategoryClick={(categoryName) => {
+                  setSelectedCategory(categoryName);
+                  scrollToProducts();
+                }}
+              />
+            </div>
+          )}
 
           <ArtisanWhyChoose shopName={effectiveSettings.shopName} />
 
@@ -384,6 +499,9 @@ const Shop = () => {
             onToggleWishlist={handleToggleWishlist}
             wishlist={wishlist}
           />
+
+          {/* Custom Blocks for Artisan */}
+          {customBlocks.map(block => renderCustomBlock(block, animationsEnabled))}
 
           <ArtisanFooter 
             logo={effectiveSettings.logo}
@@ -428,8 +546,7 @@ const Shop = () => {
     );
   }
 
-  // Get dynamic styling props
-  const fontClass = getFontClass(effectiveSettings?.fontFamily);
+  // Get dynamic styling props for Modern theme
   const buttonClass = getButtonClass(effectiveSettings?.buttonStyle);
 
   // MODERN THEME (default)
