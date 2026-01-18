@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { useAbandonedCartTracker } from '@/hooks/useAbandonedCartTracker';
+import { useDynamicSEO } from '@/hooks/useDynamicSEO';
 import ShopHeader from '@/components/shop/ShopHeader';
 import { GradientHeader, MinimalHeader, GlassHeader } from '@/components/shop/headers';
 import TrustBar from '@/components/shop/TrustBar';
@@ -248,6 +249,15 @@ const Shop = () => {
 
   // Currently only Modern and Artisan themes are available
   const currentTheme = previewTheme || effectiveSettings?.selectedTheme || 'modern';
+
+  // Apply dynamic SEO (favicon, title, meta tags)
+  useDynamicSEO(effectiveSettings ? {
+    title: effectiveSettings.seoTitle || effectiveSettings.shopName,
+    description: effectiveSettings.seoDescription,
+    image: effectiveSettings.socialImage || effectiveSettings.heroImage,
+    favicon: effectiveSettings.favicon,
+    shopName: effectiveSettings.shopName,
+  } : null);
 
   if (!effectiveSettings) {
     return (
