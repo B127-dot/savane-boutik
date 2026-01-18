@@ -1,8 +1,11 @@
-// Color Palettes - Same as ShopEditor
+import { TrustBarItem } from '@/contexts/AppContext';
+
+// Color Palettes - Centralized design system
 export const COLOR_PALETTES = [
   { 
     id: 'default', 
     name: 'Défaut', 
+    colors: ['#111827', '#6366f1', '#22c55e', '#f59e0b'],
     primary: '#6366f1',
     secondary: '#22c55e',
     accent: '#f59e0b',
@@ -12,6 +15,7 @@ export const COLOR_PALETTES = [
   { 
     id: 'glacier', 
     name: 'Glacier', 
+    colors: ['#0f172a', '#06b6d4', '#3b82f6', '#8b5cf6'],
     primary: '#06b6d4',
     secondary: '#3b82f6',
     accent: '#8b5cf6',
@@ -21,6 +25,7 @@ export const COLOR_PALETTES = [
   { 
     id: 'harvest', 
     name: 'Harvest', 
+    colors: ['#1c1917', '#f59e0b', '#ea580c', '#dc2626'],
     primary: '#f59e0b',
     secondary: '#ea580c',
     accent: '#dc2626',
@@ -30,6 +35,7 @@ export const COLOR_PALETTES = [
   { 
     id: 'lavender', 
     name: 'Lavender', 
+    colors: ['#1e1b4b', '#a855f7', '#ec4899', '#f43f5e'],
     primary: '#a855f7',
     secondary: '#ec4899',
     accent: '#f43f5e',
@@ -39,6 +45,7 @@ export const COLOR_PALETTES = [
   { 
     id: 'brutalist', 
     name: 'Brutalist', 
+    colors: ['#000000', '#ffffff', '#ff0000', '#ffff00'],
     primary: '#ffffff',
     secondary: '#ff0000',
     accent: '#ffff00',
@@ -48,6 +55,7 @@ export const COLOR_PALETTES = [
   { 
     id: 'obsidian', 
     name: 'Obsidian', 
+    colors: ['#09090b', '#71717a', '#a1a1aa', '#e4e4e7'],
     primary: '#71717a',
     secondary: '#a1a1aa',
     accent: '#e4e4e7',
@@ -57,6 +65,7 @@ export const COLOR_PALETTES = [
   { 
     id: 'orchid', 
     name: 'Orchid', 
+    colors: ['#14040d', '#db2777', '#f472b6', '#fce7f3'],
     primary: '#db2777',
     secondary: '#f472b6',
     accent: '#fce7f3',
@@ -66,6 +75,7 @@ export const COLOR_PALETTES = [
   { 
     id: 'solar', 
     name: 'Solar', 
+    colors: ['#1a1302', '#fbbf24', '#f59e0b', '#d97706'],
     primary: '#fbbf24',
     secondary: '#f59e0b',
     accent: '#d97706',
@@ -75,6 +85,7 @@ export const COLOR_PALETTES = [
   { 
     id: 'tide', 
     name: 'Tide', 
+    colors: ['#042f2e', '#14b8a6', '#2dd4bf', '#5eead4'],
     primary: '#14b8a6',
     secondary: '#2dd4bf',
     accent: '#5eead4',
@@ -84,6 +95,7 @@ export const COLOR_PALETTES = [
   { 
     id: 'verdant', 
     name: 'Verdant', 
+    colors: ['#052e16', '#22c55e', '#4ade80', '#86efac'],
     primary: '#22c55e',
     secondary: '#4ade80',
     accent: '#86efac',
@@ -97,7 +109,66 @@ export const getPaletteById = (paletteId?: string) => {
   return COLOR_PALETTES.find(p => p.id === paletteId) || COLOR_PALETTES[0];
 };
 
-// Font family mapping
+// Font options for shop customization
+export const FONT_OPTIONS = [
+  { id: 'inter', name: 'Inter', preview: 'Aa', style: 'font-sans' },
+  { id: 'switzer', name: 'Switzer', preview: 'Aa', style: 'font-switzer' },
+  { id: 'lora', name: 'Lora', preview: 'Aa', style: 'font-serif' },
+  { id: 'poppins', name: 'Poppins', preview: 'Aa', style: 'font-poppins' },
+  { id: 'playfair', name: 'Playfair', preview: 'Aa', style: 'font-playfair' },
+];
+
+// Button style options
+export const BUTTON_STYLES = [
+  { id: 'rounded', name: 'Arrondi', class: 'rounded-lg' },
+  { id: 'pill', name: 'Pilule', class: 'rounded-full' },
+  { id: 'square', name: 'Carré', class: 'rounded-none' },
+];
+
+// Header style options
+export const HEADER_STYLES = [
+  { id: 'classic', name: 'Classique', description: 'Simple et efficace' },
+  { id: 'gradient', name: 'Gradient Glow', description: 'Moderne avec effets' },
+  { id: 'minimal', name: 'Minimal Clean', description: 'Épuré et élégant' },
+  { id: 'glass', name: 'Glass Premium', description: 'Glassmorphism chic' },
+];
+
+// Section spacing options
+export const SECTION_SPACING_OPTIONS = [
+  { id: 'compact', label: 'Compact', icon: '⊟' },
+  { id: 'normal', label: 'Normal', icon: '⊞' },
+  { id: 'airy', label: 'Aéré', icon: '⬜' },
+] as const;
+
+// Card border radius options
+export const CARD_BORDER_RADIUS_OPTIONS = [
+  { id: 'none', label: 'Aucun', radius: '0' },
+  { id: 'light', label: 'Léger', radius: '4px' },
+  { id: 'medium', label: 'Moyen', radius: '8px' },
+  { id: 'strong', label: 'Fort', radius: '16px' },
+] as const;
+
+// Trust bar icon options
+export const TRUST_BAR_ICONS = [
+  { value: 'truck', label: 'Livraison' },
+  { value: 'shield', label: 'Sécurité' },
+  { value: 'phone', label: 'Téléphone' },
+  { value: 'star', label: 'Étoile' },
+  { value: 'heart', label: 'Cœur' },
+  { value: 'clock', label: 'Horloge' },
+  { value: 'check', label: 'Validé' },
+  { value: 'wallet', label: 'Paiement' },
+  { value: 'headphones', label: 'Support' },
+] as const;
+
+// Default trust bar items
+export const DEFAULT_TRUST_BAR: TrustBarItem[] = [
+  { id: '1', icon: 'wallet', title: 'Paiement Mobile Sécurisé', subtitle: 'Orange Money, Wave, Moov' },
+  { id: '2', icon: 'truck', title: 'Livraison Rapide', subtitle: 'Partout au Burkina' },
+  { id: '3', icon: 'headphones', title: 'Support 7j/7', subtitle: 'WhatsApp & Appel' },
+];
+
+// Font family CSS mapping
 export const FONT_FAMILIES: Record<string, string> = {
   inter: "'Inter', sans-serif",
   switzer: "'Switzer', sans-serif",
@@ -128,6 +199,25 @@ export const getButtonClass = (style?: 'rounded' | 'pill' | 'square'): string =>
   switch(style) {
     case 'pill': return 'rounded-full';
     case 'square': return 'rounded-none';
+    default: return 'rounded-lg';
+  }
+};
+
+// Get section spacing class
+export const getSectionSpacingClass = (spacing?: 'compact' | 'normal' | 'airy'): string => {
+  switch(spacing) {
+    case 'compact': return 'py-8 md:py-12';
+    case 'airy': return 'py-20 md:py-32';
+    default: return 'py-12 md:py-20';
+  }
+};
+
+// Get card border radius class
+export const getCardBorderRadiusClass = (radius?: 'none' | 'light' | 'medium' | 'strong'): string => {
+  switch(radius) {
+    case 'none': return 'rounded-none';
+    case 'light': return 'rounded';
+    case 'strong': return 'rounded-2xl';
     default: return 'rounded-lg';
   }
 };
@@ -185,3 +275,12 @@ export const generateCssVariables = (paletteId?: string): Record<string, string>
     '--shop-foreground-hsl': hexToHsl(palette.foreground),
   };
 };
+
+// Type exports
+export type ColorPalette = typeof COLOR_PALETTES[number];
+export type FontOption = typeof FONT_OPTIONS[number];
+export type ButtonStyle = typeof BUTTON_STYLES[number];
+export type HeaderStyle = typeof HEADER_STYLES[number];
+export type SectionSpacing = typeof SECTION_SPACING_OPTIONS[number]['id'];
+export type CardBorderRadius = typeof CARD_BORDER_RADIUS_OPTIONS[number]['id'];
+export type TrustBarIcon = typeof TRUST_BAR_ICONS[number]['value'];
