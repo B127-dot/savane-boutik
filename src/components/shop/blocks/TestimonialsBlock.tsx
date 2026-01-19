@@ -14,6 +14,10 @@ interface TestimonialsBlockProps {
   title?: string;
   testimonials?: Testimonial[];
   animationsEnabled?: boolean;
+  config?: {
+    title?: string;
+    testimonials?: Testimonial[];
+  };
 }
 
 const DEFAULT_TESTIMONIALS: Testimonial[] = [
@@ -41,10 +45,15 @@ const DEFAULT_TESTIMONIALS: Testimonial[] = [
 ];
 
 const TestimonialsBlock = ({ 
-  title = 'Ce que nos clients disent',
-  testimonials = DEFAULT_TESTIMONIALS,
-  animationsEnabled = true
+  title: propTitle,
+  testimonials: propTestimonials,
+  animationsEnabled = true,
+  config
 }: TestimonialsBlockProps) => {
+  // Prioritize config values over direct props
+  const title = config?.title ?? propTitle ?? 'Ce que nos clients disent';
+  const testimonials = config?.testimonials ?? propTestimonials ?? DEFAULT_TESTIMONIALS;
+
   const MotionDiv = animationsEnabled ? motion.div : 'div' as any;
 
   return (

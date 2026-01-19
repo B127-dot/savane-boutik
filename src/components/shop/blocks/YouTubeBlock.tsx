@@ -8,6 +8,12 @@ interface YouTubeBlockProps {
   videoUrl?: string;
   thumbnailUrl?: string;
   animationsEnabled?: boolean;
+  config?: {
+    title?: string;
+    subtitle?: string;
+    videoUrl?: string;
+    thumbnailUrl?: string;
+  };
 }
 
 const extractVideoId = (url: string): string | null => {
@@ -24,12 +30,19 @@ const extractVideoId = (url: string): string | null => {
 };
 
 const YouTubeBlock = ({
-  title = 'Découvrez notre histoire',
-  subtitle = 'Une vidéo vaut mille mots',
-  videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  thumbnailUrl,
-  animationsEnabled = true
+  title: propTitle,
+  subtitle: propSubtitle,
+  videoUrl: propVideoUrl,
+  thumbnailUrl: propThumbnailUrl,
+  animationsEnabled = true,
+  config
 }: YouTubeBlockProps) => {
+  // Prioritize config values over direct props
+  const title = config?.title ?? propTitle ?? 'Découvrez notre histoire';
+  const subtitle = config?.subtitle ?? propSubtitle ?? 'Une vidéo vaut mille mots';
+  const videoUrl = config?.videoUrl ?? propVideoUrl ?? '';
+  const thumbnailUrl = config?.thumbnailUrl ?? propThumbnailUrl;
+
   const [isPlaying, setIsPlaying] = useState(false);
   const videoId = extractVideoId(videoUrl);
   
@@ -44,7 +57,7 @@ const YouTubeBlock = ({
       <section className="py-12 md:py-16 bg-background">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
           <Youtube className="w-12 h-12 mx-auto mb-4 opacity-50" />
-          <p>URL YouTube invalide</p>
+          <p>Configurez l'URL de la vidéo YouTube</p>
         </div>
       </section>
     );

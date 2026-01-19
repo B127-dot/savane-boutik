@@ -18,6 +18,11 @@ interface FAQBlockProps {
   subtitle?: string;
   faqs?: FAQItem[];
   animationsEnabled?: boolean;
+  config?: {
+    title?: string;
+    subtitle?: string;
+    faqs?: FAQItem[];
+  };
 }
 
 const DEFAULT_FAQS: FAQItem[] = [
@@ -49,11 +54,17 @@ const DEFAULT_FAQS: FAQItem[] = [
 ];
 
 const FAQBlock = ({
-  title = 'Questions fréquentes',
-  subtitle = 'Tout ce que vous devez savoir',
-  faqs = DEFAULT_FAQS,
-  animationsEnabled = true
+  title: propTitle,
+  subtitle: propSubtitle,
+  faqs: propFaqs,
+  animationsEnabled = true,
+  config
 }: FAQBlockProps) => {
+  // Prioritize config values over direct props
+  const title = config?.title ?? propTitle ?? 'Questions fréquentes';
+  const subtitle = config?.subtitle ?? propSubtitle ?? 'Tout ce que vous devez savoir';
+  const faqs = config?.faqs ?? propFaqs ?? DEFAULT_FAQS;
+
   const MotionDiv = animationsEnabled ? motion.div : 'div' as any;
 
   return (
@@ -76,7 +87,7 @@ const FAQBlock = ({
           className="max-w-3xl mx-auto"
         >
           <Accordion type="single" collapsible className="space-y-3">
-            {faqs.map((faq, index) => (
+            {faqs.map((faq) => (
               <AccordionItem 
                 key={faq.id} 
                 value={faq.id}
