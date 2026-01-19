@@ -10,17 +10,34 @@ interface TextImageBlockProps {
   buttonText?: string;
   buttonLink?: string;
   animationsEnabled?: boolean;
+  config?: {
+    title?: string;
+    text?: string;
+    imageUrl?: string;
+    imagePosition?: 'left' | 'right';
+    buttonText?: string;
+    buttonLink?: string;
+  };
 }
 
 const TextImageBlock = ({
-  title = 'Notre histoire',
-  text = 'Nous sommes une boutique en ligne passionnée par la qualité et le service client. Depuis notre création, nous nous efforçons de vous offrir les meilleurs produits aux meilleurs prix, avec une livraison rapide partout au Burkina Faso.',
-  imageUrl = '/placeholder.svg',
-  imagePosition = 'right',
-  buttonText,
-  buttonLink,
-  animationsEnabled = true
+  title: propTitle,
+  text: propText,
+  imageUrl: propImageUrl,
+  imagePosition: propImagePosition,
+  buttonText: propButtonText,
+  buttonLink: propButtonLink,
+  animationsEnabled = true,
+  config
 }: TextImageBlockProps) => {
+  // Prioritize config values over direct props
+  const title = config?.title ?? propTitle ?? 'Notre histoire';
+  const text = config?.text ?? propText ?? 'Nous sommes une boutique en ligne passionnée par la qualité et le service client. Depuis notre création, nous nous efforçons de vous offrir les meilleurs produits aux meilleurs prix, avec une livraison rapide partout au Burkina Faso.';
+  const imageUrl = config?.imageUrl ?? propImageUrl ?? '/placeholder.svg';
+  const imagePosition = config?.imagePosition ?? propImagePosition ?? 'right';
+  const buttonText = config?.buttonText ?? propButtonText;
+  const buttonLink = config?.buttonLink ?? propButtonLink;
+
   const MotionDiv = animationsEnabled ? motion.div : 'div' as any;
 
   const imageComponent = (
@@ -35,6 +52,9 @@ const TextImageBlock = ({
           src={imageUrl}
           alt={title}
           className="w-full h-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/placeholder.svg';
+          }}
         />
       </div>
       {/* Decorative element */}

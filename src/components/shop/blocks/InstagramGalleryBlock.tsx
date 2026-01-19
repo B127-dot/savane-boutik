@@ -13,6 +13,11 @@ interface InstagramGalleryBlockProps {
   instagramHandle?: string;
   posts?: InstagramPost[];
   animationsEnabled?: boolean;
+  config?: {
+    title?: string;
+    instagramHandle?: string;
+    posts?: InstagramPost[];
+  };
 }
 
 const DEFAULT_POSTS: InstagramPost[] = [
@@ -25,11 +30,17 @@ const DEFAULT_POSTS: InstagramPost[] = [
 ];
 
 const InstagramGalleryBlock = ({
-  title = 'Suivez-nous sur Instagram',
-  instagramHandle = '@maboutique',
-  posts = DEFAULT_POSTS,
-  animationsEnabled = true
+  title: propTitle,
+  instagramHandle: propHandle,
+  posts: propPosts,
+  animationsEnabled = true,
+  config
 }: InstagramGalleryBlockProps) => {
+  // Prioritize config values over direct props
+  const title = config?.title ?? propTitle ?? 'Suivez-nous sur Instagram';
+  const instagramHandle = config?.instagramHandle ?? propHandle ?? '@maboutique';
+  const posts = config?.posts ?? propPosts ?? DEFAULT_POSTS;
+
   const MotionDiv = animationsEnabled ? motion.div : 'div' as any;
 
   return (
@@ -54,9 +65,12 @@ const InstagramGalleryBlock = ({
               className="aspect-square rounded-xl overflow-hidden relative group cursor-pointer"
             >
               <img 
-                src={post.imageUrl} 
+                src={post.imageUrl || '/placeholder.svg'} 
                 alt={`Instagram post ${index + 1}`}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/placeholder.svg';
+                }}
               />
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <Instagram className="w-8 h-8 text-white" />
