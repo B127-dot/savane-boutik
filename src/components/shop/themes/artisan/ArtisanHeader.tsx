@@ -46,12 +46,13 @@ const ArtisanHeader = ({ logo, shopName, cartItemsCount, onCartClick }: ArtisanH
                 <a
                   key={link.label}
                   href={link.href}
-                  className={`text-sm font-medium tracking-wide transition-all duration-300 relative group ${
-                    isScrolled ? 'text-artisan-charcoal' : 'text-artisan-charcoal'
-                  }`}
+                  className="text-sm font-medium tracking-wide transition-all duration-300 relative group text-artisan-charcoal"
                 >
                   {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-artisan-olive transition-all duration-300 group-hover:w-full" />
+                  <span 
+                    className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full shop-primary-bg"
+                    style={{ backgroundColor: 'var(--shop-primary)' }}
+                  />
                 </a>
               ))}
             </nav>
@@ -74,9 +75,7 @@ const ArtisanHeader = ({ logo, shopName, cartItemsCount, onCartClick }: ArtisanH
                   />
                 </div>
               ) : (
-                <span className={`font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-300 ${
-                  isScrolled ? 'text-artisan-charcoal' : 'text-artisan-charcoal'
-                }`}>
+                <span className="font-serif text-2xl md:text-3xl tracking-tight transition-colors duration-300 text-artisan-charcoal">
                   {shopName}
                 </span>
               )}
@@ -88,12 +87,13 @@ const ArtisanHeader = ({ logo, shopName, cartItemsCount, onCartClick }: ArtisanH
                 <a
                   key={link.label}
                   href={link.href}
-                  className={`text-sm font-medium tracking-wide transition-all duration-300 relative group ${
-                    isScrolled ? 'text-artisan-charcoal' : 'text-artisan-charcoal'
-                  }`}
+                  className="text-sm font-medium tracking-wide transition-all duration-300 relative group text-artisan-charcoal"
                 >
                   {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-artisan-olive transition-all duration-300 group-hover:w-full" />
+                  <span 
+                    className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all duration-300 group-hover:w-full"
+                    style={{ backgroundColor: 'var(--shop-primary)' }}
+                  />
                 </a>
               ))}
               
@@ -107,7 +107,8 @@ const ArtisanHeader = ({ logo, shopName, cartItemsCount, onCartClick }: ArtisanH
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs font-medium bg-artisan-olive text-white rounded-full"
+                    className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs font-medium text-white rounded-full shop-primary-bg"
+                    style={{ backgroundColor: 'var(--shop-primary)' }}
                   >
                     {cartItemsCount}
                   </motion.span>
@@ -123,7 +124,10 @@ const ArtisanHeader = ({ logo, shopName, cartItemsCount, onCartClick }: ArtisanH
               >
                 <ShoppingBag className="h-5 w-5 text-artisan-charcoal" />
                 {cartItemsCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs font-medium bg-artisan-olive text-white rounded-full">
+                  <span 
+                    className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center text-xs font-medium text-white rounded-full"
+                    style={{ backgroundColor: 'var(--shop-primary)' }}
+                  >
                     {cartItemsCount}
                   </span>
                 )}
@@ -131,7 +135,8 @@ const ArtisanHeader = ({ logo, shopName, cartItemsCount, onCartClick }: ArtisanH
               
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-lg bg-artisan-olive text-white"
+                className="p-2 rounded-lg text-white shop-primary-bg"
+                style={{ backgroundColor: 'var(--shop-primary)' }}
               >
                 <Menu className="h-5 w-5" />
               </button>
@@ -169,7 +174,9 @@ const ArtisanHeader = ({ logo, shopName, cartItemsCount, onCartClick }: ArtisanH
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-3xl font-serif text-artisan-charcoal hover:text-artisan-olive transition-colors"
+                    className="text-3xl font-serif text-artisan-charcoal transition-colors"
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#1c1917'}
                   >
                     {link.label}
                   </motion.a>

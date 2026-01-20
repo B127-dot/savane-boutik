@@ -57,7 +57,10 @@ const AesthetiqueHeader = ({ logo, shopName, cartItemsCount, onCartClick }: Aest
                 <span className="font-instrument-serif text-2xl md:text-3xl tracking-tight text-white">
                   {shopName.toLowerCase()}
                 </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mb-1 ml-0.5"></span>
+                <span 
+                  className="w-1.5 h-1.5 rounded-full mb-1 ml-0.5 shop-primary-bg"
+                  style={{ backgroundColor: 'var(--shop-primary)' }}
+                ></span>
               </>
             )}
           </a>
@@ -68,7 +71,10 @@ const AesthetiqueHeader = ({ logo, shopName, cartItemsCount, onCartClick }: Aest
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm font-medium uppercase tracking-wide text-white hover:text-emerald-400 transition-colors"
+                className="text-sm font-medium uppercase tracking-wide text-white transition-colors hover:opacity-80"
+                style={{ '--hover-color': 'var(--shop-primary)' } as React.CSSProperties}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'white'}
               >
                 {link.label}
               </a>
@@ -77,7 +83,11 @@ const AesthetiqueHeader = ({ logo, shopName, cartItemsCount, onCartClick }: Aest
 
           {/* Right Actions */}
           <div className="flex items-center gap-6">
-            <button className="text-sm font-medium uppercase tracking-wide text-white hover:text-emerald-400 transition-colors hidden md:block">
+            <button 
+              className="text-sm font-medium uppercase tracking-wide text-white transition-colors hidden md:block hover:opacity-80"
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'white'}
+            >
               <Search className="h-5 w-5" />
             </button>
             
@@ -85,8 +95,8 @@ const AesthetiqueHeader = ({ logo, shopName, cartItemsCount, onCartClick }: Aest
               onClick={onCartClick}
               className="relative group"
             >
-              <span className="text-sm font-medium uppercase tracking-wide text-white group-hover:text-emerald-400 transition-colors">
-                Panier (<span className="text-emerald-400">{cartItemsCount}</span>)
+              <span className="text-sm font-medium uppercase tracking-wide text-white group-hover:opacity-80 transition-colors">
+                Panier (<span style={{ color: 'var(--shop-primary)' }}>{cartItemsCount}</span>)
               </span>
             </button>
 
@@ -115,7 +125,10 @@ const AesthetiqueHeader = ({ logo, shopName, cartItemsCount, onCartClick }: Aest
               <div className="flex justify-between items-center mb-16">
                 <span className="font-instrument-serif text-2xl text-white flex items-center gap-1">
                   {shopName.toLowerCase()}
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span 
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ backgroundColor: 'var(--shop-primary)' }}
+                  ></span>
                 </span>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -134,7 +147,9 @@ const AesthetiqueHeader = ({ logo, shopName, cartItemsCount, onCartClick }: Aest
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-4xl font-instrument-serif text-white hover:text-emerald-400 transition-colors"
+                    className="text-4xl font-instrument-serif text-white transition-colors"
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'white'}
                   >
                     {link.label}
                   </motion.a>
@@ -147,7 +162,8 @@ const AesthetiqueHeader = ({ logo, shopName, cartItemsCount, onCartClick }: Aest
                     setIsMobileMenuOpen(false);
                     onCartClick();
                   }}
-                  className="w-full py-4 bg-white text-zinc-950 rounded-full font-medium uppercase tracking-wide"
+                  className="w-full py-4 bg-white text-zinc-950 font-medium uppercase tracking-wide shop-btn-radius"
+                  style={{ borderRadius: 'var(--shop-btn-radius, 9999px)' }}
                 >
                   Voir le panier ({cartItemsCount})
                 </button>

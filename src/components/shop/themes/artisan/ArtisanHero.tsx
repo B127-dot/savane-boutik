@@ -9,6 +9,7 @@ interface ArtisanHeroProps {
   heroSubtitle?: string;
   heroButtonText?: string;
   heroButtonLink?: string;
+  buttonStyle?: 'rounded' | 'pill' | 'square';
 }
 
 const ArtisanHero = ({
@@ -16,7 +17,8 @@ const ArtisanHero = ({
   heroTitle = "Discover the perfect blend of style",
   heroSubtitle = "Handcrafted with love, designed for everyday elegance",
   heroButtonText = "Discover More",
-  heroButtonLink = "#products"
+  heroButtonLink = "#products",
+  buttonStyle = 'pill'
 }: ArtisanHeroProps) => {
   const { products } = useApp();
   const [isPlaying, setIsPlaying] = useState(true);
@@ -31,6 +33,15 @@ const ArtisanHero = ({
       element?.scrollIntoView({ behavior: 'smooth' });
     } else if (heroButtonLink) {
       window.location.href = heroButtonLink;
+    }
+  };
+
+  // Get button radius based on buttonStyle
+  const getButtonRadius = () => {
+    switch (buttonStyle) {
+      case 'pill': return 'rounded-full';
+      case 'square': return 'rounded-none';
+      default: return 'rounded-lg';
     }
   };
 
@@ -67,7 +78,19 @@ const ArtisanHero = ({
             >
               <button
                 onClick={handleButtonClick}
-                className="group inline-flex items-center gap-3 px-8 py-4 bg-artisan-olive text-white rounded-full font-medium transition-all duration-300 hover:bg-artisan-olive-dark hover:shadow-lg hover:shadow-artisan-olive/20"
+                className={`group inline-flex items-center gap-3 px-8 py-4 text-white font-medium transition-all duration-300 hover:shadow-lg ${getButtonRadius()}`}
+                style={{ 
+                  backgroundColor: 'var(--shop-primary)',
+                  boxShadow: 'none'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 10px 25px -5px var(--shop-primary)';
+                  e.currentTarget.style.opacity = '0.9';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.opacity = '1';
+                }}
               >
                 {heroButtonText}
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -92,9 +115,17 @@ const ArtisanHero = ({
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-artisan-charcoal/50 mb-0.5">Featured</p>
                   <p className="font-medium text-artisan-charcoal text-sm truncate">{featuredProduct.name}</p>
-                  <p className="text-artisan-olive font-semibold text-sm">{featuredProduct.price.toLocaleString()} FCFA</p>
+                  <p 
+                    className="font-semibold text-sm"
+                    style={{ color: 'var(--shop-primary)' }}
+                  >
+                    {featuredProduct.price.toLocaleString()} FCFA
+                  </p>
                 </div>
-                <button className="w-8 h-8 rounded-full bg-artisan-charcoal flex items-center justify-center flex-shrink-0 hover:bg-artisan-olive transition-colors">
+                <button 
+                  className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors text-white"
+                  style={{ backgroundColor: 'var(--shop-primary)' }}
+                >
                   <ArrowRight className="h-4 w-4 text-white" />
                 </button>
               </motion.div>
@@ -144,7 +175,8 @@ const ArtisanHero = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="absolute bottom-6 left-6 w-12 h-12 rounded-full bg-artisan-olive flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform"
+                className="absolute bottom-6 left-6 w-12 h-12 rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform"
+                style={{ backgroundColor: 'var(--shop-primary)' }}
               >
                 <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l4.93-1.38C8.42 21.5 10.15 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/>

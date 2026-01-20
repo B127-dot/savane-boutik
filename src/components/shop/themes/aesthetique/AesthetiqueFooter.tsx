@@ -45,11 +45,17 @@ const AesthetiqueFooter = ({
               <input 
                 type="email" 
                 placeholder="Adresse Email" 
-                className="w-full bg-transparent border-b border-zinc-700 py-4 text-white placeholder-zinc-600 focus:outline-none focus:border-white transition-colors"
+                className="w-full bg-transparent border-b border-zinc-700 py-4 text-white placeholder-zinc-600 focus:outline-none transition-colors"
+                style={{ borderColor: 'var(--shop-primary, #71717a)' }}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--shop-primary)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = '#3f3f46'}
               />
               <button 
                 type="submit"
-                className="absolute right-0 top-1/2 -translate-y-1/2 text-sm uppercase tracking-widest font-medium text-white hover:text-emerald-400 transition-colors"
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-sm uppercase tracking-widest font-medium text-white transition-colors"
+                style={{ color: 'var(--shop-primary)' }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
               >
                 S'inscrire
               </button>

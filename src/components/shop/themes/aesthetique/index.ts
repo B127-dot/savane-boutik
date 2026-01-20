@@ -6,3 +6,4 @@ export { default as AesthetiqueProducts } from './AesthetiqueProducts';
 export { default as AesthetiqueAtelier } from './AesthetiqueAtelier';
 export { default as AesthetiqueBestSellers } from './AesthetiqueBestSellers';
 export { default as AesthetiqueFooter } from './AesthetiqueFooter';
+export { default as AesthetiqueTrustBar } from './AesthetiqueTrustBar';

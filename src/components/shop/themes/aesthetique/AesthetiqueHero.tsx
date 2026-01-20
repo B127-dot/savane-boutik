@@ -8,6 +8,7 @@ interface AesthetiqueHeroProps {
   heroButtonText?: string;
   heroButtonLink?: string;
   collectionLabel?: string;
+  buttonStyle?: 'rounded' | 'pill' | 'square';
 }
 
 const AesthetiqueHero = ({
@@ -16,7 +17,8 @@ const AesthetiqueHero = ({
   heroSubtitle = "Collection 04 • Fall 2024",
   heroButtonText = "Voir la Collection",
   heroButtonLink = "#products",
-  collectionLabel = "Collection 04 • Fall 2024"
+  collectionLabel = "Collection 04 • Fall 2024",
+  buttonStyle = 'pill'
 }: AesthetiqueHeroProps) => {
 
   const handleButtonClick = () => {
@@ -31,6 +33,15 @@ const AesthetiqueHero = ({
   const scrollToProducts = () => {
     const element = document.querySelector('#products');
     element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  // Get button radius based on buttonStyle
+  const getButtonRadius = () => {
+    switch (buttonStyle) {
+      case 'pill': return 'rounded-full';
+      case 'square': return 'rounded-none';
+      default: return 'rounded-lg';
+    }
   };
 
   return (
@@ -57,7 +68,7 @@ const AesthetiqueHero = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-sm md:text-base uppercase tracking-[0.2em] text-zinc-300 mb-6 border border-white/20 px-4 py-1.5 rounded-full backdrop-blur-md"
+          className={`text-sm md:text-base uppercase tracking-[0.2em] text-zinc-300 mb-6 border border-white/20 px-4 py-1.5 backdrop-blur-md ${getButtonRadius()}`}
         >
           {collectionLabel}
         </motion.span>
@@ -82,7 +93,11 @@ const AesthetiqueHero = ({
         >
           <button
             onClick={handleButtonClick}
-            className="bg-white text-zinc-950 px-8 py-4 rounded-full font-medium text-sm uppercase tracking-widest hover:bg-zinc-200 transition-colors min-w-[180px]"
+            className={`px-8 py-4 font-medium text-sm uppercase tracking-widest transition-all min-w-[180px] shop-primary-bg text-white hover:opacity-90 ${getButtonRadius()}`}
+            style={{ 
+              backgroundColor: 'var(--shop-primary)',
+              borderRadius: buttonStyle === 'pill' ? '9999px' : buttonStyle === 'square' ? '0' : '0.5rem'
+            }}
           >
             {heroButtonText}
           </button>
