@@ -10,6 +10,7 @@ interface AesthetiqueProductCardProps {
   onQuickView?: (product: Product) => void;
   onToggleWishlist?: (productId: string) => void;
   isInWishlist?: boolean;
+  buttonStyle?: 'rounded' | 'pill' | 'square';
 }
 
 const AesthetiqueProductCard = ({
@@ -19,11 +20,21 @@ const AesthetiqueProductCard = ({
   onQuickView,
   onToggleWishlist,
   isInWishlist = false,
+  buttonStyle = 'pill',
 }: AesthetiqueProductCardProps) => {
   const hasDiscount = product.originalPrice && product.originalPrice > product.price;
   const discountPercentage = hasDiscount
     ? Math.round(((product.originalPrice! - product.price) / product.originalPrice!) * 100)
     : 0;
+
+  // Get button radius based on buttonStyle
+  const getButtonRadius = () => {
+    switch (buttonStyle) {
+      case 'pill': return 'rounded-full';
+      case 'square': return 'rounded-none';
+      default: return 'rounded-xl';
+    }
+  };
 
   return (
     <motion.div
@@ -46,7 +57,7 @@ const AesthetiqueProductCard = ({
         <div className="absolute bottom-4 left-4 right-4 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400 ease-[cubic-bezier(0.2,0,0.2,1)]">
           <button
             onClick={() => onAddToCart(product)}
-            className="w-full bg-white/90 backdrop-blur text-black py-3 rounded-xl font-medium text-sm uppercase tracking-wider hover:bg-white transition-colors flex items-center justify-center gap-2"
+            className={`w-full bg-white/90 backdrop-blur text-black py-3 font-medium text-sm uppercase tracking-wider hover:bg-white transition-colors flex items-center justify-center gap-2 ${getButtonRadius()}`}
           >
             Ajouter <span className="text-xs text-zinc-500">•</span> {product.price.toLocaleString()} FCFA
           </button>
@@ -55,12 +66,15 @@ const AesthetiqueProductCard = ({
         {/* Badges - Top Right */}
         <div className="absolute top-4 right-4 flex flex-col gap-2">
           {hasDiscount && (
-            <div className="bg-emerald-500 backdrop-blur rounded-full px-3 py-1 text-xs uppercase tracking-wide text-white font-medium">
+            <div 
+              className={`backdrop-blur px-3 py-1 text-xs uppercase tracking-wide text-white font-medium shop-primary-bg ${getButtonRadius()}`}
+              style={{ backgroundColor: 'var(--shop-primary)' }}
+            >
               -{discountPercentage}%
             </div>
           )}
           {product.stock <= 3 && product.stock > 0 && (
-            <div className="bg-zinc-950/80 backdrop-blur rounded-full px-3 py-1 text-xs uppercase tracking-wide text-white border border-white/10">
+            <div className={`bg-zinc-950/80 backdrop-blur px-3 py-1 text-xs uppercase tracking-wide text-white border border-white/10 ${getButtonRadius()}`}>
               Dernières pièces
             </div>
           )}
@@ -71,9 +85,22 @@ const AesthetiqueProductCard = ({
           onClick={() => onToggleWishlist?.(product.id)}
           className={`absolute top-4 left-4 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
             isInWishlist 
-              ? 'bg-emerald-500 text-white' 
-              : 'bg-zinc-950/60 backdrop-blur text-white border border-white/10 opacity-0 group-hover:opacity-100 hover:bg-emerald-500'
+              ? 'text-white' 
+              : 'bg-zinc-950/60 backdrop-blur text-white border border-white/10 opacity-0 group-hover:opacity-100'
           }`}
+          style={{ 
+            backgroundColor: isInWishlist ? 'var(--shop-primary)' : undefined 
+          }}
+          onMouseEnter={(e) => {
+            if (!isInWishlist) {
+              e.currentTarget.style.backgroundColor = 'var(--shop-primary)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isInWishlist) {
+              e.currentTarget.style.backgroundColor = 'rgba(9, 9, 11, 0.6)';
+            }
+          }}
         >
           <Heart className={`h-4 w-4 ${isInWishlist ? 'fill-current' : ''}`} />
         </button>

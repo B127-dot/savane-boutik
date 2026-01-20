@@ -48,9 +48,17 @@ const ArtisanFooter = ({
               <input
                 type="email"
                 placeholder="Email"
-                className="flex-1 px-5 py-4 rounded-xl border border-artisan-charcoal/10 bg-white text-artisan-charcoal placeholder:text-artisan-charcoal/40 focus:outline-none focus:border-artisan-olive"
+                className="flex-1 px-5 py-4 rounded-xl border border-artisan-charcoal/10 bg-white text-artisan-charcoal placeholder:text-artisan-charcoal/40 focus:outline-none transition-colors"
+                style={{ borderColor: 'rgba(28, 25, 23, 0.1)' }}
+                onFocus={(e) => e.currentTarget.style.borderColor = 'var(--shop-primary)'}
+                onBlur={(e) => e.currentTarget.style.borderColor = 'rgba(28, 25, 23, 0.1)'}
               />
-              <button className="px-6 py-4 bg-artisan-olive text-white rounded-xl font-medium hover:bg-artisan-olive-dark transition-all duration-300 flex items-center gap-2">
+              <button 
+                className="px-6 py-4 text-white rounded-xl font-medium transition-all duration-300 flex items-center gap-2"
+                style={{ backgroundColor: 'var(--shop-primary)' }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.9'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              >
                 Subscribe
                 <ArrowRight className="h-4 w-4" />
               </button>
@@ -86,7 +94,12 @@ const ArtisanFooter = ({
             <ul className="space-y-3">
               {['Accueil', 'Boutique', 'Collections', 'À propos', 'Blog'].map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-sm text-artisan-charcoal/60 hover:text-artisan-olive transition-colors">
+                  <a 
+                    href="#" 
+                    className="text-sm text-artisan-charcoal/60 transition-colors"
+                    onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary)'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(28, 25, 23, 0.6)'}
+                  >
                     {item}
                   </a>
                 </li>
@@ -107,7 +120,8 @@ const ArtisanFooter = ({
                 <p className="text-sm text-artisan-charcoal/60 mb-2">Besoin d'aide?</p>
                 <a 
                   href={`https://wa.me/${whatsapp}`}
-                  className="inline-flex items-center gap-2 text-artisan-olive font-medium text-sm hover:underline"
+                  className="inline-flex items-center gap-2 font-medium text-sm hover:underline"
+                  style={{ color: 'var(--shop-primary)' }}
                 >
                   <Phone className="h-4 w-4" />
                   +{whatsapp}
@@ -147,9 +161,19 @@ const ArtisanFooter = ({
                 <a
                   key={social.label}
                   href={social.url || '#'}
-                  className="w-9 h-9 rounded-full border border-artisan-charcoal/10 flex items-center justify-center text-artisan-charcoal/50 hover:bg-artisan-olive hover:border-artisan-olive hover:text-white transition-all duration-300"
+                  className="w-9 h-9 rounded-full border border-artisan-charcoal/10 flex items-center justify-center text-artisan-charcoal/50 transition-all duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--shop-primary)';
+                    e.currentTarget.style.borderColor = 'var(--shop-primary)';
+                    e.currentTarget.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.borderColor = 'rgba(28, 25, 23, 0.1)';
+                    e.currentTarget.style.color = 'rgba(28, 25, 23, 0.5)';
+                  }}
                 >
                   <social.icon className="h-4 w-4" />
                 </a>
@@ -162,7 +186,9 @@ const ArtisanFooter = ({
                 <a 
                   key={link}
                   href="#" 
-                  className="text-sm text-artisan-charcoal/50 hover:text-artisan-olive transition-colors"
+                  className="text-sm text-artisan-charcoal/50 transition-colors"
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--shop-primary)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(28, 25, 23, 0.5)'}
                 >
                   {link}
                 </a>

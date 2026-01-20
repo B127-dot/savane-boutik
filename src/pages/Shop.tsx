@@ -59,7 +59,8 @@ import {
   AesthetiqueProducts,
   AesthetiqueAtelier,
   AesthetiqueBestSellers,
-  AesthetiqueFooter
+  AesthetiqueFooter,
+  AesthetiqueTrustBar
 } from '@/components/shop/themes/aesthetique';
 
 const Shop = () => {
@@ -373,7 +374,12 @@ const Shop = () => {
               heroSubtitle={effectiveSettings.heroSubtitle}
               heroButtonText={effectiveSettings.heroButtonText}
               heroButtonLink={effectiveSettings.heroButtonLink}
+              buttonStyle={effectiveSettings.buttonStyle}
             />
+          )}
+
+          {effectiveSettings.showTrustBar !== false && (
+            <AesthetiqueTrustBar items={effectiveSettings.trustBar} />
           )}
 
           {effectiveSettings.showMarquee !== false && <AesthetiqueMarquee />}
@@ -482,6 +488,7 @@ const Shop = () => {
               heroSubtitle={effectiveSettings.heroSubtitle}
               heroButtonText={effectiveSettings.heroButtonText}
               heroButtonLink={effectiveSettings.heroButtonLink}
+              buttonStyle={effectiveSettings.buttonStyle}
             />
           )}
 
