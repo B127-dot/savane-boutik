@@ -710,6 +710,15 @@ const Shop = () => {
                       heroButtonText={effectiveSettings.heroButtonText}
                       heroButtonLink={effectiveSettings.heroButtonLink}
                       buttonStyle={effectiveSettings.buttonStyle}
+                      // Premium props
+                      badgeText={effectiveSettings.heroBadgeText}
+                      badgeIcon={effectiveSettings.heroBadgeIcon || 'sparkles'}
+                      showBadge={effectiveSettings.showHeroBadge !== false}
+                      showStats={effectiveSettings.showHeroStats !== false}
+                      stats={effectiveSettings.heroStats}
+                      features={effectiveSettings.heroFeatures}
+                      showFeatures={effectiveSettings.showHeroFeatures !== false}
+                      showScrollIndicator={effectiveSettings.showScrollIndicator !== false}
                     />
                     {/* Promo Banner - Below Hero Position */}
                     {effectiveSettings.promoBanner?.enabled && effectiveSettings.promoBanner.position === 'below-hero' && (
@@ -889,6 +898,13 @@ const Shop = () => {
           facebook={effectiveSettings.socialLinks.facebook}
           instagram={effectiveSettings.socialLinks.instagram}
           tiktok={effectiveSettings.socialLinks.tiktok}
+          // Premium props
+          email={effectiveSettings.email}
+          address={effectiveSettings.address}
+          paymentMethods={effectiveSettings.paymentMethods || ['orange-money', 'moov-money', 'wave', 'cash']}
+          showNewsletter={effectiveSettings.showNewsletter !== false}
+          newsletterTitle={effectiveSettings.newsletterTitle}
+          showPoweredBy={effectiveSettings.showPoweredBy !== false}
         />
 
         {effectiveSettings.socialLinks.whatsapp && (
