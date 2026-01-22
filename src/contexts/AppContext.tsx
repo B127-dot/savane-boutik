@@ -86,6 +86,15 @@ export interface ShopSettings {
   heroButtonText?: string;
   heroButtonLink?: string;
   heroLayout?: 'left' | 'center' | 'right';
+  // Premium Hero Props
+  heroBadgeText?: string;
+  heroBadgeIcon?: 'sparkles' | 'flame' | 'star' | 'zap' | 'gift' | 'trending' | 'none';
+  showHeroBadge?: boolean;
+  showHeroStats?: boolean;
+  heroStats?: Array<{ id: string; value: string; suffix?: string; label: string }>;
+  heroFeatures?: Array<{ text: string }>;
+  showHeroFeatures?: boolean;
+  showScrollIndicator?: boolean;
   
   // === TRUST BAR (3 points de réassurance) ===
   trustBar?: TrustBarItem[];
@@ -106,6 +115,9 @@ export interface ShopSettings {
   showNewsletter?: boolean;
   newsletterTitle?: string;
   newsletterSubtitle?: string;
+  email?: string;
+  paymentMethods?: string[];
+  showPoweredBy?: boolean;
   
   // === PHASE 2: SECTIONS VISIBILITY ===
   showHero?: boolean;
