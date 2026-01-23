@@ -38,6 +38,9 @@ export default {
 				'lora': ['Lora', 'serif'],
 				// AESTHETIQUE Theme - Instrument Serif
 				'instrument-serif': ['Instrument Serif', 'serif'],
+				// Y2K Theme - Outfit + Space Mono
+				'outfit': ['Outfit', 'sans-serif'],
+				'space-mono': ['Space Mono', 'monospace'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

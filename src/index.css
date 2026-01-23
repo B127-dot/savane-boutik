@@ -468,6 +468,134 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
   .artisan-delay-300 { animation-delay: 0.3s; }
   .artisan-delay-400 { animation-delay: 0.4s; }
   .artisan-delay-500 { animation-delay: 0.5s; }
+
+  /* =====================================
+   ✨ Y2K / GEN-Z THEME - VIBRANT & BOLD
+   ===================================== */
+  .y2k-theme {
+    /* Y2K Color tokens - Pink, Purple, Lime */
+    --background: 300 20% 98%;
+    --foreground: 280 60% 15%;
+    --card: 300 30% 96%;
+    --card-foreground: 280 60% 15%;
+    --popover: 300 30% 96%;
+    --popover-foreground: 280 60% 15%;
+    
+    /* Primary - Hot Pink */
+    --primary: 330 90% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 330 90% 70%;
+    
+    /* Secondary - Electric Purple */
+    --secondary: 280 80% 65%;
+    --secondary-foreground: 0 0% 100%;
+    
+    /* Muted */
+    --muted: 300 15% 92%;
+    --muted-foreground: 280 20% 45%;
+    
+    /* Accent - Electric Lime */
+    --accent: 85 90% 50%;
+    --accent-foreground: 280 60% 15%;
+    
+    /* Borders */
+    --border: 280 30% 85%;
+    --input: 280 30% 85%;
+    --ring: 330 90% 60%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(330 90% 60%), hsl(280 80% 65%));
+    --gradient-secondary: linear-gradient(135deg, hsl(280 80% 65%), hsl(85 90% 50%));
+    --gradient-rainbow: linear-gradient(90deg, hsl(330 90% 60%), hsl(280 80% 65%), hsl(85 90% 50%), hsl(180 80% 50%));
+  }
+
+  .dark .y2k-theme {
+    --background: 280 40% 8%;
+    --foreground: 300 20% 98%;
+    --card: 280 40% 12%;
+    --card-foreground: 300 20% 98%;
+    --popover: 280 40% 12%;
+    --popover-foreground: 300 20% 98%;
+    --primary: 330 90% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 280 80% 65%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 280 30% 18%;
+    --muted-foreground: 280 20% 60%;
+    --accent: 85 90% 50%;
+    --accent-foreground: 280 60% 15%;
+    --border: 280 30% 25%;
+    --input: 280 30% 25%;
+    --ring: 330 90% 60%;
+  }
+
+  /* Y2K Animation Keyframes */
+  @keyframes y2k-blob {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+    }
+    25% {
+      transform: translate(20px, -30px) scale(1.1);
+    }
+    50% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    75% {
+      transform: translate(30px, 10px) scale(1.05);
+    }
+  }
+
+  @keyframes y2k-wiggle {
+    0%, 100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
+
+  .animate-y2k-blob {
+    animation: y2k-blob 8s ease-in-out infinite;
+  }
+
+  .animate-y2k-wiggle {
+    animation: y2k-wiggle 1s ease-in-out infinite;
+  }
+
+  /* Y2K Glow Effects */
+  .glow-pink {
+    box-shadow: 0 0 40px hsl(330 90% 60% / 0.4);
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 40px hsl(280 80% 65% / 0.4);
+  }
+
+  .glow-lime {
+    box-shadow: 0 0 40px hsl(85 90% 50% / 0.4);
+  }
+
+  /* Y2K Gradient Text */
+  .text-gradient-y2k {
+    background: linear-gradient(135deg, hsl(330 90% 60%), hsl(280 80% 65%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-rainbow {
+    background: linear-gradient(90deg, hsl(330 90% 60%), hsl(280 80% 65%), hsl(85 90% 50%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Y2K Border Gradient */
+  .border-gradient-y2k {
+    border: 3px solid transparent;
+    background: linear-gradient(var(--background), var(--background)) padding-box,
+                linear-gradient(135deg, hsl(330 90% 60%), hsl(280 80% 65%)) border-box;
+  }
 }
 
 @layer base {
