@@ -1,4 +1,4 @@
-import { TrustBarItem } from '@/contexts/AppContext';
+import { TrustBarItem, HeroStat, HeroFeature, MarqueeItem, FooterLink } from '@/contexts/AppContext';
 
 // Color Palettes - Centralized design system
 export const COLOR_PALETTES = [
@@ -159,6 +159,20 @@ export const TRUST_BAR_ICONS = [
   { value: 'check', label: 'Validé' },
   { value: 'wallet', label: 'Paiement' },
   { value: 'headphones', label: 'Support' },
+  { value: 'gift', label: 'Cadeau' },
+  { value: 'zap', label: 'Éclair' },
+  { value: 'package', label: 'Colis' },
+] as const;
+
+// Hero badge icon options
+export const HERO_BADGE_ICONS = [
+  { value: 'sparkles', label: 'Étoiles' },
+  { value: 'flame', label: 'Flamme' },
+  { value: 'star', label: 'Étoile' },
+  { value: 'zap', label: 'Éclair' },
+  { value: 'gift', label: 'Cadeau' },
+  { value: 'trending', label: 'Tendance' },
+  { value: 'none', label: 'Aucun' },
 ] as const;
 
 // Default trust bar items
@@ -166,6 +180,37 @@ export const DEFAULT_TRUST_BAR: TrustBarItem[] = [
   { id: '1', icon: 'wallet', title: 'Paiement Mobile Sécurisé', subtitle: 'Orange Money, Wave, Moov' },
   { id: '2', icon: 'truck', title: 'Livraison Rapide', subtitle: 'Partout au Burkina' },
   { id: '3', icon: 'headphones', title: 'Support 7j/7', subtitle: 'WhatsApp & Appel' },
+];
+
+// Default hero stats
+export const DEFAULT_HERO_STATS: HeroStat[] = [
+  { id: '1', value: '500', suffix: '+', label: 'Produits' },
+  { id: '2', value: '1000', suffix: '+', label: 'Clients satisfaits' },
+  { id: '3', value: '4.9', suffix: '★', label: 'Note moyenne' },
+];
+
+// Default hero features
+export const DEFAULT_HERO_FEATURES: HeroFeature[] = [
+  { id: '1', text: 'Livraison 24h' },
+  { id: '2', text: 'Retour gratuit' },
+  { id: '3', text: 'Paiement sécurisé' },
+];
+
+// Default marquee items
+export const DEFAULT_MARQUEE_ITEMS: MarqueeItem[] = [
+  { id: '1', text: 'LIVRAISON GRATUITE', icon: 'truck' },
+  { id: '2', text: 'NOUVELLES SORTIES', icon: 'star' },
+  { id: '3', text: 'QUALITÉ PREMIUM', icon: 'zap' },
+  { id: '4', text: 'SATISFAIT OU REMBOURSÉ', icon: 'heart' },
+  { id: '5', text: 'ÉDITION LIMITÉE', icon: 'sparkles' },
+];
+
+// Default footer links
+export const DEFAULT_FOOTER_LINKS: FooterLink[] = [
+  { id: '1', label: 'À propos', url: '#about' },
+  { id: '2', label: 'FAQ', url: '#faq' },
+  { id: '3', label: 'Conditions de vente', url: '/cgv' },
+  { id: '4', label: 'Confidentialité', url: '/privacy' },
 ];
 
 // Font family CSS mapping

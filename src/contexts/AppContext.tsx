@@ -19,14 +19,33 @@ export interface Category {
 
 export interface TrustBarItem {
   id: string;
-  icon: 'truck' | 'shield' | 'phone' | 'star' | 'heart' | 'clock' | 'check' | 'wallet' | 'headphones';
+  icon: 'truck' | 'shield' | 'phone' | 'star' | 'heart' | 'clock' | 'check' | 'wallet' | 'headphones' | 'gift' | 'zap' | 'package';
   title: string;
   subtitle?: string;
 }
 
 export interface FooterLink {
+  id: string;
   label: string;
   url: string;
+}
+
+export interface MarqueeItem {
+  id: string;
+  text: string;
+  icon: string;
+}
+
+export interface HeroStat {
+  id: string;
+  value: string;
+  suffix?: string;
+  label: string;
+}
+
+export interface HeroFeature {
+  id: string;
+  text: string;
 }
 
 export interface PromoBanner {
@@ -91,10 +110,13 @@ export interface ShopSettings {
   heroBadgeIcon?: 'sparkles' | 'flame' | 'star' | 'zap' | 'gift' | 'trending' | 'none';
   showHeroBadge?: boolean;
   showHeroStats?: boolean;
-  heroStats?: Array<{ id: string; value: string; suffix?: string; label: string }>;
-  heroFeatures?: Array<{ text: string }>;
+  heroStats?: HeroStat[];
+  heroFeatures?: HeroFeature[];
   showHeroFeatures?: boolean;
   showScrollIndicator?: boolean;
+  
+  // Marquee / Ticker
+  marqueeItems?: MarqueeItem[];
   
   // === TRUST BAR (3 points de réassurance) ===
   trustBar?: TrustBarItem[];
@@ -112,6 +134,7 @@ export interface ShopSettings {
   // === FOOTER ===
   aboutText?: string;
   footerLinks?: FooterLink[];
+  footerAboutText?: string;
   showNewsletter?: boolean;
   newsletterTitle?: string;
   newsletterSubtitle?: string;
