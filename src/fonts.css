@@ -35,6 +35,10 @@
   font-display: swap;
 }
 
+/* Oswald - Brutalist heading font for SAVANE theme */
+@import '@fontsource/oswald/400.css';
+@import '@fontsource/oswald/700.css';
+
 /* Fallback and optimization */
 body {
   -webkit-font-smoothing: antialiased;

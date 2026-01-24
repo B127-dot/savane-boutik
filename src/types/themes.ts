@@ -3,7 +3,7 @@ export interface Theme {
   name: string;
   description: string;
   preview: string;
-  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique' | 'y2k' | 'urbanwave';
+  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique' | 'y2k' | 'urbanwave' | 'savane';
   isAvailable: boolean;
   isNew?: boolean;
   components: {
@@ -105,6 +105,20 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       hero: 'urbanwave',
       productCard: 'urbanwave',
       footer: 'urbanwave'
+    }
+  },
+  savane: {
+    id: 'savane',
+    name: 'Savane',
+    description: 'Design brutaliste noir et blanc pur. Typographie Oswald, angles droits, contraste maximal. Parfait pour les marques streetwear authentiques.',
+    preview: '/theme-previews/savane.jpg',
+    category: 'savane',
+    isAvailable: true,
+    isNew: true,
+    components: {
+      hero: 'savane',
+      productCard: 'savane',
+      footer: 'savane'
     }
   },
 };
