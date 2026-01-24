@@ -67,7 +67,7 @@ const Y2KProductCard = ({ product, shopUrl, onAddToCart }: Y2KProductCardProps) 
             <motion.span
               initial={{ scale: 0, rotate: -12 }}
               animate={{ scale: 1, rotate: -12 }}
-              className="absolute top-4 left-4 bg-gradient-primary text-primary-foreground font-display text-xs font-bold uppercase px-3 py-1.5 rounded-full shadow-lg"
+              className="absolute top-4 left-4 bg-primary text-primary-foreground font-display text-xs font-bold uppercase px-3 py-1.5 rounded-full shadow-lg"
             >
               {DEFAULT_TEXTS.productCard.newBadge}
             </motion.span>
@@ -114,7 +114,7 @@ const Y2KProductCard = ({ product, shopUrl, onAddToCart }: Y2KProductCardProps) 
               }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-primary text-primary-foreground font-display font-bold text-sm py-3 rounded-full shadow-lg"
+              className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-display font-bold text-sm py-3 rounded-full shadow-lg"
             >
               <ShoppingBag className="w-4 h-4" />
               {DEFAULT_TEXTS.productCard.quickAdd}

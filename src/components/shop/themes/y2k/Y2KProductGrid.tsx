@@ -53,15 +53,15 @@ const Y2KProductGrid = ({
             whileInView={{ scale: 1 }}
             viewport={{ once: true }}
             transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-            className="inline-flex items-center gap-2 bg-accent/20 text-accent-foreground font-display text-sm font-bold px-5 py-2 rounded-full border-2 border-accent mb-4"
+            className="inline-flex items-center gap-2 bg-accent/20 text-foreground font-display text-sm font-bold px-5 py-2 rounded-full border-2 border-accent mb-4"
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-4 h-4 text-accent" />
             {sectionTitle}
           </motion.div>
 
           <h2 className="font-display font-black text-4xl md:text-5xl lg:text-6xl mb-4 text-foreground">
             {DEFAULT_TEXTS.productGrid.title.split(' ')[0].toUpperCase()}{' '}
-            <span className="bg-gradient-primary bg-clip-text text-transparent">
+            <span className="text-primary">
               {DEFAULT_TEXTS.productGrid.title.split(' ').slice(1).join(' ').toUpperCase()}
             </span>
           </h2>
@@ -102,7 +102,7 @@ const Y2KProductGrid = ({
             <motion.button
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              className="group inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground font-display font-bold text-sm px-8 py-4 rounded-full shadow-lg"
+              className="group inline-flex items-center gap-2 bg-primary text-primary-foreground font-display font-bold text-sm px-8 py-4 rounded-full shadow-lg"
             >
               {DEFAULT_TEXTS.productGrid.viewAll.toUpperCase()}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

@@ -75,7 +75,7 @@ const Y2KHero = ({
 
   return (
     <section className="relative min-h-screen pt-20 overflow-hidden bg-background">
-      {/* Animated Background Blobs */}
+      {/* Animated Background Blobs - Now use dynamic colors */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/30 rounded-full blur-3xl animate-blob" />
         <div className="absolute top-40 right-20 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-blob animation-delay-2000" />
@@ -92,12 +92,12 @@ const Y2KHero = ({
             className="relative order-2 lg:order-1"
           >
             {customHeroImage ? (
-              <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden bg-gradient-primary p-1">
+              <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden border-4 border-primary/30 p-1">
                 <img src={customHeroImage} alt="Hero" className="w-full h-full object-cover rounded-[2.75rem]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent rounded-[2.75rem]" />
               </div>
             ) : (
-              <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden bg-gradient-primary p-1">
+              <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden border-4 border-primary/30 p-1">
                 <div className="w-full h-full bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 rounded-[2.75rem] flex items-center justify-center">
                   <Sparkles className="w-24 h-24 text-primary/50" />
                 </div>
@@ -146,7 +146,7 @@ const Y2KHero = ({
               transition={{ duration: 0.6, delay: 0.4 }}
               className="font-display font-black text-5xl sm:text-6xl lg:text-7xl xl:text-8xl leading-[0.9] tracking-tight"
             >
-              <span className="bg-gradient-primary bg-clip-text text-transparent">
+              <span className="text-primary">
                 {heroTitle.split(' ')[0]}
               </span>
               <br />
@@ -176,7 +176,7 @@ const Y2KHero = ({
                 <motion.button
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="group flex items-center gap-2 bg-gradient-primary text-primary-foreground font-display font-bold text-sm px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-shadow"
+                  className="group flex items-center gap-2 bg-primary text-primary-foreground font-display font-bold text-sm px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-shadow"
                 >
                   {heroButtonText}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -206,7 +206,7 @@ const Y2KHero = ({
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 1 + i * 0.1 }}
-                      className="block font-display font-black text-2xl lg:text-3xl bg-gradient-primary bg-clip-text text-transparent"
+                      className="block font-display font-black text-2xl lg:text-3xl text-primary"
                     >
                       {stat.value}
                     </motion.span>
