@@ -9,18 +9,54 @@ interface Y2KHeaderProps {
   cartItemCount?: number;
   onCartClick?: () => void;
   shopUrl?: string;
+  headerStyle?: 'classic' | 'gradient' | 'minimal' | 'glass';
+  buttonStyle?: 'rounded' | 'pill' | 'square';
 }
 
-const Y2KHeader = ({ shopName, logo, cartItemCount = 0, onCartClick, shopUrl }: Y2KHeaderProps) => {
+const Y2KHeader = ({ 
+  shopName, 
+  logo, 
+  cartItemCount = 0, 
+  onCartClick, 
+  shopUrl,
+  headerStyle = 'classic',
+  buttonStyle = 'rounded'
+}: Y2KHeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navLinks = ['BOUTIQUE', 'NOUVEAU', 'VIBES', 'À PROPOS'];
+
+  // Dynamic button radius based on buttonStyle
+  const getButtonRadius = () => {
+    switch(buttonStyle) {
+      case 'pill': return 'rounded-full';
+      case 'square': return 'rounded-none';
+      default: return 'rounded-lg';
+    }
+  };
+
+  // Dynamic header style classes
+  const getHeaderClasses = () => {
+    const base = 'fixed top-0 left-0 right-0 z-50 h-16';
+    switch(headerStyle) {
+      case 'gradient':
+        return `${base} bg-gradient-to-r from-primary/90 to-secondary/90 backdrop-blur-xl border-b border-white/10`;
+      case 'minimal':
+        return `${base} bg-transparent`;
+      case 'glass':
+        return `${base} bg-white/10 backdrop-blur-2xl border-b border-white/20`;
+      default: // classic
+        return `${base} bg-background/80 backdrop-blur-xl border-b-2 border-primary/20`;
+    }
+  };
+
+  const btnRadius = getButtonRadius();
 
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
-      className="fixed top-0 left-0 right-0 z-50 h-16 bg-background/80 backdrop-blur-xl border-b-2 border-primary/20"
+      className={getHeaderClasses()}
     >
       <div className="max-w-7xl mx-auto h-full px-4 flex items-center justify-between">
         {/* Logo */}
@@ -32,10 +68,10 @@ const Y2KHeader = ({ shopName, logo, cartItemCount = 0, onCartClick, shopUrl }: 
               whileHover={{ scale: 1.05, rotate: -2 }}
               className="flex items-center gap-2"
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-primary-foreground" />
               </div>
-              <span className="font-display font-black text-xl tracking-tight bg-gradient-primary bg-clip-text text-transparent">
+              <span className="font-display font-black text-xl tracking-tight text-primary">
                 {shopName || 'GLOWUP'}
               </span>
             </motion.div>
@@ -64,7 +100,7 @@ const Y2KHeader = ({ shopName, logo, cartItemCount = 0, onCartClick, shopUrl }: 
             onClick={onCartClick}
             whileHover={{ scale: 1.1, rotate: 5 }}
             whileTap={{ scale: 0.9 }}
-            className="relative p-2.5 rounded-full bg-gradient-primary text-primary-foreground shadow-lg"
+            className={`relative p-2.5 ${btnRadius} bg-primary text-primary-foreground shadow-lg`}
           >
             <ShoppingBag className="w-5 h-5" />
             {cartItemCount > 0 && (

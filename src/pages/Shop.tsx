@@ -496,6 +496,8 @@ const Shop = () => {
             cartItemCount={cartItemsCount}
             onCartClick={() => setIsCartOpen(true)}
             shopUrl={shopUrl}
+            headerStyle={effectiveSettings.headerStyle}
+            buttonStyle={effectiveSettings.buttonStyle}
           />
 
           <Y2KMarquee items={effectiveSettings.marqueeItems} />
