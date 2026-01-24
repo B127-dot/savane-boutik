@@ -5,6 +5,7 @@ export { SEOSection } from './SEOSection';
 export { DesignSection } from './DesignSection';
 export { HeroSection } from './HeroSection';
 export { TrustBarSection } from './TrustBarSection';
+export { MarqueeSection } from './MarqueeSection';
 export { ProductsSection } from './ProductsSection';
 export { SectionsSection } from './SectionsSection';
 export { PromoSection } from './PromoSection';

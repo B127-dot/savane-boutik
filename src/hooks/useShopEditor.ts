@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import { useApp, TrustBarItem, PromoBanner, CustomBlock } from '@/contexts/AppContext';
+import { useApp, TrustBarItem, PromoBanner, CustomBlock, MarqueeItem, HeroStat, HeroFeature, FooterLink } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
-import { DEFAULT_TRUST_BAR } from '@/lib/shopTheme';
+import { DEFAULT_TRUST_BAR, DEFAULT_HERO_STATS, DEFAULT_HERO_FEATURES, DEFAULT_MARQUEE_ITEMS, DEFAULT_FOOTER_LINKS } from '@/lib/shopTheme';
 
 // ============= ZOD VALIDATION SCHEMA =============
 const trustBarItemSchema = z.object({
@@ -86,21 +86,37 @@ export interface ShopEditorFormData {
   heroButtonText: string;
   heroButtonLink: string;
   heroLayout: 'left' | 'center' | 'right';
+  // Premium Hero
+  heroBadgeText: string;
+  heroBadgeIcon: 'sparkles' | 'flame' | 'star' | 'zap' | 'gift' | 'trending' | 'none';
+  showHeroBadge: boolean;
+  heroStats: HeroStat[];
+  showHeroStats: boolean;
+  heroFeatures: HeroFeature[];
+  showHeroFeatures: boolean;
+  showScrollIndicator: boolean;
+  // Trust Bar
   trustBar: TrustBarItem[];
+  // Marquee
+  marqueeItems: MarqueeItem[];
+  showMarquee: boolean;
+  // Products
   productsTitle: string;
   productsSubtitle: string;
   productsLayout: 'grid' | 'list' | 'carousel';
   productsPerRow: 2 | 3 | 4;
   showCollections: boolean;
   collectionsTitle: string;
+  // Footer
   aboutText: string;
+  footerLinks: FooterLink[];
   showNewsletter: boolean;
   newsletterTitle: string;
   newsletterSubtitle: string;
+  // Section visibility
   showHero: boolean;
   showTrustBar: boolean;
   showProducts: boolean;
-  showMarquee: boolean;
   showNewArrivals: boolean;
   sectionOrder: string[];
   promoBanner: PromoBanner;
@@ -135,21 +151,37 @@ const getDefaultFormData = (): ShopEditorFormData => ({
   heroButtonText: 'Voir la Collection',
   heroButtonLink: '#products',
   heroLayout: 'center',
+  // Premium Hero defaults
+  heroBadgeText: 'Nouvelle Collection',
+  heroBadgeIcon: 'sparkles',
+  showHeroBadge: true,
+  heroStats: DEFAULT_HERO_STATS,
+  showHeroStats: true,
+  heroFeatures: DEFAULT_HERO_FEATURES,
+  showHeroFeatures: true,
+  showScrollIndicator: true,
+  // Trust Bar
   trustBar: DEFAULT_TRUST_BAR,
+  // Marquee
+  marqueeItems: DEFAULT_MARQUEE_ITEMS,
+  showMarquee: true,
+  // Products
   productsTitle: 'Nos Produits',
   productsSubtitle: 'Une sélection choisie avec soin',
   productsLayout: 'grid',
   productsPerRow: 3,
   showCollections: true,
   collectionsTitle: 'Collections',
+  // Footer
   aboutText: '',
+  footerLinks: DEFAULT_FOOTER_LINKS,
   showNewsletter: true,
   newsletterTitle: 'Restez informé',
   newsletterSubtitle: 'Recevez nos offres exclusives',
+  // Visibility
   showHero: true,
   showTrustBar: true,
   showProducts: true,
-  showMarquee: true,
   showNewArrivals: true,
   sectionOrder: ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'newsletter'],
   promoBanner: {
@@ -222,21 +254,37 @@ export function useShopEditor() {
         heroButtonText: shopSettings.heroButtonText || 'Voir la Collection',
         heroButtonLink: shopSettings.heroButtonLink || '#products',
         heroLayout: shopSettings.heroLayout || 'center',
+        // Premium Hero
+        heroBadgeText: shopSettings.heroBadgeText || 'Nouvelle Collection',
+        heroBadgeIcon: shopSettings.heroBadgeIcon || 'sparkles',
+        showHeroBadge: shopSettings.showHeroBadge ?? true,
+        heroStats: shopSettings.heroStats || DEFAULT_HERO_STATS,
+        showHeroStats: shopSettings.showHeroStats ?? true,
+        heroFeatures: shopSettings.heroFeatures || DEFAULT_HERO_FEATURES,
+        showHeroFeatures: shopSettings.showHeroFeatures ?? true,
+        showScrollIndicator: shopSettings.showScrollIndicator ?? true,
+        // Trust Bar
         trustBar: shopSettings.trustBar || DEFAULT_TRUST_BAR,
+        // Marquee
+        marqueeItems: shopSettings.marqueeItems || DEFAULT_MARQUEE_ITEMS,
+        showMarquee: shopSettings.showMarquee ?? true,
+        // Products
         productsTitle: shopSettings.productsTitle || 'Nos Produits',
         productsSubtitle: shopSettings.productsSubtitle || 'Une sélection choisie avec soin',
         productsLayout: shopSettings.productsLayout || 'grid',
         productsPerRow: shopSettings.productsPerRow || 3,
         showCollections: shopSettings.showCollections ?? true,
         collectionsTitle: shopSettings.collectionsTitle || 'Collections',
+        // Footer
         aboutText: shopSettings.aboutText || '',
+        footerLinks: shopSettings.footerLinks || DEFAULT_FOOTER_LINKS,
         showNewsletter: shopSettings.showNewsletter ?? true,
         newsletterTitle: shopSettings.newsletterTitle || 'Restez informé',
         newsletterSubtitle: shopSettings.newsletterSubtitle || 'Recevez nos offres exclusives',
+        // Visibility
         showHero: shopSettings.showHero ?? true,
         showTrustBar: shopSettings.showTrustBar ?? true,
         showProducts: shopSettings.showProducts ?? true,
-        showMarquee: shopSettings.showMarquee ?? true,
         showNewArrivals: shopSettings.showNewArrivals ?? true,
         sectionOrder: shopSettings.sectionOrder || ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'newsletter'],
         promoBanner: shopSettings.promoBanner || getDefaultFormData().promoBanner,
@@ -419,7 +467,21 @@ export function useShopEditor() {
       heroButtonText: formData.heroButtonText,
       heroButtonLink: formData.heroButtonLink,
       heroLayout: formData.heroLayout,
+      // Premium Hero
+      heroBadgeText: formData.heroBadgeText,
+      heroBadgeIcon: formData.heroBadgeIcon,
+      showHeroBadge: formData.showHeroBadge,
+      heroStats: formData.heroStats,
+      showHeroStats: formData.showHeroStats,
+      heroFeatures: formData.heroFeatures,
+      showHeroFeatures: formData.showHeroFeatures,
+      showScrollIndicator: formData.showScrollIndicator,
+      // Trust Bar
       trustBar: formData.trustBar,
+      // Marquee
+      marqueeItems: formData.marqueeItems,
+      showMarquee: formData.showMarquee,
+      // Products
       productsTitle: formData.productsTitle,
       productsSubtitle: formData.productsSubtitle,
       productsPerRow: formData.productsPerRow,
@@ -431,7 +493,6 @@ export function useShopEditor() {
       showNewArrivals: formData.showNewArrivals,
       showProducts: formData.showProducts,
       showNewsletter: formData.showNewsletter,
-      showMarquee: formData.showMarquee,
       sectionOrder: formData.sectionOrder,
       promoBanner: formData.promoBanner,
       socialLinks: {
@@ -441,6 +502,7 @@ export function useShopEditor() {
         tiktok: formData.tiktok,
       },
       aboutText: formData.aboutText,
+      footerLinks: formData.footerLinks,
       phone: formData.phone,
       newsletterTitle: formData.newsletterTitle,
       newsletterSubtitle: formData.newsletterSubtitle,
@@ -600,21 +662,37 @@ export function useShopEditor() {
       heroButtonText: formData.heroButtonText,
       heroButtonLink: formData.heroButtonLink,
       heroLayout: formData.heroLayout,
+      // Premium Hero
+      heroBadgeText: formData.heroBadgeText,
+      heroBadgeIcon: formData.heroBadgeIcon,
+      showHeroBadge: formData.showHeroBadge,
+      heroStats: formData.heroStats,
+      showHeroStats: formData.showHeroStats,
+      heroFeatures: formData.heroFeatures,
+      showHeroFeatures: formData.showHeroFeatures,
+      showScrollIndicator: formData.showScrollIndicator,
+      // Trust Bar
       trustBar: formData.trustBar,
+      // Marquee
+      marqueeItems: formData.marqueeItems,
+      showMarquee: formData.showMarquee,
+      // Products
       productsTitle: formData.productsTitle,
       productsSubtitle: formData.productsSubtitle,
       productsLayout: formData.productsLayout,
       productsPerRow: formData.productsPerRow,
       showCollections: formData.showCollections,
       collectionsTitle: formData.collectionsTitle,
+      // Footer
       aboutText: formData.aboutText,
+      footerLinks: formData.footerLinks,
       showNewsletter: formData.showNewsletter,
       newsletterTitle: formData.newsletterTitle,
       newsletterSubtitle: formData.newsletterSubtitle,
+      // Visibility
       showHero: formData.showHero,
       showTrustBar: formData.showTrustBar,
       showProducts: formData.showProducts,
-      showMarquee: formData.showMarquee,
       showNewArrivals: formData.showNewArrivals,
       sectionOrder: formData.sectionOrder,
       promoBanner: formData.promoBanner,

@@ -7,6 +7,7 @@ export const DEFAULT_TEXTS = {
   // Section Hero
   hero: {
     badge: "Nouvelle Collection",
+    badgeIcon: "sparkles" as const,
     title: "Bienvenue dans notre boutique",
     subtitle: "Découvrez nos produits de qualité, livrés chez vous rapidement.",
     buttonPrimary: "Voir la Collection",
@@ -32,6 +33,23 @@ export const DEFAULT_TEXTS = {
     { icon: 'truck', text: 'Livraison Rapide' },
     { icon: 'shield', text: 'Paiement Sécurisé' },
     { icon: 'phone', text: 'Support 7j/7' },
+  ],
+
+  // Marquee / Ticker items
+  marquee: [
+    { text: 'LIVRAISON GRATUITE', icon: 'truck' },
+    { text: 'NOUVELLES SORTIES', icon: 'star' },
+    { text: 'QUALITÉ PREMIUM', icon: 'zap' },
+    { text: 'SATISFAIT OU REMBOURSÉ', icon: 'heart' },
+    { text: 'ÉDITION LIMITÉE', icon: 'sparkles' },
+  ],
+
+  // Footer links
+  footerLinks: [
+    { label: 'À propos', url: '#about' },
+    { label: 'FAQ', url: '#faq' },
+    { label: 'Conditions de vente', url: '/cgv' },
+    { label: 'Politique de confidentialité', url: '/privacy' },
   ],
 
   // Cartes produits
