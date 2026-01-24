@@ -3,7 +3,7 @@ export interface Theme {
   name: string;
   description: string;
   preview: string;
-  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique' | 'y2k' | 'urbanwave' | 'savane';
+  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique' | 'urbanwave' | 'savane';
   isAvailable: boolean;
   isNew?: boolean;
   components: {
@@ -77,20 +77,6 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       hero: 'creative',
       productCard: 'creative',
       footer: 'creative'
-    }
-  },
-  y2k: {
-    id: 'y2k',
-    name: 'Y2K / Gen-Z',
-    description: 'Design vibrant et audacieux avec des couleurs néon, des dégradés roses/violets/verts et une énergie Gen-Z. Parfait pour le streetwear et les marques jeunes.',
-    preview: '/theme-previews/y2k.jpg',
-    category: 'y2k',
-    isAvailable: true,
-    isNew: true,
-    components: {
-      hero: 'y2k',
-      productCard: 'y2k',
-      footer: 'y2k'
     }
   },
   urbanwave: {

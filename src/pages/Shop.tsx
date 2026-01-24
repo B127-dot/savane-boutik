@@ -63,17 +63,6 @@ import {
   AesthetiqueTrustBar
 } from '@/components/shop/themes/aesthetique';
 
-// Theme components - Y2K Gen-Z
-import {
-  Y2KHeader,
-  Y2KMarquee,
-  Y2KHero,
-  Y2KProductCard,
-  Y2KProductGrid,
-  Y2KTrustBar,
-  Y2KFooter
-} from '@/components/shop/themes/y2k';
-
 // Theme components - URBANWAVE Streetwear
 import {
   UrbanwaveHeader,
@@ -304,7 +293,6 @@ const Shop = () => {
   // Determine which theme to use
   const isArtisan = currentTheme === 'artisan';
   const isAesthetique = currentTheme === 'aesthetique';
-  const isY2K = currentTheme === 'y2k';
   const isUrbanwave = currentTheme === 'urbanwave';
   const isSavane = currentTheme === 'savane';
 
@@ -433,122 +421,6 @@ const Shop = () => {
           />
 
           <SavaneFooter settings={effectiveSettings} />
-
-          {effectiveSettings.socialLinks.whatsapp && (
-            <WhatsAppButton 
-              phoneNumber={effectiveSettings.socialLinks.whatsapp}
-              message="Bonjour, je visite votre boutique en ligne !"
-            />
-          )}
-
-          <BottomNavMobile 
-            cartItemsCount={cartItemsCount}
-            onCartClick={() => setIsCartOpen(true)}
-            onCategoriesClick={scrollToCategories}
-            onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          />
-
-          <CartSheet
-            open={isCartOpen}
-            onOpenChange={setIsCartOpen}
-            shopUrl={shopUrl || ''}
-            shopSettings={effectiveSettings}
-          />
-
-          <QuickViewModal
-            product={quickViewProduct}
-            isOpen={!!quickViewProduct}
-            onClose={() => setQuickViewProduct(null)}
-            onAddToCart={handleAddToCart}
-          />
-        </div>
-      </ThemeProvider>
-    );
-  }
-
-  // Y2K / GEN-Z THEME
-  if (isY2K) {
-    const customBlocks = effectiveSettings.customBlocks || [];
-    const animationsEnabled = effectiveSettings.animationsEnabled ?? true;
-    
-    return (
-      <ThemeProvider themeId={currentTheme}>
-        <DynamicThemeStyles 
-          colorPalette={effectiveSettings.colorPalette}
-          buttonStyle={effectiveSettings.buttonStyle}
-          fontFamily={effectiveSettings.fontFamily}
-        />
-        <div className={`min-h-screen bg-background pb-20 md:pb-0 y2k-theme ${fontClass}`}>
-          {/* Promo Banner */}
-          {effectiveSettings.promoBanner?.enabled && effectiveSettings.promoBanner.position === 'top' && (
-            <PromoBanner
-              text={effectiveSettings.promoBanner.text}
-              backgroundColor={effectiveSettings.promoBanner.backgroundColor}
-              textColor={effectiveSettings.promoBanner.textColor}
-              link={effectiveSettings.promoBanner.link}
-              animationsEnabled={animationsEnabled}
-            />
-          )}
-
-          <Y2KHeader 
-            logo={effectiveSettings.logo}
-            shopName={effectiveSettings.shopName}
-            cartItemCount={cartItemsCount}
-            onCartClick={() => setIsCartOpen(true)}
-            shopUrl={shopUrl}
-            headerStyle={effectiveSettings.headerStyle}
-            buttonStyle={effectiveSettings.buttonStyle}
-          />
-
-          <Y2KMarquee items={effectiveSettings.marqueeItems} />
-
-          {effectiveSettings.showHero !== false && (
-            <Y2KHero 
-              heroImage={effectiveSettings.heroImage}
-              heroTitle={effectiveSettings.heroTitle}
-              heroSubtitle={effectiveSettings.heroSubtitle}
-              heroButtonText={effectiveSettings.heroButtonText}
-              heroButtonLink={effectiveSettings.heroButtonLink}
-              shopUrl={shopUrl}
-              badgeText={effectiveSettings.heroBadgeText}
-              badgeIcon={effectiveSettings.heroBadgeIcon}
-              showBadge={effectiveSettings.showHeroBadge}
-              stats={effectiveSettings.heroStats}
-              showStats={effectiveSettings.showHeroStats}
-            />
-          )}
-
-          {effectiveSettings.showTrustBar !== false && (
-            <Y2KTrustBar items={effectiveSettings.trustBar} />
-          )}
-
-          <div id="products">
-            <Y2KProductGrid 
-              products={filteredProducts}
-              shopUrl={shopUrl}
-              onAddToCart={handleAddToCart}
-              sectionTitle={effectiveSettings.productsTitle}
-              sectionSubtitle={effectiveSettings.productsSubtitle}
-            />
-          </div>
-
-          {/* Custom Blocks for Y2K */}
-          {customBlocks.map(block => renderCustomBlock(block, animationsEnabled))}
-
-          <Y2KFooter 
-            shopName={effectiveSettings.shopName}
-            logo={effectiveSettings.logo}
-            aboutText={effectiveSettings.aboutText}
-            phone={effectiveSettings.phone}
-            email={effectiveSettings.email}
-            address={effectiveSettings.address}
-            whatsapp={effectiveSettings.socialLinks.whatsapp}
-            facebook={effectiveSettings.socialLinks.facebook}
-            instagram={effectiveSettings.socialLinks.instagram}
-            tiktok={effectiveSettings.socialLinks.tiktok}
-            shopUrl={shopUrl}
-            footerLinks={effectiveSettings.footerLinks}
-          />
 
           {effectiveSettings.socialLinks.whatsapp && (
             <WhatsAppButton 

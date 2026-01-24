@@ -57,8 +57,6 @@ const DynamicThemeStyles = ({
     // This ensures Y2K, Modern, and all themed components respond to palette changes
     const css = `
       /* Dynamic Shop Theme - Overrides all theme-specific colors */
-      .y2k-theme,
-      .dark .y2k-theme,
       .modern-theme,
       .artisan-theme,
       .urbanwave-theme,
@@ -95,16 +93,6 @@ const DynamicThemeStyles = ({
         
         /* Dynamic Button Radius */
         --shop-button-radius: ${buttonRadiusValue};
-      }
-      
-      /* Apply theme background to y2k-theme containers */
-      .y2k-theme {
-        --background: ${backgroundHsl} !important;
-        --foreground: ${foregroundHsl} !important;
-        --card: ${backgroundHsl} !important;
-        --card-foreground: ${foregroundHsl} !important;
-        --border: ${primaryHsl} / 0.2 !important;
-        --ring: ${primaryHsl} !important;
       }
       
       /* Shop-specific themed classes */
@@ -185,27 +173,6 @@ const DynamicThemeStyles = ({
         color: var(--shop-primary) !important;
       }
       
-      /* Y2K specific gradient overrides */
-      .y2k-theme .text-gradient-y2k,
-      .y2k-theme .text-gradient-rainbow {
-        background: linear-gradient(135deg, ${palette.primary}, ${palette.secondary}) !important;
-        -webkit-background-clip: text !important;
-        -webkit-text-fill-color: transparent !important;
-        background-clip: text !important;
-      }
-      
-      /* Y2K glow effects with dynamic colors */
-      .y2k-theme .glow-pink {
-        box-shadow: 0 0 40px hsl(${primaryHsl} / 0.4) !important;
-      }
-      
-      .y2k-theme .glow-purple {
-        box-shadow: 0 0 40px hsl(${secondaryHsl} / 0.4) !important;
-      }
-      
-      .y2k-theme .glow-lime {
-        box-shadow: 0 0 40px hsl(${accentHsl} / 0.4) !important;
-      }
     `;
     
     styleElement.textContent = css;
