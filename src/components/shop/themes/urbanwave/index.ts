@@ -6,3 +6,7 @@ export { default as UrbanwaveProductGrid } from './UrbanwaveProductGrid';
 export { default as UrbanwaveCategorySection } from './UrbanwaveCategorySection';
 export { default as UrbanwaveNewsletter } from './UrbanwaveNewsletter';
 export { default as UrbanwaveFooter } from './UrbanwaveFooter';
+export { default as UrbanwaveImageGallery } from './UrbanwaveImageGallery';
+export { default as UrbanwaveSizeSelector } from './UrbanwaveSizeSelector';
+export { default as UrbanwaveTechnicalSpecs } from './UrbanwaveTechnicalSpecs';
+export { default as UrbanwaveProductDetail } from './UrbanwaveProductDetail';
