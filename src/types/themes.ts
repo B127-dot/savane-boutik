@@ -3,7 +3,7 @@ export interface Theme {
   name: string;
   description: string;
   preview: string;
-  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique' | 'urbanwave' | 'savane';
+  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique' | 'urbanwave' | 'savane' | 'y2k';
   isAvailable: boolean;
   isNew?: boolean;
   components: {
@@ -103,6 +103,20 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       hero: 'savane',
       productCard: 'savane',
       footer: 'savane'
+    }
+  },
+  y2k: {
+    id: 'y2k',
+    name: 'Y2K Glow',
+    description: 'Design Gen-Z vibrant avec gradients roses, violets et lime. Parfait pour une boutique tendance et jeune.',
+    preview: '/theme-previews/y2k.jpg',
+    category: 'y2k',
+    isAvailable: true,
+    isNew: true,
+    components: {
+      hero: 'y2k',
+      productCard: 'y2k',
+      footer: 'y2k'
     }
   },
 };

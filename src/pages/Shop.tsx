@@ -85,6 +85,15 @@ import {
   SavaneFooter
 } from '@/components/shop/themes/savane';
 
+// Theme components - Y2K Glow Vibes
+import {
+  Y2kHeader,
+  Y2kHero,
+  Y2kMarquee,
+  Y2kProductGrid,
+  Y2kFooter
+} from '@/components/shop/themes/y2k';
+
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
   const [searchParams] = useSearchParams();
@@ -295,6 +304,7 @@ const Shop = () => {
   const isAesthetique = currentTheme === 'aesthetique';
   const isUrbanwave = currentTheme === 'urbanwave';
   const isSavane = currentTheme === 'savane';
+  const isY2k = currentTheme === 'y2k';
 
   // Helper function to render custom blocks (shared across themes)
   const renderCustomBlock = (block: CustomBlock, animationsEnabled: boolean = true) => {
@@ -423,6 +433,107 @@ const Shop = () => {
           <SavaneFooter settings={effectiveSettings} />
 
           {effectiveSettings.socialLinks.whatsapp && (
+            <WhatsAppButton 
+              phoneNumber={effectiveSettings.socialLinks.whatsapp}
+              message="Bonjour, je visite votre boutique en ligne !"
+            />
+          )}
+
+          <BottomNavMobile 
+            cartItemsCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+            onCategoriesClick={scrollToCategories}
+            onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          />
+
+          <CartSheet
+            open={isCartOpen}
+            onOpenChange={setIsCartOpen}
+            shopUrl={shopUrl || ''}
+            shopSettings={effectiveSettings}
+          />
+
+          <QuickViewModal
+            product={quickViewProduct}
+            isOpen={!!quickViewProduct}
+            onClose={() => setQuickViewProduct(null)}
+            onAddToCart={handleAddToCart}
+          />
+        </div>
+      </ThemeProvider>
+    );
+  }
+
+  // Y2K GLOW VIBES THEME
+  if (isY2k) {
+    const customBlocks = effectiveSettings.customBlocks || [];
+    const animationsEnabled = effectiveSettings.animationsEnabled ?? true;
+    
+    return (
+      <ThemeProvider themeId={currentTheme}>
+        <DynamicThemeStyles 
+          colorPalette={effectiveSettings.colorPalette}
+          buttonStyle="pill"
+          fontFamily="inter"
+        />
+        <div className={`min-h-screen bg-background pb-20 md:pb-0 y2k-theme font-outfit`}>
+          {/* Promo Banner */}
+          {effectiveSettings.promoBanner?.enabled && effectiveSettings.promoBanner.position === 'top' && (
+            <PromoBanner
+              text={effectiveSettings.promoBanner.text}
+              backgroundColor={effectiveSettings.promoBanner.backgroundColor}
+              textColor={effectiveSettings.promoBanner.textColor}
+              link={effectiveSettings.promoBanner.link}
+              animationsEnabled={animationsEnabled}
+            />
+          )}
+
+          <Y2kHeader 
+            shopUrl={shopUrl || ''}
+            shopName={effectiveSettings.shopName}
+            logoUrl={effectiveSettings.logo}
+            onCartClick={() => setIsCartOpen(true)}
+          />
+
+          {effectiveSettings.showHero !== false && (
+            <Y2kHero 
+              title={effectiveSettings.heroTitle || "GLOW UP SZN"}
+              subtitle={effectiveSettings.heroSubtitle || "Slay every day with our curated collection ✨"}
+              ctaText={effectiveSettings.heroButtonText || "SHOP NOW"}
+              onCtaClick={scrollToProducts}
+              heroImage={effectiveSettings.heroImage}
+            />
+          )}
+
+          <Y2kMarquee />
+
+          {effectiveSettings.showTrustBar !== false && effectiveSettings.trustBar && (
+            <TrustBar trustItems={effectiveSettings.trustBar} />
+          )}
+
+          <div id="products">
+            <Y2kProductGrid 
+              products={filteredProducts}
+              categories={categories}
+              shopUrl={shopUrl || ''}
+              onAddToCart={handleAddToCart}
+              onQuickView={(product) => setQuickViewProduct(product)}
+            />
+          </div>
+
+          {/* Custom Blocks */}
+          {customBlocks.map(block => renderCustomBlock(block, animationsEnabled))}
+
+          <Y2kFooter 
+            shopUrl={shopUrl || ''}
+            shopName={effectiveSettings.shopName}
+            whatsappNumber={effectiveSettings.socialLinks?.whatsapp}
+            email={effectiveSettings.email}
+            instagram={effectiveSettings.socialLinks?.instagram}
+            tiktok={effectiveSettings.socialLinks?.tiktok}
+          />
+
+          {effectiveSettings.socialLinks?.whatsapp && (
             <WhatsAppButton 
               phoneNumber={effectiveSettings.socialLinks.whatsapp}
               message="Bonjour, je visite votre boutique en ligne !"
