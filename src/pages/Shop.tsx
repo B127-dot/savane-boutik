@@ -85,6 +85,17 @@ import {
   UrbanwaveFooter
 } from '@/components/shop/themes/urbanwave';
 
+// Theme components - SAVANE Brutalist
+import {
+  SavaneHeader,
+  SavaneHero,
+  SavaneTicker,
+  SavaneProductGrid,
+  SavaneLookbook,
+  SavaneTrustBar,
+  SavaneFooter
+} from '@/components/shop/themes/savane';
+
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
   const [searchParams] = useSearchParams();
@@ -295,6 +306,7 @@ const Shop = () => {
   const isAesthetique = currentTheme === 'aesthetique';
   const isY2K = currentTheme === 'y2k';
   const isUrbanwave = currentTheme === 'urbanwave';
+  const isSavane = currentTheme === 'savane';
 
   // Helper function to render custom blocks (shared across themes)
   const renderCustomBlock = (block: CustomBlock, animationsEnabled: boolean = true) => {
@@ -359,6 +371,100 @@ const Shop = () => {
 
   // Get font class for theming
   const fontClass = getFontClass(effectiveSettings?.fontFamily);
+
+  // SAVANE / BRUTALIST THEME
+  if (isSavane) {
+    const customBlocks = effectiveSettings.customBlocks || [];
+    const animationsEnabled = effectiveSettings.animationsEnabled ?? true;
+    
+    return (
+      <ThemeProvider themeId={currentTheme}>
+        <DynamicThemeStyles 
+          colorPalette="brutalist"
+          buttonStyle="square"
+          fontFamily={effectiveSettings.fontFamily}
+        />
+        <div className={`min-h-screen bg-background text-foreground pb-20 md:pb-0 font-body`}>
+          {/* Promo Banner */}
+          {effectiveSettings.promoBanner?.enabled && effectiveSettings.promoBanner.position === 'top' && (
+            <PromoBanner
+              text={effectiveSettings.promoBanner.text}
+              backgroundColor={effectiveSettings.promoBanner.backgroundColor}
+              textColor={effectiveSettings.promoBanner.textColor}
+              link={effectiveSettings.promoBanner.link}
+              animationsEnabled={animationsEnabled}
+            />
+          )}
+
+          <SavaneHeader 
+            shopName={effectiveSettings.shopName}
+            logo={effectiveSettings.logo}
+            cartItemsCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+          />
+
+          <SavaneTicker />
+
+          {effectiveSettings.showHero !== false && (
+            <SavaneHero settings={effectiveSettings} />
+          )}
+
+          {effectiveSettings.showTrustBar !== false && (
+            <SavaneTrustBar items={effectiveSettings.trustBar} />
+          )}
+
+          <div id="products">
+            <SavaneProductGrid 
+              products={filteredProducts}
+              shopUrl={shopUrl}
+              onAddToCart={handleAddToCart}
+              sectionTitle={effectiveSettings.productsTitle || "SHOP"}
+            />
+          </div>
+
+          <SavaneLookbook />
+
+          {/* Custom Blocks */}
+          {customBlocks.map(block => renderCustomBlock(block, animationsEnabled))}
+
+          <SavaneTicker 
+            text="PAIEMENT SÉCURISÉ /// LIVRAISON EXPRESS /// QUALITÉ PREMIUM /// "
+            inverted
+          />
+
+          <SavaneFooter settings={effectiveSettings} />
+
+          {effectiveSettings.socialLinks.whatsapp && (
+            <WhatsAppButton 
+              phoneNumber={effectiveSettings.socialLinks.whatsapp}
+              message="Bonjour, je visite votre boutique en ligne !"
+            />
+          )}
+
+          <BottomNavMobile 
+            cartItemsCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+            onCategoriesClick={scrollToCategories}
+            onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          />
+
+          <CartSheet
+            open={isCartOpen}
+            onOpenChange={setIsCartOpen}
+            shopUrl={shopUrl || ''}
+            shopSettings={effectiveSettings}
+          />
+
+          <QuickViewModal
+            product={quickViewProduct}
+            isOpen={!!quickViewProduct}
+            onClose={() => setQuickViewProduct(null)}
+            onAddToCart={handleAddToCart}
+          />
+        </div>
+      </ThemeProvider>
+    );
+  }
 
   // Y2K / GEN-Z THEME
   if (isY2K) {

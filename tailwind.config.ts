@@ -41,6 +41,9 @@ export default {
 				// Y2K Theme - Outfit + Space Mono
 				'outfit': ['Outfit', 'sans-serif'],
 				'space-mono': ['Space Mono', 'monospace'],
+				// SAVANE Theme - Oswald brutalist
+				'heading': ['Oswald', 'sans-serif'],
+				'oswald': ['Oswald', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -190,6 +193,10 @@ export default {
 				'scale-in': {
 					'0%': { transform: 'scale(0.9)', opacity: '0' },
 					'100%': { transform: 'scale(1)', opacity: '1' }
+				},
+				'ticker': {
+					'0%': { transform: 'translateX(0)' },
+					'100%': { transform: 'translateX(-50%)' }
 				}
 			},
 			animation: {
@@ -206,6 +213,7 @@ export default {
 				'pulse-slow': 'pulse-slow 4s ease-in-out infinite',
 				'slide-up': 'slide-up 0.8s ease-out forwards',
 				'scale-in': 'scale-in 0.5s ease-out forwards',
+				'ticker': 'ticker 20s linear infinite',
 			},
 			animationDelay: {
 				'100': '100ms',
