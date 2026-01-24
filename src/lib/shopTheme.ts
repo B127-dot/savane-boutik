@@ -13,6 +13,16 @@ export const COLOR_PALETTES = [
     foreground: '#ffffff'
   },
   { 
+    id: 'y2k', 
+    name: 'Y2K Original', 
+    colors: ['#1a0a14', '#ec4899', '#a855f7', '#84cc16'],
+    primary: '#ec4899',    // Hot Pink (330 90% 60%)
+    secondary: '#a855f7',  // Electric Purple (280 80% 65%)
+    accent: '#84cc16',     // Electric Lime (85 90% 50%)
+    background: '#1a0a14', // Dark purple-tinted background
+    foreground: '#fdf4ff'  // Soft pink-white
+  },
+  { 
     id: 'glacier', 
     name: 'Glacier', 
     colors: ['#0f172a', '#06b6d4', '#3b82f6', '#8b5cf6'],
