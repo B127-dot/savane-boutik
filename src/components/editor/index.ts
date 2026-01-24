@@ -1,6 +1,5 @@
 // Editor Section Components - Barrel export
 export { IdentitySection } from './IdentitySection';
-export { ThemeSection } from './ThemeSection';
 export { ContactSection } from './ContactSection';
 export { SEOSection } from './SEOSection';
 export { DesignSection } from './DesignSection';
@@ -11,6 +10,10 @@ export { SectionsSection } from './SectionsSection';
 export { PromoSection } from './PromoSection';
 export { AdvancedSection } from './AdvancedSection';
 export { FooterSection } from './FooterSection';
+
+// Theme Components
+export { ActiveThemeCard } from './ActiveThemeCard';
+export { ThemePickerModal } from './ThemePickerModal';
 
 // Types
 export type { 

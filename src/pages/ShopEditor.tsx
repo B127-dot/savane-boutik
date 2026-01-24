@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Accordion } from '@/components/ui/accordion';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -48,7 +48,6 @@ import BlockLibraryModal from '@/components/shop/BlockLibraryModal';
 // Editor Section Components
 import {
   IdentitySection,
-  ThemeSection,
   ContactSection,
   SEOSection,
   DesignSection,
@@ -59,9 +58,13 @@ import {
   PromoSection,
   AdvancedSection,
   FooterSection,
+  ActiveThemeCard,
+  ThemePickerModal,
 } from '@/components/editor';
 
 const ShopEditor = () => {
+  const [themePickerOpen, setThemePickerOpen] = useState(false);
+  
   const {
     // State
     formData,
@@ -252,6 +255,12 @@ const ShopEditor = () => {
                   )}
                 </Button>
               </motion.div>
+
+              {/* Active Theme Card */}
+              <ActiveThemeCard 
+                currentTheme={formData.selectedTheme}
+                onChangeClick={() => setThemePickerOpen(true)}
+              />
             </div>
           </div>
 
@@ -260,7 +269,6 @@ const ShopEditor = () => {
             <div className="p-5 space-y-4">
               <Accordion type="multiple" defaultValue={['identity', 'design', 'hero']} className="space-y-3">
                 <IdentitySection formData={formData} updateField={updateField} validationErrors={validationErrors} />
-                <ThemeSection formData={formData} updateField={updateField} />
                 <ContactSection formData={formData} updateField={updateField} validationErrors={validationErrors} />
                 <SEOSection formData={formData} updateField={updateField} validationErrors={validationErrors} />
                 <DesignSection formData={formData} updateField={updateField} currentPalette={currentPalette} />
@@ -369,6 +377,15 @@ const ShopEditor = () => {
           </div>
         </div>
       </main>
+
+      {/* Theme Picker Modal */}
+      <ThemePickerModal
+        isOpen={themePickerOpen}
+        onClose={() => setThemePickerOpen(false)}
+        currentTheme={formData.selectedTheme}
+        onThemeChange={(themeId) => updateField('selectedTheme', themeId)}
+        shopUrl={shopSettings?.shopUrl}
+      />
 
       {/* Block Library Modal */}
       <BlockLibraryModal
