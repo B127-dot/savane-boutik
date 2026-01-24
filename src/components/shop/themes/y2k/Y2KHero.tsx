@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Star, Heart, Zap, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import heroImage from '@/assets/y2k-hero-model.jpg';
+import { DEFAULT_TEXTS } from '@/lib/defaultTexts';
 
 interface FloatingIconProps {
   children: React.ReactNode;
@@ -35,25 +35,26 @@ interface Y2KHeroProps {
   heroButtonLink?: string;
   shopUrl?: string;
   stats?: Array<{ value: string; label: string }>;
+  badgeText?: string;
 }
 
 const defaultStats = [
-  { value: '10K+', label: 'Happy Babes' },
-  { value: '500+', label: 'Fresh Fits' },
-  { value: '4.9', label: 'Vibes Rating' },
+  { value: '10K+', label: 'Clients satisfaits' },
+  { value: '500+', label: 'Produits' },
+  { value: '4.9', label: 'Note moyenne' },
 ];
 
 const Y2KHero = ({
   heroImage: customHeroImage,
-  heroTitle = 'GLOW UP SZN',
-  heroSubtitle = 'Streetwear qui a un impact différent. Couleurs audacieuses, coupes fraîches et énergie de personnage principal. Prêt à monter de niveau ?',
-  heroButtonText = 'VOIR LA COLLECTION',
+  heroTitle = DEFAULT_TEXTS.hero.title,
+  heroSubtitle = DEFAULT_TEXTS.hero.subtitle,
+  heroButtonText = DEFAULT_TEXTS.hero.buttonPrimary,
   heroButtonLink,
   shopUrl,
   stats = defaultStats,
+  badgeText = DEFAULT_TEXTS.hero.badge,
 }: Y2KHeroProps) => {
   const buttonHref = heroButtonLink || (shopUrl ? `/shop/${shopUrl}#products` : '#products');
-  const displayImage = customHeroImage || heroImage;
 
   return (
     <section className="relative min-h-screen pt-20 overflow-hidden bg-background">
@@ -73,15 +74,24 @@ const Y2KHero = ({
             transition={{ duration: 0.8 }}
             className="relative order-2 lg:order-1"
           >
-            <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden bg-gradient-primary p-1">
-              <img
-                src={displayImage}
-                alt="Hero Model"
-                className="w-full h-full object-cover rounded-[2.75rem]"
-              />
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent rounded-[2.75rem]" />
-            </div>
+            {customHeroImage ? (
+              <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden bg-gradient-primary p-1">
+                <img
+                  src={customHeroImage}
+                  alt="Hero"
+                  className="w-full h-full object-cover rounded-[2.75rem]"
+                />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent rounded-[2.75rem]" />
+              </div>
+            ) : (
+              /* Default gradient placeholder when no image */
+              <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden bg-gradient-primary p-1">
+                <div className="w-full h-full bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 rounded-[2.75rem] flex items-center justify-center">
+                  <Sparkles className="w-24 h-24 text-primary/50" />
+                </div>
+              </div>
+            )}
 
             {/* Floating Icons */}
             <FloatingIcon delay={0.5} x="5%" y="20%">
@@ -113,7 +123,7 @@ const Y2KHero = ({
             >
               <span className="inline-flex items-center gap-2 bg-primary/10 border-2 border-primary/30 text-primary font-display font-bold text-sm px-4 py-2 rounded-full">
                 <Sparkles className="w-4 h-4" />
-                NEW COLLECTION
+                {badgeText}
               </span>
             </motion.div>
 
@@ -166,7 +176,7 @@ const Y2KHero = ({
                 whileTap={{ scale: 0.95 }}
                 className="font-display font-bold text-sm px-8 py-4 rounded-full border-2 border-border hover:border-primary hover:text-primary transition-colors"
               >
-                DÉCOUVRIR
+                {DEFAULT_TEXTS.header.about.toUpperCase()}
               </motion.button>
             </motion.div>
 
