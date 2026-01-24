@@ -167,10 +167,10 @@ const ShopEditor = () => {
   }, [formData.sectionOrder, customBlocks, getSectionVisibility]);
 
   return (
-    <div className="flex min-h-screen bg-background w-full -m-6">
-      <main className="flex-1 flex min-h-screen">
+    <div className="flex h-screen bg-background w-full -m-6 overflow-hidden">
+      <main className="flex-1 flex h-screen overflow-hidden">
         {/* Editor Sidebar */}
-        <div className="w-[400px] border-r border-border bg-gradient-to-b from-card to-card/95 flex flex-col">
+        <div className="w-[400px] border-r border-border bg-gradient-to-b from-card to-card/95 flex flex-col h-screen overflow-hidden">
           {/* Header */}
           <div className="sticky top-0 z-20 bg-card/95 backdrop-blur-xl border-b border-border">
             <div className="p-5">
@@ -302,7 +302,7 @@ const ShopEditor = () => {
         </div>
 
         {/* Preview Area */}
-        <div className="flex-1 bg-muted/20 flex flex-col">
+        <div className="flex-1 bg-muted/20 flex flex-col h-screen overflow-hidden">
           {/* Preview Toolbar */}
           <div className="bg-card/80 backdrop-blur-sm border-b border-border px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-1 p-1 bg-muted/50 rounded-xl">
@@ -339,7 +339,7 @@ const ShopEditor = () => {
           </div>
 
           {/* Preview Frame */}
-          <div className="flex-1 flex items-start justify-center p-8 overflow-auto">
+          <div className="flex-1 flex items-start justify-center p-8 overflow-y-auto overflow-x-hidden">
             <motion.div 
               layout
               className={`rounded-2xl shadow-2xl shadow-black/10 overflow-hidden border border-border/50 transition-all duration-500 relative ${
