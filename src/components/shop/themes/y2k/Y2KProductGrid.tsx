@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Y2KProductCard from './Y2KProductCard';
+import { DEFAULT_TEXTS } from '@/lib/defaultTexts';
 
 interface Product {
   id: string;
@@ -26,8 +27,8 @@ const Y2KProductGrid = ({
   products, 
   shopUrl, 
   onAddToCart,
-  sectionTitle = "Hot Right Now",
-  sectionSubtitle = "Ce que tout le monde s'arrache. Attrape le tien avant qu'il disparaisse !"
+  sectionTitle = DEFAULT_TEXTS.productGrid.sectionBadge,
+  sectionSubtitle = DEFAULT_TEXTS.productGrid.subtitle
 }: Y2KProductGridProps) => {
   return (
     <section id="products" className="relative py-16 lg:py-24 overflow-hidden">
@@ -59,7 +60,10 @@ const Y2KProductGrid = ({
           </motion.div>
 
           <h2 className="font-display font-black text-4xl md:text-5xl lg:text-6xl mb-4 text-foreground">
-            NOS <span className="bg-gradient-primary bg-clip-text text-transparent">PRODUITS</span>
+            {DEFAULT_TEXTS.productGrid.title.split(' ')[0].toUpperCase()}{' '}
+            <span className="bg-gradient-primary bg-clip-text text-transparent">
+              {DEFAULT_TEXTS.productGrid.title.split(' ').slice(1).join(' ').toUpperCase()}
+            </span>
           </h2>
 
           <p className="font-body text-muted-foreground max-w-xl mx-auto">
@@ -100,7 +104,7 @@ const Y2KProductGrid = ({
               whileTap={{ scale: 0.95 }}
               className="group inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground font-display font-bold text-sm px-8 py-4 rounded-full shadow-lg"
             >
-              VOIR TOUS LES PRODUITS
+              {DEFAULT_TEXTS.productGrid.viewAll.toUpperCase()}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </motion.button>
           </Link>

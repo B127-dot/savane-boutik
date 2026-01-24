@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles, Heart, Instagram, Facebook, Send, MapPin, Phone, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { DEFAULT_TEXTS } from '@/lib/defaultTexts';
 
 interface Y2KFooterProps {
   shopName: string;
@@ -20,7 +21,7 @@ interface Y2KFooterProps {
 const Y2KFooter = ({
   shopName,
   logo,
-  aboutText = "Streetwear qui a un impact différent. Couleurs audacieuses, coupes fraîches et énergie de personnage principal.",
+  aboutText = DEFAULT_TEXTS.footer.aboutDefault,
   phone,
   email,
   address,
@@ -33,8 +34,18 @@ const Y2KFooter = ({
   const [emailInput, setEmailInput] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  const navigation = ['BOUTIQUE', 'NOUVEAU', 'VIBES', 'À PROPOS'];
-  const help = ['FAQ', 'LIVRAISON', 'RETOURS', 'GUIDE DES TAILLES'];
+  const navigation = [
+    DEFAULT_TEXTS.footer.links.products.toUpperCase(),
+    DEFAULT_TEXTS.productCard.newBadge,
+    DEFAULT_TEXTS.header.about.toUpperCase(),
+    DEFAULT_TEXTS.header.contact.toUpperCase()
+  ];
+  const help = [
+    DEFAULT_TEXTS.footer.help.faq,
+    DEFAULT_TEXTS.footer.help.shipping,
+    DEFAULT_TEXTS.footer.help.returns,
+    DEFAULT_TEXTS.footer.help.sizeGuide
+  ];
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,10 +74,11 @@ const Y2KFooter = ({
               className="text-center lg:text-left"
             >
               <h3 className="font-display font-black text-2xl lg:text-3xl mb-2">
-                REJOINS LA <span className="text-primary">SQUAD</span>
+                {DEFAULT_TEXTS.newsletter.y2kTitle.split(' ')[0].toUpperCase()}{' '}
+                <span className="text-primary">{DEFAULT_TEXTS.newsletter.y2kTitle.split(' ').slice(1).join(' ').toUpperCase()}</span>
               </h3>
               <p className="font-body text-background/70 max-w-md">
-                Inscris-toi pour recevoir les dernières drops et offres exclusives.
+                {DEFAULT_TEXTS.newsletter.y2kSubtitle}
               </p>
             </motion.div>
 
@@ -80,7 +92,7 @@ const Y2KFooter = ({
               {isSubscribed ? (
                 <div className="flex items-center gap-2 text-primary font-display font-bold">
                   <Sparkles className="w-5 h-5" />
-                  Bienvenue dans la squad !
+                  {DEFAULT_TEXTS.newsletter.y2kSuccess}
                 </div>
               ) : (
                 <>
@@ -88,7 +100,7 @@ const Y2KFooter = ({
                     type="email"
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
-                    placeholder="Ton email..."
+                    placeholder={DEFAULT_TEXTS.newsletter.placeholder}
                     className="flex-1 lg:w-72 px-5 py-3 rounded-full bg-background/10 border-2 border-background/20 text-background placeholder:text-background/50 font-body focus:outline-none focus:border-primary transition-colors"
                   />
                   <motion.button
@@ -98,7 +110,7 @@ const Y2KFooter = ({
                     className="px-6 py-3 bg-gradient-primary text-primary-foreground font-display font-bold rounded-full flex items-center gap-2"
                   >
                     <Send className="w-4 h-4" />
-                    <span className="hidden sm:inline">S'INSCRIRE</span>
+                    <span className="hidden sm:inline">{DEFAULT_TEXTS.newsletter.buttonText.toUpperCase()}</span>
                   </motion.button>
                 </>
               )}
@@ -148,7 +160,7 @@ const Y2KFooter = ({
 
           {/* Navigation */}
           <div>
-            <h4 className="font-display font-bold text-sm mb-4 text-background/50">NAVIGATION</h4>
+            <h4 className="font-display font-bold text-sm mb-4 text-background/50">{DEFAULT_TEXTS.footer.navigation.toUpperCase()}</h4>
             <ul className="space-y-2">
               {navigation.map((link) => (
                 <li key={link}>
@@ -176,7 +188,7 @@ const Y2KFooter = ({
 
           {/* Contact */}
           <div>
-            <h4 className="font-display font-bold text-sm mb-4 text-background/50">CONTACT</h4>
+            <h4 className="font-display font-bold text-sm mb-4 text-background/50">{DEFAULT_TEXTS.footer.contact.toUpperCase()}</h4>
             <ul className="space-y-3">
               {phone && (
                 <li className="flex items-center gap-2 text-sm text-background/70">
@@ -216,13 +228,13 @@ const Y2KFooter = ({
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="font-body text-xs text-background/50">
-            © {new Date().getFullYear()} {shopName}. Propulsé avec{' '}
-            <Heart className="w-3 h-3 inline text-primary fill-primary" /> par BurkE-Shop
+            © {new Date().getFullYear()} {shopName}. {DEFAULT_TEXTS.footer.poweredBy}{' '}
+            <Heart className="w-3 h-3 inline text-primary fill-primary" /> BurkinaShop
           </p>
           <div className="flex gap-4 text-xs text-background/50">
-            <Link to="/privacy" className="hover:text-primary transition-colors">Confidentialité</Link>
-            <Link to="/terms" className="hover:text-primary transition-colors">CGV</Link>
-            <Link to="/cookies" className="hover:text-primary transition-colors">Cookies</Link>
+            <Link to="/privacy" className="hover:text-primary transition-colors">{DEFAULT_TEXTS.footer.privacy}</Link>
+            <Link to="/terms" className="hover:text-primary transition-colors">{DEFAULT_TEXTS.footer.terms}</Link>
+            <Link to="/cookies" className="hover:text-primary transition-colors">{DEFAULT_TEXTS.footer.cookies}</Link>
           </div>
         </div>
       </div>

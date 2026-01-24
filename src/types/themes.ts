@@ -30,10 +30,10 @@ export const THEME_REGISTRY: Record<string, Theme> = {
   artisan: {
     id: 'artisan',
     name: 'Artisan',
-    description: 'Design organique et naturel avec layouts asymétriques créatifs. Idéal pour les produits artisanaux et faits main.',
+    description: 'Bientôt disponible - Design organique et naturel avec layouts asymétriques créatifs.',
     preview: '/theme-previews/artisan.jpg',
     category: 'artisan',
-    isAvailable: true,
+    isAvailable: false,
     components: {
       hero: 'artisan',
       productCard: 'artisan',
@@ -43,10 +43,10 @@ export const THEME_REGISTRY: Record<string, Theme> = {
   aesthetique: {
     id: 'aesthetique',
     name: 'Esthétique',
-    description: 'Design sombre et luxueux avec typographie serif élégante. Parfait pour les boutiques premium et design d\'intérieur.',
+    description: 'Bientôt disponible - Design sombre et luxueux avec typographie serif élégante.',
     preview: '/theme-previews/aesthetique.jpg',
     category: 'aesthetique',
-    isAvailable: true,
+    isAvailable: false,
     components: {
       hero: 'aesthetique',
       productCard: 'aesthetique',
@@ -96,11 +96,10 @@ export const THEME_REGISTRY: Record<string, Theme> = {
   urbanwave: {
     id: 'urbanwave',
     name: 'UrbanWave',
-    description: 'Design streetwear sombre et audacieux avec des accents orange vibrants. Parfait pour les marques de mode urbaine et les boutiques streetwear.',
+    description: 'Bientôt disponible - Design streetwear sombre et audacieux avec des accents orange vibrants.',
     preview: '/theme-previews/urbanwave.jpg',
     category: 'urbanwave',
-    isAvailable: true,
-    isNew: true,
+    isAvailable: false,
     components: {
       hero: 'urbanwave',
       productCard: 'urbanwave',
@@ -110,11 +109,10 @@ export const THEME_REGISTRY: Record<string, Theme> = {
   savane: {
     id: 'savane',
     name: 'Savane',
-    description: 'Design brutaliste noir et blanc pur. Typographie Oswald, angles droits, contraste maximal. Parfait pour les marques streetwear authentiques.',
+    description: 'Bientôt disponible - Design brutaliste noir et blanc pur avec typographie Oswald.',
     preview: '/theme-previews/savane.jpg',
     category: 'savane',
-    isAvailable: true,
-    isNew: true,
+    isAvailable: false,
     components: {
       hero: 'savane',
       productCard: 'savane',

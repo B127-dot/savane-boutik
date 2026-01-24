@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { DEFAULT_TEXTS } from '@/lib/defaultTexts';
 
 interface Product {
   id: string;
@@ -68,7 +69,7 @@ const Y2KProductCard = ({ product, shopUrl, onAddToCart }: Y2KProductCardProps) 
               animate={{ scale: 1, rotate: -12 }}
               className="absolute top-4 left-4 bg-gradient-primary text-primary-foreground font-display text-xs font-bold uppercase px-3 py-1.5 rounded-full shadow-lg"
             >
-              HOT
+              {DEFAULT_TEXTS.productCard.newBadge}
             </motion.span>
           )}
 
@@ -116,7 +117,7 @@ const Y2KProductCard = ({ product, shopUrl, onAddToCart }: Y2KProductCardProps) 
               className="w-full flex items-center justify-center gap-2 bg-gradient-primary text-primary-foreground font-display font-bold text-sm py-3 rounded-full shadow-lg"
             >
               <ShoppingBag className="w-4 h-4" />
-              QUICK ADD
+              {DEFAULT_TEXTS.productCard.quickAdd}
             </motion.button>
           </motion.div>
         </div>
