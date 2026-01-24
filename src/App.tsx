@@ -30,6 +30,7 @@ import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import Academy from "./pages/Academy";
 import DemoArtisan from "./pages/DemoArtisan";
+import DemoUrbanwave from "./pages/DemoUrbanwave";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
@@ -48,6 +49,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/demo/artisan" element={<DemoArtisan />} />
+            <Route path="/demo/urbanwave" element={<DemoUrbanwave />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogArticle />} />

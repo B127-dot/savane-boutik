@@ -3,7 +3,7 @@ export interface Theme {
   name: string;
   description: string;
   preview: string;
-  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique' | 'y2k';
+  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique' | 'y2k' | 'urbanwave';
   isAvailable: boolean;
   components: {
     hero: string;
@@ -89,6 +89,19 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       hero: 'y2k',
       productCard: 'y2k',
       footer: 'y2k'
+    }
+  },
+  urbanwave: {
+    id: 'urbanwave',
+    name: 'UrbanWave',
+    description: 'Design streetwear sombre et audacieux avec des accents orange vibrants. Parfait pour les marques de mode urbaine et les boutiques streetwear.',
+    preview: '/theme-previews/urbanwave.jpg',
+    category: 'urbanwave',
+    isAvailable: true,
+    components: {
+      hero: 'urbanwave',
+      productCard: 'urbanwave',
+      footer: 'urbanwave'
     }
   },
 };

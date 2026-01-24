@@ -74,6 +74,17 @@ import {
   Y2KFooter
 } from '@/components/shop/themes/y2k';
 
+// Theme components - URBANWAVE Streetwear
+import {
+  UrbanwaveHeader,
+  UrbanwaveHero,
+  UrbanwaveFeaturesBar,
+  UrbanwaveProductGrid,
+  UrbanwaveCategorySection,
+  UrbanwaveNewsletter,
+  UrbanwaveFooter
+} from '@/components/shop/themes/urbanwave';
+
 const Shop = () => {
   const { shopUrl } = useParams<{ shopUrl: string }>();
   const [searchParams] = useSearchParams();
@@ -283,6 +294,7 @@ const Shop = () => {
   const isArtisan = currentTheme === 'artisan';
   const isAesthetique = currentTheme === 'aesthetique';
   const isY2K = currentTheme === 'y2k';
+  const isUrbanwave = currentTheme === 'urbanwave';
 
   // Helper function to render custom blocks (shared across themes)
   const renderCustomBlock = (block: CustomBlock, animationsEnabled: boolean = true) => {
@@ -412,6 +424,117 @@ const Shop = () => {
           {customBlocks.map(block => renderCustomBlock(block, animationsEnabled))}
 
           <Y2KFooter 
+            shopName={effectiveSettings.shopName}
+            logo={effectiveSettings.logo}
+            aboutText={effectiveSettings.aboutText}
+            phone={effectiveSettings.phone}
+            email={effectiveSettings.email}
+            address={effectiveSettings.address}
+            whatsapp={effectiveSettings.socialLinks.whatsapp}
+            facebook={effectiveSettings.socialLinks.facebook}
+            instagram={effectiveSettings.socialLinks.instagram}
+            tiktok={effectiveSettings.socialLinks.tiktok}
+            shopUrl={shopUrl}
+          />
+
+          {effectiveSettings.socialLinks.whatsapp && (
+            <WhatsAppButton 
+              phoneNumber={effectiveSettings.socialLinks.whatsapp}
+              message="Bonjour, je visite votre boutique en ligne !"
+            />
+          )}
+
+          <BottomNavMobile 
+            cartItemsCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+            onCategoriesClick={scrollToCategories}
+            onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          />
+
+          <CartSheet
+            open={isCartOpen}
+            onOpenChange={setIsCartOpen}
+            shopUrl={shopUrl || ''}
+            shopSettings={effectiveSettings}
+          />
+
+          <QuickViewModal
+            product={quickViewProduct}
+            isOpen={!!quickViewProduct}
+            onClose={() => setQuickViewProduct(null)}
+            onAddToCart={handleAddToCart}
+          />
+        </div>
+      </ThemeProvider>
+    );
+  }
+
+  // URBANWAVE STREETWEAR THEME
+  if (isUrbanwave) {
+    const customBlocks = effectiveSettings.customBlocks || [];
+    const animationsEnabled = effectiveSettings.animationsEnabled ?? true;
+    
+    return (
+      <ThemeProvider themeId={currentTheme}>
+        <DynamicThemeStyles 
+          colorPalette={effectiveSettings.colorPalette}
+          buttonStyle={effectiveSettings.buttonStyle}
+          fontFamily={effectiveSettings.fontFamily}
+        />
+        <div className={`min-h-screen bg-background pb-20 md:pb-0 urbanwave-theme ${fontClass}`}>
+          {/* Promo Banner */}
+          {effectiveSettings.promoBanner?.enabled && effectiveSettings.promoBanner.position === 'top' && (
+            <PromoBanner
+              text={effectiveSettings.promoBanner.text}
+              backgroundColor={effectiveSettings.promoBanner.backgroundColor}
+              textColor={effectiveSettings.promoBanner.textColor}
+              link={effectiveSettings.promoBanner.link}
+              animationsEnabled={animationsEnabled}
+            />
+          )}
+
+          <UrbanwaveHeader 
+            logo={effectiveSettings.logo}
+            shopName={effectiveSettings.shopName}
+            cartItemCount={cartItemsCount}
+            onCartClick={() => setIsCartOpen(true)}
+            shopUrl={shopUrl}
+          />
+
+          {effectiveSettings.showHero !== false && (
+            <UrbanwaveHero 
+              heroImage={effectiveSettings.heroImage}
+              heroTitle={effectiveSettings.heroTitle}
+              heroSubtitle={effectiveSettings.heroSubtitle}
+              heroButtonText={effectiveSettings.heroButtonText}
+              heroButtonLink={effectiveSettings.heroButtonLink}
+              shopUrl={shopUrl}
+            />
+          )}
+
+          {effectiveSettings.showTrustBar !== false && (
+            <UrbanwaveFeaturesBar />
+          )}
+
+          <div id="products">
+            <UrbanwaveProductGrid 
+              products={filteredProducts}
+              shopUrl={shopUrl}
+              onAddToCart={handleAddToCart}
+              onQuickView={(product) => setQuickViewProduct(product)}
+              sectionTitle={effectiveSettings.productsTitle}
+              sectionSubtitle={effectiveSettings.productsSubtitle}
+            />
+          </div>
+
+          <UrbanwaveCategorySection />
+
+          {/* Custom Blocks */}
+          {customBlocks.map(block => renderCustomBlock(block, animationsEnabled))}
+
+          <UrbanwaveNewsletter />
+
+          <UrbanwaveFooter 
             shopName={effectiveSettings.shopName}
             logo={effectiveSettings.logo}
             aboutText={effectiveSettings.aboutText}
