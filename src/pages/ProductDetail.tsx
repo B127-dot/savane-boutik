@@ -35,6 +35,11 @@ const ProductDetail = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [reviews, setReviews] = useState<any[]>([]);
   const [rating, setRating] = useState<{ average: number; count: number }>({ average: 0, count: 0 });
+  
+  // Review form - must be declared before any conditional returns
+  const [reviewName, setReviewName] = useState('');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState('');
 
   // Get current theme
   const previewTheme = searchParams.get('previewTheme');
@@ -48,11 +53,6 @@ const ProductDetail = () => {
   if (currentTheme === 'y2k') {
     return <Y2kProductDetail />;
   }
-  
-  // Review form
-  const [reviewName, setReviewName] = useState('');
-  const [reviewRating, setReviewRating] = useState(5);
-  const [reviewComment, setReviewComment] = useState('');
 
   useEffect(() => {
     const foundProduct = products.find(p => p.id === productId);
