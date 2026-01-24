@@ -6,3 +6,4 @@ export { default as Y2KProductCard } from './Y2KProductCard';
 export { default as Y2KProductGrid } from './Y2KProductGrid';
 export { default as Y2KFooter } from './Y2KFooter';
 export { default as Y2KTrustBar } from './Y2KTrustBar';
+export { default as Y2KProductDetail } from './Y2KProductDetail';
