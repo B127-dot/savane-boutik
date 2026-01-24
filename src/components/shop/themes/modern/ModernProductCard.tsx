@@ -2,7 +2,7 @@ import { Product } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Heart, Eye, ShoppingCart, Star, Zap } from 'lucide-react';
+import { Heart, Eye, ShoppingCart, Star, Zap, ImageOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface ModernProductCardProps {
@@ -123,11 +123,26 @@ const ModernProductCard = ({
       {/* Image Container */}
       <div className="relative overflow-hidden">
         <AspectRatio ratio={1}>
-          <img
-            src={product.images[0] || '/placeholder.svg'}
-            alt={product.name}
-            className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
-          />
+          {product.images[0] && product.images[0] !== '/placeholder.svg' ? (
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
+            />
+          ) : (
+            <div className={`w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-primary/10 via-muted to-primary/5 ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}>
+              <div 
+                className="w-16 h-16 rounded-full flex items-center justify-center mb-3"
+                style={{ backgroundColor: 'color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 15%, transparent)' }}
+              >
+                <ImageOff 
+                  className="w-8 h-8" 
+                  style={{ color: 'var(--shop-primary, hsl(var(--primary)))' }}
+                />
+              </div>
+              <span className="text-xs text-muted-foreground font-medium">Image à venir</span>
+            </div>
+          )}
         </AspectRatio>
         
         {/* Quick Add Overlay */}
