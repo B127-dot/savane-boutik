@@ -1,8 +1,15 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Sparkles, SlidersHorizontal } from 'lucide-react';
+import { Search, Sparkles, ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Product, Category } from '@/contexts/AppContext';
 import { Y2kProductCard } from './Y2kProductCard';
 
@@ -23,7 +30,7 @@ export const Y2kProductGrid = ({
 }: Y2kProductGridProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<'newest' | 'price-asc' | 'price-desc'>('newest');
+  const [sortBy, setSortBy] = useState<string>('newest');
 
   const filteredProducts = useMemo(() => {
     let filtered = [...products];
@@ -49,6 +56,9 @@ export const Y2kProductGrid = ({
       case 'price-desc':
         filtered.sort((a, b) => b.price - a.price);
         break;
+      case 'name-asc':
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        break;
       case 'newest':
       default:
         // Assuming newer products have higher IDs or we keep original order
@@ -58,128 +68,132 @@ export const Y2kProductGrid = ({
     return filtered;
   }, [products, searchQuery, selectedCategory, sortBy]);
 
-  // Determine card sizes for bento layout
-  const getCardSize = (index: number): 'standard' | 'medium' | 'large' => {
-    const pattern = index % 6;
-    if (pattern === 0) return 'large';
-    if (pattern === 3) return 'medium';
-    return 'standard';
-  };
-
   return (
-    <section className="py-16 y2k-theme">
+    <section className="py-12 md:py-16 y2k-theme">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-8 md:mb-10"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full border border-primary/30 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full border border-primary/30 mb-3">
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="font-outfit text-sm font-medium text-primary">THE COLLECTION</span>
+            <span className="font-outfit text-xs font-medium text-primary uppercase tracking-wider">
+              Notre Collection
+            </span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-outfit font-black">
+          <h2 className="text-3xl md:text-4xl font-outfit font-black">
             <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              FRESH DROPS
+              Nos Produits
             </span>
           </h2>
-          <p className="text-muted-foreground font-outfit mt-4 max-w-md mx-auto">
-            Main character energy only. Shop the vibes that hit different.
-          </p>
         </motion.div>
 
-        {/* Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-10">
+        {/* Filters Row */}
+        <div className="flex flex-col gap-4 mb-8">
           {/* Search */}
-          <div className="relative flex-1">
+          <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Search the vibes..."
+              placeholder="Rechercher un produit..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 py-6 rounded-full border-2 border-border/50 focus:border-primary font-outfit"
+              className="pl-12 py-5 rounded-xl border-2 border-border/50 focus:border-primary font-outfit bg-background/80"
             />
           </div>
 
-          {/* Category Pills */}
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            <Button
-              variant={selectedCategory === null ? "default" : "outline"}
-              onClick={() => setSelectedCategory(null)}
-              className={`rounded-full font-outfit font-bold whitespace-nowrap ${
-                selectedCategory === null 
-                  ? 'bg-gradient-to-r from-primary to-secondary text-primary-foreground' 
-                  : ''
-              }`}
-            >
-              ALL
-            </Button>
-            {categories.map((cat) => (
-              <Button
-                key={cat.id}
-                variant={selectedCategory === cat.id ? "default" : "outline"}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`rounded-full font-outfit font-bold whitespace-nowrap ${
-                  selectedCategory === cat.id 
-                    ? 'bg-gradient-to-r from-primary to-secondary text-primary-foreground' 
-                    : ''
-                }`}
-              >
-                {cat.name.toUpperCase()}
-              </Button>
-            ))}
-          </div>
+          {/* Category Pills + Sort */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* Category Pills - Horizontally Scrollable */}
+            <div className="flex-1 overflow-x-auto pb-1 scrollbar-hide">
+              <div className="flex gap-2 min-w-max">
+                <Button
+                  variant={selectedCategory === null ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategory(null)}
+                  className={`rounded-full font-outfit font-semibold text-xs whitespace-nowrap ${
+                    selectedCategory === null 
+                      ? 'bg-gradient-to-r from-primary to-secondary text-primary-foreground border-0' 
+                      : 'hover:border-primary/50'
+                  }`}
+                >
+                  Tous
+                </Button>
+                {categories.map((cat) => (
+                  <Button
+                    key={cat.id}
+                    variant={selectedCategory === cat.id ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`rounded-full font-outfit font-semibold text-xs whitespace-nowrap ${
+                      selectedCategory === cat.id 
+                        ? 'bg-gradient-to-r from-primary to-secondary text-primary-foreground border-0' 
+                        : 'hover:border-primary/50'
+                    }`}
+                  >
+                    {cat.name}
+                  </Button>
+                ))}
+              </div>
+            </div>
 
-          {/* Sort */}
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full"
-            >
-              <SlidersHorizontal className="w-5 h-5" />
-            </Button>
+            {/* Sort Dropdown */}
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-full sm:w-[180px] rounded-xl font-outfit border-2 border-border/50 focus:border-primary">
+                <SelectValue placeholder="Trier par" />
+              </SelectTrigger>
+              <SelectContent className="font-outfit">
+                <SelectItem value="newest">Plus récents</SelectItem>
+                <SelectItem value="price-asc">Prix croissant</SelectItem>
+                <SelectItem value="price-desc">Prix décroissant</SelectItem>
+                <SelectItem value="name-asc">Nom A-Z</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
-        {/* Product Grid - Bento Style */}
+        {/* Product Grid - Uniform Layout */}
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-auto">
-            {filteredProducts.map((product, index) => {
-              const size = getCardSize(index);
-              const colSpan = size === 'large' ? 'md:col-span-2' : '';
-              const rowSpan = size === 'large' ? 'md:row-span-2' : size === 'medium' ? 'md:row-span-1' : '';
-              
-              return (
-                <div key={product.id} className={`${colSpan} ${rowSpan}`}>
-                  <Y2kProductCard
-                    product={product}
-                    shopUrl={shopUrl}
-                    isNew={index < 3}
-                    size={size}
-                    onAddToCart={onAddToCart}
-                    onQuickView={onQuickView}
-                  />
-                </div>
-              );
-            })}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {filteredProducts.map((product, index) => (
+              <Y2kProductCard
+                key={product.id}
+                product={product}
+                shopUrl={shopUrl}
+                isNew={index < 3}
+                onAddToCart={onAddToCart}
+                onQuickView={onQuickView}
+              />
+            ))}
           </div>
         ) : (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-20"
+            className="text-center py-16"
           >
-            <Sparkles className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
-            <p className="text-xl font-outfit font-bold text-muted-foreground">
-              No vibes found 😢
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 flex items-center justify-center">
+              <Sparkles className="w-10 h-10 text-primary/50" />
+            </div>
+            <p className="text-xl font-outfit font-bold text-foreground mb-2">
+              Aucun produit trouvé
             </p>
-            <p className="text-muted-foreground font-outfit mt-2">
-              Try adjusting your filters, bestie!
+            <p className="text-muted-foreground font-outfit mb-4">
+              Essayez de modifier vos filtres
             </p>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory(null);
+              }}
+              className="rounded-full font-outfit"
+            >
+              Réinitialiser les filtres
+            </Button>
           </motion.div>
         )}
       </div>
