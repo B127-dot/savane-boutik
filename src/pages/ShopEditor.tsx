@@ -53,6 +53,7 @@ import {
   DesignSection,
   HeroSection,
   TrustBarSection,
+  MarqueeSection,
   ProductsSection,
   SectionsSection,
   PromoSection,
@@ -280,6 +281,7 @@ const ShopEditor = () => {
                   updateTrustBarItem={updateTrustBarItem}
                   removeTrustBarItem={removeTrustBarItem}
                 />
+                <MarqueeSection formData={formData} updateField={updateField} />
                 <ProductsSection formData={formData} updateField={updateField} />
                 <SectionsSection 
                   formData={formData}

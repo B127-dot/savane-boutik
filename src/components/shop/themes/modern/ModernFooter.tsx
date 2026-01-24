@@ -3,6 +3,9 @@ import { PaymentMethodsGrid } from '@/components/shop/PaymentMethodsIcons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FooterLink } from '@/contexts/AppContext';
+import { DEFAULT_TEXTS } from '@/lib/defaultTexts';
 
 // TikTok Icon Component
 const TikTokIcon = ({ className = "h-5 w-5" }: { className?: string }) => (
@@ -26,12 +29,13 @@ interface ModernFooterProps {
   showNewsletter?: boolean;
   newsletterTitle?: string;
   showPoweredBy?: boolean;
+  footerLinks?: FooterLink[];
 }
 
 const ModernFooter = ({
   logo,
   shopName,
-  aboutText = "Votre boutique en ligne de confiance.",
+  aboutText = DEFAULT_TEXTS.footer.aboutDefault,
   phone,
   whatsapp,
   email,
@@ -41,11 +45,17 @@ const ModernFooter = ({
   tiktok,
   paymentMethods = ['orange-money', 'moov-money', 'wave', 'cash'],
   showNewsletter = true,
-  newsletterTitle = "Restez informé",
+  newsletterTitle = DEFAULT_TEXTS.newsletter.title,
   showPoweredBy = true,
+  footerLinks,
 }: ModernFooterProps) => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
+
+  // Use custom footer links or defaults
+  const displayLinks = footerLinks && footerLinks.length > 0 
+    ? footerLinks 
+    : DEFAULT_TEXTS.footerLinks.map((link, i) => ({ id: `default-${i}`, ...link }));
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,9 +82,7 @@ const ModernFooter = ({
           <div className="container mx-auto px-4">
             <div className="max-w-xl mx-auto text-center">
               <h3 className="text-2xl font-display font-bold mb-2">{newsletterTitle}</h3>
-              <p className="text-white/70 mb-6">
-                Recevez nos offres exclusives et nouveautés directement dans votre boîte mail.
-              </p>
+              <p className="text-white/70 mb-6">{DEFAULT_TEXTS.newsletter.subtitle}</p>
               
               {isSubscribed ? (
                 <div 
@@ -82,13 +90,13 @@ const ModernFooter = ({
                   style={{ backgroundColor: 'var(--shop-primary, hsl(var(--primary)))' }}
                 >
                   <span>✓</span>
-                  <span>Merci pour votre inscription !</span>
+                  <span>{DEFAULT_TEXTS.newsletter.successMessage}</span>
                 </div>
               ) : (
                 <form onSubmit={handleNewsletterSubmit} className="flex gap-2 max-w-md mx-auto">
                   <Input
                     type="email"
-                    placeholder="Votre email"
+                    placeholder={DEFAULT_TEXTS.newsletter.placeholder}
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
                     className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
@@ -126,39 +134,24 @@ const ModernFooter = ({
               )}
               <span className="font-display font-bold text-xl">{shopName}</span>
             </div>
-            <p className="text-white/70 font-body text-sm leading-relaxed">
-              {aboutText}
-            </p>
+            <p className="text-white/70 font-body text-sm leading-relaxed">{aboutText}</p>
           </div>
 
-          {/* Column 2: Navigation */}
+          {/* Column 2: Navigation (Custom Links) */}
           <div>
-            <h4 className="font-display font-semibold text-lg mb-4">Navigation</h4>
+            <h4 className="font-display font-semibold text-lg mb-4">{DEFAULT_TEXTS.footer.navigation}</h4>
             <ul className="space-y-3">
-              <li>
-                <a href="#products" className="text-white/70 hover:text-white transition-colors text-sm flex items-center gap-2 group">
-                  <ArrowRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  <span>Produits</span>
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="text-white/70 hover:text-white transition-colors text-sm flex items-center gap-2 group">
-                  <ArrowRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  <span>À propos</span>
-                </a>
-              </li>
-              <li>
-                <a href="#faq" className="text-white/70 hover:text-white transition-colors text-sm flex items-center gap-2 group">
-                  <ArrowRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  <span>FAQ</span>
-                </a>
-              </li>
-              <li>
-                <a href="#cgv" className="text-white/70 hover:text-white transition-colors text-sm flex items-center gap-2 group">
-                  <ArrowRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  <span>Conditions de vente</span>
-                </a>
-              </li>
+              {displayLinks.map((link) => (
+                <li key={link.id}>
+                  <Link 
+                    to={link.url} 
+                    className="text-white/70 hover:text-white transition-colors text-sm flex items-center gap-2 group"
+                  >
+                    <ArrowRight className="h-3 w-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                    <span>{link.label}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

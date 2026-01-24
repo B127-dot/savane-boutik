@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Heart, Instagram, Facebook, Send, MapPin, Phone, Mail } from 'lucide-react';
+import { Sparkles, Heart, Instagram, Facebook, Send, MapPin, Phone, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { DEFAULT_TEXTS } from '@/lib/defaultTexts';
+import { FooterLink } from '@/contexts/AppContext';
 
 interface Y2KFooterProps {
   shopName: string;
@@ -16,6 +17,7 @@ interface Y2KFooterProps {
   instagram?: string;
   tiktok?: string;
   shopUrl?: string;
+  footerLinks?: FooterLink[];
 }
 
 const Y2KFooter = ({
@@ -30,22 +32,15 @@ const Y2KFooter = ({
   instagram,
   tiktok,
   shopUrl,
+  footerLinks,
 }: Y2KFooterProps) => {
   const [emailInput, setEmailInput] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  const navigation = [
-    DEFAULT_TEXTS.footer.links.products.toUpperCase(),
-    DEFAULT_TEXTS.productCard.newBadge,
-    DEFAULT_TEXTS.header.about.toUpperCase(),
-    DEFAULT_TEXTS.header.contact.toUpperCase()
-  ];
-  const help = [
-    DEFAULT_TEXTS.footer.help.faq,
-    DEFAULT_TEXTS.footer.help.shipping,
-    DEFAULT_TEXTS.footer.help.returns,
-    DEFAULT_TEXTS.footer.help.sizeGuide
-  ];
+  // Use custom footer links or defaults
+  const displayLinks = footerLinks && footerLinks.length > 0 
+    ? footerLinks 
+    : DEFAULT_TEXTS.footerLinks.map((link, i) => ({ id: `default-${i}`, ...link }));
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -158,15 +153,15 @@ const Y2KFooter = ({
             </div>
           </div>
 
-          {/* Navigation */}
+          {/* Custom Links */}
           <div>
             <h4 className="font-display font-bold text-sm mb-4 text-background/50">{DEFAULT_TEXTS.footer.navigation.toUpperCase()}</h4>
             <ul className="space-y-2">
-              {navigation.map((link) => (
-                <li key={link}>
-                  <button className="font-body text-sm text-background/70 hover:text-primary transition-colors">
-                    {link}
-                  </button>
+              {displayLinks.map((link) => (
+                <li key={link.id}>
+                  <Link to={link.url} className="font-body text-sm text-background/70 hover:text-primary transition-colors">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -176,13 +171,10 @@ const Y2KFooter = ({
           <div>
             <h4 className="font-display font-bold text-sm mb-4 text-background/50">AIDE</h4>
             <ul className="space-y-2">
-              {help.map((link) => (
-                <li key={link}>
-                  <button className="font-body text-sm text-background/70 hover:text-primary transition-colors">
-                    {link}
-                  </button>
-                </li>
-              ))}
+              <li><button className="font-body text-sm text-background/70 hover:text-primary transition-colors">{DEFAULT_TEXTS.footer.help.faq}</button></li>
+              <li><button className="font-body text-sm text-background/70 hover:text-primary transition-colors">{DEFAULT_TEXTS.footer.help.shipping}</button></li>
+              <li><button className="font-body text-sm text-background/70 hover:text-primary transition-colors">{DEFAULT_TEXTS.footer.help.returns}</button></li>
+              <li><button className="font-body text-sm text-background/70 hover:text-primary transition-colors">{DEFAULT_TEXTS.footer.help.sizeGuide}</button></li>
             </ul>
           </div>
 

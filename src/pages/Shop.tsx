@@ -498,7 +498,7 @@ const Shop = () => {
             shopUrl={shopUrl}
           />
 
-          <Y2KMarquee />
+          <Y2KMarquee items={effectiveSettings.marqueeItems} />
 
           {effectiveSettings.showHero !== false && (
             <Y2KHero 
@@ -508,12 +508,16 @@ const Shop = () => {
               heroButtonText={effectiveSettings.heroButtonText}
               heroButtonLink={effectiveSettings.heroButtonLink}
               shopUrl={shopUrl}
+              badgeText={effectiveSettings.heroBadgeText}
+              badgeIcon={effectiveSettings.heroBadgeIcon}
+              showBadge={effectiveSettings.showHeroBadge}
               stats={effectiveSettings.heroStats}
+              showStats={effectiveSettings.showHeroStats}
             />
           )}
 
           {effectiveSettings.showTrustBar !== false && (
-            <Y2KTrustBar />
+            <Y2KTrustBar items={effectiveSettings.trustBar} />
           )}
 
           <div id="products">
@@ -541,6 +545,7 @@ const Shop = () => {
             instagram={effectiveSettings.socialLinks.instagram}
             tiktok={effectiveSettings.socialLinks.tiktok}
             shopUrl={shopUrl}
+            footerLinks={effectiveSettings.footerLinks}
           />
 
           {effectiveSettings.socialLinks.whatsapp && (
@@ -1248,13 +1253,13 @@ const Shop = () => {
           facebook={effectiveSettings.socialLinks.facebook}
           instagram={effectiveSettings.socialLinks.instagram}
           tiktok={effectiveSettings.socialLinks.tiktok}
-          // Premium props
           email={effectiveSettings.email}
           address={effectiveSettings.address}
           paymentMethods={effectiveSettings.paymentMethods || ['orange-money', 'moov-money', 'wave', 'cash']}
           showNewsletter={effectiveSettings.showNewsletter !== false}
           newsletterTitle={effectiveSettings.newsletterTitle}
           showPoweredBy={effectiveSettings.showPoweredBy !== false}
+          footerLinks={effectiveSettings.footerLinks}
         />
 
         {effectiveSettings.socialLinks.whatsapp && (
