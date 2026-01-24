@@ -91,9 +91,6 @@ export const DEFAULT_TEXTS = {
     placeholder: "Votre email",
     buttonText: "S'inscrire",
     successMessage: "Merci pour votre inscription !",
-    y2kTitle: "Rejoins la Squad",
-    y2kSubtitle: "Inscris-toi pour recevoir les dernières drops et offres exclusives.",
-    y2kSuccess: "Bienvenue dans la squad !",
   },
 
   // Footer

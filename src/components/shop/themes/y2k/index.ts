@@ -1,9 +1,0 @@
-// Y2K Gen-Z Theme - Vibrant, Bold, Playful
-export { default as Y2KHeader } from './Y2KHeader';
-export { default as Y2KMarquee } from './Y2KMarquee';
-export { default as Y2KHero } from './Y2KHero';
-export { default as Y2KProductCard } from './Y2KProductCard';
-export { default as Y2KProductGrid } from './Y2KProductGrid';
-export { default as Y2KFooter } from './Y2KFooter';
-export { default as Y2KTrustBar } from './Y2KTrustBar';
-export { default as Y2KProductDetail } from './Y2KProductDetail';

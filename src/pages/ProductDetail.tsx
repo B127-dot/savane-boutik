@@ -22,7 +22,6 @@ import {
 
 // Themed Product Detail Pages
 import { UrbanwaveProductDetail } from '@/components/shop/themes/urbanwave';
-import { Y2KProductDetail } from '@/components/shop/themes/y2k';
 
 const ProductDetail = () => {
   const { shopUrl, productId } = useParams<{ shopUrl: string; productId: string }>();
@@ -43,10 +42,6 @@ const ProductDetail = () => {
   // Render themed product detail if theme requires it
   if (currentTheme === 'urbanwave') {
     return <UrbanwaveProductDetail />;
-  }
-  
-  if (currentTheme === 'y2k') {
-    return <Y2KProductDetail />;
   }
   
   // Review form
