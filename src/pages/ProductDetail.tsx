@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ShoppingCart, Minus, Plus, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -20,8 +20,12 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 
+// Themed Product Detail Pages
+import { UrbanwaveProductDetail } from '@/components/shop/themes/urbanwave';
+
 const ProductDetail = () => {
   const { shopUrl, productId } = useParams<{ shopUrl: string; productId: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { products, categories, addToCart, cart, shopSettings, addReview, getApprovedReviews, getProductRating } = useApp();
   const { toast } = useToast();
@@ -30,6 +34,15 @@ const ProductDetail = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [reviews, setReviews] = useState<any[]>([]);
   const [rating, setRating] = useState<{ average: number; count: number }>({ average: 0, count: 0 });
+
+  // Get current theme
+  const previewTheme = searchParams.get('previewTheme');
+  const currentTheme = previewTheme || shopSettings?.selectedTheme || 'modern';
+  
+  // Render themed product detail if theme requires it
+  if (currentTheme === 'urbanwave') {
+    return <UrbanwaveProductDetail />;
+  }
   
   // Review form
   const [reviewName, setReviewName] = useState('');
