@@ -6,17 +6,20 @@ import { Button } from '@/components/ui/button';
 import { useApp } from '@/contexts/AppContext';
 
 interface Y2kHeaderProps {
-  shopUrl: string;
+  shopUrl?: string;
   shopName?: string;
+  logo?: string;
   logoUrl?: string;
+  cartItemCount?: number;
   onCartClick?: () => void;
 }
 
-export const Y2kHeader = ({ shopUrl, shopName, logoUrl, onCartClick }: Y2kHeaderProps) => {
+export const Y2kHeader = ({ shopUrl = '', shopName, logo, logoUrl, cartItemCount, onCartClick }: Y2kHeaderProps) => {
   const { cart } = useApp();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
-  const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const actualLogo = logo || logoUrl;
+  const cartItemsCount = cartItemCount ?? cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -30,8 +33,8 @@ export const Y2kHeader = ({ shopUrl, shopName, logoUrl, onCartClick }: Y2kHeader
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to={`/shop/${shopUrl}`} className="flex items-center gap-2">
-              {logoUrl ? (
-                <img src={logoUrl} alt={shopName} className="h-8 w-auto" />
+              {actualLogo ? (
+                <img src={actualLogo} alt={shopName} className="h-8 w-auto" />
               ) : (
                 <motion.div 
                   className="flex items-center gap-2"
