@@ -15,12 +15,12 @@ export const COLOR_PALETTES = [
   { 
     id: 'y2k', 
     name: 'Y2K Original', 
-    colors: ['#1a0a14', '#ec4899', '#a855f7', '#84cc16'],
-    primary: '#ec4899',    // Hot Pink (330 90% 60%)
-    secondary: '#a855f7',  // Electric Purple (280 80% 65%)
-    accent: '#84cc16',     // Electric Lime (85 90% 50%)
-    background: '#1a0a14', // Dark purple-tinted background
-    foreground: '#fdf4ff'  // Soft pink-white
+    colors: ['#1f0a1a', '#f5428d', '#c861fc', '#9bd212'],
+    primary: '#f5428d',    // Hot Pink - HSL(330 90% 60%)
+    secondary: '#c861fc',  // Electric Purple - HSL(280 80% 65%)
+    accent: '#9bd212',     // Electric Lime - HSL(85 90% 50%)
+    background: '#1f0a1a', // Dark magenta background - HSL(280 40% 8%)
+    foreground: '#faf5ff'  // Light purple-white
   },
   { 
     id: 'glacier', 
