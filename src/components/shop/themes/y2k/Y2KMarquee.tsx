@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Heart, Star, Zap, Truck, Shield } from 'lucide-react';
+import { Sparkles, Heart, Star, Zap, Truck, Shield, Gift, Flame } from 'lucide-react';
+import { MarqueeItem } from '@/contexts/AppContext';
+import { DEFAULT_TEXTS } from '@/lib/defaultTexts';
 
 interface Y2KMarqueeProps {
-  items?: Array<{ text: string; icon?: string }>;
+  items?: MarqueeItem[];
 }
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -12,19 +14,21 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   zap: Zap,
   truck: Truck,
   shield: Shield,
+  gift: Gift,
+  flame: Flame,
 };
 
-const defaultItems = [
-  { text: 'LIVRAISON GRATUITE', icon: 'truck' },
-  { text: 'NOUVELLES SORTIES', icon: 'star' },
-  { text: 'ÉNERGIE PRINCIPALE', icon: 'zap' },
-  { text: 'SLAY ALL DAY', icon: 'heart' },
-  { text: 'Y2K VIBES', icon: 'sparkles' },
-  { text: 'ÉDITION LIMITÉE', icon: 'star' },
-];
+const Y2KMarquee = ({ items }: Y2KMarqueeProps) => {
+  // Use provided items or defaults from centralized texts
+  const displayItems = items && items.length > 0 
+    ? items 
+    : DEFAULT_TEXTS.marquee.map((item, index) => ({
+        id: `default-${index}`,
+        text: item.text,
+        icon: item.icon,
+      }));
 
-const Y2KMarquee = ({ items = defaultItems }: Y2KMarqueeProps) => {
-  const repeatedItems = [...items, ...items, ...items, ...items];
+  const repeatedItems = [...displayItems, ...displayItems, ...displayItems, ...displayItems];
 
   return (
     <div className="w-full bg-gradient-primary py-2.5 overflow-hidden">

@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Star, Heart, Zap, Sparkles } from 'lucide-react';
+import { ArrowRight, Star, Heart, Zap, Sparkles, Flame, Gift, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DEFAULT_TEXTS } from '@/lib/defaultTexts';
+import { HeroStat } from '@/contexts/AppContext';
 
 interface FloatingIconProps {
   children: React.ReactNode;
@@ -27,6 +28,15 @@ const FloatingIcon = ({ children, delay, x, y }: FloatingIconProps) => (
   </motion.div>
 );
 
+const BADGE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  sparkles: Sparkles,
+  flame: Flame,
+  star: Star,
+  zap: Zap,
+  gift: Gift,
+  trending: TrendingUp,
+};
+
 interface Y2KHeroProps {
   heroImage?: string;
   heroTitle?: string;
@@ -34,15 +44,13 @@ interface Y2KHeroProps {
   heroButtonText?: string;
   heroButtonLink?: string;
   shopUrl?: string;
-  stats?: Array<{ value: string; label: string }>;
+  // Premium editable props
   badgeText?: string;
+  badgeIcon?: string;
+  showBadge?: boolean;
+  stats?: HeroStat[];
+  showStats?: boolean;
 }
-
-const defaultStats = [
-  { value: '10K+', label: 'Clients satisfaits' },
-  { value: '500+', label: 'Produits' },
-  { value: '4.9', label: 'Note moyenne' },
-];
 
 const Y2KHero = ({
   heroImage: customHeroImage,
@@ -51,10 +59,19 @@ const Y2KHero = ({
   heroButtonText = DEFAULT_TEXTS.hero.buttonPrimary,
   heroButtonLink,
   shopUrl,
-  stats = defaultStats,
   badgeText = DEFAULT_TEXTS.hero.badge,
+  badgeIcon = 'sparkles',
+  showBadge = true,
+  stats,
+  showStats = true,
 }: Y2KHeroProps) => {
   const buttonHref = heroButtonLink || (shopUrl ? `/shop/${shopUrl}#products` : '#products');
+  const BadgeIcon = BADGE_ICONS[badgeIcon] || Sparkles;
+
+  // Use provided stats or defaults
+  const displayStats = stats && stats.length > 0 
+    ? stats.map(s => ({ value: `${s.value}${s.suffix || ''}`, label: s.label }))
+    : DEFAULT_TEXTS.stats.map(s => ({ value: `${s.value}${s.suffix || ''}`, label: s.label }));
 
   return (
     <section className="relative min-h-screen pt-20 overflow-hidden bg-background">
@@ -76,16 +93,10 @@ const Y2KHero = ({
           >
             {customHeroImage ? (
               <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden bg-gradient-primary p-1">
-                <img
-                  src={customHeroImage}
-                  alt="Hero"
-                  className="w-full h-full object-cover rounded-[2.75rem]"
-                />
-                {/* Gradient overlay */}
+                <img src={customHeroImage} alt="Hero" className="w-full h-full object-cover rounded-[2.75rem]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent rounded-[2.75rem]" />
               </div>
             ) : (
-              /* Default gradient placeholder when no image */
               <div className="relative aspect-[3/4] rounded-[3rem] overflow-hidden bg-gradient-primary p-1">
                 <div className="w-full h-full bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 rounded-[2.75rem] flex items-center justify-center">
                   <Sparkles className="w-24 h-24 text-primary/50" />
@@ -93,7 +104,6 @@ const Y2KHero = ({
               </div>
             )}
 
-            {/* Floating Icons */}
             <FloatingIcon delay={0.5} x="5%" y="20%">
               <div className="w-14 h-14 rounded-2xl bg-primary/90 backdrop-blur flex items-center justify-center shadow-lg">
                 <Star className="w-7 h-7 text-primary-foreground fill-primary-foreground" />
@@ -115,17 +125,19 @@ const Y2KHero = ({
 
           {/* Right Side - Content */}
           <div className="order-1 lg:order-2 space-y-6 lg:space-y-8">
-            {/* Tag */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <span className="inline-flex items-center gap-2 bg-primary/10 border-2 border-primary/30 text-primary font-display font-bold text-sm px-4 py-2 rounded-full">
-                <Sparkles className="w-4 h-4" />
-                {badgeText}
-              </span>
-            </motion.div>
+            {/* Badge */}
+            {showBadge && badgeText && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                <span className="inline-flex items-center gap-2 bg-primary/10 border-2 border-primary/30 text-primary font-display font-bold text-sm px-4 py-2 rounded-full">
+                  <BadgeIcon className="w-4 h-4" />
+                  {badgeText}
+                </span>
+              </motion.div>
+            )}
 
             {/* Title */}
             <motion.h1
@@ -181,28 +193,30 @@ const Y2KHero = ({
             </motion.div>
 
             {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 1 }}
-              className="flex gap-8 pt-8"
-            >
-              {stats.map((stat, i) => (
-                <div key={i} className="text-center">
-                  <motion.span
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 1 + i * 0.1 }}
-                    className="block font-display font-black text-2xl lg:text-3xl bg-gradient-primary bg-clip-text text-transparent"
-                  >
-                    {stat.value}
-                  </motion.span>
-                  <span className="font-body text-xs text-muted-foreground">
-                    {stat.label}
-                  </span>
-                </div>
-              ))}
-            </motion.div>
+            {showStats && displayStats.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 1 }}
+                className="flex gap-8 pt-8"
+              >
+                {displayStats.map((stat, i) => (
+                  <div key={i} className="text-center">
+                    <motion.span
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 1 + i * 0.1 }}
+                      className="block font-display font-black text-2xl lg:text-3xl bg-gradient-primary bg-clip-text text-transparent"
+                    >
+                      {stat.value}
+                    </motion.span>
+                    <span className="font-body text-xs text-muted-foreground">
+                      {stat.label}
+                    </span>
+                  </div>
+                ))}
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
