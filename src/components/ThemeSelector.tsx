@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, Eye, Sparkles, Lock } from 'lucide-react';
+import { Check, Eye, Lock } from 'lucide-react';
 import { getAvailableThemes, Theme } from '@/types/themes';
 import { useToast } from '@/hooks/use-toast';
 import ThemePreviewModal from './ThemePreviewModal';
 import { useApp } from '@/contexts/AppContext';
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface ThemeSelectorProps {
   currentTheme: string;
@@ -17,11 +18,12 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
   const { toast } = useToast();
   const { shopSettings } = useApp();
   const themes = getAvailableThemes();
-  const [selectedTheme, setSelectedTheme] = useState<string>(currentTheme);
   const [previewTheme, setPreviewTheme] = useState<Theme | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  const handlePreview = (theme: Theme) => {
+  const handlePreview = (e: React.MouseEvent, theme: Theme) => {
+    e.stopPropagation();
+    
     if (!theme.isAvailable) {
       toast({
         title: "Thème non disponible",
@@ -54,7 +56,6 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
       return;
     }
 
-    setSelectedTheme(theme.id);
     onThemeChange(theme.id);
     
     toast({
@@ -63,120 +64,118 @@ const ThemeSelector = ({ currentTheme, onThemeChange }: ThemeSelectorProps) => {
     });
   };
 
+  // Sort themes: available first, then by new status
+  const sortedThemes = [...themes].sort((a, b) => {
+    if (a.isAvailable !== b.isAvailable) return a.isAvailable ? -1 : 1;
+    if (a.isNew !== b.isNew) return a.isNew ? -1 : 1;
+    return 0;
+  });
+
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <Sparkles className="h-6 w-6 text-primary" />
-          Choisir un thème pour votre boutique
-        </h2>
-        <p className="text-muted-foreground">
-          Personnalisez l'apparence de votre boutique en un clic. Tous vos produits et paramètres restent intacts.
-        </p>
-      </div>
+    <div className="space-y-2">
+      {sortedThemes.map((theme, index) => {
+        const isActive = theme.id === currentTheme;
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {themes.map((theme) => {
-          const isActive = theme.id === currentTheme;
-          const isSelected = theme.id === selectedTheme;
-
-          return (
-            <Card 
-              key={theme.id}
-              className={`relative overflow-hidden transition-all duration-300 hover:shadow-lg ${
-                isSelected ? 'ring-2 ring-primary shadow-xl' : ''
-              } ${!theme.isAvailable ? 'opacity-75' : ''}`}
-            >
-              {/* Theme Preview */}
-              <div className="relative h-48 bg-gradient-to-br from-muted to-muted-foreground/10 overflow-hidden">
-                <img 
-                  src={theme.preview} 
-                  alt={`Aperçu ${theme.name}`}
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                />
-                {!theme.isAvailable && (
-                  <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
-                    <Lock className="h-12 w-12 text-white" />
-                  </div>
+        return (
+          <motion.div
+            key={theme.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05 }}
+            onClick={() => theme.isAvailable && handleApplyTheme(theme)}
+            className={cn(
+              "flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200",
+              "border",
+              isActive 
+                ? "bg-primary/5 border-primary/40 shadow-[0_0_12px_-3px_hsl(var(--primary)/0.3)]" 
+                : "border-transparent hover:bg-muted/50 hover:border-border",
+              !theme.isAvailable && "opacity-60 cursor-not-allowed"
+            )}
+          >
+            {/* Preview Image - Square 1:1 */}
+            <div className={cn(
+              "w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 relative",
+              "ring-2 transition-all duration-200",
+              isActive ? "ring-primary" : "ring-border"
+            )}>
+              <img 
+                src={theme.preview} 
+                alt={`Aperçu ${theme.name}`}
+                className="w-full h-full object-cover object-top"
+              />
+              
+              {/* Lock overlay for unavailable */}
+              {!theme.isAvailable && (
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                  <Lock className="h-5 w-5 text-white/80" />
+                </div>
+              )}
+              
+              {/* Subtle gradient overlay for premium feel */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            </div>
+            
+            {/* Theme Info */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className={cn(
+                  "font-semibold text-sm truncate",
+                  isActive && "text-primary"
+                )}>
+                  {theme.name}
+                </span>
+                
+                {theme.isNew && (
+                  <Badge 
+                    variant="secondary" 
+                    className="text-[10px] px-1.5 py-0 h-4 bg-primary/10 text-primary border-0 font-medium"
+                  >
+                    NOUVEAU
+                  </Badge>
                 )}
-
-                {/* Active Badge */}
-                {isActive && (
-                  <Badge className="absolute top-3 right-3 bg-primary text-primary-foreground">
-                    <Check className="h-3 w-3 mr-1" />
-                    Actuel
+                
+                {!theme.isAvailable && (
+                  <Badge 
+                    variant="secondary" 
+                    className="text-[10px] px-1.5 py-0 h-4 font-medium"
+                  >
+                    Bientôt
                   </Badge>
                 )}
               </div>
-
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <span>{theme.name}</span>
-                  {!theme.isAvailable && (
-                    <Badge variant="secondary" className="ml-2">
-                      Bientôt
-                    </Badge>
-                  )}
-                </CardTitle>
-                <CardDescription>{theme.description}</CardDescription>
-              </CardHeader>
-
-              <CardContent className="space-y-3">
-                <div className="flex gap-2">
-                  <Button
-                    onClick={() => handleApplyTheme(theme)}
-                    disabled={!theme.isAvailable || isActive}
-                    className="flex-1"
-                    variant={isActive ? "outline" : "default"}
-                  >
-                    {isActive ? (
-                      <>
-                        <Check className="h-4 w-4 mr-2" />
-                        Activé
-                      </>
-                    ) : theme.isAvailable ? (
-                      'Appliquer'
-                    ) : (
-                      <>
-                        <Lock className="h-4 w-4 mr-2" />
-                        Verrouillé
-                      </>
-                    )}
-                  </Button>
-                  
-                  {theme.isAvailable && !isActive && (
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => handlePreview(theme)}
-                      title="Prévisualiser"
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
-
-      {/* Info Card */}
-      <Card className="bg-muted/50 border-primary/20">
-        <CardContent className="pt-6">
-          <div className="flex gap-4">
-            <Sparkles className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <p className="text-sm font-medium text-foreground">
-                Nouveau thème en préparation
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Le thème "Élégant" sera disponible prochainement avec un design sophistiqué et des animations raffinées.
+              
+              <p className="text-xs text-muted-foreground truncate mt-0.5">
+                {theme.description.slice(0, 60)}...
               </p>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+            
+            {/* Actions */}
+            <div className="flex items-center gap-1 flex-shrink-0">
+              {isActive && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="w-6 h-6 rounded-full bg-primary flex items-center justify-center"
+                >
+                  <Check className="w-3.5 h-3.5 text-primary-foreground" />
+                </motion.div>
+              )}
+              
+              {theme.isAvailable && !isActive && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 hover:bg-primary/10"
+                  onClick={(e) => handlePreview(e, theme)}
+                  title="Prévisualiser"
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </motion.div>
+        );
+      })}
 
       {/* Preview Modal */}
       {previewTheme && (

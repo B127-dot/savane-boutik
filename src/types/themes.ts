@@ -5,6 +5,7 @@ export interface Theme {
   preview: string;
   category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique' | 'y2k' | 'urbanwave';
   isAvailable: boolean;
+  isNew?: boolean;
   components: {
     hero: string;
     productCard: string;
@@ -85,6 +86,7 @@ export const THEME_REGISTRY: Record<string, Theme> = {
     preview: '/theme-previews/y2k.jpg',
     category: 'y2k',
     isAvailable: true,
+    isNew: true,
     components: {
       hero: 'y2k',
       productCard: 'y2k',
@@ -98,6 +100,7 @@ export const THEME_REGISTRY: Record<string, Theme> = {
     preview: '/theme-previews/urbanwave.jpg',
     category: 'urbanwave',
     isAvailable: true,
+    isNew: true,
     components: {
       hero: 'urbanwave',
       productCard: 'urbanwave',
