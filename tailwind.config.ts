@@ -197,6 +197,14 @@ export default {
 				'ticker': {
 					'0%': { transform: 'translateX(0)' },
 					'100%': { transform: 'translateX(-50%)' }
+				},
+				'wiggle': {
+					'0%, 100%': { transform: 'rotate(-3deg)' },
+					'50%': { transform: 'rotate(3deg)' }
+				},
+				'bounce-y': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' }
 				}
 			},
 			animation: {
@@ -214,6 +222,8 @@ export default {
 				'slide-up': 'slide-up 0.8s ease-out forwards',
 				'scale-in': 'scale-in 0.5s ease-out forwards',
 				'ticker': 'ticker 20s linear infinite',
+				'wiggle': 'wiggle 1s ease-in-out infinite',
+				'bounce-y': 'bounce-y 2s ease-in-out infinite',
 			},
 			animationDelay: {
 				'100': '100ms',
