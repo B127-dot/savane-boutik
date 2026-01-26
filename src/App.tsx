@@ -34,6 +34,7 @@ import DemoUrbanwave from "./pages/DemoUrbanwave";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
+import CategoryPage from "./pages/CategoryPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { CookieConsentBanner } from "./components/CookieConsentBanner";
 
@@ -74,10 +75,11 @@ const App = () => (
             <Route path="/marketing" element={<ProtectedRoute><Marketing /></ProtectedRoute>} />
             <Route path="/payment-integration" element={<ProtectedRoute><PaymentIntegration /></ProtectedRoute>} />
             {/* Public Shop Routes */}
-          <Route path="/shop/:shopUrl" element={<Shop />} />
-          <Route path="/shop/:shopUrl/product/:productId" element={<ProductDetail />} />
-          <Route path="/shop/:shopUrl/checkout" element={<Checkout />} />
-          <Route path="/shop/:shopUrl/order-success/:orderId" element={<OrderSuccess />} />
+            <Route path="/shop/:shopUrl" element={<Shop />} />
+            <Route path="/shop/:shopUrl/category/:categorySlug" element={<CategoryPage />} />
+            <Route path="/shop/:shopUrl/product/:productId" element={<ProductDetail />} />
+            <Route path="/shop/:shopUrl/checkout" element={<Checkout />} />
+            <Route path="/shop/:shopUrl/order-success/:orderId" element={<OrderSuccess />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
