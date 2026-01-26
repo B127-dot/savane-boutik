@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { Search, ArrowUpDown } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,8 +12,10 @@ import {
 } from '@/components/ui/select';
 import { Skeleton } from '@/components/ui/skeleton';
 import ModernProductCard from './ModernProductCard';
+import ViewModeToggle from '@/components/shop/ViewModeToggle';
 import { DEFAULT_TEXTS } from '@/lib/defaultTexts';
 import { Product } from '@/contexts/AppContext';
+import { cn } from '@/lib/utils';
 
 interface Category {
   id: string;
@@ -35,8 +37,8 @@ interface ModernProductGridProps {
   isLoading?: boolean;
 }
 
-// Skeleton Card Component
-const SkeletonCard = () => (
+// Skeleton Card Component for Grid mode
+const SkeletonCardGrid = () => (
   <div className="bg-card rounded-xl border border-border overflow-hidden">
     <Skeleton className="aspect-square w-full" />
     <div className="p-3 md:p-4 space-y-3">
@@ -49,6 +51,27 @@ const SkeletonCard = () => (
       <Skeleton className="h-4 w-1/2 mx-auto" />
       <Skeleton className="h-6 w-2/3 mx-auto" />
       <Skeleton className="h-11 w-full rounded-lg" />
+    </div>
+  </div>
+);
+
+// Skeleton Card Component for Feed mode
+const SkeletonCardFeed = () => (
+  <div className="bg-card rounded-2xl shadow-lg overflow-hidden">
+    <Skeleton className="aspect-[4/5] w-full" />
+    <div className="p-4 space-y-3">
+      <div className="flex items-center justify-between">
+        <div className="flex gap-1">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Skeleton key={i} className="h-4 w-4 rounded-full" />
+          ))}
+        </div>
+        <Skeleton className="h-5 w-20 rounded-full" />
+      </div>
+      <Skeleton className="h-6 w-3/4" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-8 w-1/3" />
+      <Skeleton className="h-12 w-full rounded-lg" />
     </div>
   </div>
 );
@@ -95,6 +118,20 @@ const ModernProductGrid = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortOrder, setSortOrder] = useState('default');
+  
+  // View mode state with localStorage persistence
+  const [viewMode, setViewMode] = useState<'grid' | 'feed'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('shop-view-mode');
+      return (saved === 'grid' || saved === 'feed') ? saved : 'feed';
+    }
+    return 'feed';
+  });
+
+  // Save view mode to localStorage
+  useEffect(() => {
+    localStorage.setItem('shop-view-mode', viewMode);
+  }, [viewMode]);
   
   // Respect user's motion preferences
   const shouldReduceMotion = useReducedMotion();
@@ -214,8 +251,8 @@ const ModernProductGrid = ({
               </div>
             )}
 
-            {/* Sort Dropdown */}
-            <div className="flex justify-center">
+            {/* Sort + View Mode Toggle */}
+            <div className="flex items-center justify-center gap-3">
               <Select value={sortOrder} onValueChange={setSortOrder}>
                 <SelectTrigger className="w-full max-w-[200px] h-11">
                   <ArrowUpDown className="h-4 w-4 mr-2" />
@@ -229,20 +266,35 @@ const ModernProductGrid = ({
                   <SelectItem value="name">{DEFAULT_TEXTS.productGrid.sortOptions.name}</SelectItem>
                 </SelectContent>
               </Select>
+              
+              {/* View Mode Toggle - Visible on mobile */}
+              <ViewModeToggle 
+                mode={viewMode} 
+                onChange={setViewMode}
+                className="md:hidden"
+              />
             </div>
           </motion.div>
         )}
 
         {/* Loading State */}
         {isLoading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
+          <div className={cn(
+            viewMode === 'feed' 
+              ? "flex flex-col gap-4 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-6"
+              : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6"
+          )}>
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <SkeletonCard key={i} />
+              viewMode === 'feed' ? <SkeletonCardFeed key={i} /> : <SkeletonCardGrid key={i} />
             ))}
           </div>
         ) : filteredProducts.length > 0 ? (
-          /* Products Grid */
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
+          /* Products Grid/Feed */
+          <div className={cn(
+            viewMode === 'feed' 
+              ? "flex flex-col gap-4 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-6"
+              : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6"
+          )}>
             {filteredProducts.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -262,6 +314,7 @@ const ModernProductGrid = ({
                   onToggleWishlist={onToggleWishlist}
                   isInWishlist={wishlist.includes(product.id)}
                   buttonStyle={buttonStyle}
+                  variant={viewMode}
                 />
               </motion.div>
             ))}
