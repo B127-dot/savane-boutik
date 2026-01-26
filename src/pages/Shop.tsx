@@ -1105,6 +1105,7 @@ const Shop = () => {
                     <CategoryShowcase 
                       categories={categories}
                       products={products}
+                      shopUrl={shopUrl || ''}
                       onCategoryClick={(categoryName) => {
                         setSelectedCategory(categoryName);
                         scrollToProducts();

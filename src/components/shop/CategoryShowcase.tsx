@@ -1,15 +1,20 @@
+import { useNavigate } from 'react-router-dom';
 import { Category, Product } from '@/contexts/AppContext';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { slugify } from '@/lib/utils';
 
 interface CategoryShowcaseProps {
   categories: Category[];
   products: Product[];
-  onCategoryClick: (categoryName: string) => void;
+  shopUrl: string;
+  onCategoryClick?: (categoryName: string) => void;
 }
 
-const CategoryShowcase = ({ categories, products, onCategoryClick }: CategoryShowcaseProps) => {
+const CategoryShowcase = ({ categories, products, shopUrl, onCategoryClick }: CategoryShowcaseProps) => {
+  const navigate = useNavigate();
+
   const getProductCountByCategory = (categoryId: string) => {
     return products.filter(p => p.categoryId === categoryId && p.status === 'active').length;
   };
@@ -17,6 +22,12 @@ const CategoryShowcase = ({ categories, products, onCategoryClick }: CategorySho
   const getCategoryImage = (categoryId: string) => {
     const categoryProducts = products.filter(p => p.categoryId === categoryId && p.status === 'active');
     return categoryProducts[0]?.images[0] || '/placeholder.svg';
+  };
+
+  const handleCategoryClick = (category: Category) => {
+    const slug = slugify(category.name);
+    navigate(`/shop/${shopUrl}/category/${slug}`);
+    onCategoryClick?.(category.name);
   };
 
   if (categories.length === 0) return null;
@@ -44,7 +55,7 @@ const CategoryShowcase = ({ categories, products, onCategoryClick }: CategorySho
               <div
                 key={category.id}
                 className="group relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
-                onClick={() => onCategoryClick(category.name)}
+                onClick={() => handleCategoryClick(category)}
               >
                 <AspectRatio ratio={4/3}>
                   <img 
