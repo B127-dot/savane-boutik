@@ -1,219 +1,194 @@
 
-# Plan de Redesign Immersif des Cartes Produit - Thème Modern
 
-## Contexte du Problème
+# Plan : Page Catégorie Dédiée avec Grille 3 Colonnes et Mode Feed Mobile
 
-Les utilisateurs trouvent que la grille actuelle à 2 colonnes sur mobile n'est **"pas intéressante"**. Le problème :
-- Les cartes sont trop petites et comprimées
-- Difficile de voir les détails des produits
-- L'expérience n'est pas immersive ni engageante
-- Ne correspond pas aux standards modernes (Instagram, TikTok, etc.)
+## Objectif
 
-## Solution Proposée : Layout Hybride Adaptatif
+Créer une page dédiée pour chaque catégorie avec :
+- URL propre et partageable
+- Layout **3 colonnes** sur desktop (plus aéré)
+- Mode **Feed immersif 1 colonne** sur mobile (réutilisant le travail précédent)
 
-Créer un système de présentation qui s'adapte au nombre de produits et au type d'affichage souhaité :
+## Architecture de la Page
 
-### Option A : Mode "Feed" (Style Instagram) - RECOMMANDÉ
-Sur mobile, afficher les produits en **une seule colonne** avec des cartes plus grandes et immersives.
-
-```
-+----------------------------------------+
-|  [Image produit - Grande, ratio 4:5]   |
-|                                        |
-|  ❤️ 👁️                                |
-|                                        |
-+----------------------------------------+
-|  ⭐⭐⭐⭐⭐  |  NOUVEAU                |
-|  Laptop Gaming                          |
-|  650 000 FCFA                          |
-|  [🛒 Ajouter au panier]                |
-+----------------------------------------+
-        (swipe up pour le suivant)
-```
-
-### Option B : Mode "Showcase" Alterné
-Premier produit en pleine largeur (featured), puis grille 2 colonnes.
-
-```
-+----------------------------------------+
-|     [Produit 1 - Full Width]           |
-+----------------------------------------+
-+-----------------+  +-----------------+
-| [Produit 2]     |  | [Produit 3]     |
-+-----------------+  +-----------------+
+```text
++--------------------------------------------------+
+|  [← Retour]     Logo     [Panier]                |
++--------------------------------------------------+
+|                                                  |
+|  ┌──────────────────────────────────────────┐   |
+|  │     [Image de couverture catégorie]       │   |
+|  │                                           │   |
+|  │     MODE                                  │   |
+|  │     12 produits disponibles              │   |
+|  └──────────────────────────────────────────┘   |
+|                                                  |
++--------------------------------------------------+
+|  [Rechercher...]    [Toggle]    Trier: [Récents]|
++--------------------------------------------------+
+|                                                  |
+|  ┌──────┐  ┌──────┐  ┌──────┐                   |
+|  │      │  │      │  │      │                   |
+|  │  P1  │  │  P2  │  │  P3  │  ← 3 colonnes     |
+|  │      │  │      │  │      │                   |
+|  └──────┘  └──────┘  └──────┘                   |
+|                                                  |
++--------------------------------------------------+
 ```
 
-## Modifications Techniques
+## Responsive Design
 
-### 1. ModernProductGrid.tsx - Nouveau Layout Adaptatif
+| Écran | Layout |
+|-------|--------|
+| Mobile (< 768px) | **1 colonne Feed** (ratio 4:5, immersif) |
+| Tablette (768-1024px) | 2 colonnes grille |
+| Desktop (> 1024px) | **3 colonnes** grille |
 
-**Changement de la grille mobile :**
-- Avant : `grid-cols-2` (2 colonnes sur mobile)
-- Après : `grid-cols-1 sm:grid-cols-2` (1 colonne sur petit mobile, 2 sur grand mobile/tablette)
+## Fichiers à Créer/Modifier
 
-**Ajout d'un sélecteur de vue :**
-- Bouton toggle pour choisir entre "Grille" et "Liste/Feed"
-- Persistance du choix dans localStorage
+### 1. CRÉER : `src/pages/CategoryPage.tsx`
+
+Nouvelle page dédiée avec :
+- Header avec bouton retour et panier
+- Hero de catégorie (image, nom, nombre de produits)
+- Toggle Grille/Feed (réutilise ViewModeToggle)
+- Barre de recherche et tri
+- Grille de produits avec ModernProductCard
+- Bottom navigation mobile
 
 ```tsx
-// Nouveau state pour le mode d'affichage
-const [viewMode, setViewMode] = useState<'grid' | 'feed'>('feed');
-
-// Classes dynamiques
-const gridClasses = viewMode === 'feed' 
-  ? 'flex flex-col gap-4 md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-6'
-  : 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6';
+// Structure principale
+const CategoryPage = () => {
+  const { shopUrl, categorySlug } = useParams();
+  const [viewMode, setViewMode] = useState<'grid' | 'feed'>('feed');
+  
+  // Grille responsive : 1 col feed / 2 col tablette / 3 col desktop
+  const gridClasses = viewMode === 'feed'
+    ? 'flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6'
+    : 'grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6';
+    
+  return (
+    <div className="min-h-screen bg-background">
+      <CategoryHeader shopUrl={shopUrl} cartCount={cart.length} />
+      <CategoryHero category={category} productCount={products.length} />
+      <FilterBar viewMode={viewMode} onViewModeChange={setViewMode} />
+      <ProductGrid products={products} viewMode={viewMode} />
+      <BottomNavMobile /> {/* Sur mobile */}
+    </div>
+  );
+};
 ```
 
-### 2. ModernProductCard.tsx - Variante "Feed"
+### 2. MODIFIER : `src/App.tsx`
 
-Créer une variante de carte optimisée pour l'affichage en colonne unique :
-
-**Ratio d'image ajusté :**
-- Mode grille : `AspectRatio ratio={1}` (carré)
-- Mode feed : `AspectRatio ratio={4/5}` (plus vertical, plus immersif)
-
-**Layout horizontal pour le contenu en mode feed :**
+Ajouter la nouvelle route :
 ```tsx
-// En mode feed, le contenu s'affiche en ligne
-<div className={variant === 'feed' 
-  ? 'flex items-center justify-between p-4' 
-  : 'p-3 md:p-4 space-y-2'
-}>
+import CategoryPage from './pages/CategoryPage';
+
+// Dans les routes publiques
+<Route path="/shop/:shopUrl/category/:categorySlug" element={<CategoryPage />} />
 ```
 
-**Informations enrichies en mode feed :**
-- Nom complet du produit (pas de truncate)
-- Description courte visible
-- Prix plus grand et proéminent
-- Bouton d'ajout au panier plus large
+### 3. MODIFIER : `src/components/shop/CategoryShowcase.tsx`
 
-### 3. Nouveau Composant : ViewModeToggle
-
-Petit toggle UI pour basculer entre les modes :
-
+Changer le comportement du clic pour naviguer vers la page dédiée :
 ```tsx
-const ViewModeToggle = ({ mode, onChange }) => (
-  <div className="flex bg-muted rounded-lg p-1">
-    <Button 
-      variant={mode === 'feed' ? 'default' : 'ghost'}
-      size="sm"
-      onClick={() => onChange('feed')}
-    >
-      <LayoutList className="h-4 w-4" />
-    </Button>
-    <Button 
-      variant={mode === 'grid' ? 'default' : 'ghost'}
-      size="sm"
-      onClick={() => onChange('grid')}
-    >
-      <LayoutGrid className="h-4 w-4" />
-    </Button>
-  </div>
-);
+import { useNavigate } from 'react-router-dom';
+import { slugify } from '@/lib/utils';
+
+// Ajouter shopUrl en props
+interface CategoryShowcaseProps {
+  categories: Category[];
+  products: Product[];
+  shopUrl: string; // NOUVEAU
+  onCategoryClick?: (categoryName: string) => void; // Optionnel maintenant
+}
+
+// Dans le composant
+const navigate = useNavigate();
+
+const handleCategoryClick = (category: Category) => {
+  const slug = slugify(category.name);
+  navigate(`/shop/${shopUrl}/category/${slug}`);
+};
 ```
 
-### 4. Améliorations UX Additionnelles
+### 4. MODIFIER : `src/lib/utils.ts`
 
-**Animation de scroll fluide :**
-- Snap-to-card en mode feed pour un défilement "TikTok-like"
-- `scroll-snap-type: y mandatory` avec `scroll-snap-align: start`
-
-**Lazy loading amélioré :**
-- Charger les images au fur et à mesure du scroll
-- Placeholder blur pendant le chargement
-
-**Micro-interactions :**
-- Parallax léger sur l'image au scroll
-- Transition douce entre les modes grille/feed
-
-## Fichiers à Modifier
-
-| Fichier | Action |
-|---------|--------|
-| `src/components/shop/themes/modern/ModernProductGrid.tsx` | Ajouter state viewMode, toggle, et classes adaptatives |
-| `src/components/shop/themes/modern/ModernProductCard.tsx` | Ajouter prop `variant: 'grid' \| 'feed'`, ajuster ratio et layout |
-| (Nouveau) `src/components/shop/ViewModeToggle.tsx` | Créer composant toggle grille/liste |
-
-## Résultat Visuel Attendu
-
-### Avant (Problème actuel)
-```
-+--------+  +--------+
-| Petit  |  | Petit  |
-| carré  |  | carré  |
-+--------+  +--------+
-| Laptop |  | Phone  |
-| 650K   |  | 450K   |
-[Ajouter]  [Ajouter]
-```
-- Images comprimées
-- Détails difficiles à lire
-- Pas engageant
-
-### Après (Mode Feed)
-```
-+----------------------------------+
-|                                  |
-|    [Grande image produit]        |
-|         Ratio 4:5                |
-|                                  |
-|  ❤️ 👁️                          |
-+----------------------------------+
-| ⭐⭐⭐⭐⭐     NOUVEAU           |
-| Laptop Gaming Pro 15"            |
-| Le meilleur pour les gamers      |
-|                                  |
-| 650 000 FCFA                     |
-| [  🛒 Ajouter au panier  ]       |
-+----------------------------------+
-```
-- Image grande et immersive
-- Tous les détails visibles
-- Expérience Instagram/TikTok-like
-- Plus engageant pour l'acheteur
-
-## Avantages de cette Approche
-
-1. **Flexibilité** : L'utilisateur choisit son mode préféré
-2. **Immersion** : Le mode feed offre une expérience premium sur mobile
-3. **Compatibilité** : Desktop reste en grille classique (comportement attendu)
-4. **Progressive** : Amélioration sans casser l'existant
-5. **Moderne** : Aligné avec les tendances TikTok/Instagram Shopping
-
-## Détails Techniques
-
-### Props ModernProductCard mise à jour
+Ajouter la fonction slugify :
 ```tsx
-interface ModernProductCardProps {
-  product: Product;
-  shopUrl: string;
-  onAddToCart: (product: Product) => void;
-  onQuickView: (product: Product) => void;
-  onToggleWishlist?: (productId: string) => void;
-  isInWishlist?: boolean;
-  buttonStyle?: 'rounded' | 'pill' | 'square';
-  variant?: 'grid' | 'feed'; // NOUVEAU
+export function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // Supprime accents
+    .replace(/[^a-z0-9]+/g, '-')     // Remplace caractères spéciaux par tirets
+    .replace(/(^-|-$)/g, '');        // Supprime tirets en début/fin
 }
 ```
 
-### Classes conditionnelles pour le mode feed
+### 5. MODIFIER : `src/pages/Shop.tsx`
+
+Passer `shopUrl` au composant CategoryShowcase :
 ```tsx
-// Container de la carte
-className={cn(
-  "group relative bg-card overflow-hidden transition-all duration-300",
-  variant === 'feed' 
-    ? "rounded-2xl border-0 shadow-lg" 
-    : "rounded-xl border border-border hover:shadow-2xl hover:-translate-y-2"
-)}
-
-// Ratio d'image
-<AspectRatio ratio={variant === 'feed' ? 4/5 : 1}>
-
-// Zone de contenu
-className={cn(
-  variant === 'feed' 
-    ? "p-4 space-y-3" 
-    : "p-3 md:p-4 space-y-2 md:space-y-3"
-)}
+<CategoryShowcase
+  categories={categories}
+  products={products}
+  shopUrl={shopUrl || ''}
+/>
 ```
+
+## Composants Réutilisés
+
+Le travail précédent sur le thème Modern sera réutilisé :
+
+| Composant | Utilisation |
+|-----------|-------------|
+| `ViewModeToggle` | Toggle grille/feed dans CategoryPage |
+| `ModernProductCard` | Cartes produit avec variant 'grid' ou 'feed' |
+| `BottomNavMobile` | Navigation mobile en bas de page |
+| `ModernHeader` | Header de la page catégorie |
+
+## Flux Utilisateur
+
+```text
+1. Boutique principale (/shop/ma-boutique)
+   │
+   ├── Clic sur catégorie "Mode"
+   │
+   ▼
+2. Page catégorie (/shop/ma-boutique/category/mode)
+   │
+   ├── Hero avec image et titre "MODE"
+   ├── Toggle Grille/Feed
+   ├── 12 produits affichés
+   │   └── Desktop: 3 colonnes
+   │   └── Mobile: 1 colonne Feed immersif
+   │
+   ├── Bouton retour → Retour à la boutique
+   │
+   ▼
+3. Clic sur produit → Page détail produit
+```
+
+## Classes Tailwind pour la Grille
+
+```tsx
+// Mode Feed (mobile par défaut)
+const feedClasses = "flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6";
+
+// Mode Grille
+const gridClasses = "grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6";
+
+// Déterminer la variante de carte
+const cardVariant = viewMode === 'feed' && isMobile ? 'feed' : 'grid';
+```
+
+## Avantages de cette Approche
+
+1. **Cohérence** : Réutilise le système Feed/Grille déjà créé
+2. **SEO** : URLs propres indexables par Google
+3. **Partage** : Liens directs vers catégories spécifiques
+4. **UX Mobile** : Mode Feed immersif déjà validé par les utilisateurs
+5. **Aéré** : 3 colonnes desktop = meilleure lisibilité que 4
+
