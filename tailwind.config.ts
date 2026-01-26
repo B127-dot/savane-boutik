@@ -205,6 +205,10 @@ export default {
 				'bounce-y': {
 					'0%, 100%': { transform: 'translateY(0)' },
 					'50%': { transform: 'translateY(-10px)' }
+				},
+				'marquee': {
+					from: { transform: 'translateX(0)' },
+					to: { transform: 'translateX(calc(-100% - var(--gap)))' }
 				}
 			},
 			animation: {
@@ -224,6 +228,7 @@ export default {
 				'ticker': 'ticker 20s linear infinite',
 				'wiggle': 'wiggle 1s ease-in-out infinite',
 				'bounce-y': 'bounce-y 2s ease-in-out infinite',
+				'marquee': 'marquee var(--duration) linear infinite',
 			},
 			animationDelay: {
 				'100': '100ms',
