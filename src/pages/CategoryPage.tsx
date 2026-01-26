@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, ShoppingBag, Search, ArrowUpDown } from 'lucide-react';
+import { ArrowLeft, ShoppingBag, Search, ArrowUpDown, Home } from 'lucide-react';
 import { useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import ModernProductCard from '@/components/shop/themes/modern/ModernProductCard';
 import ViewModeToggle from '@/components/shop/ViewModeToggle';
 import BottomNavMobile from '@/components/shop/BottomNavMobile';
@@ -168,6 +176,32 @@ const CategoryPage = () => {
           </div>
         </div>
       </header>
+
+      {/* Breadcrumb */}
+      <nav className="container mx-auto px-4 py-3 md:py-4">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to={`/shop/${shopUrl}`} className="flex items-center gap-1.5">
+                  <Home className="h-3.5 w-3.5" />
+                  <span>Accueil</span>
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to={`/shop/${shopUrl}#categories`}>Catégories</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{category.name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </nav>
 
       {/* Category Hero */}
       <section className="relative overflow-hidden">
