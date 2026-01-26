@@ -16,9 +16,6 @@ import TrustBar from '@/components/shop/TrustBar';
 import SkeletonProductCard from '@/components/shop/SkeletonProductCard';
 import NewArrivalsCarousel from '@/components/shop/NewArrivalsCarousel';
 import CategoryShowcase from '@/components/shop/CategoryShowcase';
-import SocialProofSection from '@/components/shop/SocialProofSection';
-import NewsletterSection from '@/components/shop/NewsletterSection';
-import WhyBuySection from '@/components/shop/WhyBuySection';
 import QuickViewModal from '@/components/shop/QuickViewModal';
 import BottomNavMobile from '@/components/shop/BottomNavMobile';
 import DynamicThemeStyles from '@/components/shop/DynamicThemeStyles';
@@ -35,9 +32,13 @@ import {
 } from '@/components/shop/blocks';
 
 // Theme components - Modern
-import ModernHero from '@/components/shop/themes/modern/ModernHero';
-import ModernProductGrid from '@/components/shop/themes/modern/ModernProductGrid';
-import ModernFooter from '@/components/shop/themes/modern/ModernFooter';
+import {
+  ModernHeader,
+  ModernHero,
+  ModernTrustBar,
+  ModernProductGrid,
+  ModernFooter
+} from '@/components/shop/themes/modern';
 
 // Theme components - ARTISAN
 import { 
@@ -943,7 +944,15 @@ const Shop = () => {
             case 'glass':
               return <GlassHeader {...headerProps} />;
             default:
-              return <ShopHeader {...headerProps} />;
+              return (
+                <ModernHeader
+                  logo={headerProps.logo}
+                  shopName={headerProps.shopName}
+                  cartItemCount={headerProps.cartItemsCount}
+                  onCartClick={headerProps.onCartClick}
+                  shopUrl={shopUrl}
+                />
+              );
           }
         })()}
 
@@ -1074,7 +1083,7 @@ const Shop = () => {
                 );
 
               case 'trustBar':
-                return <TrustBar key="trustBar" trustItems={effectiveSettings.trustBar} />;
+                return <ModernTrustBar key="trustBar" items={effectiveSettings.trustBar?.map(item => ({ icon: item.icon, text: item.title }))} />;
 
               case 'newArrivals':
                 return (
@@ -1123,7 +1132,7 @@ const Shop = () => {
                 );
 
               case 'newsletter':
-                return <NewsletterSection key="newsletter" buttonStyle={effectiveSettings.buttonStyle} />;
+                return null; // Newsletter intégrée dans ModernFooter
 
               default:
                 return null;
@@ -1131,8 +1140,6 @@ const Shop = () => {
           });
         })()}
 
-        <SocialProofSection />
-        <WhyBuySection />
 
         <ModernFooter 
           logo={effectiveSettings.logo}
