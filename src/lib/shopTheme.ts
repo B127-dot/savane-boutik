@@ -1,4 +1,4 @@
-import { TrustBarItem, HeroStat, HeroFeature, MarqueeItem, FooterLink } from '@/contexts/AppContext';
+import { TrustBarItem, HeroStat, HeroFeature, MarqueeItem, FooterLink, TestimonialItem } from '@/contexts/AppContext';
 
 // Color Palettes - Centralized design system
 export const COLOR_PALETTES = [
@@ -203,6 +203,52 @@ export const DEFAULT_MARQUEE_ITEMS: MarqueeItem[] = [
   { id: '3', text: 'QUALITÉ PREMIUM', icon: 'zap' },
   { id: '4', text: 'SATISFAIT OU REMBOURSÉ', icon: 'heart' },
   { id: '5', text: 'ÉDITION LIMITÉE', icon: 'sparkles' },
+];
+
+// Default testimonials items
+export const DEFAULT_TESTIMONIALS: TestimonialItem[] = [
+  {
+    id: '1',
+    name: 'Fatou Traoré',
+    handle: '@fatou_style',
+    avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=150&h=150&fit=crop&crop=face',
+    text: 'Livraison ultra rapide ! J\'ai reçu ma commande en 24h à Ouagadougou. Service impeccable !',
+  },
+  {
+    id: '2',
+    name: 'Ibrahim Kaboré',
+    handle: '@ibrahim_biz',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+    text: 'Le paiement Orange Money est très pratique. Service 5 étoiles, je recommande vivement !',
+  },
+  {
+    id: '3',
+    name: 'Aminata Ouédraogo',
+    handle: '@aminata_mode',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
+    text: 'Produits de qualité et service client exceptionnel via WhatsApp. Toujours à l\'écoute !',
+  },
+  {
+    id: '4',
+    name: 'Moussa Sawadogo',
+    handle: '@moussa_tech',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
+    text: 'Ma boutique préférée ! Les prix sont imbattables et la livraison toujours fiable.',
+  },
+  {
+    id: '5',
+    name: 'Adama Compaoré',
+    handle: '@adama_shop',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
+    text: 'J\'ai commandé 3 fois déjà. Jamais déçue ! Qualité au rendez-vous à chaque fois.',
+  },
+  {
+    id: '6',
+    name: 'Salamata Zongo',
+    handle: '@sala_chic',
+    avatar: 'https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face',
+    text: 'Excellent rapport qualité-prix. Je recommande vivement cette boutique à tous mes amis !',
+  },
 ];
 
 // Default footer links

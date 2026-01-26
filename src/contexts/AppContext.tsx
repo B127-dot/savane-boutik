@@ -57,6 +57,14 @@ export interface PromoBanner {
   position: 'top' | 'below-hero';
 }
 
+export interface TestimonialItem {
+  id: string;
+  name: string;
+  handle?: string;
+  avatar?: string;
+  text: string;
+}
+
 export interface CustomBlock {
   id: string;
   type: 'testimonials' | 'instagram' | 'faq' | 'youtube' | 'text-image';
@@ -141,6 +149,12 @@ export interface ShopSettings {
   email?: string;
   paymentMethods?: string[];
   showPoweredBy?: boolean;
+  
+  // === TESTIMONIALS SECTION ===
+  showTestimonials?: boolean;
+  testimonialsTitle?: string;
+  testimonialsDescription?: string;
+  testimonials?: TestimonialItem[];
   
   // === PHASE 2: SECTIONS VISIBILITY ===
   showHero?: boolean;

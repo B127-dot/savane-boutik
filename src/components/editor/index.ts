@@ -11,6 +11,7 @@ export { SectionsSection } from './SectionsSection';
 export { PromoSection } from './PromoSection';
 export { AdvancedSection } from './AdvancedSection';
 export { FooterSection } from './FooterSection';
+export { TestimonialsSection } from './TestimonialsSection';
 
 // Theme Components
 export { ActiveThemeCard } from './ActiveThemeCard';

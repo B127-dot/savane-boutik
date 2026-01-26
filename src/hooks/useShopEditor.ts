@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import { useApp, TrustBarItem, PromoBanner, CustomBlock, MarqueeItem, HeroStat, HeroFeature, FooterLink } from '@/contexts/AppContext';
+import { useApp, TrustBarItem, PromoBanner, CustomBlock, MarqueeItem, HeroStat, HeroFeature, FooterLink, TestimonialItem } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
-import { DEFAULT_TRUST_BAR, DEFAULT_HERO_STATS, DEFAULT_HERO_FEATURES, DEFAULT_MARQUEE_ITEMS, DEFAULT_FOOTER_LINKS } from '@/lib/shopTheme';
+import { DEFAULT_TRUST_BAR, DEFAULT_HERO_STATS, DEFAULT_HERO_FEATURES, DEFAULT_MARQUEE_ITEMS, DEFAULT_FOOTER_LINKS, DEFAULT_TESTIMONIALS } from '@/lib/shopTheme';
 
 // ============= ZOD VALIDATION SCHEMA =============
 const trustBarItemSchema = z.object({
@@ -118,6 +118,12 @@ export interface ShopEditorFormData {
   showTrustBar: boolean;
   showProducts: boolean;
   showNewArrivals: boolean;
+  // Testimonials
+  showTestimonials: boolean;
+  testimonialsTitle: string;
+  testimonialsDescription: string;
+  testimonials: TestimonialItem[];
+  // Other
   sectionOrder: string[];
   promoBanner: PromoBanner;
 }
@@ -183,7 +189,13 @@ const getDefaultFormData = (): ShopEditorFormData => ({
   showTrustBar: true,
   showProducts: true,
   showNewArrivals: true,
-  sectionOrder: ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'newsletter'],
+  // Testimonials
+  showTestimonials: true,
+  testimonialsTitle: 'Ce que nos clients disent',
+  testimonialsDescription: 'Rejoignez des milliers de clients satisfaits à travers le Burkina Faso',
+  testimonials: DEFAULT_TESTIMONIALS,
+  // Section order - include testimonials
+  sectionOrder: ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'testimonials', 'newsletter'],
   promoBanner: {
     enabled: false,
     text: '',
@@ -286,7 +298,13 @@ export function useShopEditor() {
         showTrustBar: shopSettings.showTrustBar ?? true,
         showProducts: shopSettings.showProducts ?? true,
         showNewArrivals: shopSettings.showNewArrivals ?? true,
-        sectionOrder: shopSettings.sectionOrder || ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'newsletter'],
+        // Testimonials
+        showTestimonials: shopSettings.showTestimonials ?? true,
+        testimonialsTitle: shopSettings.testimonialsTitle || 'Ce que nos clients disent',
+        testimonialsDescription: shopSettings.testimonialsDescription || 'Rejoignez des milliers de clients satisfaits à travers le Burkina Faso',
+        testimonials: shopSettings.testimonials || DEFAULT_TESTIMONIALS,
+        // Section order
+        sectionOrder: shopSettings.sectionOrder || ['hero', 'trustBar', 'newArrivals', 'categories', 'products', 'testimonials', 'newsletter'],
         promoBanner: shopSettings.promoBanner || getDefaultFormData().promoBanner,
       });
       setCustomBlocks(shopSettings.customBlocks || []);
@@ -493,6 +511,11 @@ export function useShopEditor() {
       showNewArrivals: formData.showNewArrivals,
       showProducts: formData.showProducts,
       showNewsletter: formData.showNewsletter,
+      // Testimonials
+      showTestimonials: formData.showTestimonials,
+      testimonialsTitle: formData.testimonialsTitle,
+      testimonialsDescription: formData.testimonialsDescription,
+      testimonials: formData.testimonials,
       sectionOrder: formData.sectionOrder,
       promoBanner: formData.promoBanner,
       socialLinks: {
@@ -545,6 +568,28 @@ export function useShopEditor() {
     updateField('trustBar', formData.trustBar.filter(item => item.id !== id));
   }, [formData.trustBar, updateField]);
 
+  // Testimonial management
+  const addTestimonial = useCallback(() => {
+    const newItem: TestimonialItem = {
+      id: Date.now().toString(),
+      name: '',
+      handle: '',
+      avatar: '',
+      text: '',
+    };
+    updateField('testimonials', [...formData.testimonials, newItem]);
+  }, [formData.testimonials, updateField]);
+
+  const updateTestimonial = useCallback((id: string, updates: Partial<TestimonialItem>) => {
+    updateField('testimonials', formData.testimonials.map(item => 
+      item.id === id ? { ...item, ...updates } : item
+    ));
+  }, [formData.testimonials, updateField]);
+
+  const removeTestimonial = useCallback((id: string) => {
+    updateField('testimonials', formData.testimonials.filter(item => item.id !== id));
+  }, [formData.testimonials, updateField]);
+
   // Section visibility management
   const handleToggleSectionVisibility = useCallback((sectionId: string, visible: boolean) => {
     switch (sectionId) {
@@ -555,6 +600,7 @@ export function useShopEditor() {
       case 'products': updateField('showProducts', visible); break;
       case 'newsletter': updateField('showNewsletter', visible); break;
       case 'marquee': updateField('showMarquee', visible); break;
+      case 'testimonials': updateField('showTestimonials', visible); break;
     }
   }, [updateField]);
 
@@ -567,6 +613,7 @@ export function useShopEditor() {
       case 'products': return formData.showProducts;
       case 'newsletter': return formData.showNewsletter;
       case 'marquee': return formData.showMarquee;
+      case 'testimonials': return formData.showTestimonials;
       default: return true;
     }
   }, [formData]);
@@ -694,6 +741,11 @@ export function useShopEditor() {
       showTrustBar: formData.showTrustBar,
       showProducts: formData.showProducts,
       showNewArrivals: formData.showNewArrivals,
+      // Testimonials
+      showTestimonials: formData.showTestimonials,
+      testimonialsTitle: formData.testimonialsTitle,
+      testimonialsDescription: formData.testimonialsDescription,
+      testimonials: formData.testimonials,
       sectionOrder: formData.sectionOrder,
       promoBanner: formData.promoBanner,
       customBlocks: customBlocks,
@@ -754,6 +806,11 @@ export function useShopEditor() {
     addTrustBarItem,
     updateTrustBarItem,
     removeTrustBarItem,
+    
+    // Testimonials
+    addTestimonial,
+    updateTestimonial,
+    removeTestimonial,
     
     // Sections
     handleToggleSectionVisibility,
