@@ -1,178 +1,166 @@
 
-# Plan d'Optimisation du Thème Modern
+# Plan : Intégration de la Section Témoignages avec Effet Marquee
 
-## 1. Problème Identifié : Double Newsletter
+## Objectif
 
-Il y a effectivement **deux sections Newsletter** qui créent une redondance :
+Intégrer un nouveau composant de témoignages avec un effet de défilement horizontal infini (marquee) dans le thème Modern, créant une présentation plus dynamique et moderne des avis clients.
 
-1. **`NewsletterSection`** (ligne 1127 de Shop.tsx) - Rendue dans le `sectionOrder`
-2. **Newsletter intégrée dans `ModernFooter`** (ligne 1150 avec `showNewsletter={true}`)
+## Analyse du Projet
 
-**Action** : Supprimer la `NewsletterSection` du `sectionOrder` et garder uniquement celle du Footer qui est mieux intégrée visuellement.
+### Ce qui existe déjà
+- **Avatar component** : `src/components/ui/avatar.tsx` ✅ (déjà installé)
+- **Dépendance `@radix-ui/react-avatar`** : ✅ (déjà dans package.json)
+- **`TestimonialsBlock`** : `src/components/shop/blocks/TestimonialsBlock.tsx` (version grille statique)
+- **Animations scroll** : Le `tailwind.config.ts` a déjà `scroll-left` et `scroll-right` keyframes
 
----
+### Ce qui manque
+- Le composant `TestimonialCard` pour la version marquee
+- Le composant `TestimonialsSection` avec l'effet marquee
+- L'animation `marquee` dans Tailwind config
+- L'intégration dans le thème Modern
 
-## 2. Analyse Complète du Thème Modern
+## Architecture des Fichiers
 
-### Points Forts Actuels
-- Hero immersif avec stats animées et badge
-- Grille de produits avec mode Feed/Grille
-- Footer professionnel avec newsletter intégrée
-- TrustBar de réassurance
-- Navigation mobile (BottomNavMobile)
+```text
+src/components/ui/
+├── avatar.tsx                    ← Existe déjà ✅
+├── testimonial-card.tsx          ← À créer (carte individuelle)
+└── testimonials-with-marquee.tsx ← À créer (section avec marquee)
 
-### Points Faibles à Améliorer
-
-| Section | Problème | Solution |
-|---------|----------|----------|
-| **Header** | Le thème utilise `ShopHeader` générique au lieu de `ModernHeader` | Utiliser `ModernHeader` (déjà créé, mais non utilisé !) |
-| **TrustBar** | Utilise le composant générique `TrustBar` au lieu de `ModernTrustBar` | Remplacer par `ModernTrustBar` (plus compact et animé) |
-| **NewArrivals** | Le carousel fonctionne mais manque de contexte visuel | Ajouter un badge "Nouveau" sur les cartes |
-| **SocialProofSection** | Stats hardcodées, pas éditables par le vendeur | Rendre les témoignages dynamiques |
-| **WhyBuySection** | Contenu statique, duplique la TrustBar | Supprimer ou remplacer par section éditable |
-| **CategoryShowcase** | Navigue vers page mais la page n'existe pas encore | Implémenter CategoryPage (plan précédent) |
-
----
-
-## 3. Actions Prioritaires
-
-### Action 1 : Supprimer la Newsletter en Double
-Retirer `NewsletterSection` du rendu des sections dans Shop.tsx.
-
-**Fichier** : `src/pages/Shop.tsx`
-```tsx
-// AVANT (ligne 1126-1127)
-case 'newsletter':
-  return <NewsletterSection key="newsletter" buttonStyle={effectiveSettings.buttonStyle} />;
-
-// APRÈS - Supprimer ce case entièrement ou retourner null
-case 'newsletter':
-  return null; // Newsletter déjà incluse dans ModernFooter
+src/pages/Shop.tsx                ← À modifier (ajouter la section)
+tailwind.config.ts                ← À modifier (ajouter animation marquee)
 ```
 
-**Alternative** : Garder la section mais désactiver la newsletter dans le Footer :
+## Fichiers à Créer/Modifier
+
+### 1. CRÉER : `src/components/ui/testimonial-card.tsx`
+
+Composant de carte de témoignage individuelle avec avatar, nom et avis.
+
 ```tsx
-<ModernFooter 
-  ...
-  showNewsletter={false} // Désactiver ici car déjà affiché avant
+// Structure :
+// - Avatar avec image (via Radix Avatar)
+// - Nom et handle (@pseudonyme)
+// - Texte du témoignage
+// - Lien optionnel vers le profil
+```
+
+### 2. CRÉER : `src/components/ui/testimonials-with-marquee.tsx`
+
+Section complète avec :
+- Titre et description
+- Effet marquee (défilement horizontal infini)
+- Dégradés de fondu sur les bords (fade-out)
+- Duplication automatique des cartes pour l'effet infini
+
+```tsx
+// Props :
+interface TestimonialsSectionProps {
+  title: string
+  description: string
+  testimonials: Array<{
+    author: TestimonialAuthor
+    text: string
+    href?: string
+  }>
+  className?: string
+}
+```
+
+### 3. MODIFIER : `tailwind.config.ts`
+
+Ajouter l'animation marquee et la largeur max-container :
+
+```js
+// Dans extend.maxWidth :
+container: "1280px",
+
+// Dans extend.keyframes :
+marquee: {
+  from: { transform: 'translateX(0)' },
+  to: { transform: 'translateX(calc(-100% - var(--gap)))' }
+}
+
+// Dans extend.animation :
+marquee: 'marquee var(--duration) linear infinite',
+```
+
+### 4. MODIFIER : `src/pages/Shop.tsx`
+
+Intégrer la nouvelle section de témoignages dans le thème Modern, entre les produits et le footer :
+
+```tsx
+// Import
+import { TestimonialsSection } from '@/components/ui/testimonials-with-marquee';
+
+// Données par défaut (localisées en français pour Burkina Faso)
+const TESTIMONIALS_DATA = [
+  {
+    author: {
+      name: "Fatou Traoré",
+      handle: "@fatou_style",
+      avatar: "https://images.unsplash.com/..."
+    },
+    text: "Livraison ultra rapide ! J'ai reçu ma commande en 24h à Ouagadougou."
+  },
+  // ... autres témoignages
+];
+
+// Dans le rendu du thème Modern
+<TestimonialsSection
+  title="Ce que nos clients disent"
+  description="Rejoignez des milliers de clients satisfaits"
+  testimonials={TESTIMONIALS_DATA}
 />
 ```
 
-### Action 2 : Utiliser ModernHeader au lieu de ShopHeader
-Le `ModernHeader` existe mais n'est pas utilisé ! Il offre :
-- Navigation avec liens (Accueil, Produits, À propos, Contact)
-- Header transparent sur le Hero qui devient solide au scroll
-- Menu mobile avec animation
+## Données des Témoignages (Burkinabization)
 
-**Fichier** : `src/pages/Shop.tsx` (section Modern theme)
-```tsx
-// AVANT (lignes 938-947)
-switch (effectiveSettings.headerStyle) {
-  case 'gradient':
-    return <GradientHeader {...headerProps} />;
-  ...
-  default:
-    return <ShopHeader {...headerProps} />;
-}
+Les témoignages seront localisés pour le marché burkinabè :
 
-// APRÈS - Ajouter ModernHeader comme défaut pour le thème Modern
-default:
-  return <ModernHeader {...headerProps} shopUrl={shopUrl} />;
-```
+| Nom | Handle | Avis |
+|-----|--------|------|
+| Fatou Traoré | @fatou_style | Livraison ultra rapide ! J'ai reçu ma commande en 24h. |
+| Ibrahim Kaboré | @ibrahim_biz | Le paiement Orange Money est très pratique. Service 5 étoiles ! |
+| Aminata Ouédraogo | @aminata_mode | Produits de qualité et service client exceptionnel via WhatsApp. |
+| Moussa Sawadogo | @moussa_tech | Ma boutique préférée ! Les prix sont imbattables et la livraison fiable. |
+| Adama Compaoré | @adama_shop | J'ai commandé 3 fois déjà. Jamais déçue ! |
+| Salamata Zongo | @sala_chic | Excellent rapport qualité-prix. Je recommande vivement ! |
 
-### Action 3 : Utiliser ModernTrustBar
-Le `ModernTrustBar` est plus compact et utilise Framer Motion pour les animations.
-
-**Fichier** : `src/pages/Shop.tsx` (section Modern theme, ligne 1077)
-```tsx
-// AVANT
-case 'trustBar':
-  return <TrustBar key="trustBar" trustItems={effectiveSettings.trustBar} />;
-
-// APRÈS
-case 'trustBar':
-  return <ModernTrustBar key="trustBar" items={effectiveSettings.trustBar} />;
-```
-
-### Action 4 : Supprimer les sections redondantes
-`SocialProofSection` et `WhyBuySection` ajoutent du contenu statique qui duplique la TrustBar et ne peut pas être édité.
-
-**Fichier** : `src/pages/Shop.tsx` (lignes 1135-1136)
-```tsx
-// SUPPRIMER CES LIGNES (elles sont statiques et redondantes)
-<SocialProofSection />
-<WhyBuySection />
-```
-
----
-
-## 4. Structure Finale Recommandée
+## Effet Visuel
 
 ```text
-┌─────────────────────────────────────────┐
-│ ModernHeader (transparent → sticky)     │  ← NOUVEAU
-├─────────────────────────────────────────┤
-│ PromoBanner (optionnel)                 │
-├─────────────────────────────────────────┤
-│ ModernHero (avec stats et badge)        │
-├─────────────────────────────────────────┤
-│ ModernTrustBar (compact et animé)       │  ← NOUVEAU
-├─────────────────────────────────────────┤
-│ NewArrivalsCarousel                     │
-├─────────────────────────────────────────┤
-│ CategoryShowcase                        │
-├─────────────────────────────────────────┤
-│ ModernProductGrid (Feed/Grille)         │
-├─────────────────────────────────────────┤
-│ Custom Blocks (FAQ, Testimonials, etc.) │
-├─────────────────────────────────────────┤
-│ ModernFooter (avec Newsletter intégrée) │  ← CONSERVÉ
-└─────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│              Ce que nos clients disent                      │
+│     Rejoignez des milliers de clients satisfaits            │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│ ░░░                                                     ░░░ │
+│ ░░░  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐    ░░░ │
+│ ░░░  │ Fatou  │→ │Ibrahim │→ │Aminata │→ │ Moussa │→   ░░░ │
+│ ░░░  │ ★★★★★  │  │ ★★★★★  │  │ ★★★★★  │  │ ★★★★★  │    ░░░ │
+│ ░░░  │ "..."  │  │ "..."  │  │ "..."  │  │ "..."  │    ░░░ │
+│ ░░░  └────────┘  └────────┘  └────────┘  └────────┘    ░░░ │
+│ ░░░                                                     ░░░ │
+│     ← Dégradé fade-out                  Dégradé fade-out → │
+└─────────────────────────────────────────────────────────────┘
+                           ↓
+            Défilement horizontal infini ←────────────────────┘
 ```
 
-**Sections supprimées :**
-- `NewsletterSection` (redondant avec Footer)
-- `SocialProofSection` (statique, non éditable)
-- `WhyBuySection` (duplique TrustBar)
+## Avantages de cette Approche
 
----
+1. **Effet WOW** : Le défilement continu attire l'œil et crée une impression de dynamisme
+2. **Social Proof** : Les témoignages renforcent la confiance des acheteurs
+3. **Localisation** : Noms et contextes burkinabè pour l'authenticité
+4. **Performance** : Animation CSS pure, pas de JavaScript
+5. **Accessibilité** : Support du `prefers-reduced-motion`
+6. **Réutilisable** : Composant UI indépendant dans `/components/ui`
 
-## 5. Fichiers à Modifier
+## Ordre d'Implémentation
 
-| Fichier | Modifications |
-|---------|---------------|
-| `src/pages/Shop.tsx` | 1. Utiliser `ModernHeader` par défaut, 2. Utiliser `ModernTrustBar`, 3. Retirer `NewsletterSection` du switch, 4. Supprimer `SocialProofSection` et `WhyBuySection` |
-| `src/components/shop/themes/modern/index.ts` | Ajouter l'export de `ModernTrustBar` si manquant |
-
----
-
-## 6. Avantages de ces Changements
-
-1. **Plus professionnel** : Header avec navigation complète
-2. **Moins de redondance** : Une seule newsletter, une seule section de réassurance
-3. **Plus cohérent** : Tous les composants du thème Modern utilisés ensemble
-4. **Plus léger** : Moins de sections = page plus rapide
-5. **100% éditable** : Tout le contenu visible est personnalisable par le vendeur
-
----
-
-## 7. Résumé des Modifications
-
-```text
-SUPPRIMER :
-- NewsletterSection (case 'newsletter' → return null)
-- SocialProofSection 
-- WhyBuySection
-
-REMPLACER :
-- ShopHeader → ModernHeader (header par défaut)
-- TrustBar → ModernTrustBar
-
-CONSERVER :
-- ModernHero
-- NewArrivalsCarousel  
-- CategoryShowcase
-- ModernProductGrid
-- Custom Blocks
-- ModernFooter (avec sa newsletter intégrée)
-```
+1. Étendre `tailwind.config.ts` avec l'animation marquee
+2. Créer `testimonial-card.tsx` (composant de carte)
+3. Créer `testimonials-with-marquee.tsx` (section complète)
+4. Intégrer dans `Shop.tsx` pour le thème Modern
