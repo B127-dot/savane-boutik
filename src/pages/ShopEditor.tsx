@@ -59,6 +59,7 @@ import {
   PromoSection,
   AdvancedSection,
   FooterSection,
+  TestimonialsSection,
   ActiveThemeCard,
   ThemePickerModal,
 } from '@/components/editor';
@@ -105,6 +106,11 @@ const ShopEditor = () => {
     addTrustBarItem,
     updateTrustBarItem,
     removeTrustBarItem,
+    
+    // Testimonials
+    addTestimonial,
+    updateTestimonial,
+    removeTestimonial,
     
     // Sections
     handleToggleSectionVisibility,
@@ -283,6 +289,13 @@ const ShopEditor = () => {
                 />
                 <MarqueeSection formData={formData} updateField={updateField} />
                 <ProductsSection formData={formData} updateField={updateField} />
+                <TestimonialsSection 
+                  formData={formData} 
+                  updateField={updateField}
+                  addTestimonial={addTestimonial}
+                  updateTestimonial={updateTestimonial}
+                  removeTestimonial={removeTestimonial}
+                />
                 <SectionsSection 
                   formData={formData}
                   updateField={updateField}
