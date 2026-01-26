@@ -92,31 +92,31 @@ const ModernProductCard = ({
         )}
       </div>
 
-      {/* Action Buttons - Top Right */}
-      <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
+      {/* Action Buttons - Top Right - Always visible on mobile */}
+      <div className="absolute top-2 right-2 md:top-3 md:right-3 z-10 flex flex-col gap-1.5 md:gap-2 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 md:translate-x-2 md:group-hover:translate-x-0">
         {onToggleWishlist && (
           <Button
             size="icon"
             variant="secondary"
-            className="h-9 w-9 rounded-full shadow-lg bg-white/90 hover:bg-white backdrop-blur-sm"
+            className="h-10 w-10 md:h-9 md:w-9 rounded-full shadow-lg bg-white/90 hover:bg-white backdrop-blur-sm active:scale-95 transition-transform"
             onClick={(e) => {
               e.stopPropagation();
               onToggleWishlist(product.id);
             }}
           >
-            <Heart className={`h-4 w-4 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+            <Heart className={`h-5 w-5 md:h-4 md:w-4 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
           </Button>
         )}
         <Button
           size="icon"
           variant="secondary"
-          className="h-9 w-9 rounded-full shadow-lg bg-white/90 hover:bg-white backdrop-blur-sm"
+          className="h-10 w-10 md:h-9 md:w-9 rounded-full shadow-lg bg-white/90 hover:bg-white backdrop-blur-sm active:scale-95 transition-transform"
           onClick={(e) => {
             e.stopPropagation();
             onQuickView(product);
           }}
         >
-          <Eye className="h-4 w-4 text-gray-600" />
+          <Eye className="h-5 w-5 md:h-4 md:w-4 text-gray-600" />
         </Button>
       </div>
 
@@ -166,30 +166,30 @@ const ModernProductCard = ({
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3">
+      <div className="p-3 md:p-4 space-y-2 md:space-y-3">
         {/* Rating */}
-        <div className="flex items-center justify-center gap-0.5">
+        <div className="flex items-center justify-center gap-1">
           {[1, 2, 3, 4, 5].map((star) => (
             <Star
               key={star}
-              className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400"
+              className="h-3 w-3 md:h-3.5 md:w-3.5 fill-yellow-400 text-yellow-400"
             />
           ))}
         </div>
 
         {/* Title */}
-        <h3 className="font-semibold text-center text-foreground line-clamp-2 min-h-[2.5rem] text-sm md:text-base">
+        <h3 className="font-semibold text-center text-foreground line-clamp-2 min-h-[2.5rem] text-sm md:text-base leading-tight">
           {product.name}
         </h3>
 
         {/* Price */}
-        <div className="flex flex-col items-center gap-1">
+        <div className="flex flex-col items-center gap-0.5">
           {hasDiscount && (
-            <span className="text-sm text-muted-foreground line-through">
+            <span className="text-xs md:text-sm text-muted-foreground line-through">
               {formatPrice(product.originalPrice!)} FCFA
             </span>
           )}
-          <span className="text-xl font-bold text-foreground">
+          <span className="text-lg md:text-xl font-bold text-foreground">
             {formatPrice(product.price)} FCFA
           </span>
         </div>
@@ -197,7 +197,7 @@ const ModernProductCard = ({
         {/* Stock Urgency Indicator */}
         {isLowStock && (
           <div 
-            className="flex items-center justify-center gap-1.5 text-xs font-medium py-1.5 px-3 rounded-full mx-auto"
+            className="flex items-center justify-center gap-1 text-[10px] md:text-xs font-medium py-1 md:py-1.5 px-2 md:px-3 rounded-full mx-auto"
             style={{ 
               backgroundColor: 'color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 15%, transparent)',
               color: 'var(--shop-primary, hsl(var(--primary)))'
@@ -215,14 +215,14 @@ const ModernProductCard = ({
             onAddToCart(product);
           }}
           disabled={isOutOfStock}
-          className={`w-full md:opacity-0 md:group-hover:opacity-100 transition-opacity shop-btn-primary ${getButtonRadius()}`}
-          size="lg"
+          className={`w-full md:opacity-0 md:group-hover:opacity-100 transition-all active:scale-95 shop-btn-primary ${getButtonRadius()}`}
+          size="default"
           style={{ 
             backgroundColor: isOutOfStock ? undefined : 'var(--shop-primary, hsl(var(--primary)))',
           }}
         >
           <ShoppingCart className="h-4 w-4 mr-2" />
-          {isOutOfStock ? 'Indisponible' : 'Ajouter au panier'}
+          {isOutOfStock ? 'Indisponible' : 'Ajouter'}
         </Button>
       </div>
     </div>
