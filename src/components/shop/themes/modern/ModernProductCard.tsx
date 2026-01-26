@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Heart, Eye, ShoppingCart, Star, Zap, ImageOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
 interface ModernProductCardProps {
   product: Product;
@@ -13,6 +14,7 @@ interface ModernProductCardProps {
   onToggleWishlist?: (productId: string) => void;
   isInWishlist?: boolean;
   buttonStyle?: 'rounded' | 'pill' | 'square';
+  variant?: 'grid' | 'feed';
 }
 
 // Helper to check if product is new (created within last 7 days)
@@ -36,9 +38,11 @@ const ModernProductCard = ({
   onQuickView,
   onToggleWishlist,
   isInWishlist = false,
-  buttonStyle = 'rounded'
+  buttonStyle = 'rounded',
+  variant = 'grid'
 }: ModernProductCardProps) => {
   const navigate = useNavigate();
+  const isFeed = variant === 'feed';
 
   const handleCardClick = () => {
     navigate(`/shop/${shopUrl}/product/${product.id}`);
@@ -65,7 +69,12 @@ const ModernProductCard = ({
   return (
     <div 
       onClick={handleCardClick}
-      className="group relative bg-card rounded-xl border border-border overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 cursor-pointer"
+      className={cn(
+        "group relative bg-card overflow-hidden transition-all duration-300 cursor-pointer",
+        isFeed 
+          ? "rounded-2xl shadow-lg border-0" 
+          : "rounded-xl border border-border hover:shadow-2xl hover:-translate-y-2"
+      )}
     >
       {/* Badges Stack */}
       <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
@@ -122,31 +131,38 @@ const ModernProductCard = ({
 
       {/* Image Container */}
       <div className="relative overflow-hidden">
-        <AspectRatio ratio={1}>
+        <AspectRatio ratio={isFeed ? 4/5 : 1}>
           {product.images[0] && product.images[0] !== '/placeholder.svg' ? (
             <img
               src={product.images[0]}
               alt={product.name}
-              className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
+              className={cn(
+                "w-full h-full object-cover transition-transform duration-500 group-hover:scale-110",
+                isOutOfStock && "opacity-50 grayscale"
+              )}
+              loading="lazy"
             />
           ) : (
-            <div className={`w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-primary/10 via-muted to-primary/5 ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}>
+            <div className={cn(
+              "w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-primary/10 via-muted to-primary/5",
+              isOutOfStock && "opacity-50 grayscale"
+            )}>
               <div 
-                className="w-16 h-16 rounded-full flex items-center justify-center mb-3"
+                className={cn("rounded-full flex items-center justify-center mb-3", isFeed ? "w-20 h-20" : "w-16 h-16")}
                 style={{ backgroundColor: 'color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 15%, transparent)' }}
               >
                 <ImageOff 
-                  className="w-8 h-8" 
+                  className={isFeed ? "w-10 h-10" : "w-8 h-8"}
                   style={{ color: 'var(--shop-primary, hsl(var(--primary)))' }}
                 />
               </div>
-              <span className="text-xs text-muted-foreground font-medium">Image à venir</span>
+              <span className={cn("text-muted-foreground font-medium", isFeed ? "text-sm" : "text-xs")}>Image à venir</span>
             </div>
           )}
         </AspectRatio>
         
-        {/* Quick Add Overlay */}
-        {!isOutOfStock && (
+        {/* Quick Add Overlay - Only on grid mode or desktop */}
+        {!isOutOfStock && !isFeed && (
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
             <Button
               onClick={(e) => {
@@ -166,38 +182,82 @@ const ModernProductCard = ({
       </div>
 
       {/* Content */}
-      <div className="p-3 md:p-4 space-y-2 md:space-y-3">
-        {/* Rating */}
-        <div className="flex items-center justify-center gap-1">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Star
-              key={star}
-              className="h-3 w-3 md:h-3.5 md:w-3.5 fill-yellow-400 text-yellow-400"
-            />
-          ))}
+      <div className={cn(
+        isFeed ? "p-4 space-y-3" : "p-3 md:p-4 space-y-2 md:space-y-3"
+      )}>
+        {/* Rating + Badge Row */}
+        <div className={cn(
+          "flex items-center gap-2",
+          isFeed ? "justify-between" : "justify-center"
+        )}>
+          <div className="flex items-center gap-1">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={cn(
+                  "fill-yellow-400 text-yellow-400",
+                  isFeed ? "h-4 w-4" : "h-3 w-3 md:h-3.5 md:w-3.5"
+                )}
+              />
+            ))}
+          </div>
+          {isFeed && isNew && !hasDiscount && (
+            <Badge 
+              className="text-white text-xs font-semibold"
+              style={{ backgroundColor: 'var(--shop-primary, hsl(var(--primary)))' }}
+            >
+              NOUVEAU
+            </Badge>
+          )}
         </div>
 
         {/* Title */}
-        <h3 className="font-semibold text-center text-foreground line-clamp-2 min-h-[2.5rem] text-sm md:text-base leading-tight">
+        <h3 className={cn(
+          "font-semibold text-foreground leading-tight",
+          isFeed 
+            ? "text-lg md:text-xl" 
+            : "text-center line-clamp-2 min-h-[2.5rem] text-sm md:text-base"
+        )}>
           {product.name}
         </h3>
 
+        {/* Description - Only in feed mode */}
+        {isFeed && product.description && (
+          <p className="text-muted-foreground text-sm line-clamp-2">
+            {product.description}
+          </p>
+        )}
+
         {/* Price */}
-        <div className="flex flex-col items-center gap-0.5">
+        <div className={cn(
+          "flex gap-2",
+          isFeed ? "items-baseline" : "flex-col items-center gap-0.5"
+        )}>
+          <span className={cn(
+            "font-bold text-foreground",
+            isFeed ? "text-2xl" : "text-lg md:text-xl"
+          )}>
+            {formatPrice(product.price)} FCFA
+          </span>
           {hasDiscount && (
-            <span className="text-xs md:text-sm text-muted-foreground line-through">
+            <span className={cn(
+              "text-muted-foreground line-through",
+              isFeed ? "text-base" : "text-xs md:text-sm"
+            )}>
               {formatPrice(product.originalPrice!)} FCFA
             </span>
           )}
-          <span className="text-lg md:text-xl font-bold text-foreground">
-            {formatPrice(product.price)} FCFA
-          </span>
         </div>
 
         {/* Stock Urgency Indicator */}
         {isLowStock && (
           <div 
-            className="flex items-center justify-center gap-1 text-[10px] md:text-xs font-medium py-1 md:py-1.5 px-2 md:px-3 rounded-full mx-auto"
+            className={cn(
+              "flex items-center gap-1 font-medium rounded-full",
+              isFeed 
+                ? "text-xs py-2 px-4 w-fit" 
+                : "justify-center text-[10px] md:text-xs py-1 md:py-1.5 px-2 md:px-3 mx-auto"
+            )}
             style={{ 
               backgroundColor: 'color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 15%, transparent)',
               color: 'var(--shop-primary, hsl(var(--primary)))'
@@ -208,21 +268,25 @@ const ModernProductCard = ({
           </div>
         )}
 
-        {/* Add to Cart Button - Mobile visible, desktop hidden (overlay takes over) */}
+        {/* Add to Cart Button */}
         <Button
           onClick={(e) => {
             e.stopPropagation();
             onAddToCart(product);
           }}
           disabled={isOutOfStock}
-          className={`w-full md:opacity-0 md:group-hover:opacity-100 transition-all active:scale-95 shop-btn-primary ${getButtonRadius()}`}
-          size="default"
+          className={cn(
+            "w-full transition-all active:scale-95 shop-btn-primary",
+            getButtonRadius(),
+            isFeed ? "h-12 text-base" : "md:opacity-0 md:group-hover:opacity-100"
+          )}
+          size={isFeed ? "lg" : "default"}
           style={{ 
             backgroundColor: isOutOfStock ? undefined : 'var(--shop-primary, hsl(var(--primary)))',
           }}
         >
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          {isOutOfStock ? 'Indisponible' : 'Ajouter'}
+          <ShoppingCart className={isFeed ? "h-5 w-5 mr-2" : "h-4 w-4 mr-2"} />
+          {isOutOfStock ? 'Indisponible' : 'Ajouter au panier'}
         </Button>
       </div>
     </div>
