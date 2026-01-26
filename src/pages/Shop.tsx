@@ -36,7 +36,7 @@ import {
 
 // Theme components - Modern
 import ModernHero from '@/components/shop/themes/modern/ModernHero';
-import ModernProductCard from '@/components/shop/themes/modern/ModernProductCard';
+import ModernProductGrid from '@/components/shop/themes/modern/ModernProductGrid';
 import ModernFooter from '@/components/shop/themes/modern/ModernFooter';
 
 // Theme components - ARTISAN
@@ -1106,115 +1106,20 @@ const Shop = () => {
 
               case 'products':
                 return (
-                  <section key="products" id="products" className="py-12 md:py-16 bg-background">
-                    <div className="container mx-auto px-4">
-                      <div className="text-center mb-10">
-                        <h2 className="text-3xl md:text-4xl font-bold mb-3 font-display text-foreground">
-                          Tous Nos Produits
-                        </h2>
-                        <p className="text-lg font-body text-muted-foreground">
-                          Parcourez notre collection complète
-                        </p>
-                      </div>
-
-                      <div className="mb-8 space-y-4">
-                        <div className="relative max-w-2xl mx-auto">
-                          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                          <Input
-                            type="text"
-                            placeholder="Rechercher un produit..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-12 h-14 text-lg border-2 focus:border-primary"
-                          />
-                        </div>
-
-                        <div className="flex flex-wrap gap-2 justify-center">
-                          <Button
-                            variant={selectedCategory === 'all' ? 'default' : 'outline'}
-                            onClick={() => setSelectedCategory('all')}
-                            className="rounded-full"
-                          >
-                            Tous ({products.filter(p => p.status === 'active' && p.stock > 0).length})
-                          </Button>
-                          {categories.map((category) => {
-                            const count = products.filter(
-                              p => p.categoryId === category.id && p.status === 'active' && p.stock > 0
-                            ).length;
-                            if (count === 0) return null;
-                            
-                            return (
-                              <Button
-                                key={category.id}
-                                variant={selectedCategory === category.name ? 'default' : 'outline'}
-                                onClick={() => setSelectedCategory(category.name)}
-                                className="rounded-full"
-                              >
-                                {category.name} ({count})
-                              </Button>
-                            );
-                          })}
-                        </div>
-
-                        <div className="flex flex-wrap gap-3 justify-center items-center">
-                          <span className="text-sm text-muted-foreground">Trier par:</span>
-                          <select
-                            value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value as any)}
-                            className="px-4 py-2 rounded-lg border border-border bg-card text-foreground"
-                          >
-                            <option value="recent">Plus récent</option>
-                            <option value="price-asc">Prix croissant</option>
-                            <option value="price-desc">Prix décroissant</option>
-                            <option value="name">Nom A-Z</option>
-                          </select>
-                        </div>
-                      </div>
-
-                      {isLoading ? (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                            <SkeletonProductCard key={i} />
-                          ))}
-                        </div>
-                      ) : filteredProducts.length > 0 ? (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                          {filteredProducts.map((product) => (
-                            <ModernProductCard
-                              key={product.id}
-                              product={product}
-                              shopUrl={shopUrl!}
-                              onAddToCart={handleAddToCart}
-                              onQuickView={setQuickViewProduct}
-                              onToggleWishlist={handleToggleWishlist}
-                              isInWishlist={wishlist.includes(product.id)}
-                              buttonStyle={effectiveSettings.buttonStyle}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-center py-16">
-                          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 bg-muted">
-                            <Search className="h-10 w-10 text-muted-foreground" />
-                          </div>
-                          <h3 className="text-xl font-semibold mb-2 font-display text-foreground">
-                            Aucun produit trouvé
-                          </h3>
-                          <p className="mb-6 font-body text-muted-foreground">
-                            Essayez de modifier vos critères de recherche
-                          </p>
-                          <Button 
-                            onClick={() => {
-                              setSearchQuery('');
-                              setSelectedCategory('all');
-                            }}
-                          >
-                            Réinitialiser les filtres
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </section>
+                  <ModernProductGrid
+                    key="products"
+                    products={filteredProducts}
+                    categories={categories}
+                    shopUrl={shopUrl}
+                    onAddToCart={handleAddToCart}
+                    onQuickView={setQuickViewProduct}
+                    onToggleWishlist={handleToggleWishlist}
+                    wishlist={wishlist}
+                    sectionTitle={effectiveSettings.productsTitle || "Nos Produits"}
+                    sectionSubtitle={effectiveSettings.productsSubtitle || "Parcourez notre collection complète"}
+                    buttonStyle={effectiveSettings.buttonStyle}
+                    isLoading={isLoading}
+                  />
                 );
 
               case 'newsletter':
@@ -1259,6 +1164,22 @@ const Shop = () => {
           onCartClick={() => setIsCartOpen(true)}
           onCategoriesClick={scrollToCategories}
           onHomeClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          wishlistProducts={wishlist.map(id => {
+            const product = products.find(p => p.id === id);
+            return product ? { 
+              id: product.id, 
+              name: product.name, 
+              price: product.price, 
+              image: product.images[0] 
+            } : null;
+          }).filter(Boolean) as { id: string; name: string; price: number; image?: string }[]}
+          onWishlistProductClick={(productId) => {
+            const product = products.find(p => p.id === productId);
+            if (product) setQuickViewProduct(product);
+          }}
+          categories={categories}
+          shopName={effectiveSettings.shopName}
+          socialLinks={effectiveSettings.socialLinks}
         />
 
         <CartSheet
