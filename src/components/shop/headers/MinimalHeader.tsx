@@ -1,6 +1,6 @@
 import { ShoppingCart, Menu, X, ArrowUpRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface MinimalHeaderProps {
@@ -12,9 +12,18 @@ interface MinimalHeaderProps {
 
 const MinimalHeader = ({ logo, shopName, cartItemsCount, onCartClick }: MinimalHeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-background">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      isScrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
+    }`}>
       <div className="mx-6">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
@@ -36,35 +45,47 @@ const MinimalHeader = ({ logo, shopName, cartItemsCount, onCartClick }: MinimalH
                 {shopName.charAt(0).toUpperCase()}
               </span>
             )}
-            <span className="text-sm font-medium text-foreground/90 font-display hidden sm:block">
+            <span className={`text-sm font-medium font-display hidden sm:block transition-colors ${
+              isScrolled ? 'text-foreground/90' : 'text-white'
+            }`}>
               {shopName}
             </span>
           </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2">
-            <div className="flex items-center gap-1 rounded-full bg-muted/50 px-1 py-1 ring-1 ring-border backdrop-blur">
+            <div className={`flex items-center gap-1 rounded-full px-1 py-1 backdrop-blur transition-all ${
+              isScrolled ? 'bg-muted/50 ring-1 ring-border' : 'bg-white/10 ring-1 ring-white/20'
+            }`}>
               <a 
                 href="#" 
-                className="px-3 py-2 text-sm font-medium text-foreground/90 hover:text-foreground transition-colors"
+                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                  isScrolled ? 'text-foreground/90 hover:text-foreground' : 'text-white hover:text-white'
+                }`}
               >
                 Accueil
               </a>
               <a 
                 href="#products" 
-                className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                  isScrolled ? 'text-foreground/80 hover:text-foreground' : 'text-white/80 hover:text-white'
+                }`}
               >
                 Produits
               </a>
               <a 
                 href="#categories"
-                className="hover:text-foreground text-sm font-medium text-foreground/80 py-2 px-3 transition-colors"
+                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                  isScrolled ? 'text-foreground/80 hover:text-foreground' : 'text-white/80 hover:text-white'
+                }`}
               >
                 Catégories
               </a>
               <a 
                 href="#about" 
-                className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+                className={`px-3 py-2 text-sm font-medium transition-colors ${
+                  isScrolled ? 'text-foreground/80 hover:text-foreground' : 'text-white/80 hover:text-white'
+                }`}
               >
                 À propos
               </a>
