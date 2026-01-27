@@ -1,7 +1,7 @@
 import { ShoppingCart, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface GradientHeaderProps {
@@ -13,10 +13,19 @@ interface GradientHeaderProps {
 
 const GradientHeader = ({ logo, shopName, cartItemsCount, onCartClick }: GradientHeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50">
-      <nav className="flex md:px-12 md:py-6 px-6 py-4 relative items-center justify-between bg-background/80 backdrop-blur-md">
+    <header className="fixed top-0 left-0 right-0 z-50">
+      <nav className={`flex md:px-12 md:py-6 px-6 py-4 relative items-center justify-between transition-all duration-300 ${
+        isScrolled ? 'bg-background/80 backdrop-blur-md' : 'bg-transparent'
+      }`}>
         {/* Logo */}
         <div className="flex items-center gap-3">
           {logo ? (
@@ -37,28 +46,40 @@ const GradientHeader = ({ logo, shopName, cartItemsCount, onCartClick }: Gradien
               </span>
             </div>
           )}
-          <span className="text-lg font-display font-bold text-foreground hidden sm:block">
+          <span className={`text-lg font-display font-bold hidden sm:block transition-colors ${
+            isScrolled ? 'text-foreground' : 'text-white'
+          }`}>
             {shopName}
           </span>
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex bg-gradient-to-br from-white/10 to-white/5 dark:from-white/10 dark:to-white/0 rounded-full p-1 shadow-lg backdrop-blur-md border border-white/10 gap-1 items-center">
+        <div className={`hidden md:flex rounded-full p-1 shadow-lg backdrop-blur-md border gap-1 items-center transition-all ${
+          isScrolled 
+            ? 'bg-gradient-to-br from-white/10 to-white/5 dark:from-white/10 dark:to-white/0 border-white/10' 
+            : 'bg-white/10 border-white/20'
+        }`}>
           <a 
             href="#products"
-            className="transition-all text-sm font-medium text-foreground bg-foreground/10 rounded-full py-1.5 px-4 shadow-sm"
+            className={`transition-all text-sm font-medium rounded-full py-1.5 px-4 shadow-sm ${
+              isScrolled ? 'text-foreground bg-foreground/10' : 'text-white bg-white/20'
+            }`}
           >
             Produits
           </a>
           <a 
             href="#categories"
-            className="hover:text-foreground transition-colors text-sm font-medium text-muted-foreground py-1.5 px-4"
+            className={`transition-colors text-sm font-medium py-1.5 px-4 ${
+              isScrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
+            }`}
           >
             Catégories
           </a>
           <a 
             href="#about"
-            className="hover:text-foreground transition-colors text-sm font-medium text-muted-foreground py-1.5 px-4"
+            className={`transition-colors text-sm font-medium py-1.5 px-4 ${
+              isScrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
+            }`}
           >
             À propos
           </a>

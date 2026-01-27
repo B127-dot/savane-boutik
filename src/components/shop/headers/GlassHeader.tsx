@@ -1,6 +1,6 @@
 import { ShoppingCart, Menu, X, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface GlassHeaderProps {
@@ -12,6 +12,13 @@ interface GlassHeaderProps {
 
 const GlassHeader = ({ logo, shopName, cartItemsCount, onCartClick }: GlassHeaderProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Get initials from shop name (max 2 chars)
   const getInitials = (name: string) => {
@@ -23,8 +30,12 @@ const GlassHeader = ({ logo, shopName, cartItemsCount, onCartClick }: GlassHeade
   };
 
   return (
-    <header className="sticky top-0 z-50 py-4 px-4 lg:px-8">
-      <div className="relative max-w-7xl mx-auto ring-1 ring-border bg-background/60 border border-border rounded-2xl px-6 shadow-lg backdrop-blur-lg">
+    <header className="fixed top-0 left-0 right-0 z-50 py-4 px-4 lg:px-8">
+      <div className={`relative max-w-7xl mx-auto rounded-2xl px-6 transition-all duration-300 ${
+        isScrolled 
+          ? 'ring-1 ring-border bg-background/80 border border-border shadow-lg backdrop-blur-lg' 
+          : 'bg-transparent border-transparent'
+      }`}>
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <a href="#" className="group">
@@ -44,7 +55,7 @@ const GlassHeader = ({ logo, shopName, cartItemsCount, onCartClick }: GlassHeade
                   </span>
                 </div>
               )}
-              <span className="text-sm font-medium text-foreground hidden lg:block font-display">
+              <span className={`text-sm font-medium hidden lg:block font-display transition-colors ${isScrolled ? 'text-foreground' : 'text-white'}`}>
                 {shopName}
               </span>
             </div>
@@ -54,25 +65,33 @@ const GlassHeader = ({ logo, shopName, cartItemsCount, onCartClick }: GlassHeade
           <nav className="hidden md:flex items-center gap-8">
             <a 
               href="#products"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
+              className={`text-sm font-medium transition-colors duration-200 ${
+                isScrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
+              }`}
             >
               Produits
             </a>
             <a 
               href="#categories"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
+              className={`text-sm font-medium transition-colors duration-200 ${
+                isScrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
+              }`}
             >
               Catégories
             </a>
             <a 
               href="#about"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
+              className={`text-sm font-medium transition-colors duration-200 ${
+                isScrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
+              }`}
             >
               À propos
             </a>
             <a 
               href="#contact"
-              className="hover:text-foreground transition-colors duration-200 text-sm font-medium text-muted-foreground"
+              className={`text-sm font-medium transition-colors duration-200 ${
+                isScrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
+              }`}
             >
               Contact
             </a>
