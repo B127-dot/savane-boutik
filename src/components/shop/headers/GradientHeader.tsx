@@ -23,7 +23,7 @@ const GradientHeader = ({ logo, shopName, cartItemsCount, onCartClick }: Gradien
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      <nav className={`flex md:px-12 md:py-6 px-6 py-4 relative items-center justify-between transition-all duration-300 ${
+      <nav className={`flex md:px-12 md:py-6 px-3 sm:px-6 py-4 relative items-center justify-between transition-all duration-300 ${
         isScrolled ? 'bg-background/80 backdrop-blur-md' : 'bg-transparent'
       }`}>
         {/* Logo */}

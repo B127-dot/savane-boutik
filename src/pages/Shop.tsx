@@ -918,7 +918,7 @@ const Shop = () => {
         buttonStyle={effectiveSettings.buttonStyle}
         fontFamily={effectiveSettings.fontFamily}
       />
-      <div className={`min-h-screen pb-20 md:pb-0 bg-background ${fontClass}`}>
+      <div className={`min-h-screen pb-20 md:pb-0 bg-background overflow-x-hidden ${fontClass}`}>
         {/* Promo Banner - Top Position */}
         {effectiveSettings.promoBanner?.enabled && effectiveSettings.promoBanner.position === 'top' && (
           <PromoBanner

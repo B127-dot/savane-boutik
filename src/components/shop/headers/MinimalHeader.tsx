@@ -24,7 +24,7 @@ const MinimalHeader = ({ logo, shopName, cartItemsCount, onCartClick }: MinimalH
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
     }`}>
-      <div className="mx-6">
+      <div className="mx-3 sm:mx-6">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
           <a href="#" className="inline-flex items-center gap-2">
