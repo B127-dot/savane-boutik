@@ -37,7 +37,7 @@ export function TestimonialsSection({
         <div className="relative">
           {/* Marquee Track */}
           <div
-            className="flex gap-4 overflow-hidden [--duration:40s] [--gap:1rem]"
+            className="flex gap-4 overflow-hidden w-full max-w-full [--duration:40s] [--gap:1rem]"
             style={{
               maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
               WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',

@@ -31,7 +31,7 @@ const GlassHeader = ({ logo, shopName, cartItemsCount, onCartClick }: GlassHeade
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 py-3 sm:py-4 px-2 sm:px-4 lg:px-8">
-      <div className={`relative max-w-7xl mx-auto rounded-2xl px-3 sm:px-6 transition-all duration-300 ${
+      <div className={`relative w-full max-w-7xl mx-auto rounded-2xl px-3 sm:px-6 transition-all duration-300 ${
         isScrolled 
           ? 'ring-1 ring-border bg-background/80 border border-border shadow-lg backdrop-blur-lg' 
           : 'bg-transparent border-transparent'

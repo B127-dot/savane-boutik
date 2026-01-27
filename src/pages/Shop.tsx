@@ -123,6 +123,14 @@ const Shop = () => {
   const [wishlist, setWishlist] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<'recent' | 'price-asc' | 'price-desc' | 'name'>('recent');
 
+  // Add shop-page class to #root for full-width layout
+  useEffect(() => {
+    document.getElementById('root')?.classList.add('shop-page');
+    return () => {
+      document.getElementById('root')?.classList.remove('shop-page');
+    };
+  }, []);
+
   // Listen for preview updates from ShopEditor via postMessage
   useEffect(() => {
     if (!isEditorPreview) return;

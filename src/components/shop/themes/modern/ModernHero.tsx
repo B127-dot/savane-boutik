@@ -73,7 +73,7 @@ const AnimatedStat = ({ value, suffix = '', label }: { value: string; suffix?: s
       <div className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white mb-1 sm:mb-2">
         {count}{suffix}
       </div>
-      <div className="font-body text-white/70 text-[10px] sm:text-xs md:text-sm truncate max-w-[80px] sm:max-w-none mx-auto">{label}</div>
+      <div className="font-body text-white/70 text-[10px] sm:text-xs md:text-sm truncate max-w-[60px] sm:max-w-none mx-auto">{label}</div>
     </div>
   );
 };
@@ -157,7 +157,7 @@ const ModernHero = ({
       />
       
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-3 sm:px-4">
+      <div className="relative z-10 container mx-auto px-3 sm:px-4 max-w-full">
         <div className="max-w-4xl mx-auto">
           {/* Badge */}
           {showBadge && (
@@ -247,7 +247,7 @@ const ModernHero = ({
           {/* Stats with animated counters */}
           {showStats && stats.length > 0 && (
             <div 
-              className={`grid grid-cols-3 gap-2 sm:gap-6 mt-12 sm:mt-16 transition-all duration-700 delay-[400ms] ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+              className={`grid grid-cols-3 gap-1 sm:gap-2 md:gap-6 mt-12 sm:mt-16 transition-all duration-700 delay-[400ms] ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               {stats.map((stat) => (
                 <AnimatedStat 

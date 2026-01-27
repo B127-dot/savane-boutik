@@ -1,8 +1,17 @@
-#root {
+/* Styles par défaut uniquement pour les pages internes (dashboard, etc.) */
+#root:not(.shop-page) {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+}
+
+/* Pages de boutique : pas de contraintes */
+#root.shop-page {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
 }
 
 .logo {
