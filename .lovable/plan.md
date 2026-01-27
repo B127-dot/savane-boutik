@@ -1,166 +1,213 @@
 
-# Plan de Correction : Supprimer la Couche Blanche Derrière les Headers
+# Plan de Correction : Débordement Horizontal sur Mobile
 
-## Problème Identifié
+## Problèmes Identifiés
 
-Les captures d'écran montrent clairement une **bande blanche** entre le header et le hero. Cela se produit parce que les headers alternatifs (`GlassHeader`, `MinimalHeader`, `GradientHeader`) utilisent :
+En analysant l'image et le code, j'ai identifié **4 sources principales** de débordement horizontal sur mobile :
 
-1. **`position: sticky`** au lieu de **`position: fixed`**
-2. Des **fonds opaques** (`bg-background`) au lieu de transparents
-3. Du **padding externe** qui crée un espace visible
+### 1. Absence de `overflow-x-hidden` sur le conteneur principal Shop
+- **Fichier** : `src/pages/Shop.tsx` (ligne 921)
+- **Problème** : Le conteneur principal du thème Modern n'a pas `overflow-x-hidden`, contrairement à d'autres pages comme `Index.tsx` et `Login.tsx` qui l'utilisent.
+- **Impact** : Les éléments larges (marquee, animations, stats) peuvent déborder horizontalement.
 
-### Comparaison des Headers
+### 2. Grille des Stats dans le Hero trop large sur mobile
+- **Fichier** : `src/components/shop/themes/modern/ModernHero.tsx` (ligne 250)
+- **Problème** : La grille `grid-cols-3` avec `gap-6` et les textes larges peuvent dépasser la largeur du viewport sur petits écrans (320px-375px).
+- **Impact** : Les labels comme "Note moyenne" ou "Clients" débordent, causant le scroll horizontal visible sur la capture d'écran.
 
-| Header | Position | Fond Initial | Problème |
-|--------|----------|--------------|----------|
-| `ModernHeader` ✅ | `fixed` | `bg-transparent` | Aucun |
-| `GlassHeader` ❌ | `sticky` | `bg-background/60` | Bande blanche visible |
-| `MinimalHeader` ❌ | `sticky` | `bg-background` | Bande blanche opaque |
-| `GradientHeader` ❌ | `sticky` | `bg-background/80` | Bande blanche semi-transparente |
+### 3. Espace insuffisant dans les Headers sur très petits écrans
+- **Fichier** : `src/components/shop/headers/GlassHeader.tsx` (ligne 33)
+- **Problème** : Le padding `px-4` combiné au conteneur interne `px-6` peut créer des éléments trop larges sur mobile 320px.
 
-## Solution Proposée
+### 4. Section Testimonials Marquee
+- **Fichier** : `src/components/ui/testimonials-with-marquee.tsx`
+- **Problème** : Bien que la section ait `overflow-hidden`, le conteneur parent pourrait ne pas hériter cette contrainte.
 
-Transformer tous les headers en **headers fixes et transparents** au départ, qui deviennent opaques au scroll (comme le `ModernHeader`).
-
-### Modifications à Apporter
+## Architecture des Corrections
 
 ```text
-┌─────────────────────────────────────────────────────────────┐
-│ AVANT (sticky + fond blanc)                                 │
-├─────────────────────────────────────────────────────────────┤
-│ ╔══════════════════════════════════════════════════════════╗│
-│ ║ Header [fond blanc]                                      ║│
-│ ╠══════════════════════════════════════════════════════════╣│
-│ ║                                                          ║│
-│ ║               Hero (image)                               ║│
-│ ║                                                          ║│
-│ ╚══════════════════════════════════════════════════════════╝│
-│                      ↑                                      │
-│           Bande blanche visible ici                         │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────┐
+│ AVANT (débordement)                               │
+├───────────────────────────────────────────────────┤
+│                                                   │
+│  ┌─────────────────────────────────────────────┐  │
+│  │ Shop.tsx (pas d'overflow-x-hidden)          │  │
+│  │ ┌─────────────────────────────────────────┐ │  │
+│  │ │ Hero Stats: 500+ | 1000+ | 4.9★         │→│←─ Déborde
+│  │ └─────────────────────────────────────────┘ │  │
+│  └─────────────────────────────────────────────┘  │
+│                                                   │
+└───────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────────┐
-│ APRÈS (fixed + transparent)                                 │
-├─────────────────────────────────────────────────────────────┤
-│ ╔══════════════════════════════════════════════════════════╗│
-│ ║ Header [transparent, flotte au-dessus]                   ║│
-│ ║══════════════════════════════════════════════════════════║│
-│ ║               Hero (image visible derrière)              ║│
-│ ║                                                          ║│
-│ ╚══════════════════════════════════════════════════════════╝│
-│                                                             │
-│           Pas de bande blanche !                            │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────┐
+│ APRÈS (contenu contenu)                           │
+├───────────────────────────────────────────────────┤
+│                                                   │
+│  ┌─────────────────────────────────────────────┐  │
+│  │ Shop.tsx (overflow-x-hidden)                │  │
+│  │ ┌─────────────────────────────────────────┐ │  │
+│  │ │ Hero Stats adaptifs sur mobile          │ │  │
+│  │ │   500+        1000+        4.9★         │ │  │
+│  │ │  Produits    Clients       Note         │ │  │
+│  │ └─────────────────────────────────────────┘ │  │
+│  └─────────────────────────────────────────────┘  │
+│                                                   │
+└───────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## Fichiers à Modifier
 
-### 1. `src/components/shop/headers/GlassHeader.tsx`
+### 1. `src/pages/Shop.tsx`
 
-**Avant :**
+**Modification** : Ajouter `overflow-x-hidden` au conteneur principal de chaque thème.
+
 ```tsx
-<header className="sticky top-0 z-50 py-4 px-4 lg:px-8">
-  <div className="... bg-background/60 ...">
+// Ligne 921 - Thème Modern (et autres thèmes similaires)
+// AVANT :
+<div className={`min-h-screen pb-20 md:pb-0 bg-background ${fontClass}`}>
+
+// APRÈS :
+<div className={`min-h-screen pb-20 md:pb-0 bg-background overflow-x-hidden ${fontClass}`}>
 ```
 
-**Après :**
+Cette modification s'appliquera à tous les thèmes (Modern, Artisan, Aesthetique, Y2k, Savane, Urbanwave).
+
+---
+
+### 2. `src/components/shop/themes/modern/ModernHero.tsx`
+
+**Modifications** :
+
+a) **Réduire l'espace entre les stats sur mobile** (ligne 250) :
 ```tsx
-const [isScrolled, setIsScrolled] = useState(false);
+// AVANT :
+className={`grid grid-cols-3 gap-6 mt-16 transition-all ...`}
 
-useEffect(() => {
-  const handleScroll = () => setIsScrolled(window.scrollY > 20);
-  window.addEventListener('scroll', handleScroll);
-  return () => window.removeEventListener('scroll', handleScroll);
-}, []);
-
-<header className="fixed top-0 left-0 right-0 z-50 py-4 px-4 lg:px-8">
-  <div className={`... ${isScrolled ? 'bg-background/80 shadow-lg' : 'bg-transparent border-transparent'} ...`}>
+// APRÈS :
+className={`grid grid-cols-3 gap-2 sm:gap-6 mt-12 sm:mt-16 transition-all ...`}
 ```
 
-### 2. `src/components/shop/headers/MinimalHeader.tsx`
-
-**Avant :**
+b) **Adapter la taille du texte des stats sur mobile** (ligne 73) :
 ```tsx
-<header className="sticky top-0 z-50 bg-background">
+// AVANT :
+className="text-3xl md:text-4xl font-display font-bold text-white mb-2"
+
+// APRÈS :
+className="text-2xl sm:text-3xl md:text-4xl font-display font-bold text-white mb-1 sm:mb-2"
 ```
 
-**Après :**
+c) **Tronquer ou adapter les labels trop longs** (ligne 76) :
 ```tsx
-const [isScrolled, setIsScrolled] = useState(false);
+// AVANT :
+<div className="font-body text-white/70 text-sm">{label}</div>
 
-useEffect(() => {
-  const handleScroll = () => setIsScrolled(window.scrollY > 20);
-  window.addEventListener('scroll', handleScroll);
-  return () => window.removeEventListener('scroll', handleScroll);
-}, []);
-
-<header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-  isScrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
-}`}>
+// APRÈS :
+<div className="font-body text-white/70 text-[10px] sm:text-xs md:text-sm truncate max-w-[80px] sm:max-w-none mx-auto">{label}</div>
 ```
 
-### 3. `src/components/shop/headers/GradientHeader.tsx`
-
-**Avant :**
+d) **Ajouter un padding horizontal au conteneur** (ligne 160) :
 ```tsx
-<header className="sticky top-0 z-50">
-  <nav className="... bg-background/80 backdrop-blur-md">
-```
+// AVANT :
+<div className="relative z-10 container mx-auto px-4">
 
-**Après :**
-```tsx
-const [isScrolled, setIsScrolled] = useState(false);
-
-useEffect(() => {
-  const handleScroll = () => setIsScrolled(window.scrollY > 20);
-  window.addEventListener('scroll', handleScroll);
-  return () => window.removeEventListener('scroll', handleScroll);
-}, []);
-
-<header className="fixed top-0 left-0 right-0 z-50">
-  <nav className={`... transition-all duration-300 ${
-    isScrolled ? 'bg-background/80 backdrop-blur-md' : 'bg-transparent'
-  }`}>
+// APRÈS :
+<div className="relative z-10 container mx-auto px-3 sm:px-4">
 ```
 
 ---
 
-## Ajustements Visuels Complémentaires
+### 3. `src/components/shop/headers/GlassHeader.tsx`
 
-### Couleur du Texte
+**Modifications** :
 
-Les liens de navigation et le nom de la boutique doivent également s'adapter :
-- **Quand transparent** : Texte blanc (visible sur l'image hero sombre)
-- **Quand scrolled** : Texte normal (`text-foreground`)
-
+a) **Réduire le padding sur très petits écrans** (ligne 33) :
 ```tsx
-// Exemple pour les liens
-className={`... ${isScrolled ? 'text-foreground' : 'text-white'} ...`}
+// AVANT :
+<header className="fixed top-0 left-0 right-0 z-50 py-4 px-4 lg:px-8">
+
+// APRÈS :
+<header className="fixed top-0 left-0 right-0 z-50 py-3 sm:py-4 px-2 sm:px-4 lg:px-8">
 ```
 
-### GlassHeader Spécifique
+b) **Réduire le padding interne du conteneur** (ligne 34) :
+```tsx
+// AVANT :
+<div className={`relative max-w-7xl mx-auto rounded-2xl px-6 transition-all ...`}>
 
-Le GlassHeader a un design "flottant" avec des bords arrondis. Pour maintenir ce style tout en étant transparent :
-- Conserver le `rounded-2xl` 
-- Rendre la bordure transparente quand non scrolled
-- Appliquer le backdrop-blur uniquement au scroll
+// APRÈS :
+<div className={`relative max-w-7xl mx-auto rounded-2xl px-3 sm:px-6 transition-all ...`}>
+```
+
+---
+
+### 4. `src/components/shop/headers/MinimalHeader.tsx`
+
+**Modification** : Réduire les marges sur mobile (ligne 27) :
+```tsx
+// AVANT :
+<div className="mx-6">
+
+// APRÈS :
+<div className="mx-3 sm:mx-6">
+```
+
+---
+
+### 5. `src/components/shop/headers/GradientHeader.tsx`
+
+**Modification** : Réduire le padding sur mobile (ligne 26) :
+```tsx
+// AVANT :
+<nav className={`flex md:px-12 md:py-6 px-6 py-4 ...`}>
+
+// APRÈS :
+<nav className={`flex md:px-12 md:py-6 px-3 sm:px-6 py-4 ...`}>
+```
+
+---
+
+### 6. `src/components/ui/testimonials-with-marquee.tsx`
+
+**Modification** : S'assurer que le conteneur parent gère bien l'overflow (ligne 22) :
+```tsx
+// AVANT :
+<section className={cn("py-16 md:py-20 overflow-hidden", className)}>
+
+// APRÈS :
+<section className={cn("py-12 sm:py-16 md:py-20 overflow-hidden w-full", className)}>
+```
+
+Et ajuster le padding du conteneur interne :
+```tsx
+// AVANT :
+<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+// APRÈS :
+<div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
+```
 
 ---
 
 ## Résumé des Changements
 
-| Fichier | Changement Principal |
-|---------|---------------------|
-| `GlassHeader.tsx` | `sticky` → `fixed`, fond dynamique, texte adaptatif |
-| `MinimalHeader.tsx` | `sticky` → `fixed`, fond transparent → opaque au scroll |
-| `GradientHeader.tsx` | `sticky` → `fixed`, fond transparent → gradient au scroll |
+| Fichier | Type de Correction | Impact |
+|---------|-------------------|--------|
+| `Shop.tsx` (tous thèmes) | Ajouter `overflow-x-hidden` | Empêche tout débordement global |
+| `ModernHero.tsx` | Responsive stats + gaps réduits | Stats visibles sur 320px |
+| `GlassHeader.tsx` | Padding réduit sur mobile | Header compact sur petits écrans |
+| `MinimalHeader.tsx` | Marges réduites sur mobile | Plus d'espace pour le contenu |
+| `GradientHeader.tsx` | Padding réduit sur mobile | Header bien contenu |
+| `testimonials-with-marquee.tsx` | Largeur 100% + padding réduit | Marquee bien contenu |
+
+---
 
 ## Résultat Attendu
 
-Après ces modifications :
-1. L'image hero sera visible à 100% derrière tous les headers
-2. Le header "flottera" au-dessus du contenu
-3. Au scroll, le header deviendra opaque avec backdrop-blur
-4. Plus aucune bande blanche visible
+Après ces corrections :
+1. Plus de scroll horizontal sur mobile (320px à 428px)
+2. Les statistiques du Hero seront lisibles sur tous les écrans
+3. Les headers resteront contenus sans débordement
+4. La section témoignages avec marquee sera parfaitement alignée
+5. L'expérience utilisateur sera fluide sur tous les appareils
