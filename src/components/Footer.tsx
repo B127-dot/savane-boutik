@@ -28,6 +28,7 @@ const Footer = () => {
         { label: "Témoignages", href: "#testimonials" },
         { label: "Documentation", href: "/docs" },
         { label: "Blog", href: "/blog" },
+        { label: "Superwhisper", href: "https://superwhisper.com" },
       ]
     },
     {
