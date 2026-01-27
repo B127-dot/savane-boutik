@@ -131,7 +131,7 @@ const ModernHero = ({
   return (
     <section 
       ref={heroRef}
-      className="relative w-full min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex items-center justify-center overflow-hidden"
+      className="relative w-full min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex items-center justify-center overflow-hidden pt-20 md:pt-24"
     >
       {/* Background */}
       <div 
