@@ -19,8 +19,8 @@ export function TestimonialsSection({
   className 
 }: TestimonialsSectionProps) {
   return (
-    <section className={cn("py-16 md:py-20 overflow-hidden", className)}>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className={cn("py-12 sm:py-16 md:py-20 overflow-hidden w-full", className)}>
+      <div className="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
         {/* Header */}
         <div className="flex flex-col items-center justify-center mb-12">
           <div className="flex flex-col items-center gap-3 text-center max-w-2xl">
