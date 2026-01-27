@@ -222,12 +222,12 @@ const ModernProductGrid = ({
 
             {/* Scrollable Category Pills */}
             {categories.length > 0 && (
-              <div className="relative">
+              <div className="relative overflow-hidden">
                 {/* Gradient fade edges for scroll indication */}
                 <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none md:hidden" />
                 <div className="absolute right-0 top-0 bottom-0 w-4 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none md:hidden" />
                 
-                <div className="flex gap-2 overflow-x-auto pb-2 px-1 scrollbar-hide md:flex-wrap md:justify-center md:overflow-visible">
+                <div className="flex gap-2 overflow-x-auto pb-2 px-1 scrollbar-hide md:flex-wrap md:justify-center md:overflow-visible max-w-full">
                   <CategoryPill
                     name={DEFAULT_TEXTS.productGrid.allCategories}
                     count={categoryCounts.all}

@@ -24,6 +24,18 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 80px; /* Offset for sticky header */
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* Ensure containers respect viewport width */
+  .container {
+    max-width: 100%;
   }
 
   :root {

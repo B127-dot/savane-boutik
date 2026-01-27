@@ -318,7 +318,7 @@ const BottomNavMobile = ({
         animate={{ y: 0 }}
         className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-border shadow-[0_-4px_20px_rgba(0,0,0,0.1)]"
       >
-        <div className="grid grid-cols-5 h-16 safe-area-pb">
+        <div className="grid grid-cols-5 h-16 safe-area-pb min-w-0 w-full">
           {/* Home */}
           <NavItem
             icon={Home}
