@@ -165,7 +165,7 @@ const ModernHero = ({
               className={`flex justify-center mb-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
             >
               <div 
-                className="inline-flex items-center gap-2 backdrop-blur-sm border rounded-full px-6 py-2"
+                className="inline-flex items-center gap-1.5 sm:gap-2 backdrop-blur-sm border rounded-full px-3 sm:px-6 py-1.5 sm:py-2"
                 style={{ 
                   backgroundColor: 'color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 20%, transparent)',
                   borderColor: 'color-mix(in srgb, var(--shop-primary, hsl(var(--primary))) 30%, transparent)'
@@ -173,11 +173,11 @@ const ModernHero = ({
               >
                 {BadgeIcon && (
                   <BadgeIcon 
-                    className="w-5 h-5 text-white animate-pulse" 
+                    className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-pulse" 
                     style={{ color: 'var(--shop-primary, hsl(var(--primary)))' }}
                   />
                 )}
-                <span className="text-white font-display font-semibold">{badgeText}</span>
+                <span className="text-sm sm:text-base text-white font-display font-semibold">{badgeText}</span>
               </div>
             </div>
           )}
