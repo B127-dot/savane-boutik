@@ -131,14 +131,33 @@ const Sidebar = () => {
   useLayoutEffect(() => {
     const updateIndicatorPosition = () => {
       const activeHref = location.pathname;
-      const activeElement = itemRefs.current.get(activeHref);
+      let activeElement = itemRefs.current.get(activeHref);
+      
+      // If no direct match, check sub-items
+      if (!activeElement) {
+        for (const section of sidebarSections) {
+          for (const item of section.items) {
+            if (item.subItems) {
+              const subMatch = item.subItems.find(sub => sub.href === activeHref);
+              if (subMatch) {
+                activeElement = itemRefs.current.get(subMatch.href);
+                break;
+              }
+            }
+          }
+        }
+      }
       
       if (activeElement && navRef.current) {
         const navRect = navRef.current.getBoundingClientRect();
         const itemRect = activeElement.getBoundingClientRect();
         
+        // Calculate position relative to scroll container
+        const scrollTop = navRef.current.scrollTop;
+        const relativeTop = itemRect.top - navRect.top + scrollTop;
+        
         setIndicatorStyle({
-          top: itemRect.top - navRect.top + navRef.current.scrollTop,
+          top: relativeTop,
           height: itemRect.height,
           opacity: 1
         });
@@ -147,9 +166,10 @@ const Sidebar = () => {
       }
     };
 
-    // Small delay to ensure DOM is updated
-    const timer = setTimeout(updateIndicatorPosition, 50);
-    return () => clearTimeout(timer);
+    // Use requestAnimationFrame for smoother updates
+    requestAnimationFrame(() => {
+      setTimeout(updateIndicatorPosition, 10);
+    });
   }, [location.pathname, expandedItems, isCollapsed]);
 
   // Hover handlers
