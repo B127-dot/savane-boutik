@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useLayoutEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '@/contexts/AppContext';
 import { 
@@ -6,12 +6,8 @@ import {
   BarChart3, 
   Package, 
   ShoppingCart, 
-  Palette,
   CreditCard,
   Megaphone,
-  HelpCircle,
-  User,
-  Crown,
   LogOut,
   ChevronDown,
   ChevronRight,
@@ -60,6 +56,13 @@ const Sidebar = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>(['/products']);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  
+  // Sliding indicator state
+  const navRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<Map<string, HTMLElement>>(new Map());
+  const [indicatorStyle, setIndicatorStyle] = useState({ top: 0, height: 0, opacity: 0 });
+  const [hoverStyle, setHoverStyle] = useState({ top: 0, height: 0, opacity: 0 });
+  
   const location = useLocation();
   const navigate = useNavigate();
   const { user, shopSettings, logout, orders } = useApp();
@@ -124,6 +127,48 @@ const Sidebar = () => {
     }
   ];
 
+  // Calculate indicator position based on active element
+  useLayoutEffect(() => {
+    const updateIndicatorPosition = () => {
+      const activeHref = location.pathname;
+      const activeElement = itemRefs.current.get(activeHref);
+      
+      if (activeElement && navRef.current) {
+        const navRect = navRef.current.getBoundingClientRect();
+        const itemRect = activeElement.getBoundingClientRect();
+        
+        setIndicatorStyle({
+          top: itemRect.top - navRect.top + navRef.current.scrollTop,
+          height: itemRect.height,
+          opacity: 1
+        });
+      } else {
+        setIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+      }
+    };
+
+    // Small delay to ensure DOM is updated
+    const timer = setTimeout(updateIndicatorPosition, 50);
+    return () => clearTimeout(timer);
+  }, [location.pathname, expandedItems, isCollapsed]);
+
+  // Hover handlers
+  const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (!navRef.current) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const navRect = navRef.current.getBoundingClientRect();
+    
+    setHoverStyle({
+      top: rect.top - navRect.top + navRef.current.scrollTop,
+      height: rect.height,
+      opacity: 1
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setHoverStyle(prev => ({ ...prev, opacity: 0 }));
+  }, []);
+
   const handleLogout = () => {
     setShowLogoutDialog(false);
     logout();
@@ -178,11 +223,17 @@ const Sidebar = () => {
               <TooltipTrigger asChild>
                 <Link
                   to={item.href}
+                  ref={(el) => {
+                    if (el) itemRefs.current.set(item.href, el);
+                    else itemRefs.current.delete(item.href);
+                  }}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
                   className={`
-                    flex items-center justify-center rounded-lg px-3 py-2.5 transition-all duration-200 group
+                    flex items-center justify-center rounded-lg px-3 py-2.5 transition-colors duration-200 group relative z-10
                     ${isActive 
-                      ? 'bg-gradient-to-r from-primary to-primary/85 text-primary-foreground shadow-lg shadow-primary/30 scale-[1.02]' 
-                      : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground hover:translate-x-1'
+                      ? 'text-primary-foreground' 
+                      : 'text-muted-foreground hover:text-accent-foreground'
                     }
                   `}
                 >
@@ -196,17 +247,23 @@ const Sidebar = () => {
           </TooltipProvider>
         ) : (
           <div
+            ref={(el) => {
+              if (el) itemRefs.current.set(item.href, el);
+              else itemRefs.current.delete(item.href);
+            }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             className={`
-              flex items-center justify-between rounded-lg px-3 py-2.5 transition-all duration-200 cursor-pointer group
+              flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors duration-200 cursor-pointer group relative z-10
               ${isActive 
-                ? 'bg-gradient-to-r from-primary to-primary/85 text-primary-foreground shadow-lg shadow-primary/30 scale-[1.02] border-l-4 border-primary-foreground/50' 
-                : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground hover:translate-x-1'
+                ? 'text-primary-foreground' 
+                : 'text-muted-foreground hover:text-accent-foreground'
               }
             `}
             onClick={() => hasSubItems ? toggleExpanded(item.href) : navigate(item.href)}
           >
             <div className="flex items-center gap-3 flex-1">
-              <item.icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? '' : 'group-hover:scale-110 group-hover:rotate-6'}`} />
+              <item.icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? '' : 'group-hover:scale-110'}`} />
               <span className={`text-sm tracking-tight ${isActive ? 'font-semibold' : 'font-medium'}`}>
                 {item.label}
               </span>
@@ -241,11 +298,17 @@ const Sidebar = () => {
                 <Link
                   key={subItem.href}
                   to={subItem.href}
+                  ref={(el) => {
+                    if (el) itemRefs.current.set(subItem.href, el);
+                    else itemRefs.current.delete(subItem.href);
+                  }}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
                   className={`
-                    flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200
+                    flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors duration-200 relative z-10
                     ${isSubActive 
-                      ? 'bg-accent text-accent-foreground font-medium' 
-                      : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground hover:translate-x-1'
+                      ? 'text-primary-foreground font-medium' 
+                      : 'text-muted-foreground hover:text-accent-foreground'
                     }
                   `}
                 >
@@ -300,11 +363,36 @@ const Sidebar = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto p-3 space-y-6 sidebar-scroll">
+      <nav ref={navRef} className="flex-1 overflow-y-auto p-3 space-y-6 sidebar-scroll relative">
+        {/* Hover Indicator (subtle) */}
+        <div
+          className="absolute left-0 right-0 mx-2 pointer-events-none z-0 
+                     bg-accent/50 rounded-lg
+                     transition-all duration-200 ease-out"
+          style={{
+            top: `${hoverStyle.top}px`,
+            height: `${hoverStyle.height}px`,
+            opacity: hoverStyle.opacity
+          }}
+        />
+        
+        {/* Active Indicator (sliding) */}
+        <div
+          className="absolute left-0 right-0 mx-2 pointer-events-none z-[1] 
+                     bg-gradient-to-r from-primary to-primary/85 
+                     rounded-lg shadow-lg shadow-primary/30
+                     transition-all duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+          style={{
+            top: `${indicatorStyle.top}px`,
+            height: `${indicatorStyle.height}px`,
+            opacity: indicatorStyle.opacity
+          }}
+        />
+
         {sidebarSections.map((section, sectionIndex) => (
           <div key={section.label} className={sectionIndex > 0 ? 'mt-6' : ''}>
             {!isCollapsed && (
-              <h3 className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground/50 px-3 mb-2">
+              <h3 className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground/50 px-3 mb-2 relative z-10">
                 {section.label}
               </h3>
             )}
