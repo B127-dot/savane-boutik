@@ -1,9 +1,0 @@
-export { default as AesthetiqueHeader } from './AesthetiqueHeader';
-export { default as AesthetiqueHero } from './AesthetiqueHero';
-export { default as AesthetiqueMarquee } from './AesthetiqueMarquee';
-export { default as AesthetiqueProductCard } from './AesthetiqueProductCard';
-export { default as AesthetiqueProducts } from './AesthetiqueProducts';
-export { default as AesthetiqueAtelier } from './AesthetiqueAtelier';
-export { default as AesthetiqueBestSellers } from './AesthetiqueBestSellers';
-export { default as AesthetiqueFooter } from './AesthetiqueFooter';
-export { default as AesthetiqueTrustBar } from './AesthetiqueTrustBar';

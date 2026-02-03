@@ -3,7 +3,7 @@ export interface Theme {
   name: string;
   description: string;
   preview: string;
-  category: 'modern' | 'elegant' | 'minimal' | 'creative' | 'artisan' | 'aesthetique' | 'urbanwave' | 'savane' | 'y2k';
+  category: 'modern';
   isAvailable: boolean;
   isNew?: boolean;
   components: {
@@ -25,98 +25,6 @@ export const THEME_REGISTRY: Record<string, Theme> = {
       hero: 'modern',
       productCard: 'modern',
       footer: 'modern'
-    }
-  },
-  artisan: {
-    id: 'artisan',
-    name: 'Artisan',
-    description: 'Bientôt disponible - Design organique et naturel avec layouts asymétriques créatifs.',
-    preview: '/theme-previews/artisan.jpg',
-    category: 'artisan',
-    isAvailable: false,
-    components: {
-      hero: 'artisan',
-      productCard: 'artisan',
-      footer: 'artisan'
-    }
-  },
-  aesthetique: {
-    id: 'aesthetique',
-    name: 'Esthétique',
-    description: 'Bientôt disponible - Design sombre et luxueux avec typographie serif élégante.',
-    preview: '/theme-previews/aesthetique.jpg',
-    category: 'aesthetique',
-    isAvailable: false,
-    components: {
-      hero: 'aesthetique',
-      productCard: 'aesthetique',
-      footer: 'aesthetique'
-    }
-  },
-  minimal: {
-    id: 'minimal',
-    name: 'Minimaliste',
-    description: 'Bientôt disponible - Design épuré avec espaces blancs généreux et typographie moderne.',
-    preview: '/theme-previews/minimal.jpg',
-    category: 'minimal',
-    isAvailable: false,
-    components: {
-      hero: 'minimal',
-      productCard: 'minimal',
-      footer: 'minimal'
-    }
-  },
-  creative: {
-    id: 'creative',
-    name: 'Créatif',
-    description: 'Bientôt disponible - Design audacieux avec couleurs vives et animations dynamiques.',
-    preview: '/theme-previews/creative.jpg',
-    category: 'creative',
-    isAvailable: false,
-    components: {
-      hero: 'creative',
-      productCard: 'creative',
-      footer: 'creative'
-    }
-  },
-  urbanwave: {
-    id: 'urbanwave',
-    name: 'UrbanWave',
-    description: 'Bientôt disponible - Design streetwear sombre et audacieux avec des accents orange vibrants.',
-    preview: '/theme-previews/urbanwave.jpg',
-    category: 'urbanwave',
-    isAvailable: false,
-    components: {
-      hero: 'urbanwave',
-      productCard: 'urbanwave',
-      footer: 'urbanwave'
-    }
-  },
-  savane: {
-    id: 'savane',
-    name: 'Savane',
-    description: 'Bientôt disponible - Design brutaliste noir et blanc pur avec typographie Oswald.',
-    preview: '/theme-previews/savane.jpg',
-    category: 'savane',
-    isAvailable: false,
-    components: {
-      hero: 'savane',
-      productCard: 'savane',
-      footer: 'savane'
-    }
-  },
-  y2k: {
-    id: 'y2k',
-    name: 'Y2K Glow',
-    description: 'Design Gen-Z vibrant avec gradients roses, violets et lime. Parfait pour une boutique tendance et jeune.',
-    preview: '/theme-previews/y2k.jpg',
-    category: 'y2k',
-    isAvailable: true,
-    isNew: true,
-    components: {
-      hero: 'y2k',
-      productCard: 'y2k',
-      footer: 'y2k'
     }
   },
 };
