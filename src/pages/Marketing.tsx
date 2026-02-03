@@ -10,7 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ShopQRCode from '@/components/ShopQRCode';
-import { Plus, Edit, Trash2, Percent, DollarSign, Tag, Share, Users, ShoppingCart, MessageCircle, Clock, TrendingUp } from 'lucide-react';
+import CapturedLeadsTab from '@/components/shop/CapturedLeadsTab';
+import { Plus, Edit, Trash2, Percent, DollarSign, Tag, Share, Users, ShoppingCart, MessageCircle, Clock, TrendingUp, Gift } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { PromoCode, AbandonedCart } from '@/contexts/AppContext';
 import { generateAbandonedCartRecoveryMessage, openWhatsApp } from '@/lib/whatsapp';
@@ -149,10 +150,14 @@ const Marketing = () => {
       </div>
 
       <Tabs defaultValue="promos" className="space-y-6">
-        <TabsList>
+        <TabsList className="flex flex-wrap h-auto gap-1">
           <TabsTrigger value="promos">
             <Tag className="w-4 h-4 mr-2" />
             Codes promo
+          </TabsTrigger>
+          <TabsTrigger value="leads">
+            <Gift className="w-4 h-4 mr-2" />
+            Leads capturés
           </TabsTrigger>
           <TabsTrigger value="abandoned">
             <ShoppingCart className="w-4 h-4 mr-2" />
@@ -168,6 +173,11 @@ const Marketing = () => {
             Partage
           </TabsTrigger>
         </TabsList>
+
+        {/* NEW: Captured Leads Tab */}
+        <TabsContent value="leads" className="space-y-6">
+          <CapturedLeadsTab shopName={shopSettings?.shopName || 'Ma Boutique'} />
+        </TabsContent>
 
         <TabsContent value="promos" className="space-y-6">
           <div className="flex justify-between items-center">
