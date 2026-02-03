@@ -14,6 +14,7 @@ import QuickViewModal from '@/components/shop/QuickViewModal';
 import BottomNavMobile from '@/components/shop/BottomNavMobile';
 import DynamicThemeStyles from '@/components/shop/DynamicThemeStyles';
 import PromoBanner from '@/components/shop/PromoBanner';
+import ExitIntentPopup from '@/components/shop/ExitIntentPopup';
 import { getFontClass } from '@/lib/shopTheme';
 
 // Custom Blocks
@@ -557,6 +558,15 @@ const Shop = () => {
           onClose={() => setQuickViewProduct(null)}
           onAddToCart={handleAddToCart}
         />
+
+        {/* Exit Intent Popup - Capture WhatsApp for marketing */}
+        {!isEditorPreview && cart.length > 0 && (
+          <ExitIntentPopup
+            shopName={effectiveSettings.shopName}
+            discountPercent={10}
+            inactivityDelay={120000}
+          />
+        )}
       </div>
     </ThemeProvider>
   );
