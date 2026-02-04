@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Gift, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -163,7 +164,10 @@ const ExitIntentPopup = ({
     setIsVisible(false);
   };
 
-  return (
+  const portalTarget = typeof document !== 'undefined' ? document.body : null;
+  if (!portalTarget) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isVisible && (
         <>
@@ -176,115 +180,118 @@ const ExitIntentPopup = ({
             onClick={handleClose}
           />
 
-          {/* Popup */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[101] w-[95vw] max-w-md"
-          >
-            <div className="relative bg-gradient-to-br from-background via-background to-primary/5 rounded-3xl shadow-2xl border border-border/50 overflow-hidden">
-              {/* Decorative gradient */}
-              <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-primary/20 to-transparent pointer-events-none" />
-              
-              {/* Close button */}
-              <button
-                onClick={handleClose}
-                className="absolute top-4 right-4 p-2 rounded-full bg-background/80 hover:bg-background transition-colors z-10"
-                aria-label="Fermer"
-              >
-                <X className="w-5 h-5 text-muted-foreground" />
-              </button>
+          {/* Centering wrapper (prevents layout/transform issues) */}
+          <div className="fixed inset-0 z-[101] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 16 }}
+              transition={{ type: "spring", damping: 26, stiffness: 320 }}
+              className="w-full max-w-md"
+            >
+              <div className="relative bg-gradient-to-br from-background via-background to-primary/5 rounded-3xl shadow-2xl border border-border/50 overflow-hidden">
+                {/* Decorative gradient */}
+                <div className="absolute top-0 left-0 right-0 h-28 bg-gradient-to-b from-primary/20 to-transparent pointer-events-none" />
 
-              <div className="relative p-6 sm:p-8">
-                {/* Icon */}
-                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30">
-                  <Gift className="w-8 h-8 text-primary-foreground" />
-                </div>
-
-                {/* Title */}
-                <h2 className="text-2xl sm:text-3xl font-display font-bold text-center text-foreground mb-2">
-                  Attendez ! 🎁
-                </h2>
-                
-                {/* Subtitle */}
-                <p className="text-center text-muted-foreground font-body mb-6">
-                  Recevez <span className="text-primary font-semibold">{discountPercent}% de réduction</span> sur votre première commande chez {shopName} !
-                </p>
-
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="popup-name" className="text-sm font-medium">
-                      Votre prénom (optionnel)
-                    </Label>
-                    <Input
-                      id="popup-name"
-                      type="text"
-                      placeholder="Ex: Aminata"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="h-12 bg-background/50"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="popup-phone" className="text-sm font-medium">
-                      Votre numéro WhatsApp <span className="text-destructive">*</span>
-                    </Label>
-                    <div className="relative">
-                      <MessageCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                      <Input
-                        id="popup-phone"
-                        type="tel"
-                        placeholder="Ex: 70 12 34 56"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="h-12 pl-11 bg-background/50"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <Button
-                    type="submit"
-                    size="lg"
-                    disabled={isSubmitting}
-                    className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90"
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                        Envoi...
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2">
-                        <Gift className="w-5 h-5" />
-                        Recevoir mon code -{discountPercent}%
-                      </span>
-                    )}
-                  </Button>
-                </form>
-
-                {/* Privacy note */}
-                <p className="text-xs text-muted-foreground text-center mt-4">
-                  🔒 Vos données sont sécurisées. Pas de spam, promis !
-                </p>
-
-                {/* No thanks link */}
+                {/* Close button */}
                 <button
                   onClick={handleClose}
-                  className="block w-full text-center text-sm text-muted-foreground hover:text-foreground mt-3 transition-colors"
+                  className="absolute top-4 right-4 p-2 rounded-full bg-background/80 hover:bg-background transition-colors z-10"
+                  aria-label="Fermer"
                 >
-                  Non merci, je préfère payer plein tarif
+                  <X className="w-5 h-5 text-muted-foreground" />
                 </button>
+
+                <div className="relative p-5 sm:p-6">
+                  {/* Icon */}
+                  <div className="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30">
+                    <Gift className="w-7 h-7 text-primary-foreground" />
+                  </div>
+
+                  {/* Title */}
+                  <h2 className="text-xl sm:text-2xl font-display font-bold text-center text-foreground mb-1.5">
+                    Attendez ! 🎁
+                  </h2>
+
+                  {/* Subtitle */}
+                  <p className="text-center text-sm text-muted-foreground font-body mb-4">
+                    Recevez <span className="text-primary font-semibold">{discountPercent}% de réduction</span> sur votre première commande chez {shopName} !
+                  </p>
+
+                  {/* Form */}
+                  <form onSubmit={handleSubmit} className="space-y-3">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="popup-name" className="text-sm font-medium">
+                        Votre prénom (optionnel)
+                      </Label>
+                      <Input
+                        id="popup-name"
+                        type="text"
+                        placeholder="Ex: Aminata"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="h-11 bg-background/50"
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <Label htmlFor="popup-phone" className="text-sm font-medium">
+                        Votre numéro WhatsApp <span className="text-destructive">*</span>
+                      </Label>
+                      <div className="relative">
+                        <MessageCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                        <Input
+                          id="popup-phone"
+                          type="tel"
+                          placeholder="Ex: 70 12 34 56"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          className="h-11 pl-11 bg-background/50"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={isSubmitting}
+                      className="w-full h-11 text-sm sm:text-base font-semibold bg-primary hover:bg-primary/90"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                          Envoi...
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2">
+                          <Gift className="w-5 h-5" />
+                          Recevoir mon code -{discountPercent}%
+                        </span>
+                      )}
+                    </Button>
+                  </form>
+
+                  {/* Privacy note */}
+                  <p className="text-xs text-muted-foreground text-center mt-3">
+                    🔒 Vos données sont sécurisées. Pas de spam, promis !
+                  </p>
+
+                  {/* No thanks link */}
+                  <button
+                    onClick={handleClose}
+                    className="block w-full text-center text-sm text-muted-foreground hover:text-foreground mt-2.5 transition-colors"
+                  >
+                    Non merci, je préfère payer plein tarif
+                  </button>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    portalTarget
   );
 };
 
