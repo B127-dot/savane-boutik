@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Gift, MessageCircle } from 'lucide-react';
@@ -27,6 +27,19 @@ const ExitIntentPopup = ({
   const [hasBeenShown, setHasBeenShown] = useState(false);
   const { toast } = useToast();
 
+  // Refs for scroll detection
+  const lastScrollY = useRef(0);
+  const scrollDirection = useRef<'up' | 'down'>('down');
+  const consecutiveUpScrolls = useRef(0);
+
+  // Show popup helper
+  const showPopup = useCallback(() => {
+    if (hasBeenShown || isVisible) return;
+    setIsVisible(true);
+    setHasBeenShown(true);
+    sessionStorage.setItem('exitIntentPopupShown', 'true');
+  }, [hasBeenShown, isVisible]);
+
   // Check if popup was already shown in this session
   useEffect(() => {
     const popupShown = sessionStorage.getItem('exitIntentPopupShown');
@@ -35,19 +48,70 @@ const ExitIntentPopup = ({
     }
   }, []);
 
-  // Exit intent detection (mouse leaving viewport)
-  const handleMouseLeave = useCallback((e: MouseEvent) => {
-    if (hasBeenShown || isVisible) return;
-    
-    // Only trigger when mouse leaves from the top
-    if (e.clientY <= 0) {
-      setIsVisible(true);
-      setHasBeenShown(true);
-      sessionStorage.setItem('exitIntentPopupShown', 'true');
-    }
-  }, [hasBeenShown, isVisible]);
+  // DESKTOP: Exit intent detection (mouse leaving viewport from top)
+  useEffect(() => {
+    if (hasBeenShown) return;
 
-  // Inactivity detection
+    const handleMouseLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0) {
+        showPopup();
+      }
+    };
+
+    document.addEventListener('mouseleave', handleMouseLeave);
+    return () => {
+      document.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [hasBeenShown, showPopup]);
+
+  // MOBILE: Scroll-up intent detection (user scrolling back up = intent to leave)
+  useEffect(() => {
+    if (hasBeenShown) return;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const isScrollingUp = currentScrollY < lastScrollY.current;
+
+      if (isScrollingUp && currentScrollY < 100) {
+        // User is near top and scrolling up - strong exit intent
+        consecutiveUpScrolls.current += 1;
+        if (consecutiveUpScrolls.current >= 3) {
+          showPopup();
+        }
+      } else if (!isScrollingUp) {
+        consecutiveUpScrolls.current = 0;
+      }
+
+      scrollDirection.current = isScrollingUp ? 'up' : 'down';
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [hasBeenShown, showPopup]);
+
+  // MOBILE: Visibility change detection (user switching apps/tabs)
+  useEffect(() => {
+    if (hasBeenShown) return;
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        // User is leaving - mark for next visit
+        // We'll show on return instead to not annoy
+      } else if (document.visibilityState === 'visible') {
+        // User returned - could show popup here if needed
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [hasBeenShown, showPopup]);
+
+  // UNIVERSAL: Inactivity detection (works on both mobile and desktop)
   useEffect(() => {
     if (hasBeenShown) return;
 
@@ -56,16 +120,12 @@ const ExitIntentPopup = ({
     const resetTimer = () => {
       clearTimeout(inactivityTimer);
       inactivityTimer = setTimeout(() => {
-        if (!hasBeenShown && !isVisible) {
-          setIsVisible(true);
-          setHasBeenShown(true);
-          sessionStorage.setItem('exitIntentPopupShown', 'true');
-        }
+        showPopup();
       }, inactivityDelay);
     };
 
-    // Events that reset the inactivity timer
-    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    // Events that reset the inactivity timer (includes touch for mobile)
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'touchmove'];
     
     events.forEach(event => {
       document.addEventListener(event, resetTimer, { passive: true });
@@ -80,17 +140,7 @@ const ExitIntentPopup = ({
         document.removeEventListener(event, resetTimer);
       });
     };
-  }, [hasBeenShown, isVisible, inactivityDelay]);
-
-  // Exit intent listener
-  useEffect(() => {
-    if (hasBeenShown) return;
-    
-    document.addEventListener('mouseleave', handleMouseLeave);
-    return () => {
-      document.removeEventListener('mouseleave', handleMouseLeave);
-    };
-  }, [handleMouseLeave, hasBeenShown]);
+  }, [hasBeenShown, inactivityDelay, showPopup]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
