@@ -32,12 +32,17 @@ const ExitIntentPopup = ({
   const scrollDirection = useRef<'up' | 'down'>('down');
   const consecutiveUpScrolls = useRef(0);
 
-  // Show popup helper
+  // Show popup helper with haptic feedback on mobile
   const showPopup = useCallback(() => {
     if (hasBeenShown || isVisible) return;
     setIsVisible(true);
     setHasBeenShown(true);
     sessionStorage.setItem('exitIntentPopupShown', 'true');
+    
+    // Haptic vibration on mobile (if supported)
+    if ('vibrate' in navigator) {
+      navigator.vibrate([50, 30, 50]); // Short double pulse
+    }
   }, [hasBeenShown, isVisible]);
 
   // Check if popup was already shown in this session
@@ -234,9 +239,19 @@ const ExitIntentPopup = ({
           <div className="fixed inset-0 z-[101] flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.92, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1, 
+                y: 0,
+                x: [0, -4, 4, -3, 3, -1, 1, 0] // Subtle shake animation
+              }}
               exit={{ opacity: 0, scale: 0.92, y: 16 }}
-              transition={{ type: "spring", damping: 26, stiffness: 320 }}
+              transition={{ 
+                type: "spring", 
+                damping: 26, 
+                stiffness: 320,
+                x: { delay: 0.3, duration: 0.4, ease: "easeInOut" }
+              }}
               className="w-full max-w-md"
             >
               <div className="relative bg-gradient-to-br from-background via-background to-primary/5 rounded-3xl shadow-2xl border border-border/50 overflow-hidden">
