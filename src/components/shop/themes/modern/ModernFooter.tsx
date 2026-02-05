@@ -1,4 +1,5 @@
 import { Phone, MessageCircle, Mail, MapPin, Facebook, Instagram, ArrowRight } from 'lucide-react';
+import { formatWhatsAppNumber, isValidWhatsAppNumber } from '@/lib/whatsapp';
 import { PaymentMethodsGrid } from '@/components/shop/PaymentMethodsIcons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,8 +27,8 @@ interface ModernFooterProps {
   instagram?: string;
   tiktok?: string;
   paymentMethods?: string[];
-  showNewsletter?: boolean;
-  newsletterTitle?: string;
+  showWhatsAppCommunity?: boolean;
+  whatsAppCommunityTitle?: string;
   showPoweredBy?: boolean;
   footerLinks?: FooterLink[];
 }
@@ -44,26 +45,61 @@ const ModernFooter = ({
   instagram,
   tiktok,
   paymentMethods = ['orange-money', 'moov-money', 'wave', 'cash'],
-  showNewsletter = true,
-  newsletterTitle = DEFAULT_TEXTS.newsletter.title,
+  showWhatsAppCommunity = true,
+  whatsAppCommunityTitle = "Rejoignez notre communauté WhatsApp",
   showPoweredBy = true,
   footerLinks,
 }: ModernFooterProps) => {
-  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [whatsappNumber, setWhatsappNumber] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [error, setError] = useState('');
 
   // Use custom footer links or defaults
   const displayLinks = footerLinks && footerLinks.length > 0 
     ? footerLinks 
     : DEFAULT_TEXTS.footerLinks.map((link, i) => ({ id: `default-${i}`, ...link }));
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
+  const handleWhatsAppSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newsletterEmail) {
-      setIsSubscribed(true);
-      setNewsletterEmail('');
-      setTimeout(() => setIsSubscribed(false), 3000);
+    setError('');
+    
+    // Format and validate the number
+    let formattedNumber = whatsappNumber.trim();
+    
+    // Add +226 prefix if not present
+    if (!formattedNumber.startsWith('+') && !formattedNumber.startsWith('226')) {
+      formattedNumber = '+226' + formattedNumber;
+    } else if (formattedNumber.startsWith('226')) {
+      formattedNumber = '+' + formattedNumber;
     }
+    
+    if (!isValidWhatsAppNumber(formattedNumber)) {
+      setError('Numéro invalide. Ex: 70 12 34 56');
+      return;
+    }
+    
+    // Store lead in localStorage (same system as ExitIntentPopup)
+    const existingLeads = JSON.parse(localStorage.getItem('capturedLeads') || '[]');
+    const newLead = {
+      id: Date.now().toString(),
+      whatsappNumber: formatWhatsAppNumber(formattedNumber),
+      source: 'whatsapp_community',
+      capturedAt: new Date().toISOString(),
+      promoCode: null,
+    };
+    
+    // Check for duplicate
+    const isDuplicate = existingLeads.some(
+      (lead: any) => lead.whatsappNumber === newLead.whatsappNumber
+    );
+    
+    if (!isDuplicate) {
+      localStorage.setItem('capturedLeads', JSON.stringify([...existingLeads, newLead]));
+    }
+    
+    setIsSubscribed(true);
+    setWhatsappNumber('');
+    setTimeout(() => setIsSubscribed(false), 4000);
   };
 
   const hasSocialLinks = facebook || instagram || tiktok;
@@ -72,7 +108,7 @@ const ModernFooter = ({
   return (
     <footer className="bg-gray-900 text-white">
       {/* Newsletter Section */}
-      {showNewsletter && (
+      {showWhatsAppCommunity && (
         <div 
           className="py-12 border-b border-white/10"
           style={{ 
@@ -81,34 +117,53 @@ const ModernFooter = ({
         >
           <div className="container mx-auto px-4">
             <div className="max-w-xl mx-auto text-center">
-              <h3 className="text-2xl font-display font-bold mb-2">{newsletterTitle}</h3>
-              <p className="text-white/70 mb-6">{DEFAULT_TEXTS.newsletter.subtitle}</p>
+              {/* WhatsApp Icon */}
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366]/20 mb-4">
+                <MessageCircle className="h-7 w-7 text-[#25D366]" />
+              </div>
+              
+              <h3 className="text-2xl font-display font-bold mb-2">{whatsAppCommunityTitle}</h3>
+              <p className="text-white/70 mb-6">Recevez nos offres exclusives et nouveautés directement sur WhatsApp</p>
               
               {isSubscribed ? (
                 <div 
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-medium"
-                  style={{ backgroundColor: 'var(--shop-primary, hsl(var(--primary)))' }}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-medium bg-[#25D366]"
                 >
                   <span>✓</span>
-                  <span>{DEFAULT_TEXTS.newsletter.successMessage}</span>
+                  <span>Bienvenue dans notre communauté !</span>
                 </div>
               ) : (
-                <form onSubmit={handleNewsletterSubmit} className="flex gap-2 max-w-md mx-auto">
-                  <Input
-                    type="email"
-                    placeholder={DEFAULT_TEXTS.newsletter.placeholder}
-                    value={newsletterEmail}
-                    onChange={(e) => setNewsletterEmail(e.target.value)}
-                    className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/50"
-                    required
-                  />
-                  <Button 
-                    type="submit"
-                    className="px-6"
-                    style={{ backgroundColor: 'var(--shop-primary, hsl(var(--primary)))' }}
-                  >
-                    <ArrowRight className="h-5 w-5" />
-                  </Button>
+                <form onSubmit={handleWhatsAppSubmit} className="max-w-md mx-auto">
+                  <div className="flex gap-2">
+                    <div className="flex-1 relative">
+                      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 text-sm font-medium pointer-events-none">
+                        +226
+                      </div>
+                      <Input
+                        type="tel"
+                        placeholder="70 12 34 56"
+                        value={whatsappNumber}
+                        onChange={(e) => {
+                          setWhatsappNumber(e.target.value);
+                          setError('');
+                        }}
+                        className="pl-14 bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                        required
+                      />
+                    </div>
+                    <Button 
+                      type="submit"
+                      className="px-6 bg-[#25D366] hover:bg-[#20BD5A] text-white"
+                    >
+                      <MessageCircle className="h-5 w-5" />
+                    </Button>
+                  </div>
+                  {error && (
+                    <p className="text-red-400 text-sm mt-2">{error}</p>
+                  )}
+                  <p className="text-white/50 text-xs mt-3">
+                    En rejoignant, vous acceptez de recevoir nos messages promotionnels
+                  </p>
                 </form>
               )}
             </div>

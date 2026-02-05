@@ -509,8 +509,8 @@ const Shop = () => {
           email={effectiveSettings.email}
           address={effectiveSettings.address}
           paymentMethods={effectiveSettings.paymentMethods || ['orange-money', 'moov-money', 'wave', 'cash']}
-          showNewsletter={effectiveSettings.showNewsletter !== false}
-          newsletterTitle={effectiveSettings.newsletterTitle}
+          showWhatsAppCommunity={effectiveSettings.showNewsletter !== false}
+          whatsAppCommunityTitle={effectiveSettings.newsletterTitle || "Rejoignez notre communauté WhatsApp"}
           showPoweredBy={effectiveSettings.showPoweredBy !== false}
           footerLinks={effectiveSettings.footerLinks}
         />
