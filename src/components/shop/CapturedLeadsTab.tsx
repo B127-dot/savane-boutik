@@ -36,9 +36,9 @@ const CapturedLeadsTab = ({ shopName }: CapturedLeadsTabProps) => {
 
   // Filter leads based on search
   const filteredLeads = leads.filter(lead => 
-    lead.phone.includes(searchTerm) || 
+    (lead.phone?.includes(searchTerm)) || 
     (lead.name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    lead.discountCode.toLowerCase().includes(searchTerm.toLowerCase())
+    (lead.discountCode?.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   // Statistics
