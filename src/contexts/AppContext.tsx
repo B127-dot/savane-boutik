@@ -65,6 +65,13 @@ export interface TestimonialItem {
   text: string;
 }
 
+export interface DeliveryZone {
+  id: string;
+  name: string;
+  price: number;
+  isActive: boolean;
+}
+
 export interface CustomBlock {
   id: string;
   type: 'testimonials' | 'instagram' | 'faq' | 'youtube' | 'text-image';
@@ -171,6 +178,10 @@ export interface ShopSettings {
   
   // === PHASE 4: CUSTOM BLOCKS ===
   customBlocks?: CustomBlock[];
+  
+  // === DELIVERY ZONES ===
+  deliveryZones?: DeliveryZone[];
+  freeDeliveryThreshold?: number;
 }
 
 export interface CartItem {
@@ -256,6 +267,8 @@ export interface Order {
   customerEmail: string;
   customerPhone: string;
   deliveryAddress: string;
+  deliveryZone?: string;
+  deliveryFee?: number;
   notes?: string;
   paymentMethod: 'orange_money' | 'moov_money' | 'cod' | 'wave';
   promoCode?: string;

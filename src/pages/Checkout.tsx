@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { useApp, Order, ShopSettings } from '@/contexts/AppContext';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useApp, Order, ShopSettings, DeliveryZone } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { generateOrderMessage } from '@/lib/whatsapp';
@@ -22,6 +23,8 @@ const Checkout = () => {
     customerName: '',
     customerEmail: '',
     phone: '',
+    selectedZoneId: '',
+    addressDetails: '',
     address: '',
     notes: ''
   });
@@ -39,19 +42,41 @@ const Checkout = () => {
     }
   }, [cart, navigate, shopUrl]);
 
-  // Get full product details from cart items
+  const activeZones = useMemo(() => 
+    (shopSettings?.deliveryZones || []).filter(z => z.isActive),
+    [shopSettings?.deliveryZones]
+  );
+
+  const hasZones = activeZones.length > 0;
+
+  const selectedZone = useMemo(() =>
+    activeZones.find(z => z.id === formData.selectedZoneId),
+    [activeZones, formData.selectedZoneId]
+  );
+
   const cartWithProducts = cart.map(item => ({
     ...item,
     product: products.find(p => p.id === item.productId)!
   })).filter(item => item.product);
 
   const subtotal = cartWithProducts.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  const total = subtotal;
+
+  const deliveryFee = useMemo(() => {
+    if (!selectedZone) return 0;
+    const threshold = shopSettings?.freeDeliveryThreshold;
+    if (threshold && subtotal >= threshold) return 0;
+    return selectedZone.price;
+  }, [selectedZone, subtotal, shopSettings?.freeDeliveryThreshold]);
+
+  const total = subtotal + deliveryFee;
+
+  const isFormValid = formData.customerName && formData.phone && 
+    (hasZones ? formData.selectedZoneId : formData.address);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.customerName || !formData.phone || !formData.address) {
+    if (!isFormValid) {
       toast({
         title: "Erreur",
         description: "Veuillez remplir tous les champs obligatoires",
@@ -61,31 +86,29 @@ const Checkout = () => {
     }
 
     setIsSubmitting(true);
-
-    // Generate unique order ID
     const newOrderId = `CMD-${Date.now()}`;
     
-    // Create order matching the Order interface
+    const deliveryAddress = hasZones 
+      ? `${selectedZone?.name}${formData.addressDetails ? ' - ' + formData.addressDetails : ''}`
+      : formData.address;
+
     const newOrder: Omit<Order, 'id' | 'createdAt' | 'userId'> = {
       products: cart.map(item => {
         const product = products.find(p => p.id === item.productId);
-        return {
-          productId: item.productId,
-          quantity: item.quantity,
-          price: product?.price || 0
-        };
+        return { productId: item.productId, quantity: item.quantity, price: product?.price || 0 };
       }),
       total,
       status: 'pending',
       customerName: formData.customerName,
       customerEmail: formData.customerEmail || '',
       customerPhone: formData.phone,
-      deliveryAddress: formData.address,
+      deliveryAddress,
+      deliveryZone: selectedZone?.name,
+      deliveryFee: deliveryFee > 0 ? deliveryFee : undefined,
       notes: formData.notes || undefined,
       paymentMethod: 'cod'
     };
 
-    // Save order
     addOrder(newOrder);
     clearCart();
     
@@ -95,22 +118,16 @@ const Checkout = () => {
     });
 
     setIsSubmitting(false);
-    
-    // Redirect to success page
     setTimeout(() => {
       navigate(`/shop/${shopUrl}/order-success/${newOrderId}`);
     }, 500);
   };
 
-
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-4">
-          <Button
-            variant="ghost"
-            onClick={() => navigate(`/shop/${shopUrl}`)}
-          >
+          <Button variant="ghost" onClick={() => navigate(`/shop/${shopUrl}`)}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Retour à la boutique
           </Button>
@@ -121,7 +138,6 @@ const Checkout = () => {
         <h1 className="text-2xl sm:text-3xl font-bold mb-8">Finaliser ma commande</h1>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Form */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
@@ -163,16 +179,57 @@ const Checkout = () => {
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="address">Adresse de livraison *</Label>
-                    <Input
-                      id="address"
-                      value={formData.address}
-                      onChange={(e) => setFormData({...formData, address: e.target.value})}
-                      placeholder="Rue, quartier, ville"
-                      required
-                    />
-                  </div>
+                  {/* Delivery zone selector OR free text */}
+                  {hasZones ? (
+                    <>
+                      <div className="space-y-2">
+                        <Label className="flex items-center gap-2">
+                          <Truck className="h-4 w-4" />
+                          Zone de livraison *
+                        </Label>
+                        <Select
+                          value={formData.selectedZoneId}
+                          onValueChange={(val) => setFormData({...formData, selectedZoneId: val})}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choisissez votre quartier" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {activeZones.map(zone => (
+                              <SelectItem key={zone.id} value={zone.id}>
+                                {zone.name} — {zone.price.toLocaleString()} FCFA
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {shopSettings?.freeDeliveryThreshold && (
+                          <p className="text-xs text-muted-foreground">
+                            🎁 Livraison gratuite à partir de {shopSettings.freeDeliveryThreshold.toLocaleString()} FCFA
+                          </p>
+                        )}
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="addressDetails">Précision d'adresse (optionnel)</Label>
+                        <Input
+                          id="addressDetails"
+                          value={formData.addressDetails}
+                          onChange={(e) => setFormData({...formData, addressDetails: e.target.value})}
+                          placeholder="N° de porte, repère, rue..."
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <div className="space-y-2">
+                      <Label htmlFor="address">Adresse de livraison *</Label>
+                      <Input
+                        id="address"
+                        value={formData.address}
+                        onChange={(e) => setFormData({...formData, address: e.target.value})}
+                        placeholder="Rue, quartier, ville"
+                        required
+                      />
+                    </div>
+                  )}
 
                   <div className="space-y-2">
                     <Label htmlFor="notes">Notes supplémentaires (optionnel)</Label>
@@ -189,7 +246,7 @@ const Checkout = () => {
                       {isSubmitting ? 'Traitement...' : 'Confirmer la commande'}
                     </Button>
 
-                    {shopSettings?.socialLinks?.whatsapp && formData.customerName && formData.phone && formData.address && (
+                    {shopSettings?.socialLinks?.whatsapp && formData.customerName && formData.phone && (hasZones ? formData.selectedZoneId : formData.address) && (
                       <>
                         <div className="relative">
                           <div className="absolute inset-0 flex items-center">
@@ -209,7 +266,9 @@ const Checkout = () => {
                             {
                               name: formData.customerName,
                               phone: formData.phone,
-                              address: formData.address,
+                              address: hasZones 
+                                ? `${selectedZone?.name}${formData.addressDetails ? ' - ' + formData.addressDetails : ''}`
+                                : formData.address,
                               email: formData.customerEmail
                             }
                           )}
@@ -251,6 +310,24 @@ const Checkout = () => {
                     <span className="text-muted-foreground">Sous-total</span>
                     <span className="font-medium">{subtotal.toLocaleString()} FCFA</span>
                   </div>
+                  
+                  {hasZones && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground flex items-center gap-1">
+                        <Truck className="h-3 w-3" />
+                        Livraison {selectedZone ? `(${selectedZone.name})` : ''}
+                      </span>
+                      <span className="font-medium">
+                        {selectedZone 
+                          ? deliveryFee === 0 
+                            ? <span className="text-primary">Gratuite</span>
+                            : `${deliveryFee.toLocaleString()} FCFA`
+                          : '—'
+                        }
+                      </span>
+                    </div>
+                  )}
+
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total</span>
                     <span className="text-primary">{total.toLocaleString()} FCFA</span>

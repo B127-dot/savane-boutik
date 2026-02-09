@@ -7,10 +7,11 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Palette, Globe, Phone, MapPin, Eye, Copy, ExternalLink, CheckCircle2, MessageCircle, Info } from 'lucide-react';
+import { Palette, Globe, Phone, MapPin, Eye, Copy, ExternalLink, CheckCircle2, MessageCircle, Info, Truck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { isValidWhatsAppNumber } from '@/lib/whatsapp';
 import ThemeSelector from '@/components/ThemeSelector';
+import DeliveryZonesTab from '@/components/shop/DeliveryZonesTab';
 
 const ShopSettings = () => {
   const { shopSettings, updateShopSettings, user } = useApp();
@@ -145,7 +146,7 @@ const ShopSettings = () => {
       </Card>
 
       <Tabs defaultValue="general" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="general">
             <Globe className="w-4 h-4 mr-2" />
             Général
@@ -157,6 +158,10 @@ const ShopSettings = () => {
           <TabsTrigger value="theme">
             <Palette className="w-4 h-4 mr-2" />
             Thème
+          </TabsTrigger>
+          <TabsTrigger value="delivery">
+            <Truck className="w-4 h-4 mr-2" />
+            Livraison
           </TabsTrigger>
           <TabsTrigger value="contact">
             <Phone className="w-4 h-4 mr-2" />
@@ -270,6 +275,10 @@ const ShopSettings = () => {
                 updateShopSettings({ selectedTheme: themeId });
               }}
             />
+          </TabsContent>
+
+          <TabsContent value="delivery">
+            <DeliveryZonesTab />
           </TabsContent>
 
           <TabsContent value="contact" className="space-y-6">
