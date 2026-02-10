@@ -60,6 +60,7 @@ import {
   AdvancedSection,
   FooterSection,
   TestimonialsSection,
+  DeliverySection,
   ActiveThemeCard,
   ThemePickerModal,
 } from '@/components/editor';
@@ -308,6 +309,7 @@ const ShopEditor = () => {
                   onRemoveBlock={handleRemoveBlock}
                   onEditBlock={handleEditBlock}
                 />
+                <DeliverySection />
                 <PromoSection formData={formData} updateField={updateField} />
                 <AdvancedSection formData={formData} updateField={updateField} />
                 <FooterSection formData={formData} updateField={updateField} />
