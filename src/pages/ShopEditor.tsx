@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Accordion } from '@/components/ui/accordion';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import {
   AlertDialog,
@@ -272,50 +273,80 @@ const ShopEditor = () => {
             </div>
           </div>
 
-          {/* Scrollable Editor Content */}
-          <ScrollArea className="flex-1">
-            <div className="p-5 space-y-4">
-              <Accordion type="multiple" defaultValue={['identity', 'design', 'hero']} className="space-y-3">
-                <IdentitySection formData={formData} updateField={updateField} validationErrors={validationErrors} />
-                <ContactSection formData={formData} updateField={updateField} validationErrors={validationErrors} />
-                <SEOSection formData={formData} updateField={updateField} validationErrors={validationErrors} />
-                <DesignSection formData={formData} updateField={updateField} currentPalette={currentPalette} />
-                <HeroSection formData={formData} updateField={updateField} validationErrors={validationErrors} />
-                <TrustBarSection 
-                  formData={formData} 
-                  updateField={updateField}
-                  addTrustBarItem={addTrustBarItem}
-                  updateTrustBarItem={updateTrustBarItem}
-                  removeTrustBarItem={removeTrustBarItem}
-                />
-                <MarqueeSection formData={formData} updateField={updateField} />
-                <ProductsSection formData={formData} updateField={updateField} />
-                <TestimonialsSection 
-                  formData={formData} 
-                  updateField={updateField}
-                  addTestimonial={addTestimonial}
-                  updateTestimonial={updateTestimonial}
-                  removeTestimonial={removeTestimonial}
-                />
-                <SectionsSection 
-                  formData={formData}
-                  updateField={updateField}
-                  sectionConfigs={sectionConfigs}
-                  handleToggleSectionVisibility={handleToggleSectionVisibility}
-                  onAddBlock={() => {
-                    setEditingBlock(undefined);
-                    setBlockLibraryOpen(true);
-                  }}
-                  onRemoveBlock={handleRemoveBlock}
-                  onEditBlock={handleEditBlock}
-                />
-                <DeliverySection />
-                <PromoSection formData={formData} updateField={updateField} />
-                <AdvancedSection formData={formData} updateField={updateField} />
-                <FooterSection formData={formData} updateField={updateField} />
-              </Accordion>
+          {/* Tabs + Scrollable Editor Content */}
+          <Tabs defaultValue="shop" className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-5 pt-3 pb-1 border-b border-border">
+              <TabsList className="w-full grid grid-cols-3 h-10">
+                <TabsTrigger value="shop" className="text-xs font-semibold">Ma Boutique</TabsTrigger>
+                <TabsTrigger value="appearance" className="text-xs font-semibold">Apparence</TabsTrigger>
+                <TabsTrigger value="settings" className="text-xs font-semibold">Réglages</TabsTrigger>
+              </TabsList>
             </div>
-          </ScrollArea>
+
+            <TabsContent value="shop" className="flex-1 overflow-hidden mt-0">
+              <ScrollArea className="h-full">
+                <div className="p-5 space-y-4">
+                  <Accordion type="multiple" defaultValue={['identity', 'hero', 'products']} className="space-y-3">
+                    <IdentitySection formData={formData} updateField={updateField} validationErrors={validationErrors} />
+                    <HeroSection formData={formData} updateField={updateField} validationErrors={validationErrors} />
+                    <ProductsSection formData={formData} updateField={updateField} />
+                  </Accordion>
+                </div>
+              </ScrollArea>
+            </TabsContent>
+
+            <TabsContent value="appearance" className="flex-1 overflow-hidden mt-0">
+              <ScrollArea className="h-full">
+                <div className="p-5 space-y-4">
+                  <Accordion type="multiple" defaultValue={['design']} className="space-y-3">
+                    <DesignSection formData={formData} updateField={updateField} currentPalette={currentPalette} />
+                    <TrustBarSection 
+                      formData={formData} 
+                      updateField={updateField}
+                      addTrustBarItem={addTrustBarItem}
+                      updateTrustBarItem={updateTrustBarItem}
+                      removeTrustBarItem={removeTrustBarItem}
+                    />
+                    <TestimonialsSection 
+                      formData={formData} 
+                      updateField={updateField}
+                      addTestimonial={addTestimonial}
+                      updateTestimonial={updateTestimonial}
+                      removeTestimonial={removeTestimonial}
+                    />
+                    <SectionsSection 
+                      formData={formData}
+                      updateField={updateField}
+                      sectionConfigs={sectionConfigs}
+                      handleToggleSectionVisibility={handleToggleSectionVisibility}
+                      onAddBlock={() => {
+                        setEditingBlock(undefined);
+                        setBlockLibraryOpen(true);
+                      }}
+                      onRemoveBlock={handleRemoveBlock}
+                      onEditBlock={handleEditBlock}
+                    />
+                    <MarqueeSection formData={formData} updateField={updateField} />
+                    <PromoSection formData={formData} updateField={updateField} />
+                    <FooterSection formData={formData} updateField={updateField} />
+                    <AdvancedSection formData={formData} updateField={updateField} />
+                  </Accordion>
+                </div>
+              </ScrollArea>
+            </TabsContent>
+
+            <TabsContent value="settings" className="flex-1 overflow-hidden mt-0">
+              <ScrollArea className="h-full">
+                <div className="p-5 space-y-4">
+                  <Accordion type="multiple" defaultValue={['contact', 'seo']} className="space-y-3">
+                    <ContactSection formData={formData} updateField={updateField} validationErrors={validationErrors} />
+                    <SEOSection formData={formData} updateField={updateField} validationErrors={validationErrors} />
+                    <DeliverySection />
+                  </Accordion>
+                </div>
+              </ScrollArea>
+            </TabsContent>
+          </Tabs>
         </div>
 
         {/* Preview Area */}
