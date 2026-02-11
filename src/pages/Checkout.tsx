@@ -156,16 +156,6 @@ const Checkout = () => {
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="customerEmail">Email (optionnel)</Label>
-                    <Input
-                      id="customerEmail"
-                      type="email"
-                      value={formData.customerEmail}
-                      onChange={(e) => setFormData({...formData, customerEmail: e.target.value})}
-                      placeholder="votre@email.com"
-                    />
-                  </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="phone">Téléphone *</Label>
@@ -207,15 +197,6 @@ const Checkout = () => {
                             🎁 Livraison gratuite à partir de {shopSettings.freeDeliveryThreshold.toLocaleString()} FCFA
                           </p>
                         )}
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="addressDetails">Précision d'adresse (optionnel)</Label>
-                        <Input
-                          id="addressDetails"
-                          value={formData.addressDetails}
-                          onChange={(e) => setFormData({...formData, addressDetails: e.target.value})}
-                          placeholder="N° de porte, repère, rue..."
-                        />
                       </div>
                     </>
                   ) : (
