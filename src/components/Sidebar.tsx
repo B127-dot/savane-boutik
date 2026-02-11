@@ -58,7 +58,7 @@ interface SidebarItem {
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [expandedItems, setExpandedItems] = useState<string[]>(['/products']);
+  const [expandedItems, setExpandedItems] = useState<string[]>(['/products', '/shop-editor']);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -100,7 +100,11 @@ const Sidebar = () => {
         { 
           label: 'Ma boutique', 
           href: '/shop-editor', 
-          icon: Paintbrush
+          icon: Paintbrush,
+          subItems: [
+            { label: 'Éditeur visuel', href: '/shop-editor', icon: Paintbrush },
+            { label: 'Réglages', href: '/shop-settings', icon: Settings },
+          ]
         },
       ]
     },
