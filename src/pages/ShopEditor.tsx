@@ -49,8 +49,6 @@ import BlockLibraryModal from '@/components/shop/BlockLibraryModal';
 // Editor Section Components
 import {
   IdentitySection,
-  ContactSection,
-  SEOSection,
   DesignSection,
   HeroSection,
   TrustBarSection,
@@ -61,7 +59,6 @@ import {
   AdvancedSection,
   FooterSection,
   TestimonialsSection,
-  DeliverySection,
   ActiveThemeCard,
   ThemePickerModal,
 } from '@/components/editor';
@@ -275,11 +272,10 @@ const ShopEditor = () => {
 
           {/* Tabs + Scrollable Editor Content */}
           <Tabs defaultValue="shop" className="flex-1 flex flex-col overflow-hidden">
-            <div className="px-5 pt-3 pb-1 border-b border-border">
-              <TabsList className="w-full grid grid-cols-3 h-10">
+             <div className="px-5 pt-3 pb-1 border-b border-border">
+              <TabsList className="w-full grid grid-cols-2 h-10">
                 <TabsTrigger value="shop" className="text-xs font-semibold">Ma Boutique</TabsTrigger>
                 <TabsTrigger value="appearance" className="text-xs font-semibold">Apparence</TabsTrigger>
-                <TabsTrigger value="settings" className="text-xs font-semibold">Réglages</TabsTrigger>
               </TabsList>
             </div>
 
@@ -335,17 +331,6 @@ const ShopEditor = () => {
               </ScrollArea>
             </TabsContent>
 
-            <TabsContent value="settings" className="flex-1 overflow-hidden mt-0">
-              <ScrollArea className="h-full">
-                <div className="p-5 space-y-4">
-                  <Accordion type="multiple" defaultValue={['contact', 'seo']} className="space-y-3">
-                    <ContactSection formData={formData} updateField={updateField} validationErrors={validationErrors} />
-                    <SEOSection formData={formData} updateField={updateField} validationErrors={validationErrors} />
-                    <DeliverySection />
-                  </Accordion>
-                </div>
-              </ScrollArea>
-            </TabsContent>
           </Tabs>
         </div>
 

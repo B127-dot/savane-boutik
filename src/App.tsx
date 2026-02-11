@@ -64,7 +64,7 @@ const App = () => (
             <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
             <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
             <Route path="/reviews" element={<ProtectedRoute><Reviews /></ProtectedRoute>} />
-            <Route path="/shop-settings" element={<ProtectedRoute><ShopEditor /></ProtectedRoute>} />
+            <Route path="/shop-settings" element={<ProtectedRoute><ShopSettings /></ProtectedRoute>} />
             <Route path="/shop-editor" element={<ProtectedRoute><ShopEditor /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
