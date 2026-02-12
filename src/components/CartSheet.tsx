@@ -122,28 +122,30 @@ export const CartSheet = ({ open, onOpenChange, shopUrl, shopSettings }: CartShe
               ))}
             </div>
 
-            <SheetFooter className="flex-col gap-4 border-t pt-4">
-              <div className="flex justify-between items-center text-lg font-bold">
+            <SheetFooter className="flex-col gap-3 border-t pt-4 sm:flex-col">
+              <div className="flex justify-between items-center text-base sm:text-lg font-bold w-full">
                 <span>Total</span>
-                <span className="text-primary">{subtotal.toLocaleString()} FCFA</span>
+                <span className="text-primary truncate ml-2">{subtotal.toLocaleString()} FCFA</span>
               </div>
 
-              {shopSettings?.socialLinks?.whatsapp && (
-                <WhatsAppButton
-                  phoneNumber={shopSettings.socialLinks.whatsapp}
-                  message={generateCartMessage(cart, products, shopSettings.shopName)}
-                  variant="outline"
-                  label="Envoyer par WhatsApp"
-                  className="w-full"
-                  size="lg"
-                />
-              )}
+              <div className="flex flex-col sm:flex-row gap-2 w-full">
+                {shopSettings?.socialLinks?.whatsapp && (
+                  <WhatsAppButton
+                    phoneNumber={shopSettings.socialLinks.whatsapp}
+                    message={generateCartMessage(cart, products, shopSettings.shopName)}
+                    variant="outline"
+                    label="Envoyer par WhatsApp"
+                    className="w-full sm:flex-1"
+                    size="default"
+                  />
+                )}
 
-              <Link to={`/shop/${shopUrl}/checkout`} className="w-full" onClick={() => onOpenChange(false)}>
-                <Button className="w-full" size="lg">
-                  Procéder au paiement
-                </Button>
-              </Link>
+                <Link to={`/shop/${shopUrl}/checkout`} className="w-full sm:flex-1" onClick={() => onOpenChange(false)}>
+                  <Button className="w-full" size="default">
+                    Procéder au paiement
+                  </Button>
+                </Link>
+              </div>
             </SheetFooter>
           </>
         )}
