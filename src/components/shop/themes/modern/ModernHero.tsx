@@ -186,7 +186,7 @@ const ModernHero = ({
           <h1 
             className={`text-4xl md:text-5xl lg:text-7xl font-display font-bold text-center mb-6 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
           >
-            <span className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent break-words">
               {heroTitle}
             </span>
           </h1>
@@ -200,7 +200,7 @@ const ModernHero = ({
             </p>
             
             {showFeatures && features.length > 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-white/80 text-sm md:text-base font-body">
+              <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 text-white/80 text-xs sm:text-sm md:text-base font-body">
                 {features.map((feature, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <div 
@@ -223,7 +223,7 @@ const ModernHero = ({
             <Button 
               size="lg"
               onClick={handleButtonClick}
-              className={`text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all hover:scale-105 ${getButtonRadius()}`}
+              className={`text-base sm:text-lg px-5 sm:px-8 py-4 sm:py-6 shadow-lg hover:shadow-xl transition-all hover:scale-105 ${getButtonRadius()}`}
               style={{ 
                 backgroundColor: 'var(--shop-primary, hsl(var(--primary)))',
                 color: 'white'
@@ -238,7 +238,7 @@ const ModernHero = ({
                 const element = document.getElementById('categories');
                 element?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className={`text-lg px-8 py-6 bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm ${getButtonRadius()}`}
+              className={`text-base sm:text-lg px-5 sm:px-8 py-4 sm:py-6 bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm ${getButtonRadius()}`}
             >
               Nos Catégories
             </Button>

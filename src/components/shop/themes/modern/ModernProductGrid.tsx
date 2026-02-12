@@ -252,7 +252,7 @@ const ModernProductGrid = ({
             )}
 
             {/* Sort + View Mode Toggle */}
-            <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center justify-center gap-3 flex-wrap">
               <Select value={sortOrder} onValueChange={setSortOrder}>
                 <SelectTrigger className="w-full max-w-[200px] h-11">
                   <ArrowUpDown className="h-4 w-4 mr-2" />
@@ -305,6 +305,7 @@ const ModernProductGrid = ({
                   delay: shouldReduceMotion ? 0 : Math.min(index * cardAnimationDelay, 0.3), 
                   duration: shouldReduceMotion ? 0 : 0.4 
                 }}
+                className="min-w-0"
               >
                 <ModernProductCard
                   product={product}

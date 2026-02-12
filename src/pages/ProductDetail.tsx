@@ -126,7 +126,7 @@ const ProductDetail = () => {
               onClick={() => navigate(`/shop/${shopUrl}`)}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Retour à la boutique
+              <span className="hidden sm:inline">Retour à la boutique</span>
             </Button>
             <div className="flex items-center gap-3">
               <ThemeToggle />
@@ -212,7 +212,7 @@ const ProductDetail = () => {
             </div>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-bold text-primary">
+              <span className="text-2xl sm:text-4xl font-bold text-primary">
                 {product.price.toLocaleString()} FCFA
               </span>
             </div>

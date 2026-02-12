@@ -100,11 +100,11 @@ const QuickViewModal = ({ product, isOpen, onClose, onAddToCart }: QuickViewModa
             </div>
 
             {/* Product Name */}
-            <h2 className="text-3xl font-bold text-foreground">{product.name}</h2>
+            <h2 className="text-xl sm:text-3xl font-bold text-foreground">{product.name}</h2>
 
             {/* Price */}
             <div className="flex items-center gap-3">
-              <span className="text-4xl font-bold text-foreground">
+              <span className="text-2xl sm:text-4xl font-bold text-foreground">
                 {formatPrice(product.price)}
               </span>
               {hasDiscount && (

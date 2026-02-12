@@ -30,7 +30,7 @@ const ModernTrustBar = ({ items = defaultItems, className = '' }: ModernTrustBar
   return (
     <section className={`py-6 md:py-8 border-y border-border bg-muted/30 ${className}`}>
       <div className="container mx-auto px-4">
-        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 lg:gap-16">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-center justify-center gap-3 sm:gap-6 md:gap-12 lg:gap-16">
           {items.map((item, index) => {
             const IconComponent = ICON_MAP[item.icon] || Shield;
             

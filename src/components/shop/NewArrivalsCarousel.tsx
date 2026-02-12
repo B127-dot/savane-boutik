@@ -46,7 +46,7 @@ const NewArrivalsCarousel = ({
         {/* Section Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2">
               Nouveautés de la Semaine
             </h2>
             <p className="text-muted-foreground">
@@ -84,7 +84,7 @@ const NewArrivalsCarousel = ({
           {products.map((product) => (
             <div 
               key={product.id} 
-              className="flex-shrink-0 w-72 snap-start"
+              className="flex-shrink-0 w-64 sm:w-72 snap-start"
             >
               <ModernProductCard
                 product={product}

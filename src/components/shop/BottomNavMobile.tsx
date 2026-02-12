@@ -330,7 +330,7 @@ const BottomNavMobile = ({
           {/* Categories */}
           <NavItem
             icon={Grid3x3}
-            label="Catégories"
+            label="Catég."
             onClick={handleCategoriesClick}
             isActive={activeTab === 'categories'}
           />

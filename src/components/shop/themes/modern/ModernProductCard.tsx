@@ -234,8 +234,8 @@ const ModernProductCard = ({
           isFeed ? "items-baseline" : "flex-col items-center gap-0.5"
         )}>
           <span className={cn(
-            "font-bold text-foreground",
-            isFeed ? "text-2xl" : "text-lg md:text-xl"
+            "font-bold text-foreground truncate",
+            isFeed ? "text-2xl" : "text-base md:text-xl"
           )}>
             {formatPrice(product.price)} FCFA
           </span>
@@ -253,7 +253,7 @@ const ModernProductCard = ({
         {isLowStock && (
           <div 
             className={cn(
-              "flex items-center gap-1 font-medium rounded-full",
+              "flex items-center gap-1 font-medium rounded-full max-w-full truncate",
               isFeed 
                 ? "text-xs py-2 px-4 w-fit" 
                 : "justify-center text-[10px] md:text-xs py-1 md:py-1.5 px-2 md:px-3 mx-auto"
@@ -285,8 +285,8 @@ const ModernProductCard = ({
             backgroundColor: isOutOfStock ? undefined : 'var(--shop-primary, hsl(var(--primary)))',
           }}
         >
-          <ShoppingCart className={isFeed ? "h-5 w-5 mr-2" : "h-4 w-4 mr-2"} />
-          {isOutOfStock ? 'Indisponible' : 'Ajouter au panier'}
+          <ShoppingCart className={isFeed ? "h-5 w-5 mr-2" : "h-4 w-4 sm:mr-2"} />
+          {isOutOfStock ? 'Indisponible' : <span className={isFeed ? '' : 'hidden sm:inline'}>Ajouter au panier</span>}
         </Button>
       </div>
     </div>
