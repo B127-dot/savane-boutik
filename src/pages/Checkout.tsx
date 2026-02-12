@@ -275,11 +275,11 @@ const Checkout = () => {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   {cartWithProducts.map(item => (
-                    <div key={item.productId} className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">
+                    <div key={item.productId} className="flex justify-between text-sm gap-2">
+                      <span className="text-muted-foreground truncate min-w-0">
                         {item.product.name} x{item.quantity}
                       </span>
-                      <span className="font-medium">
+                      <span className="font-medium whitespace-nowrap">
                         {(item.product.price * item.quantity).toLocaleString()} FCFA
                       </span>
                     </div>

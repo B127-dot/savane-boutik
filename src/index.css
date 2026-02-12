@@ -661,4 +661,13 @@ Toutes les couleurs en HSL pour cohérence et maintenabilité
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Global safety: prevent text overflow on mobile shop pages */
+  .shop-page h1,
+  .shop-page h2,
+  .shop-page h3,
+  .shop-page p,
+  .shop-page span {
+    word-break: break-word;
+  }
 }

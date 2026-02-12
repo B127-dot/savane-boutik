@@ -147,7 +147,7 @@ const ModernFooter = ({
                           setWhatsappNumber(e.target.value);
                           setError('');
                         }}
-                        className="pl-14 bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                        className="pl-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 min-w-0"
                         required
                       />
                     </div>
@@ -319,7 +319,7 @@ const ModernFooter = ({
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 flex-wrap">
             <p className="text-white/50 text-sm text-center md:text-left">
               © {new Date().getFullYear()} {shopName}. Tous droits réservés.
             </p>
