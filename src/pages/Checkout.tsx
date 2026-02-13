@@ -134,17 +134,17 @@ const Checkout = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-full overflow-hidden">
         <h1 className="text-2xl sm:text-3xl font-bold mb-8">Finaliser ma commande</h1>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <Card>
+          <div className="lg:col-span-2 min-w-0">
+            <Card className="overflow-hidden">
               <CardHeader>
                 <CardTitle>Informations de livraison</CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4 overflow-hidden">
                   <div className="space-y-2">
                     <Label htmlFor="customerName">Nom complet *</Label>
                     <Input
@@ -222,8 +222,8 @@ const Checkout = () => {
                     />
                   </div>
 
-                  <div className="space-y-3">
-                    <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+                  <div className="space-y-3 overflow-hidden">
+                    <Button type="submit" className="w-full truncate" size="lg" disabled={isSubmitting}>
                       {isSubmitting ? 'Traitement...' : 'Confirmer la commande'}
                     </Button>
 
@@ -254,8 +254,8 @@ const Checkout = () => {
                             }
                           )}
                           variant="outline"
-                          label="Envoyer la commande via WhatsApp"
-                          className="w-full"
+                          label="Commander via WhatsApp"
+                          className="w-full truncate overflow-hidden"
                           size="lg"
                         />
                       </>
