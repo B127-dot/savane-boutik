@@ -77,9 +77,9 @@ const Reviews = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pt-16 lg:pt-0">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Avis clients</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Avis clients</h1>
         <p className="text-muted-foreground">
           Gérez les avis laissés par vos clients
         </p>
@@ -159,7 +159,56 @@ const Reviews = () => {
             </Select>
           </div>
 
-          <div className="rounded-md border">
+          {/* Mobile: Card view */}
+          <div className="sm:hidden space-y-3">
+            {filteredReviews.length === 0 ? (
+              <p className="text-center text-muted-foreground py-8">Aucun avis trouvé</p>
+            ) : (
+              filteredReviews.map((review) => {
+                const product = products.find(p => p.id === review.productId);
+                return (
+                  <div key={review.id} className="p-4 rounded-lg border bg-card space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="font-medium text-sm truncate">{review.customerName}</span>
+                        {review.verified && <Badge variant="outline" className="text-[10px] shrink-0">Vérifié</Badge>}
+                      </div>
+                      <Badge variant={getStatusColor(review.status)} className="text-xs shrink-0">
+                        {getStatusLabel(review.status)}
+                      </Badge>
+                    </div>
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star key={star} className={`h-3.5 w-3.5 ${star <= review.rating ? 'fill-primary text-primary' : 'text-muted'}`} />
+                      ))}
+                    </div>
+                    <p className="text-xs text-muted-foreground line-clamp-2">{review.comment}</p>
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-xs text-muted-foreground">{product?.name || 'Produit supprimé'}</span>
+                      <div className="flex gap-1">
+                        {review.status !== 'approved' && (
+                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleApprove(review.id)}>
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                          </Button>
+                        )}
+                        {review.status !== 'rejected' && (
+                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleReject(review.id)}>
+                            <XCircle className="h-4 w-4 text-orange-500" />
+                          </Button>
+                        )}
+                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleDelete(review.id)}>
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          {/* Desktop: Table view */}
+          <div className="rounded-md border hidden sm:block">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -187,65 +236,35 @@ const Reviews = () => {
                         <TableCell className="font-medium">
                           {review.customerName}
                           {review.verified && (
-                            <Badge variant="outline" className="ml-2 text-xs">
-                              Vérifié
-                            </Badge>
+                            <Badge variant="outline" className="ml-2 text-xs">Vérifié</Badge>
                           )}
                         </TableCell>
                         <TableCell>{product?.name || 'Produit supprimé'}</TableCell>
                         <TableCell>
                           <div className="flex gap-1">
                             {[1, 2, 3, 4, 5].map((star) => (
-                              <Star
-                                key={star}
-                                className={`h-4 w-4 ${
-                                  star <= review.rating
-                                    ? 'fill-primary text-primary'
-                                    : 'text-muted'
-                                }`}
-                              />
+                              <Star key={star} className={`h-4 w-4 ${star <= review.rating ? 'fill-primary text-primary' : 'text-muted'}`} />
                             ))}
                           </div>
                         </TableCell>
-                        <TableCell className="max-w-xs truncate">
-                          {review.comment}
-                        </TableCell>
+                        <TableCell className="max-w-xs truncate">{review.comment}</TableCell>
+                        <TableCell>{new Date(review.createdAt).toLocaleDateString('fr-FR')}</TableCell>
                         <TableCell>
-                          {new Date(review.createdAt).toLocaleDateString('fr-FR')}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={getStatusColor(review.status)}>
-                            {getStatusLabel(review.status)}
-                          </Badge>
+                          <Badge variant={getStatusColor(review.status)}>{getStatusLabel(review.status)}</Badge>
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-2">
                             {review.status !== 'approved' && (
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => handleApprove(review.id)}
-                                title="Approuver"
-                              >
+                              <Button variant="ghost" size="icon" onClick={() => handleApprove(review.id)} title="Approuver">
                                 <CheckCircle className="h-4 w-4 text-green-500" />
                               </Button>
                             )}
                             {review.status !== 'rejected' && (
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => handleReject(review.id)}
-                                title="Rejeter"
-                              >
+                              <Button variant="ghost" size="icon" onClick={() => handleReject(review.id)} title="Rejeter">
                                 <XCircle className="h-4 w-4 text-orange-500" />
                               </Button>
                             )}
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleDelete(review.id)}
-                              title="Supprimer"
-                            >
+                            <Button variant="ghost" size="icon" onClick={() => handleDelete(review.id)} title="Supprimer">
                               <Trash2 className="h-4 w-4 text-destructive" />
                             </Button>
                           </div>

@@ -80,16 +80,16 @@ const KPICard = ({
 
   return (
     <Card className={`${shadowClass} ${borderClass} hover:scale-[1.02] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden`}>
-      {/* Watermark Icon Background */}
+      {/* Watermark Icon Background - hidden on mobile */}
       <Icon 
-        className="absolute -bottom-4 -right-4 h-32 w-32 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none"
+        className="absolute -bottom-4 -right-4 h-32 w-32 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none hidden sm:block"
         style={{ color: iconColor }}
       />
-      <CardContent className="p-6 relative z-10">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            <p className="text-sm font-display font-medium text-muted-foreground mb-1">{title}</p>
-            <p className="text-3xl font-display font-extrabold tabular-nums">{displayValue}</p>
+      <CardContent className="p-4 sm:p-6 relative z-10">
+        <div className="flex items-start justify-between mb-2 sm:mb-4">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs sm:text-sm font-display font-medium text-muted-foreground mb-0.5 sm:mb-1 truncate">{title}</p>
+            <p className="text-xl sm:text-3xl font-display font-extrabold tabular-nums">{displayValue}</p>
           </div>
           <div className="flex flex-col items-end gap-2">
             <Icon className={`${iconSize} text-primary transition-all duration-300 group-hover:rotate-6 group-hover:scale-110`} />
@@ -116,7 +116,7 @@ const KPICard = ({
         )}
 
         {sparklineData && sparklineData.length > 0 && (
-          <div className="mb-3">
+          <div className="mb-3 hidden sm:block">
             <MiniSparkline 
               data={sparklineData} 
               color={trend?.isPositive ? 'hsl(var(--kpi-success))' : 'hsl(var(--primary))'}

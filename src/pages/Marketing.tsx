@@ -141,27 +141,29 @@ const Marketing = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pt-16 lg:pt-0">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Marketing</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Marketing</h1>
           <p className="text-muted-foreground">Gérez vos codes promo et partagez votre boutique</p>
         </div>
       </div>
 
       <Tabs defaultValue="promos" className="space-y-6">
-        <TabsList className="flex flex-wrap h-auto gap-1">
-          <TabsTrigger value="promos">
-            <Tag className="w-4 h-4 mr-2" />
-            Codes promo
+        <TabsList className="flex flex-wrap h-auto gap-1 overflow-x-auto">
+          <TabsTrigger value="promos" className="text-xs sm:text-sm">
+            <Tag className="w-4 h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Codes promo</span>
+            <span className="sm:hidden">Promos</span>
           </TabsTrigger>
-          <TabsTrigger value="leads">
-            <Gift className="w-4 h-4 mr-2" />
-            Leads capturés
+          <TabsTrigger value="leads" className="text-xs sm:text-sm">
+            <Gift className="w-4 h-4 sm:mr-2" />
+            Leads
           </TabsTrigger>
-          <TabsTrigger value="abandoned">
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            Paniers abandonnés
+          <TabsTrigger value="abandoned" className="text-xs sm:text-sm">
+            <ShoppingCart className="w-4 h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Paniers abandonnés</span>
+            <span className="sm:hidden">Paniers</span>
             {abandonedCarts.length > 0 && (
               <Badge variant="destructive" className="ml-2">
                 {abandonedCarts.length}
