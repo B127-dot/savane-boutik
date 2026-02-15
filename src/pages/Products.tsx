@@ -183,10 +183,10 @@ const Products = () => {
   );
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 pt-16 lg:pt-6 space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-display font-bold">Gestion des Produits</h1>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold">Produits</h1>
           <p className="font-body text-muted-foreground">
             Gérez votre catalogue de produits
           </p>
@@ -195,8 +195,8 @@ const Products = () => {
         <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
           <DialogTrigger asChild>
             <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Ajouter un produit
+              <Plus className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Ajouter un produit</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
