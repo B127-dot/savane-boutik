@@ -11,10 +11,10 @@ interface PeriodSelectorProps {
 const PeriodSelector = ({ value, onChange }: PeriodSelectorProps) => {
   return (
     <div className="flex items-center gap-2">
-      <Calendar className="h-4 w-4 text-muted-foreground" />
+      <Calendar className="h-4 w-4 text-muted-foreground hidden sm:block" />
       <Select value={value} onValueChange={(v) => onChange(v as Period)}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Sélectionner période" />
+        <SelectTrigger className="w-[140px] sm:w-[180px] text-xs sm:text-sm">
+          <SelectValue placeholder="Période" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="today">Aujourd'hui</SelectItem>

@@ -17,8 +17,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-background flex">
       <Sidebar />
-      <div className="flex-1">
-        <div className="p-6">
+      <div className="flex-1 min-w-0">
+        <div className="pt-16 lg:pt-0 px-3 py-4 sm:p-4 md:p-6">
           {children}
         </div>
       </div>
