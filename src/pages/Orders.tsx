@@ -274,10 +274,10 @@ const Orders = () => {
   };
 
   return (
-    <div className="p-4 md:p-6 pt-16 lg:pt-6 space-y-6">
+    <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold">Commandes</h1>
+          <h1 className="text-3xl font-display font-bold">Gestion des Commandes</h1>
           <p className="font-body text-muted-foreground">
             Suivez et gérez toutes les commandes
           </p>
@@ -320,52 +320,7 @@ const Orders = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Mobile: Card view */}
-          <div className="sm:hidden space-y-3">
-            {filteredOrders.length === 0 ? (
-              <p className="text-center text-muted-foreground py-8">Aucune commande trouvée</p>
-            ) : (
-              filteredOrders.map((order) => (
-                <div key={order.id} className="p-4 rounded-lg border bg-card space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-sm">#{order.id}</span>
-                    <Badge variant={getStatusColor(order.status)} className="text-xs">
-                      {getStatusLabel(order.status)}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0">
-                      <p className="font-medium text-sm truncate">{order.customerName}</p>
-                      <p className="text-xs text-muted-foreground">{order.customerPhone}</p>
-                    </div>
-                    <span className="font-bold text-sm whitespace-nowrap">{order.total.toLocaleString('fr-FR')} F</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(order.createdAt).toLocaleDateString('fr-FR')}
-                    </span>
-                    <Dialog open={selectedOrder?.id === order.id} onOpenChange={(open) => !open && setSelectedOrder(null)}>
-                      <DialogTrigger asChild>
-                        <Button variant="outline" size="sm" onClick={() => setSelectedOrder(order)}>
-                          <Eye className="w-4 h-4 mr-1" /> Voir
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
-                        <DialogHeader>
-                          <DialogTitle>Commande #{order.id}</DialogTitle>
-                          <DialogDescription>Informations complètes</DialogDescription>
-                        </DialogHeader>
-                        <OrderDetails order={order} />
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-
-          {/* Desktop: Table view */}
-          <div className="overflow-x-auto hidden sm:block">
+          <div className="overflow-x-auto">
             <Table>
             <TableHeader>
               <TableRow>

@@ -143,16 +143,16 @@ const Settings = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background pt-16 lg:pt-0">
+    <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-2xl sm:text-3xl font-bold mb-2">Paramètres</h1>
+            <h1 className="text-3xl font-bold mb-2">Paramètres</h1>
             <p className="text-muted-foreground">Gérez votre compte et vos préférences</p>
           </motion.div>
         </div>

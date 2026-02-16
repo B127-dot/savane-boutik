@@ -259,11 +259,11 @@ const Dashboard = () => {
   }, [pendingOrders, outOfStockProducts, lowStockProducts, shopSettings]);
 
   return (
-    <div className="p-4 md:p-6 pt-16 lg:pt-6 space-y-6 md:space-y-8 max-w-[1600px] mx-auto">
+    <div className="p-4 md:p-6 space-y-6 md:space-y-8 max-w-[1600px] mx-auto">
       {/* Header Zone */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b">
         <div className="flex items-center gap-4">
-          <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
+          <Avatar className="h-12 w-12">
             <AvatarFallback className="bg-primary text-primary-foreground font-semibold">
               {user?.name ? getInitials(user.name) : 'U'}
             </AvatarFallback>
@@ -278,7 +278,7 @@ const Dashboard = () => {
         <div className="flex flex-wrap items-center gap-3">
           <NotificationCenter notifications={notifications} />
           <PeriodSelector value={period} onChange={setPeriod} />
-          <Badge variant="secondary" className="text-xs md:text-sm px-3 py-1 hidden sm:inline-flex">
+          <Badge variant="secondary" className="text-xs md:text-sm px-3 py-1">
             {user?.role === 'admin' ? 'Admin' : 'User'}
           </Badge>
         </div>
@@ -293,7 +293,7 @@ const Dashboard = () => {
       <div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <h2 className="text-lg md:text-xl font-display font-bold">Indicateurs Clés</h2>
-          <div className="hidden sm:flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <Switch 
               id="comparison-mode" 
               checked={showComparison}
@@ -304,7 +304,7 @@ const Dashboard = () => {
             </Label>
           </div>
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           <div className={`animate-stagger ${isVisible ? 'visible' : ''}`}>
             <KPICard
               title="Revenus"
@@ -386,8 +386,8 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* Performance Charts Zone - hidden on mobile */}
-      <div className={`animate-fade-up delay-200 ${isVisible ? 'visible' : ''} hidden sm:block`}>
+      {/* Performance Charts Zone */}
+      <div className={`animate-fade-up delay-200 ${isVisible ? 'visible' : ''}`}>
         <h2 className="text-lg md:text-xl font-display font-bold mb-4">Performance</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           <RevenueChart orders={filteredOrders} period={7} />
@@ -397,18 +397,6 @@ const Dashboard = () => {
             categories={categories}
           />
         </div>
-      </div>
-      {/* Mobile: link to Analytics */}
-      <div className="sm:hidden">
-        <Link to="/analytics">
-          <Card className="p-4 flex items-center justify-between hover:bg-accent/50 transition-colors">
-            <div className="flex items-center gap-3">
-              <TrendingUp className="w-5 h-5 text-primary" />
-              <span className="font-semibold text-sm">Voir les statistiques détaillées</span>
-            </div>
-            <ExternalLink className="w-4 h-4 text-muted-foreground" />
-          </Card>
-        </Link>
       </div>
 
       {/* Activity Zone */}
@@ -425,8 +413,8 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-               {filteredOrders.slice(0, 3).length > 0 ? (
-                  filteredOrders.slice(0, 3).map((order) => (
+                {filteredOrders.slice(0, 5).length > 0 ? (
+                  filteredOrders.slice(0, 5).map((order) => (
                     <div key={order.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-lg border bg-card hover:bg-accent/50 transition-all group gap-2">
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold truncate">#{order.id}</p>
@@ -473,8 +461,8 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          {/* Popular Products - hidden on mobile */}
-          <Card className="hidden sm:block">
+          {/* Popular Products */}
+          <Card>
             <CardHeader>
               <CardTitle>Produits Populaires</CardTitle>
               <CardDescription>
@@ -560,7 +548,7 @@ const Dashboard = () => {
                 </Button>
               </div>
             </div>
-            <div className="hidden sm:flex items-center justify-center">
+            <div className="flex items-center justify-center">
               <ShopQRCode shopUrl={fullShopUrl} shopName={shopSettings?.shopName || 'Ma Boutique'} />
             </div>
           </div>

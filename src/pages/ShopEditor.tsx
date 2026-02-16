@@ -173,14 +173,7 @@ const ShopEditor = () => {
   }, [formData.sectionOrder, customBlocks, getSectionVisibility]);
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-background w-full -m-6 overflow-hidden pt-16 lg:pt-0">
-      {/* Mobile banner */}
-      <div className="lg:hidden bg-amber-500/10 border-b border-amber-500/20 p-4 flex items-center gap-3">
-        <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
-        <p className="text-sm text-amber-700 dark:text-amber-300">
-          L'éditeur visuel est optimisé pour les écrans larges. Utilisez un ordinateur pour une meilleure expérience.
-        </p>
-      </div>
+    <div className="flex h-screen bg-background w-full -m-6 overflow-hidden">
       <main className="flex-1 flex h-screen overflow-hidden">
         {/* Editor Sidebar */}
         <div className="w-[400px] border-r border-border bg-gradient-to-b from-card to-card/95 flex flex-col h-screen overflow-hidden">
