@@ -207,10 +207,7 @@ const Sidebar = () => {
                 : 'text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground hover:translate-x-1'
               }
             `}
-            onClick={() => { 
-              if (hasSubItems) { toggleExpanded(item.href); } 
-              else { navigate(item.href); setIsMobileOpen(false); }
-            }}
+            onClick={() => hasSubItems ? toggleExpanded(item.href) : navigate(item.href)}
           >
             <div className="flex items-center gap-3 flex-1">
               <item.icon className={`w-5 h-5 transition-transform duration-200 ${isActive ? '' : 'group-hover:scale-110 group-hover:rotate-6'}`} />
@@ -248,7 +245,6 @@ const Sidebar = () => {
                 <Link
                   key={subItem.href}
                   to={subItem.href}
-                  onClick={() => setIsMobileOpen(false)}
                   className={`
                     flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200
                     ${isSubActive 
