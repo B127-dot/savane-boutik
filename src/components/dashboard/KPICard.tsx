@@ -44,7 +44,6 @@ const KPICard = ({
 }: KPICardProps) => {
   const shadowClass = level === 1 ? 'shadow-lg' : level === 2 ? 'shadow-md' : 'shadow-sm';
   const borderClass = level === 1 ? 'border-primary/20' : '';
-  const iconSize = level === 1 ? 'h-8 w-8' : level === 2 ? 'h-6 w-6' : 'h-5 w-5';
 
   // Extract numeric value for count-up animation
   const numericValue = useMemo(() => {
@@ -80,21 +79,21 @@ const KPICard = ({
 
   return (
     <Card className={`${shadowClass} ${borderClass} hover:scale-[1.02] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden`}>
-      {/* Watermark Icon Background */}
+      {/* Watermark Icon Background - hidden on mobile */}
       <Icon 
-        className="absolute -bottom-4 -right-4 h-32 w-32 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none"
+        className="absolute -bottom-4 -right-4 h-32 w-32 opacity-[0.08] group-hover:opacity-[0.12] transition-opacity duration-300 pointer-events-none hidden sm:block"
         style={{ color: iconColor }}
       />
-      <CardContent className="p-6 relative z-10">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            <p className="text-sm font-display font-medium text-muted-foreground mb-1">{title}</p>
-            <p className="text-3xl font-display font-extrabold tabular-nums">{displayValue}</p>
+      <CardContent className="p-4 sm:p-6 relative z-10">
+        <div className="flex items-start justify-between mb-2 sm:mb-4">
+          <div className="flex-1 min-w-0">
+            <p className="text-xs sm:text-sm font-display font-medium text-muted-foreground mb-1 truncate">{title}</p>
+            <p className="text-xl sm:text-3xl font-display font-extrabold tabular-nums truncate">{displayValue}</p>
           </div>
-          <div className="flex flex-col items-end gap-2">
-            <Icon className={`${iconSize} text-primary transition-all duration-300 group-hover:rotate-6 group-hover:scale-110`} />
+          <div className="flex flex-col items-end gap-1 sm:gap-2 ml-2">
+            <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary transition-all duration-300 group-hover:rotate-6 group-hover:scale-110" />
             {badge && (
-              <Badge className={`${getBadgeClass(badge.variant)} ${badge.variant === 'destructive' ? 'animate-pulse' : ''}`}>
+              <Badge className={`${getBadgeClass(badge.variant)} text-[10px] sm:text-xs whitespace-nowrap ${badge.variant === 'destructive' ? 'animate-pulse' : ''}`}>
                 {badge.text}
               </Badge>
             )}
@@ -102,21 +101,22 @@ const KPICard = ({
         </div>
 
         {showTrend && trend && (
-          <div className="flex items-center gap-1 mb-3 animate-fade-in">
+          <div className="flex items-center gap-1 mb-2 sm:mb-3 animate-fade-in flex-wrap">
             {trend.isPositive ? (
-              <TrendingUp className="h-4 w-4 text-kpi-success" />
+              <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-kpi-success shrink-0" />
             ) : (
-              <TrendingDown className="h-4 w-4 text-kpi-danger" />
+              <TrendingDown className="h-3 w-3 sm:h-4 sm:w-4 text-kpi-danger shrink-0" />
             )}
-            <span className={`text-sm font-medium ${trend.isPositive ? 'text-kpi-success' : 'text-kpi-danger'}`}>
+            <span className={`text-xs sm:text-sm font-medium ${trend.isPositive ? 'text-kpi-success' : 'text-kpi-danger'}`}>
               {trend.isPositive ? '+' : ''}{trend.value}%
             </span>
-            <span className="text-xs text-muted-foreground">{trend.label}</span>
+            <span className="text-[10px] sm:text-xs text-muted-foreground hidden sm:inline">{trend.label}</span>
           </div>
         )}
 
+        {/* Sparkline hidden on mobile */}
         {sparklineData && sparklineData.length > 0 && (
-          <div className="mb-3">
+          <div className="mb-3 hidden sm:block">
             <MiniSparkline 
               data={sparklineData} 
               color={trend?.isPositive ? 'hsl(var(--kpi-success))' : 'hsl(var(--primary))'}
@@ -126,7 +126,7 @@ const KPICard = ({
 
         {action && (
           <Link to={action.link}>
-            <Button size="sm" variant="outline" className="w-full mt-2 hover:bg-primary/10 transition-colors">
+            <Button size="sm" variant="outline" className="w-full mt-1 sm:mt-2 hover:bg-primary/10 transition-colors text-xs sm:text-sm">
               {action.label}
             </Button>
           </Link>
