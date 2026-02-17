@@ -1,3 +1,7 @@
+/* Oswald - Brutalist heading font for SAVANE theme */
+@import '@fontsource/oswald/400.css';
+@import '@fontsource/oswald/700.css';
+
 /* Switzer Font Family - Modern Neo-Grotesque Sans-Serif
  * Inspired by Wazzap.ai design system
  * Optimized for web with font-display: swap
@@ -34,10 +38,6 @@
   font-style: normal;
   font-display: swap;
 }
-
-/* Oswald - Brutalist heading font for SAVANE theme */
-@import '@fontsource/oswald/400.css';
-@import '@fontsource/oswald/700.css';
 
 /* Fallback and optimization */
 body {
