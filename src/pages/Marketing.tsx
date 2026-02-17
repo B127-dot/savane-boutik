@@ -141,35 +141,33 @@ const Marketing = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Marketing</h1>
-          <p className="text-muted-foreground">Gérez vos codes promo et partagez votre boutique</p>
-        </div>
+    <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
+      <div>
+        <h1 className="text-xl sm:text-3xl font-bold text-foreground">Marketing</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">Gérez vos codes promo et partagez votre boutique</p>
       </div>
 
       <Tabs defaultValue="promos" className="space-y-6">
-        <TabsList className="flex flex-wrap h-auto gap-1">
-          <TabsTrigger value="promos">
-            <Tag className="w-4 h-4 mr-2" />
-            Codes promo
+        <TabsList className="flex w-full overflow-x-auto h-auto gap-1 justify-start">
+          <TabsTrigger value="promos" className="text-xs sm:text-sm shrink-0">
+            <Tag className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Codes </span>promo
           </TabsTrigger>
-          <TabsTrigger value="leads">
-            <Gift className="w-4 h-4 mr-2" />
-            Leads capturés
+          <TabsTrigger value="leads" className="text-xs sm:text-sm shrink-0">
+            <Gift className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+            Leads
           </TabsTrigger>
-          <TabsTrigger value="abandoned">
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            Paniers abandonnés
+          <TabsTrigger value="abandoned" className="text-xs sm:text-sm shrink-0">
+            <ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Paniers </span>Abandonnés
             {abandonedCarts.length > 0 && (
-              <Badge variant="destructive" className="ml-2">
+              <Badge variant="destructive" className="ml-1 sm:ml-2 text-[10px] px-1">
                 {abandonedCarts.length}
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="share">
-            <Share className="w-4 h-4 mr-2" />
+          <TabsTrigger value="share" className="text-xs sm:text-sm shrink-0">
+            <Share className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
             Partage
           </TabsTrigger>
         </TabsList>

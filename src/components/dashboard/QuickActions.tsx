@@ -42,14 +42,14 @@ const QuickActions = () => {
           <span className="text-xl md:text-2xl">🎯</span>
           Actions Rapides
         </h2>
-        <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-4 scrollbar-hide">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-4 md:gap-4">
           {actions.map((action) => {
             const Icon = action.icon;
             return (
-              <Link key={action.title} to={action.link} className="snap-start shrink-0 md:shrink">
+              <Link key={action.title} to={action.link} className="min-w-0">
                 <Button
                   variant={action.variant}
-                  className="w-[140px] md:w-full h-auto flex flex-col items-center gap-2 p-4 hover:scale-[1.05] hover:shadow-lg hover:bg-primary/10 transition-all duration-300 group min-h-[100px] md:min-h-[110px]"
+                  className="w-full h-auto flex flex-col items-center gap-1.5 p-3 md:p-4 hover:scale-[1.05] hover:shadow-lg hover:bg-primary/10 transition-all duration-300 group min-h-[80px] md:min-h-[110px]"
                 >
                   <Icon className="h-5 w-5 md:h-6 md:w-6 transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110" />
                   <div className="text-center">

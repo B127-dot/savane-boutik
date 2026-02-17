@@ -183,11 +183,11 @@ const Products = () => {
   );
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
         <div>
-          <h1 className="text-3xl font-display font-bold">Gestion des Produits</h1>
-          <p className="font-body text-muted-foreground">
+          <h1 className="text-xl sm:text-3xl font-display font-bold">Gestion des Produits</h1>
+          <p className="text-sm sm:text-base font-body text-muted-foreground">
             Gérez votre catalogue de produits
           </p>
         </div>
@@ -221,7 +221,7 @@ const Products = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
         {filteredProducts.map((product) => (
           <Card key={product.id}>
             <div className="aspect-square bg-muted relative overflow-hidden">

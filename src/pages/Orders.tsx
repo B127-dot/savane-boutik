@@ -274,14 +274,12 @@ const Orders = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-display font-bold">Gestion des Commandes</h1>
-          <p className="font-body text-muted-foreground">
-            Suivez et gérez toutes les commandes
-          </p>
-        </div>
+    <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
+      <div>
+        <h1 className="text-xl sm:text-3xl font-display font-bold">Gestion des Commandes</h1>
+        <p className="text-sm sm:text-base font-body text-muted-foreground">
+          Suivez et gérez toutes les commandes
+        </p>
       </div>
 
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
@@ -320,70 +318,110 @@ const Orders = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Client</TableHead>
-                <TableHead>Téléphone</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Statut</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredOrders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-medium">#{order.id}</TableCell>
-                  <TableCell>
-                    <div>
-                      <p className="font-medium">{order.customerName}</p>
-                      {order.customerEmail && (
-                        <p className="text-sm text-muted-foreground">{order.customerEmail}</p>
-                      )}
+          {/* Mobile: Cards */}
+          <div className="sm:hidden space-y-3">
+            {filteredOrders.length === 0 ? (
+              <p className="text-center text-muted-foreground py-8">Aucune commande trouvée</p>
+            ) : (
+              filteredOrders.map((order) => (
+                <Card key={order.id} className="p-3">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div className="min-w-0">
+                      <p className="font-medium text-sm truncate">{order.customerName}</p>
+                      <p className="text-[10px] text-muted-foreground">#{order.id}</p>
                     </div>
-                  </TableCell>
-                  <TableCell className="font-medium">{order.customerPhone}</TableCell>
-                  <TableCell>
-                    {new Date(order.createdAt).toLocaleDateString('fr-FR')}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={getStatusColor(order.status)}>
+                    <Badge variant={getStatusColor(order.status)} className="text-[10px] shrink-0">
                       {getStatusLabel(order.status)}
                     </Badge>
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    {order.total.toLocaleString('fr-FR')} FCFA
-                  </TableCell>
-                  <TableCell>
+                  </div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(order.createdAt).toLocaleDateString('fr-FR')}
+                    </span>
+                    <span className="font-bold text-sm">{order.total.toLocaleString('fr-FR')} FCFA</span>
+                  </div>
+                  <div className="flex gap-2">
                     <Dialog open={selectedOrder?.id === order.id} onOpenChange={(open) => !open && setSelectedOrder(null)}>
                       <DialogTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setSelectedOrder(order)}
-                        >
-                          <Eye className="w-4 h-4 mr-1" />
+                        <Button variant="outline" size="sm" className="flex-1 h-8 text-xs" onClick={() => setSelectedOrder(order)}>
+                          <Eye className="w-3.5 h-3.5 mr-1" />
                           Voir
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
+                      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                         <DialogHeader>
-                          <DialogTitle>Détails de la commande #{order.id}</DialogTitle>
-                          <DialogDescription>
-                            Informations complètes de la commande
-                          </DialogDescription>
+                          <DialogTitle>Commande #{order.id}</DialogTitle>
+                          <DialogDescription>Détails de la commande</DialogDescription>
                         </DialogHeader>
                         <OrderDetails order={order} />
                       </DialogContent>
                     </Dialog>
-                  </TableCell>
+                    <WhatsAppButton
+                      phoneNumber={order.customerPhone}
+                      message={`Bonjour ${order.customerName}, concernant votre commande #${order.id}...`}
+                      variant="outline"
+                      label=""
+                      className="h-8 w-8 p-0"
+                    />
+                  </div>
+                </Card>
+              ))
+            )}
+          </div>
+
+          {/* Desktop: Table */}
+          <div className="hidden sm:block overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>Client</TableHead>
+                  <TableHead>Téléphone</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Statut</TableHead>
+                  <TableHead>Total</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredOrders.map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell className="font-medium">#{order.id}</TableCell>
+                    <TableCell>
+                      <div>
+                        <p className="font-medium">{order.customerName}</p>
+                        {order.customerEmail && (
+                          <p className="text-sm text-muted-foreground">{order.customerEmail}</p>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-medium">{order.customerPhone}</TableCell>
+                    <TableCell>{new Date(order.createdAt).toLocaleDateString('fr-FR')}</TableCell>
+                    <TableCell>
+                      <Badge variant={getStatusColor(order.status)}>{getStatusLabel(order.status)}</Badge>
+                    </TableCell>
+                    <TableCell className="font-medium">{order.total.toLocaleString('fr-FR')} FCFA</TableCell>
+                    <TableCell>
+                      <Dialog open={selectedOrder?.id === order.id} onOpenChange={(open) => !open && setSelectedOrder(null)}>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm" onClick={() => setSelectedOrder(order)}>
+                            <Eye className="w-4 h-4 mr-1" />
+                            Voir
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                          <DialogHeader>
+                            <DialogTitle>Détails de la commande #{order.id}</DialogTitle>
+                            <DialogDescription>Informations complètes de la commande</DialogDescription>
+                          </DialogHeader>
+                          <OrderDetails order={order} />
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>

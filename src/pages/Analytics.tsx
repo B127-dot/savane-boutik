@@ -195,15 +195,15 @@ const Analytics = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
-          <h1 className="text-3xl font-display font-bold text-foreground">Statistiques</h1>
-          <p className="font-body text-muted-foreground">Analysez les performances de votre boutique</p>
+          <h1 className="text-xl sm:text-3xl font-display font-bold text-foreground">Statistiques</h1>
+          <p className="text-sm sm:text-base font-body text-muted-foreground">Analysez les performances de votre boutique</p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Select value={period.toString()} onValueChange={(val) => setPeriod(Number(val))}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[140px] sm:w-[180px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -212,7 +212,7 @@ const Analytics = () => {
               <SelectItem value="90">90 derniers jours</SelectItem>
             </SelectContent>
           </Select>
-          <Button onClick={exportToPDF} variant="outline">
+          <Button onClick={exportToPDF} variant="outline" className="hidden sm:flex">
             <Download className="w-4 h-4 mr-2" />
             Exporter PDF
           </Button>
@@ -239,7 +239,7 @@ const Analytics = () => {
 
         <TabsContent value="overview" className="space-y-6">
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {stats.map((stat, index) => {
               const iconColors = ['#10B981', '#3B82F6', '#06B6D4', '#8B5CF6'];
               return (
@@ -276,10 +276,12 @@ const Analytics = () => {
             })}
           </div>
 
-          {/* Graphiques */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Graphiques - masquer le 2e sur mobile */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <RevenueChart orders={orders} period={period} />
-            <CategoryPieChart orders={orders} products={products} categories={categories} />
+            <div className="hidden sm:block">
+              <CategoryPieChart orders={orders} products={products} categories={categories} />
+            </div>
           </div>
 
           {/* Ventes par catégorie - Details */}
