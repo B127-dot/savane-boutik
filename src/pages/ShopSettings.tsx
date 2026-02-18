@@ -5,6 +5,7 @@ import { ContactSection, SEOSection } from '@/components/editor';
 import DeliverySection from '@/components/editor/DeliverySection';
 import { Accordion } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
+import MobileBlockedPage from '@/components/MobileBlockedPage';
 
 const tabs = [
   { id: 'contact', label: 'Contact & Réseaux', icon: Phone, description: 'Téléphone, WhatsApp, réseaux sociaux' },
@@ -19,6 +20,10 @@ const ShopSettings = () => {
   const { formData, validationErrors, updateField } = useShopEditor();
 
   return (
+    <MobileBlockedPage
+      title="Réglages Boutique"
+      description="La configuration de votre boutique (contact, SEO, livraison) est optimisée pour un usage sur ordinateur."
+    >
     <div className="flex h-[calc(100vh-theme(spacing.12))] -m-6 overflow-hidden">
       {/* Left Navigation */}
       <div className="w-[280px] border-r border-border bg-card/50 flex flex-col">
@@ -86,6 +91,7 @@ const ShopSettings = () => {
         </div>
       </div>
     </div>
+    </MobileBlockedPage>
   );
 };
 

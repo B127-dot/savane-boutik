@@ -42,6 +42,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { useShopEditor } from '@/hooks/useShopEditor';
+import MobileBlockedPage from '@/components/MobileBlockedPage';
 import { COLOR_PALETTES } from '@/lib/shopTheme';
 import { SectionConfig } from '@/components/shop/DraggableSectionManager';
 import BlockLibraryModal from '@/components/shop/BlockLibraryModal';
@@ -173,6 +174,10 @@ const ShopEditor = () => {
   }, [formData.sectionOrder, customBlocks, getSectionVisibility]);
 
   return (
+    <MobileBlockedPage
+      title="Éditeur Visuel"
+      description="La personnalisation de votre boutique (couleurs, hero, sections...) nécessite un grand écran pour être confortable."
+    >
     <div className="flex h-screen bg-background w-full -m-6 overflow-hidden">
       <main className="flex-1 flex h-screen overflow-hidden">
         {/* Editor Sidebar */}
@@ -471,6 +476,7 @@ const ShopEditor = () => {
         </AlertDialogContent>
       </AlertDialog>
     </div>
+    </MobileBlockedPage>
   );
 };
 
