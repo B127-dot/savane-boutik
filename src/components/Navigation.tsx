@@ -54,7 +54,10 @@ const Navigation = () => {
             <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Globe className="w-5 h-5 text-primary-foreground" />
             </div>
-            <Link to="/" className="text-xl font-display font-bold text-foreground whitespace-nowrap">
+            <Link to="/" className={cn(
+              "font-display font-bold text-foreground whitespace-nowrap transition-all duration-300",
+              isScrolled ? "text-base" : "text-xl"
+            )}>
               BurkE-Shop
             </Link>
           </div>
