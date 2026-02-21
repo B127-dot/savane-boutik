@@ -291,45 +291,6 @@ const Settings = () => {
                   </div>
                 </Card>
 
-                {/* Edit form */}
-                <Card className="p-6 border-border/50 space-y-5">
-                  <div>
-                    <h3 className="text-base font-semibold">Informations personnelles</h3>
-                    <p className="text-xs text-muted-foreground mt-0.5">Modifiez vos données de compte</p>
-                  </div>
-                  <Separator />
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name" className="text-sm font-semibold">Nom complet</Label>
-                      <Input
-                        id="name"
-                        value={userName}
-                        onChange={(e) => setUserName(e.target.value)}
-                        placeholder="Votre nom"
-                        className="h-11 bg-background/50"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-sm font-semibold">Adresse email</Label>
-                      <div className="relative">
-                        <Input
-                          id="email"
-                          value={user?.email}
-                          disabled
-                          className="h-11 bg-muted/50 pl-10"
-                        />
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        L'email ne peut pas être modifié pour des raisons de sécurité
-                      </p>
-                    </div>
-                  </div>
-                  <Button onClick={handleSaveProfile} disabled={isSaving} className="gap-2 w-full sm:w-auto">
-                    <Save className="w-4 h-4" />
-                    {isSaving ? 'Enregistrement...' : 'Enregistrer les modifications'}
-                  </Button>
-                </Card>
               </motion.div>
             )}
 
