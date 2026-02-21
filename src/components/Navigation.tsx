@@ -54,7 +54,7 @@ const Navigation = () => {
             <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Globe className="w-5 h-5 text-primary-foreground" />
             </div>
-            <Link to="/" className="text-xl font-display font-bold text-foreground">
+            <Link to="/" className="text-xl font-display font-bold text-foreground whitespace-nowrap">
               BurkE-Shop
             </Link>
           </div>
