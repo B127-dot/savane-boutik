@@ -35,6 +35,7 @@ import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import EditProfileModal from '@/components/EditProfileModal';
 
 type Tab = 'profile' | 'subscription' | 'privacy';
 
@@ -123,6 +124,7 @@ const Settings = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [userName, setUserName] = useState(user?.name || '');
   const [isSaving, setIsSaving] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
 
   const getUserInitials = () => {
     if (!user?.name) return 'U';
@@ -233,6 +235,7 @@ const Settings = () => {
                       size="sm"
                       variant="outline"
                       className="absolute top-3 right-3 gap-1.5 bg-background/70 backdrop-blur-sm border-border/50 text-xs"
+                      onClick={() => setShowEditProfile(true)}
                     >
                       <Edit2 className="w-3 h-3" />
                       Modifier le profil
@@ -530,6 +533,20 @@ const Settings = () => {
           </AnimatePresence>
         </main>
       </div>
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        open={showEditProfile}
+        onOpenChange={setShowEditProfile}
+        user={user}
+        onSave={(data) => {
+          const fullName = `${data.firstName} ${data.lastName}`.trim();
+          setUserName(fullName);
+          if (user) {
+            localStorage.setItem('user', JSON.stringify({ ...user, name: fullName }));
+          }
+        }}
+      />
 
       {/* Delete confirmation */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
